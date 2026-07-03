@@ -110,7 +110,7 @@ Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-
 
 ## 8. Verify live
 
-- [ ] Homepage sections render (trust bar, tea types, FAQ, guides, CTA)
+- [ ] Homepage sections render (hero, tea types, FAQ, guides, CTA)
 - [ ] Product pages show brewing accordions and internal links
 - [ ] Collection pages show hero + bottom CTA
 - [ ] Cart shows trust line

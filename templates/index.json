@@ -9,16 +9,12 @@
  */
 {
   "sections": {
-    "luxe_trust_bar": {
-      "type": "luxe-leaf-trust-bar",
-      "settings": {}
-    },
     "hero_home": {
       "type": "luxe-leaf-hero",
       "settings": {
         "eyebrow": "Premium loose leaf tea",
         "heading": "Steep. Sip. Savor.",
-        "subhead": "Hand-selected whole leaves that unfurl into a clearer, more aromatic cup \u2014 packed fresh for your daily tea ritual.",
+        "subhead": "Hand-selected whole leaves, packed fresh for a clearer, more aromatic cup.",
         "primary_label": "Shop Premium Loose Leaf Tea",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Explore Tea Types",
@@ -243,7 +239,6 @@
     }
   },
   "order": [
-    "luxe_trust_bar",
     "hero_home",
     "store_experience",
     "tea_types",

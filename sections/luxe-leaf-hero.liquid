@@ -28,10 +28,7 @@
 
   <div class="luxe-hero__content page-width">
     <div class="luxe-hero__copy">
-      <p class="luxe-hero__eyebrow">
-        {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
-        {{ section.settings.eyebrow }}
-      </p>
+      <p class="luxe-hero__eyebrow">{{ section.settings.eyebrow }}</p>
       <h1 class="luxe-hero__heading">{{ section.settings.heading }}</h1>
       <p class="luxe-hero__subhead">{{ section.settings.subhead }}</p>
 
@@ -47,9 +44,9 @@
       </div>
 
       <ul class="luxe-hero__highlights list-unstyled" role="list">
-        <li>{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%} Whole leaves, brighter cups</li>
-        <li>{%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%} Packed fresh to order</li>
-        <li>{%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%} Free shipping over $50</li>
+        <li>Whole leaves, brighter cups</li>
+        <li>Packed fresh to order</li>
+        <li>Free shipping over $50</li>
       </ul>
     </div>
   </div>
@@ -94,9 +91,6 @@
   }
 
   .luxe-hero__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
     margin: 0 0 1rem;
     color: #c9a227;
     font-size: 0.75rem;
@@ -152,9 +146,12 @@
   }
 
   .luxe-hero__highlights li {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
+    display: inline;
+  }
+
+  .luxe-hero__highlights li:not(:last-child)::after {
+    content: ' · ';
+    opacity: 0.6;
   }
 {% endstylesheet %}
 
@@ -186,7 +183,7 @@
       "type": "textarea",
       "id": "subhead",
       "label": "Subheading",
-      "default": "Hand-selected whole leaves that unfurl into a clearer, more aromatic cup — packed fresh for your daily tea ritual."
+      "default": "Hand-selected whole leaves, packed fresh for a clearer, more aromatic cup."
     },
     {
       "type": "text",

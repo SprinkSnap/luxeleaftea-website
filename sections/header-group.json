@@ -17,33 +17,10 @@
         "announcement_shipping": {
           "type": "_announcement",
           "settings": {
-            "text": "Free shipping over $50 on premium loose leaf tea",
+            "text": "Free shipping on orders $50+",
             "link": "shopify://collections/all",
             "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "letter_spacing": "normal",
-            "case": "none"
-          },
-          "blocks": {}
-        },
-        "announcement_fresh": {
-          "type": "_announcement",
-          "settings": {
-            "text": "Packed fresh to order · Hand-selected premium loose leaf tea",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "letter_spacing": "normal",
-            "case": "none"
-          },
-          "blocks": {}
-        },
-        "announcement_shop": {
-          "type": "_announcement",
-          "settings": {
-            "text": "Shop premium loose leaf tea — curated for aroma, clarity, and everyday ritual",
-            "link": "shopify://collections/all",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
+            "font_size": "0.8125rem",
             "letter_spacing": "normal",
             "case": "none"
           },
@@ -51,9 +28,7 @@
         }
       },
       "block_order": [
-        "announcement_shipping",
-        "announcement_fresh",
-        "announcement_shop"
+        "announcement_shipping"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
