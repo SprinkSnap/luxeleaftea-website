@@ -97,6 +97,106 @@
   });
 </script>
 
+{%- if settings.brand_navigation -%}
+  {%- unless template.name == 'cart' -%}
+    <nav class="luxe-mobile-bar" aria-label="Quick shop navigation" data-mobile-shop-bar>
+      <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
+        {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+        Shop Tea
+      </a>
+      {%- if settings.cart_type == 'drawer' -%}
+        <button
+          type="button"
+          class="luxe-mobile-bar__cart button button-secondary"
+          on:click="#cart-drawer/toggle"
+          aria-label="Open cart — premium loose leaf tea"
+        >
+          {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
+          <span>{{ 'content.cart_title' | t }}</span>
+          {%- if cart.item_count > 0 -%}
+            <span class="luxe-mobile-bar__count">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </button>
+      {%- else -%}
+        <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View cart">
+          {{- 'icon-cart.svg' | inline_asset_content -}}
+          <span>{{ 'content.cart_title' | t }}</span>
+        </a>
+      {%- endif -%}
+    </nav>
+  {%- endunless -%}
+
+  {%- unless settings.tea_chat_enabled == false -%}
+    <script src="{{ 'luxe-leaf-tea-chat.js' | asset_url }}" defer></script>
+    <luxe-tea-chat
+      class="luxe-tea-chat"
+      data-agent-name="{{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | escape }}"
+      data-free-shipping="{{ settings.free_shipping_threshold | default: 5000 }}"
+      data-shop-url="{{ routes.all_products_collection_url }}"
+      data-faq-url="/pages/faq"
+      data-about-url="/pages/about"
+      data-contact-url="/pages/contact"
+      hidden
+    >
+      <button
+        type="button"
+        class="luxe-tea-chat__launcher"
+        aria-label="Chat with our tea guide about premium loose leaf tea"
+        aria-expanded="false"
+        aria-controls="luxe-tea-chat-panel"
+        data-chat-launcher
+      >
+        <span class="luxe-tea-chat__launcher-icon" aria-hidden="true">
+          {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--md' -%}
+        </span>
+        <span class="luxe-tea-chat__launcher-text">Tea Guide</span>
+      </button>
+
+      <div
+        id="luxe-tea-chat-panel"
+        class="luxe-tea-chat__panel"
+        role="dialog"
+        aria-label="Luxe Leaf Tea guide chat"
+        aria-modal="true"
+        hidden
+        data-chat-panel
+      >
+        <header class="luxe-tea-chat__header">
+          <div class="luxe-tea-chat__header-copy">
+            <p class="luxe-tea-chat__eyebrow">Premium loose leaf tea</p>
+            <h2 class="luxe-tea-chat__title">{{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' }}</h2>
+          </div>
+          <button type="button" class="luxe-tea-chat__close button-unstyled" aria-label="Close chat" data-chat-close>
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </button>
+        </header>
+
+        <div class="luxe-tea-chat__messages" data-chat-messages role="log" aria-live="polite"></div>
+        <div class="luxe-tea-chat__quick-replies" data-chat-quick-replies role="group" aria-label="Quick questions"></div>
+
+        <form class="luxe-tea-chat__form" data-chat-form>
+          <label class="visually-hidden" for="luxe-tea-chat-input">Ask about our teas</label>
+          <input
+            id="luxe-tea-chat-input"
+            class="luxe-tea-chat__input"
+            type="text"
+            name="message"
+            placeholder="Ask about brewing, shipping, or which tea to try…"
+            autocomplete="off"
+            data-chat-input
+          >
+          <button type="submit" class="luxe-tea-chat__send button" aria-label="Send message">Send</button>
+        </form>
+
+        <p class="luxe-tea-chat__footer-note">
+          Real tea guidance ·
+          <button type="button" class="luxe-tea-chat__inbox-link button-unstyled" data-open-inbox>Talk to our team</button>
+        </p>
+      </div>
+    </luxe-tea-chat>
+  {%- endunless -%}
+{%- endif -%}
+
 {% stylesheet %}
   /* Pin the chat's mobile/desktop boundary so the theme and the chat agree
      on where standalone mode kicks in. Must stay in sync with the @media
