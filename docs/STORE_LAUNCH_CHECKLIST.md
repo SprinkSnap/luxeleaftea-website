@@ -38,16 +38,27 @@ Then **Publish** the pushed theme in admin.
 | Theme not synced | Pull from GitHub or `shopify theme push` |
 | Theme not **published** | Only the **published** theme is live — preview themes are not |
 | Wrong theme published | Publish the GitHub-connected Luxe Leaf theme, not an old Horizon copy |
-## Troubleshooting “still looks like Horizon theme”
+### Troubleshooting “still looks like Horizon theme”
+
+**Most common cause:** the live store is still running an old published theme. GitHub updates do not go live automatically.
+
+**Do this now (2 minutes):**
+
+1. Shopify admin → **Online Store → Themes**
+2. Find the theme connected to **`SprinkSnap/luxeleaftea-website`** branch **`main`**
+3. **Actions → Pull from GitHub** (wait until it finishes)
+4. Click **Publish** on that theme (not Preview)
+5. Hard-refresh your storefront (Ctrl+Shift+R)
+
+**How to confirm you published the right theme:** After publish, the homepage should show **“Steep. Sip. Savor.”** (not a generic Horizon hero), a **dark jade** announcement bar, **serif** headlines, and a **Tea Guide** chat button bottom-right.
 
 | Cause | Fix |
 |-------|-----|
 | Old theme still **published** | Online Store → Themes → **Publish** the GitHub `main` theme |
-| Theme editor cached settings | Theme settings → reset fonts to Playfair + Source Sans (or re-import from `settings_data.json`) |
+| Never pulled after merge | **Actions → Pull from GitHub** then **Publish** |
 | Wrong theme connected | Connect `SprinkSnap/luxeleaftea-website` branch **`main`**, not stock Horizon |
-| Browser cache | Hard refresh; look for **jade footer**, **serif headings**, **Luxe featured teas** grid with “Add to Bag” pills |
-
-After PR #16+ merge, the live theme should show: dark jade announcement bar, cream header, serif headlines, custom featured tea cards (not generic Horizon product grid), and **Luxe Leaf Tea** as theme name in admin.
+| Theme editor cached settings | Pull latest `main` — Luxe CSS now loads even if admin settings differ |
+| Browser cache | Hard refresh; look for **jade footer**, **serif headings**, Luxe featured teas with “Add to Bag” pills |
 
 ## 2. Import sample products
 

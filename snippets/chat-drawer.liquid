@@ -97,7 +97,7 @@
   });
 </script>
 
-{%- if settings.brand_navigation -%}
+{%- unless settings.brand_navigation == false -%}
   {%- unless template.name == 'cart' -%}
     <nav class="luxe-mobile-bar" aria-label="Quick shop navigation" data-mobile-shop-bar>
       <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
@@ -195,7 +195,7 @@
       </div>
     </luxe-tea-chat>
   {%- endunless -%}
-{%- endif -%}
+{%- endunless -%}
 
 {% stylesheet %}
   /* Pin the chat's mobile/desktop boundary so the theme and the chat agree

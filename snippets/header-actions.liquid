@@ -31,11 +31,11 @@
       class="svg-wrapper {% if display_style != 'icon' %}desktop:hidden{% endif %}"
       aria-hidden="true"
     >
-      {%- if settings.brand_navigation -%}
+      {%- unless settings.brand_navigation == false -%}
         {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
       {%- else -%}
         {{ 'icon-cart.svg' | inline_asset_content }}
-      {%- endif -%}
+      {%- endunless -%}
     </span>
 
     {% render 'cart-bubble', limit: 100 %}
@@ -43,7 +43,7 @@
 {% endcapture %}
 
 {% capture account_icon %}
-  {%- if settings.brand_navigation -%}
+  {%- unless settings.brand_navigation == false -%}
     <span class="account-button__icon svg-wrapper">
       {%- render 'luxe-leaf-header-icon', name: 'account' -%}
     </span>
@@ -64,7 +64,7 @@
         d="M10.375 3.813a3.063 3.063 0 1 1-6.125 0 3.063 3.063 0 0 1 6.125 0ZM7.313 9.5c-3.667 0-6.24 2.691-6.563 6.125h13.125C13.552 12.191 10.979 9.5 7.312 9.5Z"
       />
     </svg>
-  {%- endif -%}
+  {%- endunless -%}
 {% endcapture %}
 
 <header-actions
@@ -130,7 +130,7 @@
       aria-haspopup="dialog"
       aria-expanded="false"
       aria-controls="cart-drawer"
-      aria-label="{% if settings.brand_navigation %}Premium loose leaf tea cart{% else %}{{ 'accessibility.cart' | t }}{% endif %}"
+      aria-label="{% unless settings.brand_navigation == false %}Premium loose leaf tea cart{% else %}{{ 'accessibility.cart' | t }}{% endunless %}"
       aria-describedby="cart-bubble-text"
       data-testid="cart-drawer-trigger"
     >
@@ -140,7 +140,7 @@
     <a
       href="{{ routes.cart_url }}"
       class="header-actions__action action__cart{% if display_style == 'text' %} header-actions__text-style{% endif %}"
-      aria-label="{% if settings.brand_navigation %}Premium loose leaf tea cart{% else %}{{ 'accessibility.cart' | t }}{% endif %}"
+      aria-label="{% unless settings.brand_navigation == false %}Premium loose leaf tea cart{% else %}{{ 'accessibility.cart' | t }}{% endunless %}"
       aria-describedby="cart-bubble-text"
     >
       {{ cart_icon }}

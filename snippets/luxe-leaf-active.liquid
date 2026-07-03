@@ -1,0 +1,5 @@
+{%- comment -%}
+  Luxe Leaf Tea is the base theme — brand mode is ON unless explicitly disabled in admin.
+  Use: {% unless settings.brand_navigation == false %} or render this snippet for checks.
+{%- endcomment -%}
+{%- unless settings.brand_navigation == false -%}true{%- endunless -%}

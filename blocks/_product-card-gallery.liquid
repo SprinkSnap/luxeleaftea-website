@@ -26,9 +26,9 @@
         </div>
       {%- endif -%}
     </div>
-    {%- if settings.brand_navigation -%}
+    {%- unless settings.brand_navigation == false -%}
       {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
-    {%- endif -%}
+    {%- endunless -%}
     {%  if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add', product: product, section_id: section.id %}
     {% endif %}

@@ -92,7 +92,7 @@
     %}
 
     {% capture children %}
-      {% if settings.brand_navigation %}
+      {% unless settings.brand_navigation == false %}
         {% render 'luxe-leaf-brand-nav-items' %}
       {% else %}
       {% for link in block_settings.menu.links %}

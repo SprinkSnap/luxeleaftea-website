@@ -268,11 +268,11 @@
     form="cart-form"
   >
     <span class="button-text">
-      {%- if settings.brand_navigation -%}
+      {%- unless settings.brand_navigation == false -%}
         Checkout Now — Secure Payment
       {%- else -%}
         {{ 'content.checkout' | t }}
-      {%- endif -%}
+      {%- endunless -%}
     </span>
   </button>
 

@@ -33,9 +33,9 @@
   {{ block.shopify_attributes }}
 >
   <div class="{{ cart_summary_inner_class }}">
-    {%- if settings.brand_navigation -%}
+    {%- unless settings.brand_navigation == false -%}
       {% render 'luxe-leaf-cart-conversion' %}
-    {%- endif -%}
+    {%- endunless -%}
     {% render 'cart-summary', accelerated_checkout_buttons_layout: 'vertical', section_id: section.id %}
   </div>
 </div>

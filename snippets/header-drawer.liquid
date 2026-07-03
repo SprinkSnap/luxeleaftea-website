@@ -60,11 +60,11 @@
   >
     <summary
       class="header__icon header__icon--menu header__icon--summary"
-      aria-label="{% if settings.brand_navigation %}Open tea shop menu{% else %}{{ 'accessibility.menu' | t }}{% endif %}"
+      aria-label="{% unless settings.brand_navigation == false %}Open tea shop menu{% else %}{{ 'accessibility.menu' | t }}{% endunless %}"
       on:click="/toggle"
     >
       <span class="svg-wrapper header-drawer-icon header-drawer-icon--open">
-        {%- if settings.brand_navigation -%}
+        {%- unless settings.brand_navigation == false -%}
           {%- render 'luxe-leaf-header-icon', name: 'menu' -%}
         {%- else -%}
           {{- 'icon-menu.svg' | inline_asset_content -}}
@@ -108,7 +108,7 @@
           {%- comment -%}
             Handle menus with fewer than 3 levels of links
           {%- endcomment -%}
-          {% if settings.brand_navigation %}
+          {% if settings.brand_navigation != false %}
             {% render 'luxe-leaf-brand-drawer-links', block_settings: block_settings %}
           {% elsif linklist.levels < 3 %}
             {% assign first_accordion_open = false %}
