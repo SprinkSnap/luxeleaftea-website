@@ -1,0 +1,38 @@
+{%- doc -%}
+  Premium brand navigation links for Luxe Leaf Tea header and drawer menus.
+{%- enddoc -%}
+
+{%- liquid
+  assign nav_links = 'Shop Tea|/collections/all,Collections|/collections,Our Story|/pages/about,Contact|/pages/contact' | split: ','
+-%}
+
+{%- for entry in nav_links -%}
+  {%- assign parts = entry | split: '|' -%}
+  {%- assign label = parts[0] -%}
+  {%- assign url = parts[1] -%}
+  {%- assign is_active = false -%}
+  {%- if request.path == url -%}
+    {%- assign is_active = true -%}
+  {%- endif -%}
+
+  <li
+    role="presentation"
+    class="menu-list__list-item"
+    on:focus="/activate"
+    on:blur="/deactivate"
+    on:pointerenter="/activate"
+    on:pointerleave="/deactivate"
+  >
+    <a
+      href="{{ url }}"
+      data-skip-node-update="true"
+      class="menu-list__link{% if is_active %} menu-list__link--active{% endif %}"
+      {% if is_active %}
+        aria-current="page"
+      {% endif %}
+      ref="menuitem"
+    >
+      <span class="menu-list__link-title">{{ label }}</span>
+    </a>
+  </li>
+{%- endfor -%}

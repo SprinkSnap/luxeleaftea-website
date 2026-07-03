@@ -49,11 +49,22 @@
         "visible_if": "{{ settings.logo != blank or settings.logo_inverse != blank }}",
         "info": "t:info.logo_height"
       },
-      {
-        "type": "image_picker",
-        "id": "favicon",
-        "label": "t:settings.favicon"
-      }
+        {
+          "type": "image_picker",
+          "id": "favicon",
+          "label": "t:settings.favicon"
+        },
+        {
+          "type": "header",
+          "content": "Luxe Leaf Tea"
+        },
+        {
+          "type": "checkbox",
+          "id": "brand_navigation",
+          "label": "Use Luxe Leaf Tea brand navigation",
+          "default": true,
+          "info": "Shows Shop Tea, Collections, Our Story, and Contact in the header menu."
+        }
     ]
   },
   {

@@ -92,6 +92,9 @@
     %}
 
     {% capture children %}
+      {% if settings.brand_navigation %}
+        {% render 'luxe-leaf-brand-nav-items' %}
+      {% else %}
       {% for link in block_settings.menu.links %}
         <li
           role="presentation"
@@ -148,6 +151,7 @@
           {%- endif -%}
         </li>
       {% endfor %}
+      {% endif %}
       <li
         class="menu-list__list-item"
         role="presentation"

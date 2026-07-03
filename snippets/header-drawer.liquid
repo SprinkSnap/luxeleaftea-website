@@ -104,7 +104,9 @@
           {%- comment -%}
             Handle menus with fewer than 3 levels of links
           {%- endcomment -%}
-          {% if linklist.levels < 3 %}
+          {% if settings.brand_navigation %}
+            {% render 'luxe-leaf-brand-drawer-links', block_settings: block_settings %}
+          {% elsif linklist.levels < 3 %}
             {% assign first_accordion_open = false %}
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}

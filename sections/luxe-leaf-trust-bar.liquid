@@ -1,0 +1,87 @@
+
+<section
+  class="luxe-trust-bar section section--full-width"
+  aria-label="Store benefits"
+>
+  <div class="luxe-trust-bar__inner page-width">
+    <ul class="luxe-trust-bar__list list-unstyled" role="list">
+      <li class="luxe-trust-bar__item">
+        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
+        <span>Premium Chinese loose-leaf tea</span>
+      </li>
+      <li class="luxe-trust-bar__item">
+        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
+        <span>Freshness-packed to order</span>
+      </li>
+      <li class="luxe-trust-bar__item">
+        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
+        <span>Secure checkout</span>
+      </li>
+      <li class="luxe-trust-bar__item luxe-trust-bar__item--hide-mobile">
+        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
+        <span>Free shipping over $50</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-trust-bar {
+    background: #1b4332;
+    color: #f8f6f0;
+    border-bottom: 1px solid rgb(201 162 39 / 0.25);
+  }
+
+  .luxe-trust-bar__inner {
+    padding-block: 10px;
+  }
+
+  .luxe-trust-bar__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 28px;
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .luxe-trust-bar__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .luxe-trust-bar__icon {
+    color: #c9a227;
+    font-size: 0.625rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .luxe-trust-bar__item--hide-mobile {
+      display: none;
+    }
+
+    .luxe-trust-bar__list {
+      gap: 10px 16px;
+      font-size: 0.6875rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf trust bar",
+  "tag": "section",
+  "class": "luxe-trust-bar-section",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "presets": [
+    {
+      "name": "Luxe Leaf trust bar"
+    }
+  ]
+}
+{% endschema %}

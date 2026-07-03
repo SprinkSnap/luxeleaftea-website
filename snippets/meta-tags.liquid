@@ -22,7 +22,13 @@
   assign og_title = page_title | default: shop.name
   assign og_url = canonical_url | default: request.origin
   assign og_type = 'website'
-  assign og_description = page_description | default: shop.description | default: shop.name
+  assign brand_default_description = 'Shop premium Chinese loose-leaf tea from Luxe Leaf Tea. Hand-selected leaves from Longjing, Fujian, Yunnan and beyond — packed fresh to order.'
+  assign og_description = page_description | default: shop.description | default: brand_default_description
+
+  if request.page_type == 'index' and page_description == blank
+    assign og_title = 'Premium Chinese Loose-Leaf Tea | ' | append: shop.name
+    assign og_description = brand_default_description
+  endif
 
   if request.page_type == 'product'
     assign og_type = 'product'
@@ -140,5 +146,10 @@
   <meta
     name="description"
     content="{{ page_description | escape }}"
+  >
+{% elsif request.page_type == 'index' %}
+  <meta
+    name="description"
+    content="{{ brand_default_description | escape }}"
   >
 {% endif %}
