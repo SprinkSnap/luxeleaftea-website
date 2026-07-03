@@ -105,7 +105,7 @@
   aria-label="Product details"
 >
   <div class="luxe-product-guide__trust">
-    <span class="luxe-product-guide__trust-icon" aria-hidden="true">✦</span>
+    <span class="luxe-product-guide__trust-icon" aria-hidden="true">{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}</span>
     {{ section.settings.trust_line }}
   </div>
 
@@ -133,9 +133,18 @@
   </div>
 
   <div class="luxe-product-guide__links">
-    <a href="{{ tea_collection_url }}" class="luxe-product-guide__link">{{ tea_collection_label }} →</a>
-    <a href="{{ tea_guide_url }}" class="luxe-product-guide__link">Read the brewing guide →</a>
-    <a href="/pages/faq" class="luxe-product-guide__link">View FAQ →</a>
+    <a href="{{ tea_collection_url }}" class="luxe-product-guide__link luxe-link-with-icon">
+      {{ tea_collection_label }}
+      {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+    </a>
+    <a href="{{ tea_guide_url }}" class="luxe-product-guide__link luxe-link-with-icon">
+      Read the brewing guide
+      {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+    </a>
+    <a href="/pages/faq" class="luxe-product-guide__link luxe-link-with-icon">
+      View FAQ
+      {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+    </a>
   </div>
 </section>
 
@@ -158,7 +167,7 @@
   }
 
   .luxe-product-guide__trust-icon {
-    color: #c9a227;
+    flex-shrink: 0;
   }
 
   .luxe-product-guide__row {
@@ -203,6 +212,9 @@
   }
 
   .luxe-product-guide__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     color: #1b4332;
     font-size: 0.8125rem;
     font-weight: 600;

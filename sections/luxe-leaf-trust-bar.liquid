@@ -6,19 +6,19 @@
   <div class="luxe-trust-bar__inner page-width">
     <ul class="luxe-trust-bar__list list-unstyled" role="list">
       <li class="luxe-trust-bar__item">
-        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
+        {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
         <span>Premium loose leaf tea</span>
       </li>
       <li class="luxe-trust-bar__item">
-        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
-        <span>Freshness-packed to order</span>
+        {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+        <span>Packed fresh to order</span>
       </li>
       <li class="luxe-trust-bar__item">
-        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
+        {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
         <span>Secure checkout</span>
       </li>
       <li class="luxe-trust-bar__item luxe-trust-bar__item--hide-mobile">
-        <span class="luxe-trust-bar__icon" aria-hidden="true">✦</span>
+        {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
         <span>Free shipping over $50</span>
       </li>
     </ul>
@@ -51,11 +51,6 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-  }
-
-  .luxe-trust-bar__icon {
-    color: #c9a227;
-    font-size: 0.625rem;
   }
 
   @media screen and (max-width: 749px) {

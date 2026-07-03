@@ -12,7 +12,13 @@
   <div class="luxe-proof__grid" role="list">
     {%- for block in section.blocks -%}
       <blockquote class="luxe-proof__quote" role="listitem" {{ block.shopify_attributes }}>
-        <p class="luxe-proof__stars" aria-hidden="true">★★★★★</p>
+        <p class="luxe-proof__stars" aria-hidden="true">
+          <span class="luxe-stars">
+            {%- for i in (1..5) -%}
+              {%- render 'luxe-leaf-icon', name: 'star', class: 'luxe-icon--sm' -%}
+            {%- endfor -%}
+          </span>
+        </p>
         <p class="luxe-proof__text">"{{ block.settings.quote }}"</p>
         <footer class="luxe-proof__author">— {{ block.settings.author }}</footer>
       </blockquote>
@@ -66,9 +72,6 @@
 
   .luxe-proof__stars {
     margin: 0 0 12px;
-    color: #c9a227;
-    font-size: 0.875rem;
-    letter-spacing: 0.1em;
   }
 
   .luxe-proof__text {

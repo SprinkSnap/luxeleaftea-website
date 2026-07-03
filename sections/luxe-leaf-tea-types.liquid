@@ -51,7 +51,10 @@
         <div class="luxe-tea-types__body">
           <h3 class="luxe-tea-types__title">{{ title }}</h3>
           <p class="luxe-tea-types__text">{{ blurb }}</p>
-          <span class="luxe-tea-types__link">Shop {{ title }} →</span>
+          <span class="luxe-tea-types__link luxe-link-with-icon">
+            Shop {{ title }}
+            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+          </span>
         </div>
       </a>
     {%- endfor -%}
@@ -151,6 +154,9 @@
   }
 
   .luxe-tea-types__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     color: #1b4332;
     font-size: 0.8125rem;
     font-weight: 600;

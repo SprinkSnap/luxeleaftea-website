@@ -4,7 +4,7 @@
   style="{% render 'spacing-style', settings: section.settings %}"
 >
   <p class="luxe-cart-trust__line">
-    <span class="luxe-cart-trust__icon" aria-hidden="true">✦</span>
+    <span class="luxe-cart-trust__icon" aria-hidden="true">{%- render 'luxe-leaf-icon', name: 'check', class: 'luxe-icon--sm' -%}</span>
     {{ section.settings.text }}
   </p>
 </div>
@@ -28,7 +28,6 @@
   }
 
   .luxe-cart-trust__icon {
-    color: #c9a227;
     flex-shrink: 0;
   }
 {% endstylesheet %}
