@@ -1,0 +1,24 @@
+{%- doc -%}
+  Brand SVG icons for Luxe Leaf Tea sections.
+  @param {string} name - leaf, cup, truck, lock, star, check, arrow
+  @param {string} [class] - Optional extra class names
+{%- enddoc -%}
+
+<span class="luxe-icon{% if class != blank %} {{ class }}{% endif %}" aria-hidden="true">
+  {%- case name -%}
+    {%- when 'leaf' -%}
+      {{- 'icon-leaf.svg' | inline_asset_content -}}
+    {%- when 'cup' -%}
+      {{- 'icon-cup.svg' | inline_asset_content -}}
+    {%- when 'truck' -%}
+      {{- 'icon-truck.svg' | inline_asset_content -}}
+    {%- when 'lock' -%}
+      {{- 'icon-lock.svg' | inline_asset_content -}}
+    {%- when 'star' -%}
+      {{- 'icon-star.svg' | inline_asset_content -}}
+    {%- when 'check' -%}
+      {{- 'icon-checkmark.svg' | inline_asset_content -}}
+    {%- when 'arrow' -%}
+      {{- 'icon-chevron-right.svg' | inline_asset_content -}}
+  {%- endcase -%}
+</span>

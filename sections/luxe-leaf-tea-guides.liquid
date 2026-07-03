@@ -22,7 +22,10 @@
       <a class="luxe-guides__card" href="{{ url }}" role="listitem">
         <h3 class="luxe-guides__title">{{ title }}</h3>
         <p class="luxe-guides__text">{{ blurb }}</p>
-        <span class="luxe-guides__link">Read guide →</span>
+        <span class="luxe-guides__link luxe-link-with-icon">
+          Read guide
+          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+        </span>
       </a>
     {%- endfor -%}
   </div>
@@ -109,6 +112,9 @@
   }
 
   .luxe-guides__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     color: #1b4332;
     font-size: 0.8125rem;
     font-weight: 600;

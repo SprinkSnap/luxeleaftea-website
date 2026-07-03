@@ -14,159 +14,15 @@
       "settings": {}
     },
     "hero_home": {
-      "type": "hero",
-      "blocks": {
-        "hero_eyebrow": {
-          "type": "text",
-          "name": "Eyebrow",
-          "settings": {
-            "text": "<p>Premium loose leaf tea</p>",
-            "text_color": "#c9a227",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h6",
-            "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "hero_heading": {
-          "type": "text",
-          "name": "Heading",
-          "settings": {
-            "text": "<h1>Premium Loose Leaf Tea</h1>",
-            "text_color": "#ffffff",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h1",
-            "font": "var(--font-heading--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "hero_subhead": {
-          "type": "text",
-          "name": "Subheading",
-          "settings": {
-            "text": "<p>Hand-selected leaves from trusted gardens — shipped fresh for a clearer, more aromatic cup.</p>",
-            "text_color": "#f8f6f0",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1.125rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "hero_button_primary": {
-          "type": "button",
-          "name": "Primary button",
-          "settings": {
-            "label": "Shop Collection",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button",
-            "custom_button_background": "#c9a227",
-            "custom_button_text": "#1a1a1a",
-            "custom_button_border": "#c9a227",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        },
-        "hero_button_secondary": {
-          "type": "button",
-          "name": "Secondary button",
-          "settings": {
-            "label": "Explore Tea Types",
-            "link": "shopify://collections",
-            "open_in_new_tab": false,
-            "style_class": "button-secondary",
-            "custom_button_background": "rgba(0,0,0,0)",
-            "custom_button_text": "#ffffff",
-            "custom_button_border": "#ffffff",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "hero_eyebrow",
-        "hero_heading",
-        "hero_subhead",
-        "hero_button_primary",
-        "hero_button_secondary"
-      ],
-      "name": "Hero",
+      "type": "luxe-leaf-hero",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 20,
-        "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "background_color": "#1b4332",
-        "toggle_overlay": true,
-        "overlay_color": "#0d2818cc",
-        "overlay_style": "gradient",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 120,
-        "padding-block-end": 96
+        "eyebrow": "Premium loose leaf tea",
+        "heading": "Steep. Sip. Savor.",
+        "subhead": "Hand-selected whole leaves that unfurl into a clearer, more aromatic cup — packed fresh for your daily tea ritual.",
+        "primary_label": "Shop Premium Loose Leaf Tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Explore Tea Types",
+        "secondary_link": "shopify://collections"
       }
     },
     "featured_teas": {
@@ -208,7 +64,7 @@
               "type": "_product-list-text",
               "name": "Title",
               "settings": {
-                "text": "<h2>Featured premium teas</h2><p>Curated premium loose leaf selections for everyday ritual and gifting.</p>",
+                "text": "<h2>Teas worth sipping today</h2><p>Curated premium loose leaf selections — whole leaves, vivid aroma, packed fresh to order.</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -360,7 +216,7 @@
       "settings": {
         "eyebrow": "Shop by type",
         "heading": "Explore premium loose leaf tea",
-        "intro": "Find your next favorite cup — from bright green teas to deep, re-steepable pu-erh.",
+        "intro": "Find your next cup — bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
         "padding-block-start": 56,
         "padding-block-end": 24
       }
@@ -446,7 +302,7 @@
       "settings": {
         "eyebrow": "How to brew",
         "heading": "Unlock the full flavor in every leaf",
-        "intro": "Premium loose-leaf tea rewards a little care. Follow these simple steps for a clearer, more aromatic cup.",
+        "intro": "Premium loose leaf rewards a little care. Follow these simple steps for a clearer, more drinkable cup.",
         "button_label": "Shop premium teas",
         "button_link": "shopify://collections/all",
         "padding-block-start": 48,

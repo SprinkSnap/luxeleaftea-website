@@ -21,7 +21,10 @@
 
   {%- if section.settings.link_label != blank -%}
     <p class="luxe-home-faq__footer">
-      <a href="{{ section.settings.link_url }}">{{ section.settings.link_label }} →</a>
+      <a href="{{ section.settings.link_url }}" class="luxe-link-with-icon">
+        {{ section.settings.link_label }}
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
     </p>
   {%- endif -%}
 </section>
