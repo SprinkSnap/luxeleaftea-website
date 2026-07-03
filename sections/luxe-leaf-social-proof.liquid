@@ -1,0 +1,176 @@
+
+<section
+  class="luxe-proof section section--page-width spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  aria-label="Customer reviews"
+>
+  <div class="luxe-proof__header">
+    <p class="luxe-proof__eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2 class="luxe-proof__heading">{{ section.settings.heading }}</h2>
+  </div>
+
+  <div class="luxe-proof__grid" role="list">
+    {%- for block in section.blocks -%}
+      <blockquote class="luxe-proof__quote" role="listitem" {{ block.shopify_attributes }}>
+        <p class="luxe-proof__stars" aria-hidden="true">★★★★★</p>
+        <p class="luxe-proof__text">"{{ block.settings.quote }}"</p>
+        <footer class="luxe-proof__author">— {{ block.settings.author }}</footer>
+      </blockquote>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-proof {
+    padding-block: 48px;
+    background: #1b4332;
+    color: #f8f6f0;
+  }
+
+  .luxe-proof__header {
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  .luxe-proof__eyebrow {
+    margin: 0 0 10px;
+    color: #c9a227;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-proof__heading {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .luxe-proof__grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .luxe-proof__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .luxe-proof__quote {
+    margin: 0;
+    padding: 24px;
+    border: 1px solid rgb(201 162 39 / 0.25);
+    border-radius: 10px;
+    background: rgb(0 0 0 / 0.15);
+  }
+
+  .luxe-proof__stars {
+    margin: 0 0 12px;
+    color: #c9a227;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+  }
+
+  .luxe-proof__text {
+    margin: 0 0 16px;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .luxe-proof__author {
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf social proof",
+  "tag": "section",
+  "class": "luxe-proof-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Loved by tea drinkers"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Premium loose leaf, beautifully brewed"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Verified buyer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf social proof",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "quote": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea.",
+            "author": "Sarah M."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. My daily ritual now.",
+            "author": "James L."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "quote": "Finally found premium loose leaf tea that feels special without being intimidating.",
+            "author": "Elena K."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

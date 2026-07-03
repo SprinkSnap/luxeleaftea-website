@@ -1,6 +1,6 @@
 # luxeleaftea-website
 
-Premium Chinese loose-leaf tea Shopify store (Horizon theme).
+Premium loose leaf tea Shopify store (Horizon theme).
 
 ## Brand logo
 
@@ -14,15 +14,30 @@ See [`docs/PRODUCTS_AND_COLLECTIONS.md`](docs/PRODUCTS_AND_COLLECTIONS.md) for s
 - Upload product photos from `assets/luxe-leaf-*-product.png`
 - Tag products (`green-tea`, `oolong`, `pu-erh`, `black-tea`) for auto brewing guides
 
+## SEO & content
+
+See [`docs/SEO_SETUP.md`](docs/SEO_SETUP.md) for:
+
+- Google Search Console and sitemap submission
+- Tea Guides blog setup (`tea-guides` handle)
+- Three starter article outlines for organic traffic
+- JSON-LD structured data (Organization, FAQ, Breadcrumbs, BlogPosting)
+
+The theme includes enhanced meta tags, `robots.txt.liquid`, homepage FAQ schema, and blog/article conversion CTAs.
+
 ## Homepage conversion setup
 
 The homepage includes:
 
 - Trust bar (shipping, freshness, secure checkout)
 - Premium hero with Shop Collection / Explore Tea Types CTAs
+- Tea types grid (green, oolong, pu-erh, black)
 - Featured teas product grid
 - About / trust story section
 - Brewing guide section
+- Social proof (customer quotes)
+- Tea guides hub (SEO content links)
+- Final shop CTA
 
 ## About page
 
@@ -41,9 +56,12 @@ Brand navigation is enabled by default (**Theme settings → Luxe Leaf Tea**):
 - Our Story → `/pages/about`
 - Contact → `/pages/contact`
 
+Footer also links to **Tea Guides** → `/blogs/tea-guides`.
+
 ## Next steps in Shopify admin
 
 1. Add product photos and descriptions with origin, taste notes, and brewing tips
-2. Create collections by tea type (Green, Oolong, Pu-erh, etc.)
+2. Create collections by tea type (Green, Oolong, Pu-erh, Black)
 3. Set store meta description in **Settings → General**
-4. Connect Google Search Console and submit sitemap (`/sitemap.xml`)
+4. Create the **Tea Guides** blog and publish starter articles (see SEO doc)
+5. Connect Google Search Console and submit sitemap (`/sitemap.xml`)

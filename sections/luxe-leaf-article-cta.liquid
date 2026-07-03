@@ -1,0 +1,104 @@
+
+<section class="luxe-article-cta section section--page-width spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+  <div class="luxe-article-cta__box">
+    <h2 class="luxe-article-cta__heading">{{ section.settings.heading }}</h2>
+    <p class="luxe-article-cta__text">{{ section.settings.text }}</p>
+    <a href="{{ section.settings.button_link }}" class="button luxe-article-cta__button">
+      {{ section.settings.button_label }}
+    </a>
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-article-cta {
+    padding-block: 32px 64px;
+  }
+
+  .luxe-article-cta__box {
+    padding: 32px;
+    border-radius: 12px;
+    background: #f8f6f0;
+    border: 1px solid rgb(27 67 50 / 0.12);
+    text-align: center;
+  }
+
+  .luxe-article-cta__heading {
+    margin: 0 0 12px;
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+  }
+
+  .luxe-article-cta__text {
+    margin: 0 0 20px;
+    color: rgb(0 0 0 / 0.68);
+    line-height: 1.6;
+  }
+
+  .luxe-article-cta__button {
+    background: #1b4332;
+    border-color: #1b4332;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf article CTA",
+  "tag": "section",
+  "class": "luxe-article-cta-section",
+  "enabled_on": {
+    "templates": ["article"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ready to try premium loose leaf tea?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Shop our curated collection — packed fresh to order with brewing guidance on every tea."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf article CTA",
+      "settings": {
+        "button_link": "shopify://collections/all"
+      }
+    }
+  ]
+}
+{% endschema %}
