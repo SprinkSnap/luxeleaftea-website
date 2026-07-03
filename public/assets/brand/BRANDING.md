@@ -33,12 +33,27 @@ The mark alone should signal:
 2. **Chinese origin** — Longjing-style needle leaves, subtle 茶葉 characters, ink-and-jade palette
 3. **Premium** — Gold restraint, wide-tracked serif typography, generous negative space
 
+## Logo lockups
+
+| Lockup | File | Use |
+|--------|------|-----|
+| **Horizontal** (primary) | `luxe-leaf-tea-logo-horizontal.png` | Website header, navbar |
+| **Vertical** (secondary) | `luxe-leaf-tea-logo.png` | Packaging, social, hero sections |
+
+### Header sizing
+
+| Breakpoint | Height | File |
+|------------|--------|------|
+| Desktop | 48px (96px @2x) | `luxe-leaf-tea-logo-header.png` |
+| Mobile | 36px (72px @2x) | `luxe-leaf-tea-logo-header-sm.png` |
+
 ## Current v2 design rationale
 
 - **Crossing dual leaves** — Distinctive silhouette (not generic single clipart leaf); reads as fresh bud / mountain peak
 - **茶葉 characters** — Clear Chinese tea heritage without cliché lanterns or dragons
 - **No ornate borders** — Avoids South Asian/paisley associations; stays East Asian minimal
 - **Name only** — Clean for website header click-through to shop
+- **Horizontal lockup** — Icon left, wordmark right; optimized for e-commerce navigation bars
 
 ## Colors
 

@@ -10,10 +10,13 @@ Premium drinkable loose-leaf tea leaves sourced from China.
 
 | File | Use |
 |------|-----|
-| `luxe-leaf-tea-logo.png` | Master logo (939×939, transparent) |
-| `luxe-leaf-tea-logo-header.png` / `.webp` | Website header (400px) |
-| `luxe-leaf-tea-logo-header@2x.png` / `.webp` | Retina header (800px) |
-| `luxe-leaf-tea-logo-icon.png` / `.webp` | Nav, mobile, compact UI (128px) |
+| `luxe-leaf-tea-logo-horizontal.png` | Master horizontal logo (website header) |
+| `luxe-leaf-tea-logo.png` | Master vertical logo (packaging, social) |
+| `luxe-leaf-tea-logo-header.png` / `.webp` | Header desktop (217×48) |
+| `luxe-leaf-tea-logo-header@2x.png` / `.webp` | Header desktop retina (434×96) |
+| `luxe-leaf-tea-logo-header-sm.png` / `.webp` | Header mobile (162×36) |
+| `luxe-leaf-tea-logo-header-sm@2x.png` / `.webp` | Header mobile retina (325×72) |
+| `luxe-leaf-tea-logo-icon.png` / `.webp` | Icon mark (128px) |
 | `luxe-leaf-tea-logo-og.png` | Open Graph / social sharing (1200×630) |
 | `favicon-16x16.png`, `favicon-32x32.png` | Browser favicons |
 | `apple-touch-icon.png` | iOS home screen (180×180) |
