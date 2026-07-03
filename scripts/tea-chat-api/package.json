@@ -1,0 +1,8 @@
+{
+  "name": "luxe-leaf-tea-chat-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  }
+}

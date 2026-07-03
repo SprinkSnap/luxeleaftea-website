@@ -99,6 +99,12 @@
           "default": "Mei — Tea Guide"
         },
         {
+          "type": "text",
+          "id": "tea_chat_api_url",
+          "label": "Tea chat AI API URL (optional)",
+          "info": "Deploy scripts/tea-chat-api and paste the URL for GPT-powered replies. Leave blank to use the built-in smart guide."
+        },
+        {
           "type": "range",
           "id": "free_shipping_threshold",
           "label": "Free shipping threshold (cents)",

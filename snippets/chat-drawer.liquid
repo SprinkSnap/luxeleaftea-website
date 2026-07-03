@@ -99,23 +99,35 @@
 
 {%- unless settings.brand_navigation == false -%}
   {%- unless template.name == 'cart' -%}
-    <nav class="luxe-mobile-bar" aria-label="Quick shop navigation" data-mobile-shop-bar>
+    <script type="module" src="{{ 'luxe-leaf-mobile-commerce.js' | asset_url }}"></script>
+    <nav
+      class="luxe-mobile-bar{% if cart.item_count > 0 %} luxe-mobile-bar--has-cart{% endif %}"
+      aria-label="Quick shop navigation"
+      data-mobile-shop-bar
+    >
       <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
-        {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
         Shop Tea
+      </a>
+      <a
+        href="/checkout"
+        class="luxe-mobile-bar__checkout button"
+        data-mobile-checkout
+        {% if cart.item_count == 0 %}hidden{% endif %}
+      >
+        Checkout · {{ cart.total_price | money }}
       </a>
       {%- if settings.cart_type == 'drawer' -%}
         <button
           type="button"
           class="luxe-mobile-bar__cart button button-secondary"
+          data-mobile-cart-toggle
           on:click="#cart-drawer/toggle"
           aria-label="Open cart — premium loose leaf tea"
+          {% if cart.item_count > 0 %}hidden{% endif %}
         >
           {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
           <span>{{ 'content.cart_title' | t }}</span>
-          {%- if cart.item_count > 0 -%}
-            <span class="luxe-mobile-bar__count">{{ cart.item_count }}</span>
-          {%- endif -%}
+          <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
         </button>
       {%- else -%}
         <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View cart">
@@ -131,6 +143,7 @@
     <luxe-tea-chat
       class="luxe-tea-chat"
       data-agent-name="{{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | escape }}"
+      data-api-url="{{ settings.tea_chat_api_url | escape }}"
       data-free-shipping="{{ settings.free_shipping_threshold | default: 5000 }}"
       data-shop-url="{{ routes.all_products_collection_url }}"
       data-faq-url="/pages/faq"

@@ -58,7 +58,7 @@ Then **Publish** the pushed theme in admin.
 | Never pulled after merge | **Actions → Pull from GitHub** then **Publish** |
 | Wrong theme connected | Connect `SprinkSnap/luxeleaftea-website` branch **`main`**, not stock Horizon |
 | Theme editor cached settings | Pull latest `main` — Luxe CSS now loads even if admin settings differ |
-| Browser cache | Hard refresh; look for **jade footer**, **serif headings**, Luxe featured teas with “Add to Bag” pills |
+| Browser cache | Hard refresh; confirm hero headline is white, Tea Guide chat works, mobile checkout bar shows when cart has items |
 
 ## 2. Import sample products
 

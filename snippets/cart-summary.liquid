@@ -275,6 +275,11 @@
       {%- endunless -%}
     </span>
   </button>
+  {%- unless cart == empty -%}
+    {%- unless settings.brand_navigation == false -%}
+      <p class="cart__checkout-note">Apple Pay &amp; Google Pay available · Packed fresh to order</p>
+    {%- endunless -%}
+  {%- endunless -%}
 
   {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
     <div
