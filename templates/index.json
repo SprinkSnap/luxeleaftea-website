@@ -25,6 +25,18 @@
         "secondary_link": "shopify://collections"
       }
     },
+    "store_experience": {
+      "type": "luxe-leaf-store-experience",
+      "settings": {
+        "eyebrow": "Shop like you're in our tea room",
+        "heading": "Premium loose leaf tea, picked for your cup",
+        "intro": "No guesswork — whole leaves you can see, smell, and steep. We pack every order fresh so your first sip tastes like it came straight from the counter.",
+        "primary_label": "Shop Premium Loose Leaf Tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Explore Tea Types",
+        "secondary_link": "shopify://collections"
+      }
+    },
     "featured_teas": {
       "type": "product-list",
       "blocks": {
@@ -408,6 +420,7 @@
   "order": [
     "luxe_trust_bar",
     "hero_home",
+    "store_experience",
     "tea_types",
     "featured_teas",
     "about_story",

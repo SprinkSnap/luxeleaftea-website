@@ -1,0 +1,7 @@
+{
+  "name": "luxe-leaf-wechat-inventory-webhook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shopify inventory webhook → WeChat Work reorder alerts for Luxe Leaf Tea"
+}

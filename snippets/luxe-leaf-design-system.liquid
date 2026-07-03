@@ -1,0 +1,112 @@
+{%- doc -%}
+  Boutique premium tea shop design system — overrides Horizon defaults for an in-store feel.
+{%- enddoc -%}
+
+{% stylesheet %}
+  :root {
+    --luxe-jade: #1b4332;
+    --luxe-jade-rgb: 27 67 50;
+    --luxe-gold: #c9a227;
+    --luxe-gold-rgb: 201 162 39;
+    --luxe-cream: #f8f6f0;
+    --luxe-cream-dark: #ebe6dc;
+    --luxe-ink: #1a1a1a;
+    --luxe-radius: 0.5rem;
+    --luxe-radius-lg: 0.75rem;
+    --luxe-shadow: 0 8px 32px rgb(27 67 50 / 0.12);
+    --luxe-shadow-soft: 0 2px 12px rgb(27 67 50 / 0.08);
+  }
+
+  body {
+    background: var(--luxe-cream);
+  }
+
+  .product-card,
+  .product-grid__card {
+    border-radius: var(--luxe-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--luxe-shadow-soft);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    position: relative;
+  }
+
+  .product-card:hover {
+    box-shadow: var(--luxe-shadow);
+    transform: translateY(-2px);
+  }
+
+  .button,
+  .cart__checkout-button {
+    border-radius: var(--luxe-radius);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .buy-buttons-block .button,
+  .add-to-cart-button.button {
+    min-height: 3.25rem;
+    font-size: 1rem;
+    background: var(--luxe-jade) !important;
+    border-color: var(--luxe-jade) !important;
+    color: #fff !important;
+  }
+
+  .buy-buttons-block .button:hover,
+  .add-to-cart-button.button:hover {
+    background: rgb(var(--luxe-jade-rgb) / 0.88) !important;
+  }
+
+  .cart__checkout-button {
+    min-height: 3.5rem;
+    font-size: 1.0625rem;
+    background: var(--luxe-gold) !important;
+    border-color: var(--luxe-gold) !important;
+    color: var(--luxe-ink) !important;
+    width: 100%;
+  }
+
+  .cart__checkout-button:hover {
+    filter: brightness(1.05);
+  }
+
+  sticky-add-to-cart,
+  .sticky-add-to-cart {
+    background: var(--luxe-cream) !important;
+    border-top: 1px solid rgb(var(--luxe-jade-rgb) / 0.12);
+    box-shadow: 0 -4px 24px rgb(27 67 50 / 0.1);
+  }
+
+  .theme-drawer__dialog.color-custom-drawer {
+    border-radius: var(--luxe-radius-lg) var(--luxe-radius-lg) 0 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .theme-drawer__dialog.color-custom-drawer {
+      border-radius: var(--luxe-radius-lg);
+    }
+  }
+
+  .section {
+    --section-background: var(--luxe-cream);
+  }
+
+  h1,
+  h2,
+  h3,
+  .h1,
+  .h2,
+  .h3,
+  .h4 {
+    color: var(--luxe-jade);
+  }
+
+  .quick-add__button {
+    background: var(--luxe-jade);
+    color: #fff;
+    border-radius: var(--luxe-radius);
+  }
+
+  .card-gallery {
+    position: relative;
+  }
+{% endstylesheet %}

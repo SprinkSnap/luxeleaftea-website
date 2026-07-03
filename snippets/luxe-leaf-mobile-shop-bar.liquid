@@ -1,0 +1,108 @@
+{%- doc -%}
+  Mobile sticky shop bar — keeps buy path one tap away on phones.
+{%- enddoc -%}
+
+{%- unless template.name == 'cart' -%}
+<nav class="luxe-mobile-bar" aria-label="Quick shop navigation" data-mobile-shop-bar>
+  <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
+    {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+    Shop Tea
+  </a>
+  {%- if settings.cart_type == 'drawer' -%}
+    <button
+      type="button"
+      class="luxe-mobile-bar__cart button button-secondary"
+      on:click="#cart-drawer/toggle"
+      aria-label="Open cart — premium loose leaf tea"
+    >
+      {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
+      <span>{{ 'content.cart_title' | t }}</span>
+      {%- if cart.item_count > 0 -%}
+        <span class="luxe-mobile-bar__count">{{ cart.item_count }}</span>
+      {%- endif -%}
+    </button>
+  {%- else -%}
+    <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View cart">
+      {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
+      <span>{{ 'content.cart_title' | t }}</span>
+    </a>
+  {%- endif -%}
+</nav>
+{%- endunless -%}
+
+{% stylesheet %}
+  :root {
+    --luxe-mobile-bar-height: 0px;
+  }
+
+  @media screen and (max-width: 749px) {
+    :root {
+      --luxe-mobile-bar-height: 4.25rem;
+    }
+
+    body {
+      padding-bottom: var(--luxe-mobile-bar-height);
+    }
+
+    .luxe-mobile-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: calc(var(--layer-menu-drawer) + 1);
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 0.5rem;
+      padding: 0.65rem 0.75rem calc(0.65rem + env(safe-area-inset-bottom));
+      background: rgb(248 246 240 / 0.96);
+      border-top: 1px solid rgb(var(--luxe-jade-rgb) / 0.12);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 -4px 20px rgb(27 67 50 / 0.1);
+    }
+
+    .luxe-mobile-bar__shop,
+    .luxe-mobile-bar__cart {
+      min-height: 2.85rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--luxe-radius);
+    }
+
+    .luxe-mobile-bar__shop {
+      background: var(--luxe-jade);
+      border-color: var(--luxe-jade);
+      color: #fff;
+    }
+
+    .luxe-mobile-bar__cart {
+      background: #fff;
+      border-color: rgb(var(--luxe-jade-rgb) / 0.25);
+      color: var(--luxe-jade);
+    }
+
+    .luxe-mobile-bar__cart svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    .luxe-mobile-bar__count {
+      min-width: 1.25rem;
+      padding: 0 0.35rem;
+      border-radius: 999px;
+      background: var(--luxe-gold);
+      color: var(--luxe-ink);
+      font-size: 0.6875rem;
+      font-weight: 700;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-mobile-bar {
+      display: none;
+    }
+  }
+{% endstylesheet %}
