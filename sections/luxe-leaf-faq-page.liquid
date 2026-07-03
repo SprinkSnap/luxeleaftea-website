@@ -1,0 +1,280 @@
+{%- doc -%}
+  FAQ page with visible accordions and FAQPage JSON-LD for rich results.
+{%- enddoc -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section section--page-width color-{{ section.settings.color_scheme }} spacing-style luxe-faq-page"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="luxe-faq-page__header">
+    <p class="luxe-faq-page__eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1 class="luxe-faq-page__heading">{{ section.settings.heading }}</h1>
+    <div class="luxe-faq-page__intro rte">{{ section.settings.intro }}</div>
+  </div>
+
+  <div class="luxe-faq-page__list">
+    {%- for block in section.blocks -%}
+      <details class="luxe-faq-page__item" {{ block.shopify_attributes }}>
+        <summary class="luxe-faq-page__question">{{ block.settings.question }}</summary>
+        <div class="luxe-faq-page__answer rte">{{ block.settings.answer }}</div>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.settings.cta_label != blank -%}
+    <div class="luxe-faq-page__cta">
+      <p class="luxe-faq-page__cta-text">{{ section.settings.cta_text }}</p>
+      <a href="{{ section.settings.cta_link }}" class="button luxe-faq-page__cta-button">
+        {{ section.settings.cta_label }}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- for block in section.blocks -%}
+      {
+        "@type": "Question",
+        "name": {{ block.settings.question | json }},
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": {{ block.settings.answer | strip_html | json }}
+        }
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+</script>
+
+{% stylesheet %}
+  .luxe-faq-page {
+    padding-block: 48px 64px;
+  }
+
+  .luxe-faq-page__header {
+    max-width: 42rem;
+    margin-bottom: 32px;
+  }
+
+  .luxe-faq-page__eyebrow {
+    margin: 0 0 10px;
+    color: #c9a227;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-faq-page__heading {
+    margin: 0 0 12px;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.15;
+  }
+
+  .luxe-faq-page__intro {
+    color: rgb(var(--color-foreground-rgb) / 0.8);
+    line-height: 1.65;
+  }
+
+  .luxe-faq-page__list {
+    display: grid;
+    gap: 12px;
+    max-width: 48rem;
+  }
+
+  .luxe-faq-page__item {
+    border: 1px solid rgb(27 67 50 / 0.12);
+    border-radius: 10px;
+    background: #f8f6f0;
+    overflow: hidden;
+  }
+
+  .luxe-faq-page__question {
+    padding: 18px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .luxe-faq-page__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .luxe-faq-page__answer {
+    padding: 0 20px 18px;
+    color: rgb(var(--color-foreground-rgb) / 0.82);
+    line-height: 1.65;
+  }
+
+  .luxe-faq-page__answer p {
+    margin: 0;
+  }
+
+  .luxe-faq-page__cta {
+    margin-top: 40px;
+    padding: 28px;
+    border-radius: 12px;
+    background: #1b4332;
+    color: #f8f6f0;
+    text-align: center;
+  }
+
+  .luxe-faq-page__cta-text {
+    margin: 0 0 16px;
+    line-height: 1.6;
+  }
+
+  .luxe-faq-page__cta-button {
+    background: #c9a227;
+    border-color: #c9a227;
+    color: #1a1a1a;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf FAQ page",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Help center"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Premium loose leaf tea FAQ"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>Answers to common questions about brewing, shipping, and choosing premium loose leaf tea.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Ready to find your next favorite tea?"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA button",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How much loose leaf tea should I use per cup?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf FAQ page",
+      "settings": {
+        "cta_link": "shopify://collections/all"
+      },
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How much loose leaf tea should I use per cup?",
+            "answer": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What water temperature is best for loose leaf green tea?",
+            "answer": "<p>Premium loose leaf green tea brews best at 175–185°F (80–85°C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Can you re-steep premium loose leaf tea?",
+            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3–4 infusions; oolongs and pu-erh can offer 4–8.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Why choose loose leaf tea over tea bags?",
+            "answer": "<p>Loose leaf tea uses whole or large leaves that unfurl in water, releasing more aroma and flavor. Premium loose leaf also re-steeps better and offers clearer origin and quality.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How fresh is the tea when it arrives?",
+            "answer": "<p>Every order is packed fresh after you purchase — not pulled from a long-term shelf. Sealed packaging protects aroma until you open your tin or pouch.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes — free shipping on orders over $50 within the contiguous United States. See checkout for current rates on other destinations.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

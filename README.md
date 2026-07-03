@@ -23,7 +23,7 @@ See [`docs/SEO_SETUP.md`](docs/SEO_SETUP.md) for:
 - Three starter article outlines for organic traffic
 - JSON-LD structured data (Organization, FAQ, Breadcrumbs, BlogPosting)
 
-The theme includes enhanced meta tags, `robots.txt.liquid`, homepage FAQ schema, and blog/article conversion CTAs.
+The theme includes enhanced meta tags, `robots.txt.liquid`, homepage FAQ schema, visible breadcrumbs, FAQ page, collection CTAs, GA4/Search Console hooks, and blog/article conversion CTAs.
 
 ## Homepage conversion setup
 
@@ -56,7 +56,22 @@ Brand navigation is enabled by default (**Theme settings → Luxe Leaf Tea**):
 - Our Story → `/pages/about`
 - Contact → `/pages/contact`
 
-Footer also links to **Tea Guides** → `/blogs/tea-guides`.
+Footer also links to **Tea Guides** → `/blogs/tea-guides` and **FAQ** → `/pages/faq`.
+
+## FAQ page
+
+Create a page in Shopify admin:
+
+1. **Online Store → Pages → Add page**
+2. Title: `FAQ` (handle will be `faq`)
+3. Template suffix: `faq` (uses `templates/page.faq.json`)
+
+## Analytics & Search Console
+
+In **Theme settings → Logo and favicon → SEO & analytics**:
+
+- Paste your GA4 measurement ID (`G-XXXXXXXXXX`)
+- Paste your Google Search Console verification code
 
 ## Next steps in Shopify admin
 
@@ -65,3 +80,5 @@ Footer also links to **Tea Guides** → `/blogs/tea-guides`.
 3. Set store meta description in **Settings → General**
 4. Create the **Tea Guides** blog and publish starter articles (see SEO doc)
 5. Connect Google Search Console and submit sitemap (`/sitemap.xml`)
+6. Create the **FAQ** page with template suffix `faq`
+7. Add GA4 and Search Console verification in theme settings

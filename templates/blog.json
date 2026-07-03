@@ -9,6 +9,13 @@
  */
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "luxe-leaf-breadcrumbs",
+      "settings": {
+        "padding-block-start": 12,
+        "padding-block-end": 0
+      }
+    },
     "blog_hero": {
       "type": "luxe-leaf-blog-hero",
       "settings": {}
@@ -83,6 +90,7 @@
     }
   },
   "order": [
+    "breadcrumbs",
     "blog_hero",
     "main"
   ]

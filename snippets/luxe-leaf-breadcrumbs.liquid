@@ -1,0 +1,87 @@
+{%- doc -%}
+  Visible breadcrumb navigation for SEO internal linking and UX.
+{%- enddoc -%}
+
+{%- liquid
+  assign shop_url = shop.url | default: request.origin
+  assign crumbs = ''
+
+  case request.page_type
+    when 'collection'
+      if collection
+        assign crumbs = 'Home|' | append: shop_url | append: '||' | append: collection.title | append: '|' | append: collection.url
+      endif
+    when 'product'
+      if product
+        assign breadcrumb_collection = collection
+        if breadcrumb_collection == blank and product.collections.size > 0
+          assign breadcrumb_collection = product.collections.first
+        endif
+        if breadcrumb_collection == blank
+          assign tag_handles = product.tags | join: ',' | downcase
+          if tag_handles contains 'green-tea'
+            assign breadcrumb_collection = collections['green-tea']
+          elsif tag_handles contains 'oolong'
+            assign breadcrumb_collection = collections['oolong']
+          elsif tag_handles contains 'pu-erh' or tag_handles contains 'puerh'
+            assign breadcrumb_collection = collections['pu-erh']
+          elsif tag_handles contains 'black-tea'
+            assign breadcrumb_collection = collections['black-tea']
+          endif
+        endif
+
+        assign crumbs = 'Home|' | append: shop_url
+        if breadcrumb_collection != blank
+          assign crumbs = crumbs | append: '||' | append: breadcrumb_collection.title | append: '|' | append: breadcrumb_collection.url
+        endif
+        assign crumbs = crumbs | append: '||' | append: product.title | append: '|' | append: product.url
+      endif
+    when 'article'
+      if article
+        assign blog_title = blog.title | default: 'Tea Guides'
+        assign blog_url = blog.url | default: '/blogs/tea-guides'
+        assign crumbs = 'Home|' | append: shop_url | append: '||' | append: blog_title | append: '|' | append: blog_url | append: '||' | append: article.title | append: '|' | append: article.url
+      endif
+    when 'blog'
+      if blog
+        assign crumbs = 'Home|' | append: shop_url | append: '||' | append: blog.title | append: '|' | append: blog.url
+      endif
+    when 'page'
+      if page
+        assign crumbs = 'Home|' | append: shop_url | append: '||' | append: page.title | append: '|' | append: page.url
+      endif
+  endcase
+
+  assign crumb_list = crumbs | split: '||'
+-%}
+
+{%- if crumbs != blank -%}
+  <nav class="luxe-breadcrumbs page-width" aria-label="Breadcrumb">
+    <ol class="luxe-breadcrumbs__list list-unstyled" itemscope itemtype="https://schema.org/BreadcrumbList">
+      {%- for entry in crumb_list -%}
+        {%- assign parts = entry | split: '|' -%}
+        {%- assign label = parts[0] -%}
+        {%- assign url = parts[1] -%}
+        {%- assign is_last = forloop.last -%}
+
+        <li
+          class="luxe-breadcrumbs__item{% if is_last %} luxe-breadcrumbs__item--current{% endif %}"
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          {%- if is_last -%}
+            <span itemprop="name">{{ label }}</span>
+            <link itemprop="item" href="{{ shop_url | append: url }}">
+          {%- else -%}
+            <a href="{{ url }}" itemprop="item">
+              <span itemprop="name">{{ label }}</span>
+            </a>
+            <span class="luxe-breadcrumbs__sep" aria-hidden="true">/</span>
+          {%- endif -%}
+          <meta itemprop="position" content="{{ forloop.index }}">
+        </li>
+      {%- endfor -%}
+    </ol>
+  </nav>
+{%- endif -%}

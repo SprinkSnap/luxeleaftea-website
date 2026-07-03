@@ -8,6 +8,13 @@
  * ------------------------------------------------------------
  */{
   "sections": {
+    "breadcrumbs": {
+      "type": "luxe-leaf-breadcrumbs",
+      "settings": {
+        "padding-block-start": 12,
+        "padding-block-end": 0
+      }
+    },
     "main": {
       "type": "product-information",
       "blocks": {
@@ -485,6 +492,7 @@
     }
   },
   "order": [
+    "breadcrumbs",
     "main",
     "luxe_product_guide",
     "product_recommendations_qggXJq"

@@ -12,13 +12,17 @@ Set the meta description to:
 
 The theme adds page-type fallbacks in `snippets/meta-tags.liquid` when this field is blank.
 
-## 2. Google Search Console
+## 2. Google Search Console & Analytics
 
 1. Go to [Google Search Console](https://search.google.com/search-console)
 2. Add your store domain as a property
-3. Verify ownership (HTML tag or DNS — Shopify supports both)
+3. Verify ownership using the **HTML meta tag** method:
+   - Copy the verification code (the `content` value only)
+   - Paste it in **Theme settings → Logo and favicon → Google Search Console verification code**
 4. Submit sitemap: `https://your-store.com/sitemap.xml`
 5. Request indexing for the homepage after launch
+
+For Google Analytics 4, paste your measurement ID (e.g. `G-XXXXXXXXXX`) in **Theme settings → Logo and favicon → Google Analytics 4 measurement ID**.
 
 The theme ships `templates/robots.txt.liquid` with the standard Shopify crawl rules and sitemap reference.
 
@@ -83,10 +87,25 @@ The theme outputs JSON-LD via `snippets/luxe-leaf-schema.liquid`:
 | Collection | BreadcrumbList, CollectionPage |
 | Product | BreadcrumbList |
 | Article | BlogPosting |
+| FAQ page | FAQPage (visible accordions + JSON-LD) |
+
+Visible breadcrumbs appear on collection, product, blog, article, and FAQ pages via `snippets/luxe-leaf-breadcrumbs.liquid`.
 
 Duplicate Organization markup was removed from `sections/header.liquid` to avoid conflicting signals.
 
-## 6. Homepage conversion sections
+## 6. Create the FAQ page
+
+**Online Store → Pages → Add page**
+
+| Field | Value |
+|-------|-------|
+| Title | FAQ |
+| Handle | `faq` |
+| Template | `faq` (uses `templates/page.faq.json`) |
+
+The FAQ page includes 6 preset Q&As, FAQPage structured data for rich results, and a shop CTA. Footer links to `/pages/faq`.
+
+## 7. Homepage conversion sections
 
 After deploying, the homepage includes (in order):
 
@@ -100,16 +119,22 @@ After deploying, the homepage includes (in order):
 8. **Tea guides hub** (links to blog + collections)
 9. **Shop CTA** (final conversion block)
 
-## 7. Social profiles
+## 8. Social profiles
 
 **Theme settings → Social media**
 
 Add Facebook, Instagram, and YouTube URLs. These populate Organization `sameAs` in structured data and footer social links.
 
-## 8. Ongoing SEO checklist
+## 9. Ongoing SEO checklist
 
 - [ ] Add unique meta descriptions to each collection (see `docs/PRODUCTS_AND_COLLECTIONS.md`)
 - [ ] Write product descriptions with origin, tasting notes, and brewing tips
 - [ ] Publish 1–2 tea guide articles per month
 - [ ] Replace placeholder social proof quotes with real customer reviews when available
+- [ ] Create FAQ page with template suffix `faq`
+- [ ] Add GA4 measurement ID and Search Console verification in theme settings
 - [ ] Monitor Search Console for crawl errors and keyword impressions
+
+## 10. Collection conversion
+
+Collection pages include a bottom CTA (`sections/luxe-leaf-collection-cta.liquid`) linking to the full catalog and Tea Guides blog — helping visitors who browse but don't add to cart immediately.
