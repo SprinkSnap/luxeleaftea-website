@@ -18,7 +18,7 @@
       "settings": {
         "eyebrow": "Premium loose leaf tea",
         "heading": "Steep. Sip. Savor.",
-        "subhead": "Hand-selected whole leaves that unfurl into a clearer, more aromatic cup — packed fresh for your daily tea ritual.",
+        "subhead": "Hand-selected whole leaves that unfurl into a clearer, more aromatic cup \u2014 packed fresh for your daily tea ritual.",
         "primary_label": "Shop Premium Loose Leaf Tea",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Explore Tea Types",
@@ -30,7 +30,7 @@
       "settings": {
         "eyebrow": "Shop like you're in our tea room",
         "heading": "Premium loose leaf tea, picked for your cup",
-        "intro": "No guesswork — whole leaves you can see, smell, and steep. We pack every order fresh so your first sip tastes like it came straight from the counter.",
+        "intro": "No guesswork \u2014 whole leaves you can see, smell, and steep. We pack every order fresh so your first sip tastes like it came straight from the counter.",
         "primary_label": "Shop Premium Loose Leaf Tea",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Explore Tea Types",
@@ -38,189 +38,14 @@
       }
     },
     "featured_teas": {
-      "type": "product-list",
-      "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "Header",
-          "static": true,
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "featured_title": {
-              "type": "_product-list-text",
-              "name": "Title",
-              "settings": {
-                "text": "<h2>Teas worth sipping today</h2><p>Curated premium loose leaf selections — whole leaves, vivid aroma, packed fresh to order.</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h3",
-                "font": "var(--font-heading--family)",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "featured_button": {
-              "type": "_product-list-button",
-              "name": "View all",
-              "settings": {
-                "label": "Shop all teas",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "featured_title",
-            "featured_button"
-          ]
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "Product card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery": {
-              "type": "_product-card-gallery",
-              "name": "Media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title": {
-              "type": "product-title",
-              "name": "Title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_price": {
-              "type": "price",
-              "name": "Price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery",
-            "product_title",
-            "product_price"
-          ]
-        }
-      },
-      "name": "Featured teas",
+      "type": "luxe-leaf-featured-teas",
       "settings": {
+        "eyebrow": "Today's selection",
+        "heading": "Teas worth sipping today",
+        "intro": "Hand-picked premium loose leaf \u2014 whole leaves, vivid aroma, packed fresh to order.",
+        "view_all_label": "Shop all teas",
         "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 56,
-        "padding-block-end": 56
+        "product_limit": 8
       }
     },
     "tea_types": {
@@ -228,7 +53,7 @@
       "settings": {
         "eyebrow": "Shop by type",
         "heading": "Explore premium loose leaf tea",
-        "intro": "Find your next cup — bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
+        "intro": "Find your next cup \u2014 bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
         "padding-block-start": 56,
         "padding-block-end": 24
       }
@@ -240,14 +65,14 @@
           "type": "trust_point",
           "settings": {
             "title": "Origin first",
-            "text": "Teas labeled by region, harvest, and style — so you know exactly what you're buying."
+            "text": "Teas labeled by region, harvest, and style \u2014 so you know exactly what you're buying."
           }
         },
         "trust_loose": {
           "type": "trust_point",
           "settings": {
             "title": "Loose leaf only",
-            "text": "Whole leaves that unfurl in the cup — richer flavor, better re-steeps, no dusty bags."
+            "text": "Whole leaves that unfurl in the cup \u2014 richer flavor, better re-steeps, no dusty bags."
           }
         },
         "trust_fresh": {
@@ -261,7 +86,7 @@
           "type": "trust_point",
           "settings": {
             "title": "Brewing guidance",
-            "text": "Every tea ships with temperature, timing, and gram tips — confidence from the first sip."
+            "text": "Every tea ships with temperature, timing, and gram tips \u2014 confidence from the first sip."
           }
         }
       },
@@ -274,7 +99,7 @@
       "settings": {
         "eyebrow": "Our Story",
         "heading": "Tea leaves worth slowing down for",
-        "text": "<p>Luxe Leaf Tea sources drinkable premium loose-leaf teas from China's most respected growing regions — Longjing, Fujian, Yunnan, and beyond. Every lot is selected for aroma, clarity, and the kind of cup that turns a daily ritual into something special.</p><p>We work directly with trusted gardens and pack fresh to order, so what arrives at your door is ready to brew — not sitting on a shelf.</p>",
+        "text": "<p>Luxe Leaf Tea sources drinkable premium loose-leaf teas from China's most respected growing regions \u2014 Longjing, Fujian, Yunnan, and beyond. Every lot is selected for aroma, clarity, and the kind of cup that turns a daily ritual into something special.</p><p>We work directly with trusted gardens and pack fresh to order, so what arrives at your door is ready to brew \u2014 not sitting on a shelf.</p>",
         "button_label": "Read our full story",
         "button_link": "shopify://pages/about",
         "padding-block-start": 56,
@@ -295,14 +120,14 @@
           "type": "step",
           "settings": {
             "title": "Water temperature",
-            "text": "Green teas: 175–185°F. Oolongs: 195–205°F. Never boiling for delicate leaves."
+            "text": "Green teas: 175\u2013185\u00b0F. Oolongs: 195\u2013205\u00b0F. Never boiling for delicate leaves."
           }
         },
         "step_steep": {
           "type": "step",
           "settings": {
             "title": "Steep & re-steep",
-            "text": "Steep 1–2 minutes, then pour. Quality loose leaf can be re-steeped 3–5 times."
+            "text": "Steep 1\u20132 minutes, then pour. Quality loose leaf can be re-steeped 3\u20135 times."
           }
         }
       },
@@ -335,14 +160,14 @@
           "type": "faq",
           "settings": {
             "question": "What water temperature is best for loose leaf green tea?",
-            "answer": "<p>Premium loose leaf green tea brews best at 175–185°F (80–85°C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
+            "answer": "<p>Premium loose leaf green tea brews best at 175\u2013185\u00b0F (80\u201385\u00b0C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
           }
         },
         "faq_3": {
           "type": "faq",
           "settings": {
             "question": "Can you re-steep premium loose leaf tea?",
-            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3–4 infusions; oolongs and pu-erh can offer 4–8.</p>"
+            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3\u20134 infusions; oolongs and pu-erh can offer 4\u20138.</p>"
           }
         },
         "faq_4": {
@@ -371,7 +196,7 @@
         "review_1": {
           "type": "review",
           "settings": {
-            "quote": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea.",
+            "quote": "The leaves taste incredibly fresh \u2014 bright, sweet, and nothing like bagged tea.",
             "author": "Sarah M."
           }
         },

@@ -38,7 +38,16 @@ Then **Publish** the pushed theme in admin.
 | Theme not synced | Pull from GitHub or `shopify theme push` |
 | Theme not **published** | Only the **published** theme is live — preview themes are not |
 | Wrong theme published | Publish the GitHub-connected Luxe Leaf theme, not an old Horizon copy |
-| Browser cache | Hard refresh or incognito |
+## Troubleshooting “still looks like Horizon theme”
+
+| Cause | Fix |
+|-------|-----|
+| Old theme still **published** | Online Store → Themes → **Publish** the GitHub `main` theme |
+| Theme editor cached settings | Theme settings → reset fonts to Playfair + Source Sans (or re-import from `settings_data.json`) |
+| Wrong theme connected | Connect `SprinkSnap/luxeleaftea-website` branch **`main`**, not stock Horizon |
+| Browser cache | Hard refresh; look for **jade footer**, **serif headings**, **Luxe featured teas** grid with “Add to Bag” pills |
+
+After PR #16+ merge, the live theme should show: dark jade announcement bar, cream header, serif headlines, custom featured tea cards (not generic Horizon product grid), and **Luxe Leaf Tea** as theme name in admin.
 
 ## 2. Import sample products
 
