@@ -78,7 +78,7 @@ Each article template includes a **Shop the collection** CTA at the bottom (`sec
 
 ## 5. Structured data (automatic)
 
-The theme outputs JSON-LD via `snippets/luxe-leaf-schema.liquid`:
+The theme outputs JSON-LD via `snippets/meta-tags.liquid` (Organization, WebSite, FAQ, breadcrumbs, BlogPosting):
 
 | Page | Schema |
 |------|--------|
