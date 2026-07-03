@@ -16,7 +16,7 @@
     <button
       on:click="#search-modal/showDialog"
       class="button-unstyled header-actions__action{% if display_style == 'text' %} header-actions__text-style{% endif %}"
-      aria-label="{{ 'content.search_input_label' | t }}"
+      aria-label="{% if settings.brand_navigation %}Search premium loose leaf tea{% else %}{{ 'content.search_input_label' | t }}{% endif %}"
       aria-haspopup="dialog"
     >
       <span class="{% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}">
@@ -24,7 +24,11 @@
       </span>
 
       <span class="svg-wrapper {% if display_style != 'icon' %}desktop:hidden{% endif %}">
-        {{ 'icon-search.svg' | inline_asset_content }}
+        {%- if settings.brand_navigation -%}
+          {%- render 'luxe-leaf-header-icon', name: 'search' -%}
+        {%- else -%}
+          {{ 'icon-search.svg' | inline_asset_content }}
+        {%- endif -%}
       </span>
     </button>
   </search-button>

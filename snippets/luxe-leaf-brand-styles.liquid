@@ -1,5 +1,5 @@
 {%- doc -%}
-  Shared premium tea shop styles for Luxe Leaf sections.
+  Shared premium tea shop styles for Luxe Leaf sections and header.
 {%- enddoc -%}
 
 {% stylesheet %}
@@ -38,5 +38,42 @@
     display: inline-flex;
     gap: 0.15rem;
     color: #c9a227;
+  }
+
+  /* Header contrast + tea-themed icons */
+  #header-component .header__row {
+    --color-foreground: #1b4332;
+    --color-foreground-rgb: 27 67 50;
+    --color-foreground-muted: rgb(27 67 50 / 0.72);
+    --color-foreground-subdued: rgb(27 67 50 / 0.55);
+    --color-account-icon: #1b4332;
+  }
+
+  #header-component .header-actions__action,
+  #header-component .header__icon--menu,
+  #header-component .search-action .header-actions__action {
+    color: #1b4332;
+    position: relative;
+    z-index: 2;
+  }
+
+  #header-component .header-actions__action svg,
+  #header-component .header__icon--menu svg,
+  #header-component .search-action svg {
+    stroke: currentColor;
+  }
+
+  #header-component .header-actions__action .svg-wrapper,
+  #header-component .header__icon--menu .svg-wrapper {
+    color: #1b4332;
+  }
+
+  #header-component .menu-list__link {
+    color: #1b4332;
+  }
+
+  #header-component .menu-list__link:hover,
+  #header-component .menu-list__link[aria-expanded='true'] {
+    color: rgb(27 67 50 / 0.72);
   }
 {% endstylesheet %}
