@@ -1,0 +1,213 @@
+{%- doc -%}
+  Tea type collection cards for homepage and collection browsing.
+{%- enddoc -%}
+
+<section
+  class="luxe-tea-types section section--page-width spacing-style"
+  id="shop-by-type"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="luxe-tea-types__header">
+    <p class="luxe-tea-types__eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2 class="luxe-tea-types__heading">{{ section.settings.heading }}</h2>
+    <p class="luxe-tea-types__intro">{{ section.settings.intro }}</p>
+  </div>
+
+  <div class="luxe-tea-types__grid" role="list">
+    {%- assign types = 'green-tea|Green Tea|Bright, sweet, and refreshing premium loose leaf greens|luxe-leaf-green-tea-product.png,oolong|Oolong|Floral, layered, and beautifully balanced|luxe-leaf-oolong-tea-product.png,pu-erh|Pu-erh|Deep, smooth, and perfect for re-steeping|luxe-leaf-puerh-tea-product.png,black-tea|Black Tea|Rich, malty, and full-bodied|luxe-leaf-black-tea-product.png' | split: ',' -%}
+
+    {%- for entry in types -%}
+      {%- assign parts = entry | split: '|' -%}
+      {%- assign handle = parts[0] -%}
+      {%- assign title = parts[1] -%}
+      {%- assign blurb = parts[2] -%}
+      {%- assign image_file = parts[3] -%}
+      {%- assign collection = collections[handle] -%}
+      {%- if collection.url != blank -%}
+        {%- assign url = collection.url -%}
+      {%- else -%}
+        {%- assign url = '/collections/' | append: handle -%}
+      {%- endif -%}
+
+      <a class="luxe-tea-types__card" href="{{ url }}" role="listitem">
+        <div class="luxe-tea-types__media">
+          {%- if collection.featured_image -%}
+            {{
+              collection.featured_image
+              | image_url: width: 800
+              | image_tag: loading: 'lazy', alt: title, class: 'luxe-tea-types__image'
+            }}
+          {%- else -%}
+            <img
+              src="{{ image_file | asset_url }}"
+              alt="{{ title }} — premium loose leaf tea"
+              width="800"
+              height="800"
+              loading="lazy"
+              class="luxe-tea-types__image"
+            >
+          {%- endif -%}
+        </div>
+        <div class="luxe-tea-types__body">
+          <h3 class="luxe-tea-types__title">{{ title }}</h3>
+          <p class="luxe-tea-types__text">{{ blurb }}</p>
+          <span class="luxe-tea-types__link">Shop {{ title }} →</span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-tea-types {
+    padding-block: 56px;
+    background: #fff;
+  }
+
+  .luxe-tea-types__header {
+    max-width: 40rem;
+    margin-bottom: 32px;
+  }
+
+  .luxe-tea-types__eyebrow {
+    margin: 0 0 10px;
+    color: #c9a227;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-tea-types__heading {
+    margin: 0 0 12px;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+  }
+
+  .luxe-tea-types__intro {
+    margin: 0;
+    color: rgb(0 0 0 / 0.68);
+    line-height: 1.6;
+  }
+
+  .luxe-tea-types__grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-tea-types__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .luxe-tea-types__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .luxe-tea-types__card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 10px;
+    background: #f8f6f0;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .luxe-tea-types__card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgb(27 67 50 / 0.08);
+  }
+
+  .luxe-tea-types__media {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .luxe-tea-types__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .luxe-tea-types__body {
+    padding: 18px;
+  }
+
+  .luxe-tea-types__title {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+  }
+
+  .luxe-tea-types__text {
+    margin: 0 0 12px;
+    color: rgb(0 0 0 / 0.68);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .luxe-tea-types__link {
+    color: #1b4332;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf tea types",
+  "tag": "section",
+  "class": "luxe-tea-types-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop by type"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Explore premium loose leaf tea"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Find your next favorite cup — from bright green teas to deep, re-steepable pu-erh."
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf tea types"
+    }
+  ]
+}
+{% endschema %}

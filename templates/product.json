@@ -11,25 +11,6 @@
     "main": {
       "type": "product-information",
       "blocks": {
-        "disclosures_g9mWze": {
-          "type": "disclosures",
-          "name": "t:names.disclosures",
-          "settings": {
-            "heading": "Disclosures",
-            "heading_preset": "h5",
-            "open_by_default": false,
-            "icon": "caret",
-            "disclosure_heading_preset": "h6",
-            "text_color": "",
-            "dividers": true,
-            "divider_color": "{{ settings.color_palette.color2 }}",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
         "media-gallery": {
           "type": "_product-media-gallery",
           "static": true,
@@ -37,7 +18,7 @@
             "media_presentation": "grid",
             "media_columns": "two",
             "image_gap": 4,
-            "large_first_image": false,
+            "large_first_image": true,
             "icons_style": "none",
             "slideshow_controls_style": "counter",
             "slideshow_mobile_controls_style": "dots",
@@ -259,9 +240,9 @@
                   "static": true,
                   "settings": {
                     "style_class": "button",
-                    "custom_button_background": "{{ settings.color_palette.foreground }}",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}"
+                    "custom_button_background": "#1b4332",
+                    "custom_button_text": "#ffffff",
+                    "custom_button_border": "#1b4332"
                   },
                   "blocks": {}
                 },
@@ -273,6 +254,32 @@
                 }
               },
               "block_order": []
+            },
+            "trust_line_product": {
+              "type": "text",
+              "name": "Trust line",
+              "settings": {
+                "text": "<p><strong>Packed fresh to order</strong> · Premium loose leaf tea · Free shipping over $50</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "0.875rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "text_aEtTtq": {
               "type": "text",
@@ -306,13 +313,12 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "trust_line_product",
             "text_aEtTtq"
           ]
         }
       },
-      "block_order": [
-        "disclosures_g9mWze"
-      ],
+      "block_order": [],
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
@@ -325,6 +331,16 @@
         "padding-block-end": 0
       }
     },
+    "luxe_product_guide": {
+      "type": "luxe-leaf-product-guide",
+      "settings": {
+        "product": "{{ product }}",
+        "trust_line": "Packed fresh to order · Premium loose leaf tea · Free shipping over $50",
+        "open_brewing": true,
+        "padding-block-start": 0,
+        "padding-block-end": 32
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -332,7 +348,7 @@
           "type": "text",
           "name": "t:names.header",
           "settings": {
-            "text": "<h3>You may also like </h3>",
+            "text": "<h3>Complete your tea ritual</h3>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
@@ -470,6 +486,7 @@
   },
   "order": [
     "main",
+    "luxe_product_guide",
     "product_recommendations_qggXJq"
   ]
 }
