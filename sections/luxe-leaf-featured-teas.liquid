@@ -1,0 +1,296 @@
+{%- doc -%}
+  Boutique featured teas grid — fully custom, no Horizon product-list blocks.
+{%- enddoc -%}
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  if collection == blank
+    assign collection = collections.all
+  endif
+  assign limit = section.settings.product_limit | default: 8
+-%}
+
+<section class="luxe-featured section section--page-width spacing-style" id="featured-teas">
+  <div class="luxe-featured__header">
+    <p class="luxe-featured__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      {{ section.settings.eyebrow }}
+    </p>
+    <div class="luxe-featured__title-row">
+      <h2 class="luxe-featured__heading">{{ section.settings.heading }}</h2>
+      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="luxe-featured__view-all luxe-link-with-icon">
+        {{ section.settings.view_all_label }}
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
+    </div>
+    <p class="luxe-featured__intro">{{ section.settings.intro }}</p>
+  </div>
+
+  <div class="luxe-featured__grid" role="list">
+    {%- for product in collection.products limit: limit -%}
+      {%- assign variant = product.selected_or_first_available_variant -%}
+      <article class="luxe-featured__card" role="listitem">
+        <a href="{{ variant.url }}" class="luxe-featured__media-link">
+          <div class="luxe-featured__media">
+            {%- if product.featured_image -%}
+              {{
+                product.featured_image
+                | image_url: width: 600
+                | image_tag: loading: 'lazy', alt: product.title, class: 'luxe-featured__image'
+              }}
+            {%- else -%}
+              <img
+                src="{{ 'luxe-leaf-tea-assortment-hero.png' | asset_url }}"
+                alt="{{ product.title }}"
+                width="600"
+                height="600"
+                loading="lazy"
+                class="luxe-featured__image"
+              >
+            {%- endif -%}
+            {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
+          </div>
+        </a>
+        <div class="luxe-featured__body">
+          <h3 class="luxe-featured__title">
+            <a href="{{ variant.url }}">{{ product.title }}</a>
+          </h3>
+          <p class="luxe-featured__price">{{ variant.price | money }}</p>
+          {%- if product.available -%}
+            {%- form 'product', product, class: 'luxe-featured__form' -%}
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button type="submit" name="add" class="button luxe-featured__atc">
+                Add to Bag
+              </button>
+            {%- endform -%}
+          {%- else -%}
+            <span class="luxe-featured__sold-out">Sold out</span>
+          {%- endif -%}
+        </div>
+      </article>
+    {%- else -%}
+      {%- assign placeholders = 'green-tea|Premium Green Tea|luxe-leaf-green-tea-product.png,oolong|Premium Oolong|luxe-leaf-oolong-tea-product.png,black-tea|Premium Black Tea|luxe-leaf-black-tea-product.png,pu-erh|Premium Pu-erh|luxe-leaf-puerh-tea-product.png' | split: ',' -%}
+      {%- for entry in placeholders -%}
+        {%- assign parts = entry | split: '|' -%}
+        <article class="luxe-featured__card luxe-featured__card--placeholder" role="listitem">
+          <div class="luxe-featured__media">
+            <img src="{{ parts[2] | asset_url }}" alt="{{ parts[1] }}" width="600" height="600" loading="lazy" class="luxe-featured__image">
+          </div>
+          <div class="luxe-featured__body">
+            <h3 class="luxe-featured__title">{{ parts[1] }}</h3>
+            <a href="{{ routes.all_products_collection_url }}" class="button luxe-featured__atc">Shop Tea</a>
+          </div>
+        </article>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-featured {
+    padding-block: 4rem;
+    background: linear-gradient(180deg, #fff 0%, var(--luxe-cream) 100%);
+  }
+
+  .luxe-featured__header {
+    margin-bottom: 2rem;
+  }
+
+  .luxe-featured__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.65rem;
+    color: var(--luxe-gold);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .luxe-featured__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .luxe-featured__heading {
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    line-height: 1.12;
+    color: var(--luxe-jade);
+  }
+
+  .luxe-featured__view-all {
+    color: var(--luxe-jade);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .luxe-featured__intro {
+    margin: 0;
+    max-width: 36rem;
+    color: rgb(var(--luxe-jade-rgb) / 0.82);
+    line-height: 1.6;
+  }
+
+  .luxe-featured__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-featured__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  .luxe-featured__card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: var(--luxe-radius-lg);
+    border: 1px solid rgb(var(--luxe-jade-rgb) / 0.08);
+    box-shadow: var(--luxe-shadow-soft);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .luxe-featured__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--luxe-shadow);
+  }
+
+  .luxe-featured__media {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--luxe-cream-dark);
+  }
+
+  .luxe-featured__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .luxe-featured__card:hover .luxe-featured__image {
+    transform: scale(1.04);
+  }
+
+  .luxe-featured__media-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .luxe-featured__body {
+    padding: 1rem 1rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .luxe-featured__title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .luxe-featured__title a {
+    color: var(--luxe-jade);
+    text-decoration: none;
+  }
+
+  .luxe-featured__price {
+    margin: 0;
+    color: var(--luxe-gold);
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .luxe-featured__form {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .luxe-featured__atc {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    background: var(--luxe-jade);
+    border-color: var(--luxe-jade);
+    color: #fff;
+    border-radius: var(--luxe-radius-pill);
+  }
+
+  .luxe-featured__sold-out {
+    margin-top: auto;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgb(var(--luxe-jade-rgb) / 0.45);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe featured teas",
+  "tag": "section",
+  "class": "luxe-featured-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Today's selection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Teas worth sipping today"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Introduction",
+      "default": "Hand-picked premium loose leaf — whole leaves, vivid aroma, packed fresh to order."
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "Shop all teas"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Products to show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe featured teas"
+    }
+  ]
+}
+{% endschema %}

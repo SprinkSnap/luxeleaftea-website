@@ -1,0 +1,128 @@
+/**
+ * Luxe Leaf Tea — bespoke storefront skin (overrides Horizon base.css)
+ * Loaded last in theme.liquid when brand_navigation is enabled.
+ */
+
+body.luxe-leaf-theme {
+  --luxe-jade: #1b4332;
+  --luxe-jade-rgb: 27 67 50;
+  --luxe-jade-deep: #0d2818;
+  --luxe-gold: #c9a227;
+  --luxe-gold-rgb: 201 162 39;
+  --luxe-cream: #f8f6f0;
+  --luxe-cream-dark: #ebe6dc;
+  --luxe-ink: #1a1a1a;
+  --luxe-radius: 0.625rem;
+  --luxe-radius-lg: 1rem;
+  --luxe-radius-pill: 999px;
+  --luxe-shadow: 0 12px 40px rgb(27 67 50 / 0.14);
+  --luxe-shadow-soft: 0 4px 16px rgb(27 67 50 / 0.08);
+
+  --color-background: var(--luxe-cream);
+  --color-foreground: var(--luxe-jade);
+  background: var(--luxe-cream);
+  color: rgb(var(--luxe-jade-rgb) / 0.92);
+}
+
+body.luxe-leaf-theme h1,
+body.luxe-leaf-theme h2,
+body.luxe-leaf-theme h3,
+body.luxe-leaf-theme h4,
+body.luxe-leaf-theme .h1,
+body.luxe-leaf-theme .h2,
+body.luxe-leaf-theme .h3,
+body.luxe-leaf-theme .h4 {
+  font-family: var(--font-heading--family), "Playfair Display", Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--luxe-jade);
+}
+
+body.luxe-leaf-theme .header-announcements,
+body.luxe-leaf-theme .announcement-bar {
+  background: var(--luxe-jade-deep) !important;
+  color: var(--luxe-cream) !important;
+  border-bottom: 1px solid rgb(var(--luxe-gold-rgb) / 0.35);
+}
+
+body.luxe-leaf-theme #header-component .header__row {
+  background: var(--luxe-cream) !important;
+  border-bottom: 1px solid rgb(var(--luxe-jade-rgb) / 0.1);
+  box-shadow: 0 1px 0 rgb(var(--luxe-gold-rgb) / 0.15);
+}
+
+body.luxe-leaf-theme .menu-list__link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body.luxe-leaf-theme .button,
+body.luxe-leaf-theme button.button {
+  border-radius: var(--luxe-radius-pill);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+body.luxe-leaf-theme .button:not(.button-secondary):not(.button-unstyled) {
+  background: var(--luxe-jade);
+  border-color: var(--luxe-jade);
+  color: #fff;
+}
+
+body.luxe-leaf-theme .product-card,
+body.luxe-leaf-theme .product-grid__card,
+body.luxe-leaf-theme product-card {
+  border-radius: var(--luxe-radius-lg);
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgb(var(--luxe-jade-rgb) / 0.08);
+  box-shadow: var(--luxe-shadow-soft);
+}
+
+body.luxe-leaf-theme .product-card:hover {
+  box-shadow: var(--luxe-shadow);
+  transform: translateY(-3px);
+}
+
+body.luxe-leaf-theme .buy-buttons-block .button,
+body.luxe-leaf-theme .add-to-cart-button.button {
+  border-radius: var(--luxe-radius-pill) !important;
+  background: var(--luxe-jade) !important;
+  border-color: var(--luxe-jade) !important;
+  color: #fff !important;
+}
+
+body.luxe-leaf-theme .cart__checkout-button {
+  border-radius: var(--luxe-radius-pill) !important;
+  background: var(--luxe-gold) !important;
+  border-color: var(--luxe-gold) !important;
+  color: var(--luxe-ink) !important;
+  font-weight: 700;
+}
+
+body.luxe-leaf-theme footer .section,
+body.luxe-leaf-theme footer .footer,
+body.luxe-leaf-theme .footer-utilities {
+  background: var(--luxe-jade-deep) !important;
+  color: var(--luxe-cream) !important;
+}
+
+body.luxe-leaf-theme footer h2,
+body.luxe-leaf-theme footer h3,
+body.luxe-leaf-theme footer a {
+  color: var(--luxe-cream) !important;
+}
+
+body.luxe-leaf-theme footer a:hover {
+  color: var(--luxe-gold) !important;
+}
+
+body.luxe-leaf-theme .luxe-hero {
+  border-bottom: 4px solid var(--luxe-gold);
+}
+
+body.luxe-leaf-theme .luxe-trust-bar {
+  background: var(--luxe-jade);
+}
