@@ -12,6 +12,24 @@
         type="image/png"
         href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
       >
+    {%- else -%}
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{{ 'luxe-leaf-tea-favicon-32.png' | asset_url }}"
+      >
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="{{ 'luxe-leaf-tea-favicon-16.png' | asset_url }}"
+      >
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{{ 'luxe-leaf-tea-apple-touch-icon.png' | asset_url }}"
+      >
     {%- endif -%}
 
     {% comment %} This a way to wait for main content to load when navigating to a new page so that the view transitions can work consistently {% endcomment %}

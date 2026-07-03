@@ -15,7 +15,7 @@
 >
 <meta
   name="theme-color"
-  content=""
+  content="#1B4332"
 >
 
 {%- liquid
@@ -70,6 +70,27 @@
   <meta
     property="og:image:height"
     content="{{ page_image.height }}"
+  >
+{%- else -%}
+  <meta
+    property="og:image"
+    content="https:{{ 'luxe-leaf-tea-logo-og.png' | asset_url }}"
+  >
+  <meta
+    property="og:image:secure_url"
+    content="https:{{ 'luxe-leaf-tea-logo-og.png' | asset_url }}"
+  >
+  <meta
+    property="og:image:width"
+    content="1200"
+  >
+  <meta
+    property="og:image:height"
+    content="630"
+  >
+  <meta
+    property="og:image:alt"
+    content="Luxe Leaf Tea — premium Chinese loose-leaf tea"
   >
 {%- endif -%}
 
