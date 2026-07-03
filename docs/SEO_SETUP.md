@@ -1,0 +1,115 @@
+# SEO & Content Setup
+
+Deploy the theme, then complete these steps in Shopify admin to activate structured data, blog SEO, and conversion CTAs.
+
+## 1. Store meta description
+
+**Settings → General → Store details**
+
+Set the meta description to:
+
+> Shop premium loose leaf tea from Luxe Leaf Tea. Hand-selected green, oolong, pu-erh, and black teas — packed fresh to order.
+
+The theme adds page-type fallbacks in `snippets/meta-tags.liquid` when this field is blank.
+
+## 2. Google Search Console
+
+1. Go to [Google Search Console](https://search.google.com/search-console)
+2. Add your store domain as a property
+3. Verify ownership (HTML tag or DNS — Shopify supports both)
+4. Submit sitemap: `https://your-store.com/sitemap.xml`
+5. Request indexing for the homepage after launch
+
+The theme ships `templates/robots.txt.liquid` with the standard Shopify crawl rules and sitemap reference.
+
+## 3. Create the Tea Guides blog
+
+**Online Store → Blog posts → Manage blogs → Add blog**
+
+| Field | Value |
+|-------|-------|
+| Title | Tea Guides |
+| Handle | `tea-guides` |
+
+The homepage tea guides section, footer link, and shop CTA all point to `/blogs/tea-guides`.
+
+## 4. Publish starter articles
+
+Create these three articles in the **Tea Guides** blog. Handles must match exactly for homepage links to work.
+
+### Article 1: How to Brew Premium Loose Leaf Tea
+
+- **Handle:** `how-to-brew-loose-leaf-tea`
+- **Suggested title:** How to Brew Premium Loose Leaf Tea
+- **Target keyword:** how to brew loose leaf tea
+- **Outline:**
+  - Why grams matter (3g per 150ml)
+  - Water temperature by tea type (green 175–185°F, oolong 195–205°F, pu-erh boiling)
+  - Steep times and re-steeping
+  - Link to `/collections/all` and `/collections/green-tea`
+
+### Article 2: Best Oolong Teas for Beginners
+
+- **Handle:** `best-oolong-teas-for-beginners`
+- **Suggested title:** Best Oolong Teas for Beginners
+- **Target keyword:** best oolong tea for beginners
+- **Outline:**
+  - What makes oolong approachable (floral, layered, forgiving)
+  - Tieguanyin vs Da Hong Pao — taste profiles
+  - Simple gaiwan or Western brew method
+  - Link to `/collections/oolong`
+
+### Article 3: Loose Leaf vs Tea Bags
+
+- **Handle:** `loose-leaf-vs-tea-bags`
+- **Suggested title:** Loose Leaf vs Tea Bags: Why Whole Leaves Taste Better
+- **Target keyword:** loose leaf vs tea bags
+- **Outline:**
+  - Whole leaf vs fannings/dust
+  - Aroma, clarity, and re-steeping
+  - Cost per cup over multiple infusions
+  - Link to `/collections/all`
+
+Each article template includes a **Shop the collection** CTA at the bottom (`sections/luxe-leaf-article-cta.liquid`).
+
+## 5. Structured data (automatic)
+
+The theme outputs JSON-LD via `snippets/luxe-leaf-schema.liquid`:
+
+| Page | Schema |
+|------|--------|
+| All pages | Organization, WebSite (with SearchAction) |
+| Homepage | FAQPage (brewing FAQs) |
+| Collection | BreadcrumbList, CollectionPage |
+| Product | BreadcrumbList |
+| Article | BlogPosting |
+
+Duplicate Organization markup was removed from `sections/header.liquid` to avoid conflicting signals.
+
+## 6. Homepage conversion sections
+
+After deploying, the homepage includes (in order):
+
+1. Trust bar
+2. Hero
+3. Tea types grid
+4. Featured teas
+5. About / trust story
+6. Brewing guide
+7. **Social proof** (review quotes)
+8. **Tea guides hub** (links to blog + collections)
+9. **Shop CTA** (final conversion block)
+
+## 7. Social profiles
+
+**Theme settings → Social media**
+
+Add Facebook, Instagram, and YouTube URLs. These populate Organization `sameAs` in structured data and footer social links.
+
+## 8. Ongoing SEO checklist
+
+- [ ] Add unique meta descriptions to each collection (see `docs/PRODUCTS_AND_COLLECTIONS.md`)
+- [ ] Write product descriptions with origin, tasting notes, and brewing tips
+- [ ] Publish 1–2 tea guide articles per month
+- [ ] Replace placeholder social proof quotes with real customer reviews when available
+- [ ] Monitor Search Console for crawl errors and keyword impressions

@@ -76,7 +76,7 @@
             "footer_nav_links": {
               "type": "text",
               "settings": {
-                "text": "<p><a href=\"/collections/all\">Shop All Tea</a><br><a href=\"/collections/green-tea\">Green Tea</a><br><a href=\"/collections/oolong\">Oolong</a><br><a href=\"/collections/pu-erh\">Pu-erh</a><br><a href=\"/collections/black-tea\">Black Tea</a><br><a href=\"/pages/about\">Our Story</a><br><a href=\"/pages/contact\">Contact</a></p>",
+                "text": "<p><a href=\"/collections/all\">Shop All Tea</a><br><a href=\"/collections/green-tea\">Green Tea</a><br><a href=\"/collections/oolong\">Oolong</a><br><a href=\"/collections/pu-erh\">Pu-erh</a><br><a href=\"/collections/black-tea\">Black Tea</a><br><a href=\"/blogs/tea-guides\">Tea Guides</a><br><a href=\"/pages/about\">Our Story</a><br><a href=\"/pages/contact\">Contact</a></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -165,7 +165,7 @@
             "text_f9CFLH": {
               "type": "text",
               "settings": {
-                "text": "<p>Get new harvest alerts, brewing tips, and exclusive offers on premium Chinese loose-leaf tea.</p>",
+                "text": "<p>Get new harvest alerts, brewing tips, and exclusive offers on premium loose leaf tea.</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",

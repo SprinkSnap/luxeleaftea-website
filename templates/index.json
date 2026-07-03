@@ -46,7 +46,7 @@
           "type": "text",
           "name": "Heading",
           "settings": {
-            "text": "<h1>Premium Chinese Loose-Leaf Tea</h1>",
+            "text": "<h1>Premium Loose Leaf Tea</h1>",
             "text_color": "#ffffff",
             "width": "fit-content",
             "max_width": "normal",
@@ -72,7 +72,7 @@
           "type": "text",
           "name": "Subheading",
           "settings": {
-            "text": "<p>Hand-selected leaves from China's finest gardens — shipped fresh for a clearer, more aromatic cup.</p>",
+            "text": "<p>Hand-selected leaves from trusted gardens — shipped fresh for a clearer, more aromatic cup.</p>",
             "text_color": "#f8f6f0",
             "width": "fit-content",
             "max_width": "normal",
@@ -452,6 +452,57 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "social_proof": {
+      "type": "luxe-leaf-social-proof",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "quote": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea.",
+            "author": "Sarah M."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. My daily ritual now.",
+            "author": "James L."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "Finally found premium loose leaf tea that feels special without being intimidating.",
+            "author": "Elena K."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "tea_guides": {
+      "type": "luxe-leaf-tea-guides",
+      "settings": {
+        "padding-block-start": 56,
+        "padding-block-end": 56
+      }
+    },
+    "shop_cta": {
+      "type": "luxe-leaf-shop-cta",
+      "settings": {
+        "primary_link": "shopify://collections/all",
+        "secondary_link": "/blogs/tea-guides",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
     }
   },
   "order": [
@@ -460,6 +511,9 @@
     "tea_types",
     "featured_teas",
     "about_story",
-    "brewing_guide"
+    "brewing_guide",
+    "social_proof",
+    "tea_guides",
+    "shop_cta"
   ]
 }

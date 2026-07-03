@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "section": {
       "type": "main-blog-post",
@@ -86,11 +87,18 @@
         "gap": 32,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 40,
-        "padding-block-end": 80
+        "padding-block-end": 40
+      }
+    },
+    "article_cta": {
+      "type": "luxe-leaf-article-cta",
+      "settings": {
+        "button_link": "shopify://collections/all"
       }
     }
   },
   "order": [
-    "section"
+    "section",
+    "article_cta"
   ]
 }

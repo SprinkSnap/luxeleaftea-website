@@ -1,0 +1,195 @@
+
+<section
+  class="luxe-guides section section--page-width spacing-style"
+  id="tea-guides"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="luxe-guides__header">
+    <p class="luxe-guides__eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2 class="luxe-guides__heading">{{ section.settings.heading }}</h2>
+    <p class="luxe-guides__intro">{{ section.settings.intro }}</p>
+  </div>
+
+  <div class="luxe-guides__grid" role="list">
+    {%- assign guides = 'How to Brew Premium Loose Leaf Tea|/blogs/tea-guides/how-to-brew-loose-leaf-tea|Temperature, timing, and grams for a clearer cup.,Best Oolong Teas for Beginners|/blogs/tea-guides/best-oolong-teas-for-beginners|Floral, layered teas perfect for your first gaiwan.,Loose Leaf vs Tea Bags|/blogs/tea-guides/loose-leaf-vs-tea-bags|Why whole leaves taste better and re-steep beautifully.,Shop Premium Green Tea|/collections/green-tea|Bright, sweet loose leaf greens packed fresh to order.' | split: ',' -%}
+
+    {%- for entry in guides -%}
+      {%- assign parts = entry | split: '|' -%}
+      {%- assign title = parts[0] -%}
+      {%- assign url = parts[1] -%}
+      {%- assign blurb = parts[2] -%}
+
+      <a class="luxe-guides__card" href="{{ url }}" role="listitem">
+        <h3 class="luxe-guides__title">{{ title }}</h3>
+        <p class="luxe-guides__text">{{ blurb }}</p>
+        <span class="luxe-guides__link">Read guide →</span>
+      </a>
+    {%- endfor -%}
+  </div>
+
+  {%- assign blog = blogs['tea-guides'] -%}
+  {%- if blog != blank and blog.articles_count > 0 -%}
+    <div class="luxe-guides__latest">
+      <h3 class="luxe-guides__latest-heading">Latest from Tea Guides</h3>
+      <ul class="luxe-guides__latest-list list-unstyled">
+        {%- for article in blog.articles limit: 3 -%}
+          <li><a href="{{ article.url }}">{{ article.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .luxe-guides {
+    padding-block: 56px;
+    background: #fff;
+  }
+
+  .luxe-guides__header {
+    max-width: 42rem;
+    margin-bottom: 28px;
+  }
+
+  .luxe-guides__eyebrow {
+    margin: 0 0 10px;
+    color: #c9a227;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-guides__heading {
+    margin: 0 0 12px;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .luxe-guides__intro {
+    margin: 0;
+    color: rgb(0 0 0 / 0.68);
+    line-height: 1.6;
+  }
+
+  .luxe-guides__grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-guides__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .luxe-guides__card {
+    padding: 22px;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 10px;
+    background: #f8f6f0;
+    color: inherit;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .luxe-guides__card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgb(27 67 50 / 0.08);
+  }
+
+  .luxe-guides__title {
+    margin: 0 0 8px;
+    font-size: 1rem;
+  }
+
+  .luxe-guides__text {
+    margin: 0 0 12px;
+    color: rgb(0 0 0 / 0.68);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .luxe-guides__link {
+    color: #1b4332;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .luxe-guides__latest {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(27 67 50 / 0.1);
+  }
+
+  .luxe-guides__latest-heading {
+    margin: 0 0 12px;
+    font-size: 1rem;
+  }
+
+  .luxe-guides__latest-list li {
+    margin-bottom: 8px;
+  }
+
+  .luxe-guides__latest-list a {
+    color: #1b4332;
+    text-decoration: none;
+  }
+
+  .luxe-guides__latest-list a:hover {
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf tea guides",
+  "tag": "section",
+  "class": "luxe-guides-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Tea guides"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Learn to brew premium loose leaf tea"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Expert tips that help you shop with confidence — and get more flavor from every leaf."
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf tea guides"
+    }
+  ]
+}
+{% endschema %}
