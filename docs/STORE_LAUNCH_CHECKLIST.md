@@ -2,9 +2,43 @@
 
 Complete these steps in order to activate conversion and SEO across the Luxe Leaf Tea theme.
 
-## 1. Deploy theme
+## 1. Deploy theme to Shopify
 
-Push or publish the latest theme from `main` to your Shopify store.
+**GitHub `main` is updated — but your live store does not change until you sync and publish the theme in Shopify admin.**
+
+### Option A — GitHub-connected theme (recommended)
+
+1. Shopify admin → **Online Store → Themes**
+2. If you already connected this repo: click **Actions → Pull from GitHub** (or wait for auto-sync if enabled)
+3. If not connected yet:
+   - **Add theme → Connect from GitHub**
+   - Select `SprinkSnap/luxeleaftea-website` and branch **`main`**
+4. Open **Customize** on the updated theme and confirm sections load (store experience, tea chat, cart drawer)
+5. Click **Publish** — the live site only updates after publish
+
+### Option B — Shopify CLI
+
+```bash
+shopify theme pull --store YOUR-STORE.myshopify.com   # optional backup
+shopify theme push --store YOUR-STORE.myshopify.com --path . --branch main
+```
+
+Then **Publish** the pushed theme in admin.
+
+### After publishing
+
+- Hard-refresh the storefront (Ctrl+Shift+R / Cmd+Shift+R) or use a private window
+- Confirm you see: tea-themed header icons, **Mei — Tea Guide** chat button (bottom-right), mobile **Shop Tea** bar
+
+### Troubleshooting “website did not update”
+
+| Cause | Fix |
+|-------|-----|
+| PR not merged | Ensure `main` on GitHub includes latest commits (PR #14+) |
+| Theme not synced | Pull from GitHub or `shopify theme push` |
+| Theme not **published** | Only the **published** theme is live — preview themes are not |
+| Wrong theme published | Publish the GitHub-connected Luxe Leaf theme, not an old Horizon copy |
+| Browser cache | Hard refresh or incognito |
 
 ## 2. Import sample products
 
