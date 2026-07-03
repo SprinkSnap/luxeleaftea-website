@@ -9,6 +9,13 @@
  */
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "luxe-leaf-breadcrumbs",
+      "settings": {
+        "padding-block-start": 12,
+        "padding-block-end": 0
+      }
+    },
     "collection_hero": {
       "type": "luxe-leaf-collection-hero",
       "settings": {
@@ -137,10 +144,21 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "collection_cta": {
+      "type": "luxe-leaf-collection-cta",
+      "settings": {
+        "primary_link": "shopify://collections/all",
+        "secondary_link": "/blogs/tea-guides",
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
     }
   },
   "order": [
+    "breadcrumbs",
     "collection_hero",
-    "main"
+    "main",
+    "collection_cta"
   ]
 }

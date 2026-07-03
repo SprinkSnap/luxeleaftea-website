@@ -55,6 +55,9 @@
   elsif request.page_type == 'blog'
     assign meta_description = 'Tea guides and brewing tips for premium loose leaf tea — learn, brew, and shop with confidence.'
     assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'faq'
+    assign meta_description = 'FAQ about premium loose leaf tea — brewing tips, shipping, freshness, and how to choose green, oolong, pu-erh, and black teas.'
+    assign og_description = meta_description
   endif
 
   if request.page_type == 'product'

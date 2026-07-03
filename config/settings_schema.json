@@ -64,6 +64,22 @@
           "label": "Use Luxe Leaf Tea brand navigation",
           "default": true,
           "info": "Shows Shop Tea, Collections, Our Story, and Contact in the header menu."
+        },
+        {
+          "type": "header",
+          "content": "SEO & analytics"
+        },
+        {
+          "type": "text",
+          "id": "ga4_measurement_id",
+          "label": "Google Analytics 4 measurement ID",
+          "info": "Example: G-XXXXXXXXXX. Leave blank to disable."
+        },
+        {
+          "type": "text",
+          "id": "google_site_verification",
+          "label": "Google Search Console verification code",
+          "info": "Paste the content value from the HTML meta tag verification method."
         }
     ]
   },

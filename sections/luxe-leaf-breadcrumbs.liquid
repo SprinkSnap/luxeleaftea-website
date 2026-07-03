@@ -1,0 +1,85 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section section--page-width color-{{ section.settings.color_scheme }} spacing-style luxe-breadcrumbs-section"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  {%- render 'luxe-leaf-breadcrumbs' -%}
+</div>
+
+{% stylesheet %}
+  .luxe-breadcrumbs-section {
+    padding-block: 12px 0;
+  }
+
+  .luxe-breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .luxe-breadcrumbs__item a {
+    color: rgb(var(--color-foreground-rgb) / 0.65);
+    text-decoration: none;
+  }
+
+  .luxe-breadcrumbs__item a:hover {
+    color: rgb(var(--color-primary-rgb));
+    text-decoration: underline;
+  }
+
+  .luxe-breadcrumbs__item--current {
+    color: rgb(var(--color-foreground-heading-rgb));
+    font-weight: 500;
+  }
+
+  .luxe-breadcrumbs__sep {
+    color: rgb(var(--color-foreground-rgb) / 0.35);
+    user-select: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf breadcrumbs",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf breadcrumbs"
+    }
+  ]
+}
+{% endschema %}
