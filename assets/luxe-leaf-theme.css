@@ -126,3 +126,231 @@ body.luxe-leaf-theme .luxe-hero {
 body.luxe-leaf-theme .luxe-trust-bar {
   background: var(--luxe-jade);
 }
+
+/* Tea guide chat + mobile shop bar */
+:root {
+  --luxe-mobile-bar-height: 0px;
+}
+
+.luxe-tea-chat {
+  --chat-z: calc(var(--layer-menu-drawer) + 2);
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + var(--luxe-mobile-bar-height, 0px));
+  z-index: var(--chat-z);
+}
+
+.luxe-tea-chat__launcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 0.75rem 0.85rem;
+  border: none;
+  border-radius: 999px;
+  background: #1b4332;
+  color: #fff;
+  box-shadow: 0 12px 40px rgb(27 67 50 / 0.14);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.luxe-tea-chat__launcher-icon {
+  display: inline-flex;
+  color: #c9a227;
+}
+
+.luxe-tea-chat__launcher-text {
+  display: none;
+}
+
+@media screen and (min-width: 750px) {
+  .luxe-tea-chat__launcher-text {
+    display: inline;
+  }
+}
+
+.luxe-tea-chat__panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.75rem);
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: min(32rem, 70vh);
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 12px 40px rgb(27 67 50 / 0.14);
+  overflow: hidden;
+  border: 1px solid rgb(27 67 50 / 0.12);
+}
+
+.luxe-tea-chat__panel[hidden] {
+  display: none !important;
+}
+
+.luxe-tea-chat__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #1b4332, rgb(27 67 50 / 0.85));
+  color: #fff;
+}
+
+.luxe-tea-chat__eyebrow {
+  margin: 0 0 0.15rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c9a227;
+}
+
+.luxe-tea-chat__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.luxe-tea-chat__close {
+  color: #fff;
+  cursor: pointer;
+}
+
+.luxe-tea-chat__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #f8f6f0;
+}
+
+.luxe-tea-chat__bubble {
+  max-width: 90%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.luxe-tea-chat__bubble--agent {
+  align-self: flex-start;
+  background: #fff;
+  color: rgb(27 67 50 / 0.95);
+}
+
+.luxe-tea-chat__bubble--user {
+  align-self: flex-end;
+  background: #1b4332;
+  color: #fff;
+}
+
+.luxe-tea-chat__quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0 1rem 0.65rem;
+  background: #f8f6f0;
+}
+
+.luxe-tea-chat__quick-replies button {
+  padding: 0.35rem 0.65rem;
+  border: 1px solid rgb(27 67 50 / 0.2);
+  border-radius: 999px;
+  background: #fff;
+  color: #1b4332;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.luxe-tea-chat__form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid rgb(27 67 50 / 0.1);
+  background: #fff;
+}
+
+.luxe-tea-chat__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgb(27 67 50 / 0.2);
+  border-radius: 0.625rem;
+}
+
+.luxe-tea-chat__send {
+  background: #c9a227;
+  border-color: #c9a227;
+  color: #1a1a1a;
+}
+
+.luxe-tea-chat__footer-note {
+  margin: 0;
+  padding: 0.5rem 1rem 0.75rem;
+  font-size: 0.6875rem;
+  text-align: center;
+  color: rgb(27 67 50 / 0.65);
+  background: #fff;
+}
+
+@media screen and (max-width: 749px) {
+  :root {
+    --luxe-mobile-bar-height: 4.25rem;
+  }
+
+  body.luxe-leaf-theme {
+    padding-bottom: var(--luxe-mobile-bar-height);
+  }
+
+  .luxe-mobile-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: calc(var(--layer-menu-drawer) + 1);
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem calc(0.65rem + env(safe-area-inset-bottom));
+    background: rgb(248 246 240 / 0.96);
+    border-top: 1px solid rgb(27 67 50 / 0.12);
+    backdrop-filter: blur(8px);
+  }
+
+  .luxe-mobile-bar__shop,
+  .luxe-mobile-bar__cart {
+    min-height: 2.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 0.625rem;
+  }
+
+  .luxe-mobile-bar__shop {
+    background: #1b4332;
+    border-color: #1b4332;
+    color: #fff;
+  }
+
+  .luxe-tea-chat__panel {
+    position: fixed;
+    inset: auto 0 0 0;
+    width: 100%;
+    max-height: 85vh;
+    border-radius: 1rem 1rem 0 0;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .luxe-mobile-bar {
+    display: none;
+  }
+}
