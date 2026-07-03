@@ -1,0 +1,84 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section section--page-width color-{{ section.settings.color_scheme }} spacing-style luxe-cart-trust"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <p class="luxe-cart-trust__line">
+    <span class="luxe-cart-trust__icon" aria-hidden="true">✦</span>
+    {{ section.settings.text }}
+  </p>
+</div>
+
+{% stylesheet %}
+  .luxe-cart-trust {
+    padding-block: 16px 0;
+  }
+
+  .luxe-cart-trust__line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background: #f8f6f0;
+    color: #1b4332;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .luxe-cart-trust__icon {
+    color: #c9a227;
+    flex-shrink: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf cart trust",
+  "tag": "section",
+  "class": "luxe-cart-trust-section",
+  "enabled_on": {
+    "templates": ["cart"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Trust line",
+      "default": "Packed fresh to order · Premium loose leaf tea · Free shipping over $50 · Secure checkout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf cart trust"
+    }
+  ]
+}
+{% endschema %}

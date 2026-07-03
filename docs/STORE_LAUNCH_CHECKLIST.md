@@ -1,0 +1,71 @@
+# Store Launch Checklist
+
+Complete these steps in order to activate conversion and SEO across the Luxe Leaf Tea theme.
+
+## 1. Deploy theme
+
+Push or publish the latest theme from `main` to your Shopify store.
+
+## 2. Import sample products
+
+**Products → Import**
+
+1. Import [`SAMPLE_PRODUCTS_IMPORT.csv`](SAMPLE_PRODUCTS_IMPORT.csv)
+2. After import, upload product images from theme assets:
+   - Dragon Well → `luxe-leaf-green-tea-product.png`
+   - Tieguanyin → `luxe-leaf-oolong-tea-product.png`
+   - Pu-erh → `luxe-leaf-puerh-tea-product.png`
+   - Keemun → `luxe-leaf-black-tea-product.png`
+3. Add second image (`luxe-leaf-tea-liquor-product.png`) where helpful
+
+See [`PRODUCTS_AND_COLLECTIONS.md`](PRODUCTS_AND_COLLECTIONS.md) for collection setup.
+
+## 3. Create collections
+
+Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-tea`. Assign products by tag.
+
+## 4. Create pages
+
+| Page | Handle | Template |
+|------|--------|----------|
+| About | `about` | `about` |
+| FAQ | `faq` | `faq` |
+| Contact | `contact` | default |
+
+## 5. Create Tea Guides blog
+
+- Blog handle: `tea-guides`
+- Publish 3 articles from [`BLOG_STARTER_CONTENT.md`](BLOG_STARTER_CONTENT.md)
+
+## 6. Theme settings
+
+**Theme settings → Logo and favicon → SEO & analytics**
+
+- GA4 measurement ID
+- Google Search Console verification code
+
+**Settings → General**
+
+- Store meta description (see [`SEO_SETUP.md`](SEO_SETUP.md))
+
+## 7. Search Console
+
+1. Verify domain
+2. Submit `https://your-store.com/sitemap.xml`
+3. Request indexing for homepage, collections, FAQ, and blog articles
+
+## 8. Verify live
+
+- [ ] Homepage sections render (trust bar, tea types, FAQ, guides, CTA)
+- [ ] Product pages show brewing accordions and internal links
+- [ ] Collection pages show hero + bottom CTA
+- [ ] Cart shows trust line
+- [ ] FAQ page at `/pages/faq`
+- [ ] Blog at `/blogs/tea-guides`
+- [ ] No Liquid errors in theme preview
+
+## 9. Ongoing
+
+- Replace placeholder social proof with real reviews
+- Publish 1–2 tea guide articles per month
+- Monitor Search Console for impressions and crawl issues

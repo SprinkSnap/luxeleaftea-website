@@ -39,7 +39,7 @@
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<p>The link may be incorrect, or the page has been removed. </p>",
+            "text": "<p>That page may have moved — but our premium loose leaf teas are still here.</p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -63,7 +63,7 @@
           "type": "button",
           "name": "t:names.button",
           "settings": {
-            "label": "Continue shopping",
+            "label": "Shop premium loose leaf tea",
             "link": "shopify://collections/all",
             "open_in_new_tab": false,
             "style_class": "button",
@@ -90,6 +90,16 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 100,
         "padding-block-end": 100
+      }
+    },
+    "tea_types_404": {
+      "type": "luxe-leaf-tea-types",
+      "settings": {
+        "eyebrow": "Shop by type",
+        "heading": "Find your next favorite tea",
+        "intro": "Browse green, oolong, pu-erh, and black teas — packed fresh to order.",
+        "padding-block-start": 24,
+        "padding-block-end": 24
       }
     },
     "product_list_iA96Tq": {
@@ -130,7 +140,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>Discover something new</p>",
+                "text": "<p>Discover premium loose leaf tea</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -265,6 +275,7 @@
   },
   "order": [
     "main",
+    "tea_types_404",
     "product_list_iA96Tq"
   ]
 }

@@ -8,7 +8,9 @@ The Luxe Leaf Tea horizontal logo is integrated into the theme header automatica
 
 ## Products & collections
 
-See [`docs/PRODUCTS_AND_COLLECTIONS.md`](docs/PRODUCTS_AND_COLLECTIONS.md) for setup steps:
+See [`docs/PRODUCTS_AND_COLLECTIONS.md`](docs/PRODUCTS_AND_COLLECTIONS.md) for setup steps.
+
+**Quick start:** [`docs/STORE_LAUNCH_CHECKLIST.md`](docs/STORE_LAUNCH_CHECKLIST.md) · import [`docs/SAMPLE_PRODUCTS_IMPORT.csv`](docs/SAMPLE_PRODUCTS_IMPORT.csv)
 
 - Create collections: `green-tea`, `oolong`, `pu-erh`, `black-tea`
 - Upload product photos from `assets/luxe-leaf-*-product.png`

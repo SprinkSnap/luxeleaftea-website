@@ -169,12 +169,37 @@
         "padding-inline-end": 0,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 40,
-        "padding-block-end": 40
+        "padding-block-end": 32
+      }
+    },
+    "search_tea_types": {
+      "type": "luxe-leaf-tea-types",
+      "settings": {
+        "eyebrow": "Browse by type",
+        "heading": "Explore premium loose leaf tea",
+        "intro": "Not finding what you need? Browse by tea type or shop the full collection.",
+        "padding-block-start": 40,
+        "padding-block-end": 24
+      }
+    },
+    "search_cta": {
+      "type": "luxe-leaf-shop-cta",
+      "settings": {
+        "eyebrow": "Need help choosing?",
+        "heading": "Shop premium loose leaf tea",
+        "text": "Hand-selected teas packed fresh to order — with brewing guidance on every product.",
+        "primary_link": "shopify://collections/all",
+        "secondary_link": "/pages/faq",
+        "secondary_label": "View FAQ",
+        "padding-block-start": 32,
+        "padding-block-end": 48
       }
     }
   },
   "order": [
     "search",
-    "main"
+    "main",
+    "search_tea_types",
+    "search_cta"
   ]
 }

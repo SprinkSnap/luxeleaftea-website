@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */{
   "sections": {
+    "cart_trust": {
+      "type": "luxe-leaf-cart-trust",
+      "settings": {}
+    },
     "cart-section": {
       "type": "main-cart",
       "blocks": {
@@ -250,6 +254,7 @@
   },
   "order": [
     "cart-section",
+    "cart_trust",
     "product_list_NNFgcy"
   ]
 }
