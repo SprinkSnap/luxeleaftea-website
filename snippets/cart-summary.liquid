@@ -268,7 +268,11 @@
     form="cart-form"
   >
     <span class="button-text">
-      {{ 'content.checkout' | t }}
+      {%- if settings.brand_navigation -%}
+        Checkout Now — Secure Payment
+      {%- else -%}
+        {{ 'content.checkout' | t }}
+      {%- endif -%}
     </span>
   </button>
 

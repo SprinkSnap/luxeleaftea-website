@@ -1,6 +1,12 @@
 # luxeleaftea-website
 
-Premium loose leaf tea Shopify store (Horizon theme).
+Premium loose leaf tea Shopify store — custom **Luxe Leaf** boutique layer on Horizon.
+
+## Store experience (conversion, chat, inventory)
+
+See [`docs/STORE_EXPERIENCE.md`](docs/STORE_EXPERIENCE.md) for the full custom store: in-store shopping UX, cart drawer checkout flow, AI tea guide chat, mobile shop bar, and inventory badges.
+
+**Inventory + WeChat reorder alerts:** [`docs/INVENTORY_WECHAT_SETUP.md`](docs/INVENTORY_WECHAT_SETUP.md)
 
 ## Brand logo
 

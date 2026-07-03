@@ -60,11 +60,15 @@
   >
     <summary
       class="header__icon header__icon--menu header__icon--summary"
-      aria-label="{{ 'accessibility.menu' | t }}"
+      aria-label="{% if settings.brand_navigation %}Open tea shop menu{% else %}{{ 'accessibility.menu' | t }}{% endif %}"
       on:click="/toggle"
     >
       <span class="svg-wrapper header-drawer-icon header-drawer-icon--open">
-        {{- 'icon-menu.svg' | inline_asset_content -}}
+        {%- if settings.brand_navigation -%}
+          {%- render 'luxe-leaf-header-icon', name: 'menu' -%}
+        {%- else -%}
+          {{- 'icon-menu.svg' | inline_asset_content -}}
+        {%- endif -%}
       </span>
       <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
         {{- 'icon-close.svg' | inline_asset_content -}}
