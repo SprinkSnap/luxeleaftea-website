@@ -6,6 +6,14 @@ Premium Chinese loose-leaf tea Shopify store (Horizon theme).
 
 The Luxe Leaf Tea horizontal logo is integrated into the theme header automatically when no logo is uploaded in **Theme settings → Logo and favicon**.
 
+## Products & collections
+
+See [`docs/PRODUCTS_AND_COLLECTIONS.md`](docs/PRODUCTS_AND_COLLECTIONS.md) for setup steps:
+
+- Create collections: `green-tea`, `oolong`, `pu-erh`, `black-tea`
+- Upload product photos from `assets/luxe-leaf-*-product.png`
+- Tag products (`green-tea`, `oolong`, `pu-erh`, `black-tea`) for auto brewing guides
+
 ## Homepage conversion setup
 
 The homepage includes:

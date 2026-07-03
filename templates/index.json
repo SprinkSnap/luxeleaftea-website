@@ -20,7 +20,7 @@
           "type": "text",
           "name": "Eyebrow",
           "settings": {
-            "text": "<p>Premium Chinese loose-leaf tea</p>",
+            "text": "<p>Premium loose leaf tea</p>",
             "text_color": "#c9a227",
             "width": "fit-content",
             "max_width": "normal",
@@ -208,7 +208,7 @@
               "type": "_product-list-text",
               "name": "Title",
               "settings": {
-                "text": "<h2>Featured premium teas</h2><p>Curated Chinese loose-leaf selections for everyday ritual and gifting.</p>",
+                "text": "<h2>Featured premium teas</h2><p>Curated premium loose leaf selections for everyday ritual and gifting.</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -355,6 +355,16 @@
         "padding-block-end": 56
       }
     },
+    "tea_types": {
+      "type": "luxe-leaf-tea-types",
+      "settings": {
+        "eyebrow": "Shop by type",
+        "heading": "Explore premium loose leaf tea",
+        "intro": "Find your next favorite cup — from bright green teas to deep, re-steepable pu-erh.",
+        "padding-block-start": 56,
+        "padding-block-end": 24
+      }
+    },
     "about_story": {
       "type": "luxe-leaf-about-story",
       "blocks": {
@@ -447,6 +457,7 @@
   "order": [
     "luxe_trust_bar",
     "hero_home",
+    "tea_types",
     "featured_teas",
     "about_story",
     "brewing_guide"

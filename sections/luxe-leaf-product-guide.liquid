@@ -1,0 +1,214 @@
+{%- doc -%}
+  Premium product page accordions: origin, tasting notes, and brewing guide.
+  Uses product metafields when set, otherwise infers content from product tags.
+{%- enddoc -%}
+
+{%- liquid
+  assign product = section.settings.product | default: product
+  if product == blank
+    assign product = closest.product
+  endif
+
+  assign tea_type = 'premium'
+  assign tag_handles = product.tags | join: ',' | downcase
+
+  if tag_handles contains 'green-tea' or tag_handles contains 'green tea'
+    assign tea_type = 'green'
+  elsif tag_handles contains 'oolong'
+    assign tea_type = 'oolong'
+  elsif tag_handles contains 'pu-erh' or tag_handles contains 'puerh' or tag_handles contains 'pu erh'
+    assign tea_type = 'puerh'
+  elsif tag_handles contains 'black-tea' or tag_handles contains 'black tea'
+    assign tea_type = 'black'
+  endif
+
+  assign origin = product.metafields.custom.origin.value | default: product.metafields.custom.origin
+  assign tasting = product.metafields.custom.tasting_notes.value | default: product.metafields.custom.tasting_notes
+  assign brewing = product.metafields.custom.brewing_guide.value | default: product.metafields.custom.brewing_guide
+
+  case tea_type
+    when 'green'
+      assign default_origin = '<p>Hand-harvested premium loose leaf green tea from renowned gardens in Zhejiang Province. Whole leaves selected for their bright aroma, sweet finish, and classic needle shape.</p>'
+      assign default_tasting = '<p><strong>Aroma:</strong> Fresh grass, chestnut, and spring florals<br><strong>Palate:</strong> Clean, sweet, lightly vegetal<br><strong>Finish:</strong> Smooth and lingering</p>'
+      assign default_brewing = '<p><strong>Leaf:</strong> 3g per 150ml water<br><strong>Water:</strong> 175–185°F (80–85°C)<br><strong>Time:</strong> 1–2 minutes<br><strong>Re-steeps:</strong> 3–4 infusions</p>'
+    when 'oolong'
+      assign default_origin = '<p>Artisan-roasted oolong from Fujian and Taiwan-style gardens. Rolled leaves crafted to balance floral aroma with a rich, layered cup.</p>'
+      assign default_tasting = '<p><strong>Aroma:</strong> Orchid, honey, and toasted grain<br><strong>Palate:</strong> Rounded, creamy, gently sweet<br><strong>Finish:</strong> Soft and persistent</p>'
+      assign default_brewing = '<p><strong>Leaf:</strong> 4g per 150ml water<br><strong>Water:</strong> 195–205°F (90–96°C)<br><strong>Time:</strong> 2–3 minutes<br><strong>Re-steeps:</strong> 4–6 infusions</p>'
+    when 'puerh'
+      assign default_origin = '<p>Aged loose leaf pu-erh from Yunnan Province. Selected for depth, smoothness, and the rich character that develops across multiple steeps.</p>'
+      assign default_tasting = '<p><strong>Aroma:</strong> Earth, dark cocoa, dried fruit<br><strong>Palate:</strong> Deep, mellow, naturally sweet<br><strong>Finish:</strong> Warm and long</p>'
+      assign default_brewing = '<p><strong>Leaf:</strong> 4–5g per 150ml water<br><strong>Water:</strong> 205–212°F (96–100°C)<br><strong>Time:</strong> 20–30 seconds (rinse), then 2–3 minutes<br><strong>Re-steeps:</strong> 6–8 infusions</p>'
+    when 'black'
+      assign default_origin = '<p>Premium black loose leaf tea from established growing regions. Whole leaves chosen for fragrance, body, and a polished, copper-bright liquor.</p>'
+      assign default_tasting = '<p><strong>Aroma:</strong> Malty, cocoa, dried fruit<br><strong>Palate:</strong> Full-bodied, smooth, gently brisk<br><strong>Finish:</strong> Clean and satisfying</p>'
+      assign default_brewing = '<p><strong>Leaf:</strong> 3g per 150ml water<br><strong>Water:</strong> 200–212°F (93–100°C)<br><strong>Time:</strong> 3–4 minutes<br><strong>Re-steeps:</strong> 2–3 infusions</p>'
+    else
+      assign default_origin = '<p>Curated premium loose leaf tea, selected for aroma, clarity, and the kind of cup that rewards slow sipping. Origin and harvest details are listed on every lot we release.</p>'
+      assign default_tasting = '<p><strong>Aroma:</strong> Layered and inviting<br><strong>Palate:</strong> Balanced, clean, and expressive<br><strong>Finish:</strong> Smooth with a lingering sweetness</p>'
+      assign default_brewing = '<p><strong>Leaf:</strong> 3g per 150ml water<br><strong>Water:</strong> 185–205°F depending on tea style<br><strong>Time:</strong> 1–3 minutes<br><strong>Re-steeps:</strong> Quality loose leaf can be re-steeped multiple times</p>'
+  endcase
+
+  if origin == blank
+    assign origin_html = default_origin
+  else
+    assign origin_html = origin | metafield_tag
+  endif
+
+  if tasting == blank
+    assign tasting_html = default_tasting
+  else
+    assign tasting_html = tasting | metafield_tag
+  endif
+
+  if brewing == blank
+    assign brewing_html = default_brewing
+  else
+    assign brewing_html = brewing | metafield_tag
+  endif
+-%}
+
+<section
+  class="luxe-product-guide section section--page-width spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  aria-label="Product details"
+>
+  <div class="luxe-product-guide__trust">
+    <span class="luxe-product-guide__trust-icon" aria-hidden="true">✦</span>
+    {{ section.settings.trust_line }}
+  </div>
+
+  <div class="luxe-product-guide__accordion accordion accordion--caret accordion--dividers">
+    <details class="luxe-product-guide__row" {% if section.settings.open_brewing %}open{% endif %}>
+      <summary class="luxe-product-guide__summary">
+        <span>How to brew</span>
+      </summary>
+      <div class="luxe-product-guide__content rte">{{ brewing_html }}</div>
+    </details>
+
+    <details class="luxe-product-guide__row">
+      <summary class="luxe-product-guide__summary">
+        <span>Origin & harvest</span>
+      </summary>
+      <div class="luxe-product-guide__content rte">{{ origin_html }}</div>
+    </details>
+
+    <details class="luxe-product-guide__row">
+      <summary class="luxe-product-guide__summary">
+        <span>Tasting notes</span>
+      </summary>
+      <div class="luxe-product-guide__content rte">{{ tasting_html }}</div>
+    </details>
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-product-guide {
+    padding-block: 8px 32px;
+  }
+
+  .luxe-product-guide__trust {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #f8f6f0;
+    color: #1b4332;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+  }
+
+  .luxe-product-guide__trust-icon {
+    color: #c9a227;
+  }
+
+  .luxe-product-guide__row {
+    border-top: 1px solid rgb(27 67 50 / 0.12);
+  }
+
+  .luxe-product-guide__row:last-child {
+    border-bottom: 1px solid rgb(27 67 50 / 0.12);
+  }
+
+  .luxe-product-guide__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+  }
+
+  .luxe-product-guide__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .luxe-product-guide__content {
+    padding-bottom: 16px;
+    color: rgb(0 0 0 / 0.72);
+    line-height: 1.65;
+  }
+
+  .luxe-product-guide__content p {
+    margin: 0 0 10px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf product guide",
+  "tag": "section",
+  "class": "luxe-product-guide-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "autofill": true
+    },
+    {
+      "type": "text",
+      "id": "trust_line",
+      "label": "Trust line",
+      "default": "Packed fresh to order · Premium loose leaf tea · Free shipping over $50"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_brewing",
+      "label": "Open brewing guide by default",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf product guide"
+    }
+  ]
+}
+{% endschema %}
