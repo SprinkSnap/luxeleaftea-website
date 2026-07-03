@@ -64,6 +64,9 @@
   elsif request.page_type == 'page' and page.handle == 'faq'
     assign meta_description = 'FAQ about premium loose leaf tea — brewing tips, shipping, freshness, and how to choose green, oolong, pu-erh, and black teas.'
     assign og_description = meta_description
+  elsif request.page_type == 'search'
+    assign meta_description = 'Search premium loose leaf tea — green, oolong, pu-erh, and black teas from Luxe Leaf Tea.'
+    assign og_description = meta_description
   endif
 
   if request.page_type == 'product'
@@ -198,6 +201,10 @@
     name="description"
     content="{{ meta_description | escape }}"
   >
+{%- endif -%}
+
+{%- if request.page_type == 'search' -%}
+  <meta name="robots" content="noindex, follow">
 {%- endif -%}
 
 {%- if settings.google_site_verification != blank -%}
@@ -336,6 +343,21 @@
       "description": {{ collection.description | strip_html | truncate: 300 | default: 'Shop premium loose leaf tea from Luxe Leaf Tea.' | json }},
       "url": {{ schema_shop_url | append: collection.url | json }}
     }
+    {%- if collection.products_count > 0 -%}
+    ,{
+      "@type": "ItemList",
+      "itemListElement": [
+        {%- for item in collection.products limit: 12 -%}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.index }},
+          "name": {{ item.title | json }},
+          "url": {{ schema_shop_url | append: item.url | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+    {%- endif -%}
     {%- endif -%}
     {%- if request.page_type == 'product' and product -%}
     ,{

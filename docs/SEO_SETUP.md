@@ -78,6 +78,8 @@ Each article template includes a **Shop the collection** CTA at the bottom (`sec
 
 **Ready-to-publish copy:** See [`docs/BLOG_STARTER_CONTENT.md`](BLOG_STARTER_CONTENT.md) for full article HTML to paste into Shopify admin.
 
+**Sample products:** Import [`docs/SAMPLE_PRODUCTS_IMPORT.csv`](SAMPLE_PRODUCTS_IMPORT.csv) and follow [`docs/STORE_LAUNCH_CHECKLIST.md`](STORE_LAUNCH_CHECKLIST.md).
+
 ## 5. Structured data (automatic)
 
 The theme outputs JSON-LD via `snippets/meta-tags.liquid` (Organization, WebSite, FAQ, breadcrumbs, BlogPosting):
@@ -86,7 +88,7 @@ The theme outputs JSON-LD via `snippets/meta-tags.liquid` (Organization, WebSite
 |------|--------|
 | All pages | Organization, WebSite (with SearchAction) |
 | Homepage | FAQPage (brewing FAQs) |
-| Collection | BreadcrumbList, CollectionPage |
+| Collection | BreadcrumbList, CollectionPage, ItemList |
 | Product | BreadcrumbList |
 | Article | BlogPosting |
 | FAQ page | FAQPage (visible accordions + JSON-LD) |
