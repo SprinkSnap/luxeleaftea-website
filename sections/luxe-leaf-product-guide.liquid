@@ -66,6 +66,37 @@
   else
     assign brewing_html = brewing | metafield_tag
   endif
+
+  assign tea_collection_handle = ''
+  assign tea_guide_url = '/blogs/tea-guides/how-to-brew-loose-leaf-tea'
+  assign tea_collection_label = 'Shop premium loose leaf tea'
+
+  case tea_type
+    when 'green'
+      assign tea_collection_handle = 'green-tea'
+      assign tea_collection_label = 'Shop premium green tea'
+    when 'oolong'
+      assign tea_collection_handle = 'oolong'
+      assign tea_guide_url = '/blogs/tea-guides/best-oolong-teas-for-beginners'
+      assign tea_collection_label = 'Shop premium oolong tea'
+    when 'puerh'
+      assign tea_collection_handle = 'pu-erh'
+      assign tea_collection_label = 'Shop premium pu-erh tea'
+    when 'black'
+      assign tea_collection_handle = 'black-tea'
+      assign tea_collection_label = 'Shop premium black tea'
+  endcase
+
+  if tea_collection_handle != blank
+    assign tea_collection = collections[tea_collection_handle]
+    if tea_collection.url != blank
+      assign tea_collection_url = tea_collection.url
+    else
+      assign tea_collection_url = '/collections/' | append: tea_collection_handle
+    endif
+  else
+    assign tea_collection_url = '/collections/all'
+  endif
 -%}
 
 <section
@@ -99,6 +130,12 @@
       </summary>
       <div class="luxe-product-guide__content rte">{{ tasting_html }}</div>
     </details>
+  </div>
+
+  <div class="luxe-product-guide__links">
+    <a href="{{ tea_collection_url }}" class="luxe-product-guide__link">{{ tea_collection_label }} →</a>
+    <a href="{{ tea_guide_url }}" class="luxe-product-guide__link">Read the brewing guide →</a>
+    <a href="/pages/faq" class="luxe-product-guide__link">View FAQ →</a>
   </div>
 </section>
 
@@ -154,6 +191,28 @@
 
   .luxe-product-guide__content p {
     margin: 0 0 10px;
+  }
+
+  .luxe-product-guide__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgb(27 67 50 / 0.12);
+  }
+
+  .luxe-product-guide__link {
+    color: #1b4332;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .luxe-product-guide__link:hover {
+    text-decoration: underline;
   }
 {% endstylesheet %}
 

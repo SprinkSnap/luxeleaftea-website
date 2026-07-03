@@ -1,0 +1,224 @@
+
+<section
+  class="luxe-home-faq section section--page-width spacing-style"
+  id="faq"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="luxe-home-faq__header">
+    <p class="luxe-home-faq__eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2 class="luxe-home-faq__heading">{{ section.settings.heading }}</h2>
+    <p class="luxe-home-faq__intro">{{ section.settings.intro }}</p>
+  </div>
+
+  <div class="luxe-home-faq__list">
+    {%- for block in section.blocks -%}
+      <details class="luxe-home-faq__item" {{ block.shopify_attributes }}>
+        <summary class="luxe-home-faq__question">{{ block.settings.question }}</summary>
+        <div class="luxe-home-faq__answer rte">{{ block.settings.answer }}</div>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.settings.link_label != blank -%}
+    <p class="luxe-home-faq__footer">
+      <a href="{{ section.settings.link_url }}">{{ section.settings.link_label }} →</a>
+    </p>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .luxe-home-faq {
+    padding-block: 48px;
+    background: #fff;
+  }
+
+  .luxe-home-faq__header {
+    max-width: 42rem;
+    margin-bottom: 28px;
+  }
+
+  .luxe-home-faq__eyebrow {
+    margin: 0 0 10px;
+    color: #c9a227;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-home-faq__heading {
+    margin: 0 0 12px;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+  }
+
+  .luxe-home-faq__intro {
+    margin: 0;
+    color: rgb(0 0 0 / 0.68);
+    line-height: 1.6;
+  }
+
+  .luxe-home-faq__list {
+    display: grid;
+    gap: 10px;
+    max-width: 48rem;
+  }
+
+  .luxe-home-faq__item {
+    border: 1px solid rgb(27 67 50 / 0.12);
+    border-radius: 10px;
+    background: #f8f6f0;
+    overflow: hidden;
+  }
+
+  .luxe-home-faq__question {
+    padding: 16px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .luxe-home-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .luxe-home-faq__answer {
+    padding: 0 18px 16px;
+    color: rgb(0 0 0 / 0.72);
+    line-height: 1.65;
+  }
+
+  .luxe-home-faq__answer p {
+    margin: 0;
+  }
+
+  .luxe-home-faq__footer {
+    margin: 24px 0 0;
+    font-size: 0.875rem;
+  }
+
+  .luxe-home-faq__footer a {
+    color: #1b4332;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .luxe-home-faq__footer a:hover {
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf home FAQ",
+  "tag": "section",
+  "class": "luxe-home-faq-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Common questions"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Premium loose leaf tea FAQ"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Quick answers to help you brew with confidence — matched to our structured data for search visibility."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Footer link label",
+      "default": "View all FAQs"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Footer link URL"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How much loose leaf tea should I use per cup?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf home FAQ",
+      "settings": {
+        "link_url": "/pages/faq"
+      },
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How much loose leaf tea should I use per cup?",
+            "answer": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What water temperature is best for loose leaf green tea?",
+            "answer": "<p>Premium loose leaf green tea brews best at 175–185°F (80–85°C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Can you re-steep premium loose leaf tea?",
+            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3–4 infusions; oolongs and pu-erh can offer 4–8.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Why choose loose leaf tea over tea bags?",
+            "answer": "<p>Loose leaf tea uses whole or large leaves that unfurl in water, releasing more aroma and flavor. Premium loose leaf also re-steeps better and offers clearer origin and quality.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

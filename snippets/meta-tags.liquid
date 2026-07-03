@@ -29,6 +29,9 @@
     assign meta_description = brand_default_description
     assign og_description = meta_description
   elsif request.page_type == 'collection' and collection
+    unless page_title contains shop.name
+      assign og_title = 'Premium Loose Leaf ' | append: collection.title | append: ' | ' | append: shop.name
+    endif
     case collection.handle
       when 'green-tea'
         assign meta_description = 'Shop premium loose leaf green tea — bright, sweet whole-leaf selections packed fresh to order. Free shipping over $50.'
@@ -44,6 +47,9 @@
     endif
     assign og_description = meta_description
   elsif request.page_type == 'product' and product
+    unless page_title contains 'Premium Loose Leaf Tea'
+      assign og_title = product.title | append: ' | Premium Loose Leaf Tea | ' | append: shop.name
+    endif
     assign meta_description = product.description | strip_html | truncate: 155
     if meta_description == blank
       assign meta_description = 'Shop ' | append: product.title | append: ' — premium loose leaf tea packed fresh to order from Luxe Leaf Tea.'
