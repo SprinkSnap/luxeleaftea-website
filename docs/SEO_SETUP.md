@@ -76,6 +76,8 @@ Create these three articles in the **Tea Guides** blog. Handles must match exact
 
 Each article template includes a **Shop the collection** CTA at the bottom (`sections/luxe-leaf-article-cta.liquid`).
 
+**Ready-to-publish copy:** See [`docs/BLOG_STARTER_CONTENT.md`](BLOG_STARTER_CONTENT.md) for full article HTML to paste into Shopify admin.
+
 ## 5. Structured data (automatic)
 
 The theme outputs JSON-LD via `snippets/meta-tags.liquid` (Organization, WebSite, FAQ, breadcrumbs, BlogPosting):
@@ -115,9 +117,10 @@ After deploying, the homepage includes (in order):
 4. Featured teas
 5. About / trust story
 6. Brewing guide
-7. **Social proof** (review quotes)
-8. **Tea guides hub** (links to blog + collections)
-9. **Shop CTA** (final conversion block)
+7. **Home FAQ** (visible accordions matching FAQ schema)
+8. **Social proof** (review quotes)
+9. **Tea guides hub** (links to blog + collections)
+10. **Shop CTA** (final conversion block)
 
 ## 8. Social profiles
 

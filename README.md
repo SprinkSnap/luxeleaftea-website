@@ -23,7 +23,7 @@ See [`docs/SEO_SETUP.md`](docs/SEO_SETUP.md) for:
 - Three starter article outlines for organic traffic
 - JSON-LD structured data (Organization, FAQ, Breadcrumbs, BlogPosting)
 
-The theme includes enhanced meta tags, `robots.txt.liquid`, homepage FAQ schema, visible breadcrumbs, FAQ page, collection CTAs, GA4/Search Console hooks, and blog/article conversion CTAs.
+The theme includes enhanced meta tags, `robots.txt.liquid`, homepage FAQ schema + visible FAQ section, visible breadcrumbs, FAQ page, collection CTAs, product internal links, GA4/Search Console hooks, and blog/article conversion CTAs.
 
 ## Homepage conversion setup
 
@@ -35,6 +35,7 @@ The homepage includes:
 - Featured teas product grid
 - About / trust story section
 - Brewing guide section
+- Visible home FAQ (matches FAQ schema)
 - Social proof (customer quotes)
 - Tea guides hub (SEO content links)
 - Final shop CTA
@@ -78,7 +79,7 @@ In **Theme settings → Logo and favicon → SEO & analytics**:
 1. Add product photos and descriptions with origin, taste notes, and brewing tips
 2. Create collections by tea type (Green, Oolong, Pu-erh, Black)
 3. Set store meta description in **Settings → General**
-4. Create the **Tea Guides** blog and publish starter articles (see SEO doc)
+4. Create the **Tea Guides** blog and publish starter articles ([`docs/BLOG_STARTER_CONTENT.md`](docs/BLOG_STARTER_CONTENT.md))
 5. Connect Google Search Console and submit sitemap (`/sitemap.xml`)
 6. Create the **FAQ** page with template suffix `faq`
 7. Add GA4 and Search Console verification in theme settings
