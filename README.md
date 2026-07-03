@@ -6,10 +6,36 @@ Premium Chinese loose-leaf tea Shopify store (Horizon theme).
 
 The Luxe Leaf Tea horizontal logo is integrated into the theme header automatically when no logo is uploaded in **Theme settings → Logo and favicon**.
 
-- **Header logo:** `assets/luxe-leaf-tea-logo-header.png` (with WebP and retina variants)
-- **Master horizontal:** `assets/luxe-leaf-tea-logo.png`
-- **Vertical lockup:** `assets/luxe-leaf-tea-logo-vertical.png` (packaging/social)
-- **Favicons:** `assets/luxe-leaf-tea-favicon-32.png`, `luxe-leaf-tea-favicon-16.png`
-- **Open Graph:** `assets/luxe-leaf-tea-logo-og.png`
+## Homepage conversion setup
 
-Snippet: `snippets/luxe-leaf-tea-logo.liquid`
+The homepage includes:
+
+- Trust bar (shipping, freshness, secure checkout)
+- Premium hero with Shop Collection / Explore Tea Types CTAs
+- Featured teas product grid
+- About / trust story section
+- Brewing guide section
+
+## About page
+
+Create a page in Shopify admin:
+
+1. **Online Store → Pages → Add page**
+2. Title: `About` (handle will be `about`)
+3. Template suffix: `about` (uses `templates/page.about.json`)
+
+## Navigation
+
+Brand navigation is enabled by default (**Theme settings → Luxe Leaf Tea**):
+
+- Shop Tea → `/collections/all`
+- Collections → `/collections`
+- Our Story → `/pages/about`
+- Contact → `/pages/contact`
+
+## Next steps in Shopify admin
+
+1. Add product photos and descriptions with origin, taste notes, and brewing tips
+2. Create collections by tea type (Green, Oolong, Pu-erh, etc.)
+3. Set store meta description in **Settings → General**
+4. Connect Google Search Console and submit sitemap (`/sitemap.xml`)

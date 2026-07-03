@@ -1,0 +1,175 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "about_hero": {
+      "type": "section",
+      "blocks": {
+        "about_heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Our Story</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h1",
+            "font": "var(--font-heading--family)",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "about_intro": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Luxe Leaf Tea was founded on a simple belief: the best cup of tea starts with whole leaves, trusted origins, and respect for the craft behind every harvest.</p>",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "about_heading",
+        "about_intro"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "small",
+        "background_color": "#f8f6f0",
+        "padding-block-start": 56,
+        "padding-block-end": 32
+      }
+    },
+    "about_content": {
+      "type": "luxe-leaf-about-story",
+      "blocks": {
+        "point_sourcing": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Direct sourcing",
+            "text": "We partner with gardens in Zhejiang, Fujian, and Yunnan — regions known for centuries of tea mastery."
+          }
+        },
+        "point_quality": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Quality over volume",
+            "text": "Small lots, careful selection, and tasting notes you can trust — never mass-market blends."
+          }
+        },
+        "point_freshness": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Freshness promise",
+            "text": "Packed after you order to preserve aroma, color, and the clarity of each cup."
+          }
+        },
+        "point_ritual": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Made for ritual",
+            "text": "Whether your first gaiwan or your daily mug, our teas are chosen to be drinkable, approachable, and exceptional."
+          }
+        }
+      },
+      "block_order": [
+        "point_sourcing",
+        "point_quality",
+        "point_freshness",
+        "point_ritual"
+      ],
+      "settings": {
+        "eyebrow": "From garden to cup",
+        "heading": "Premium Chinese tea, curated with care",
+        "text": "<p>Every tea in our collection is chosen for its character in the cup — the nutty sweetness of Longjing, the floral lift of a Fujian oolong, the depth of a well-aged pu-erh. We label origin, style, and brewing guidance clearly, because premium tea should feel welcoming, not intimidating.</p><p>Our mission is to bring the best of Chinese loose-leaf tea to discerning drinkers who value quality, transparency, and the quiet pleasure of a well-made cup.</p>",
+        "button_label": "Shop the collection",
+        "button_link": "shopify://collections/all",
+        "padding-block-start": 32,
+        "padding-block-end": 56
+      }
+    },
+    "about_brewing": {
+      "type": "luxe-leaf-brewing-guide",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "title": "Choose your vessel",
+            "text": "A gaiwan, teapot, or simple mug with an infuser all work beautifully with loose leaf."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "title": "Use the right water",
+            "text": "Filtered water and precise temperature bring out sweetness without bitterness."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "title": "Enjoy multiple steeps",
+            "text": "The best Chinese teas reveal new layers across several short infusions."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
+      "settings": {
+        "eyebrow": "Brewing with confidence",
+        "heading": "We guide you from the first sip",
+        "intro": "Every Luxe Leaf Tea includes practical brewing notes — because great tea should be easy to enjoy.",
+        "button_label": "Browse teas",
+        "button_link": "shopify://collections/all",
+        "padding-block-start": 48,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "about_hero",
+    "about_content",
+    "about_brewing"
+  ]
+}
