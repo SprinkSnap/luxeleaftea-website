@@ -16,10 +16,6 @@
         "padding-block-end": 0
       }
     },
-    "trust_bar": {
-      "type": "luxe-leaf-trust-bar",
-      "settings": {}
-    },
     "collection_hero": {
       "type": "luxe-leaf-collection-hero",
       "settings": {
@@ -125,17 +121,12 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "browse_atc": {
-              "type": "luxe-leaf-browse-atc",
-              "settings": {}
             }
           },
           "block_order": [
             "card-gallery",
             "product_title_4nY4eT",
-            "price_EzJzMm",
-            "browse_atc"
+            "price_EzJzMm"
           ]
         }
       },
@@ -194,7 +185,6 @@
   },
   "order": [
     "breadcrumbs",
-    "trust_bar",
     "collection_hero",
     "main",
     "keep_exploring",

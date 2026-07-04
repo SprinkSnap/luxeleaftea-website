@@ -8,10 +8,6 @@
  * ------------------------------------------------------------
  */{
   "sections": {
-    "trust_bar": {
-      "type": "luxe-leaf-trust-bar",
-      "settings": {}
-    },
     "search": {
       "type": "search-header",
       "blocks": {
@@ -152,17 +148,12 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "browse_atc": {
-              "type": "luxe-leaf-browse-atc",
-              "settings": {}
             }
           },
           "block_order": [
             "product_card_gallery_cFExAi",
             "product_title_j7qXTx",
-            "price_fYkUgG",
-            "browse_atc"
+            "price_fYkUgG"
           ]
         }
       },
@@ -223,7 +214,6 @@
     }
   },
   "order": [
-    "trust_bar",
     "search",
     "main",
     "search_keep_exploring",
