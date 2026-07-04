@@ -7,13 +7,106 @@ import { StandardEvents } from '@shopify/events';
   if (window.__luxeMobileCommerceInit) return;
   window.__luxeMobileCommerceInit = true;
 
-  const NUDGE_HEIGHT = '3.25rem';
+  const NUDGE_HEIGHT = '4.5rem';
+  const NUDGE_HEIGHT_SUCCESS = '3.75rem';
+
+  const getShippingConfig = () => {
+    const body = document.body;
+    const nudge = document.querySelector('[data-shipping-nudge]');
+    const threshold = Number(body.dataset.freeShippingThreshold || nudge?.dataset.threshold) || 5000;
+    const standardRate = Number(body.dataset.standardShippingRate || nudge?.dataset.standardRate) || 595;
+    const thresholdLabel =
+      nudge?.dataset.thresholdLabel || body.dataset.freeShippingThresholdLabel || formatMoney(threshold);
+    const standardRateLabel =
+      nudge?.dataset.standardRateLabel || body.dataset.standardShippingRateLabel || formatMoney(standardRate);
+
+    return { threshold, standardRate, thresholdLabel, standardRateLabel };
+  };
 
   const formatMoney = (cents) => {
     if (window.Shopify?.formatMoney) {
       return Shopify.formatMoney(cents, window.theme?.moneyFormat || '${{amount}}');
     }
     return `$${(cents / 100).toFixed(2)}`;
+  };
+
+  const getShippingEstimate = (cartTotal) => {
+    const { threshold, standardRate } = getShippingConfig();
+    const qualifiesFree = cartTotal >= threshold;
+    const shippingCost = qualifiesFree ? 0 : standardRate;
+    const estimatedTotal = cartTotal + shippingCost;
+    const remaining = Math.max(0, threshold - cartTotal);
+    const progress = Math.min(100, Math.round((cartTotal * 100) / threshold));
+
+    return { qualifiesFree, shippingCost, estimatedTotal, remaining, progress, threshold, standardRate };
+  };
+
+  const syncCartConversion = (cart) => {
+    const conversion = document.querySelector('[data-cart-conversion]');
+    if (!(conversion instanceof HTMLElement) || cart.item_count === 0) return;
+
+    const { qualifiesFree, shippingCost, estimatedTotal, remaining, progress } = getShippingEstimate(cart.total_price);
+    const { thresholdLabel, standardRateLabel } = getShippingConfig();
+
+    const progressText = conversion.querySelector('[data-shipping-progress-text]');
+    const progressEl = conversion.querySelector('[data-shipping-progress]');
+    const progressBar = conversion.querySelector('[data-shipping-progress-bar]');
+    const rateValue = conversion.querySelector('[data-shipping-rate-value]');
+    const totalInline = conversion.querySelector('[data-estimated-total-inline]');
+
+    if (progressText) {
+      progressText.innerHTML = `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+      progressText.hidden = qualifiesFree;
+    }
+    if (progressEl instanceof HTMLElement) {
+      progressEl.hidden = qualifiesFree;
+      progressEl.setAttribute('aria-valuenow', String(progress));
+    }
+    if (progressBar instanceof HTMLElement) {
+      progressBar.style.width = `${progress}%`;
+    }
+
+    if (rateValue) {
+      rateValue.innerHTML = qualifiesFree
+        ? '<strong>Free</strong>'
+        : `Standard <strong>${standardRateLabel}</strong>`;
+    }
+    if (totalInline) {
+      totalInline.innerHTML = `Pay <strong>${formatMoney(estimatedTotal)}</strong> total`;
+    }
+
+    conversion.classList.toggle('luxe-cart-conversion--free-shipping', qualifiesFree);
+  };
+
+  const syncShippingTotals = (cart) => {
+    const totals = document.querySelector('[data-shipping-totals]');
+    if (!(totals instanceof HTMLElement) || cart.item_count === 0) return;
+
+    const { qualifiesFree, estimatedTotal, remaining } = getShippingEstimate(cart.total_price);
+    const { thresholdLabel, standardRateLabel } = getShippingConfig();
+
+    const hint = totals.querySelector('[data-shipping-hint]');
+    const shippingValue = totals.querySelector('[data-shipping-cost-value]');
+    const estimatedTotalEl = totals.querySelector('[data-estimated-total-value]');
+    const checkoutText = document.querySelector('[data-checkout-button-text]');
+
+    if (shippingValue) {
+      shippingValue.innerHTML = qualifiesFree
+        ? '<span class="luxe-shipping-totals__free">Free</span>'
+        : standardRateLabel;
+    }
+    if (hint) {
+      hint.classList.toggle('luxe-shipping-totals__hint--success', qualifiesFree);
+      hint.innerHTML = qualifiesFree
+        ? 'Free shipping unlocked on this order'
+        : `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+    }
+    if (estimatedTotalEl) {
+      estimatedTotalEl.textContent = formatMoney(estimatedTotal);
+    }
+    if (checkoutText) {
+      checkoutText.textContent = `Pay ${formatMoney(estimatedTotal)} — Secure checkout`;
+    }
   };
 
   /**
@@ -23,35 +116,58 @@ import { StandardEvents } from '@shopify/events';
     const nudge = document.querySelector('[data-shipping-nudge]');
     if (!(nudge instanceof HTMLElement)) return;
 
-    const threshold = Number(nudge.dataset.threshold) || 5000;
-    const thresholdLabel = nudge.dataset.thresholdLabel || formatMoney(threshold);
-    const textEl = nudge.querySelector('[data-shipping-nudge-text]');
-    const barEl = nudge.querySelector('[data-shipping-nudge-bar]');
-    const progressEl = nudge.querySelector('[data-shipping-nudge-progress]');
-
-    const showNudge = cart.item_count > 0 && cart.total_price < threshold;
-
-    if (!showNudge) {
+    if (cart.item_count === 0) {
       nudge.hidden = true;
       document.documentElement.style.setProperty('--luxe-shipping-nudge-height', '0px');
       return;
     }
 
-    const remaining = threshold - cart.total_price;
-    const progress = Math.min(100, Math.round((cart.total_price * 100) / threshold));
+    const { qualifiesFree, estimatedTotal, remaining, progress } = getShippingEstimate(cart.total_price);
+    const { thresholdLabel, standardRateLabel } = getShippingConfig();
+
+    const textEl = nudge.querySelector('[data-shipping-nudge-text]');
+    const rateEl = nudge.querySelector('[data-shipping-nudge-rate]');
+    const barEl = nudge.querySelector('[data-shipping-nudge-bar]');
+    const progressEl = nudge.querySelector('[data-shipping-nudge-progress]');
+    const exploreBtn = nudge.querySelector('[data-shipping-nudge-explore]');
+    const cartBtn = nudge.querySelector('[data-shipping-nudge-cart]');
+    const checkoutBtn = nudge.querySelector('[data-shipping-nudge-checkout]');
+
+    nudge.classList.toggle('luxe-shipping-nudge--success', qualifiesFree);
 
     if (textEl) {
-      textEl.innerHTML = `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+      textEl.innerHTML = qualifiesFree
+        ? '<strong>Free shipping unlocked!</strong> Secure your tea before you go.'
+        : `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+    }
+    if (rateEl) {
+      rateEl.textContent = qualifiesFree
+        ? `Pay ${formatMoney(estimatedTotal)} total · Checkout in seconds`
+        : `Standard shipping ${standardRateLabel} · Pay ${formatMoney(estimatedTotal)} total`;
     }
     if (barEl instanceof HTMLElement) {
-      barEl.style.width = `${progress}%`;
+      barEl.style.width = `${qualifiesFree ? 100 : progress}%`;
     }
     if (progressEl instanceof HTMLElement) {
-      progressEl.setAttribute('aria-valuenow', String(progress));
+      progressEl.setAttribute('aria-valuenow', String(qualifiesFree ? 100 : progress));
+    }
+
+    if (exploreBtn instanceof HTMLElement) {
+      exploreBtn.hidden = qualifiesFree;
+    }
+    if (cartBtn instanceof HTMLElement) {
+      cartBtn.hidden = qualifiesFree;
+    }
+    if (checkoutBtn instanceof HTMLElement) {
+      checkoutBtn.hidden = !qualifiesFree;
+      checkoutBtn.textContent = `Pay · ${formatMoney(estimatedTotal)}`;
     }
 
     nudge.hidden = false;
-    document.documentElement.style.setProperty('--luxe-shipping-nudge-height', NUDGE_HEIGHT);
+    document.documentElement.style.setProperty(
+      '--luxe-shipping-nudge-height',
+      qualifiesFree ? NUDGE_HEIGHT_SUCCESS : NUDGE_HEIGHT
+    );
   };
 
   const syncBar = async () => {
@@ -61,6 +177,7 @@ import { StandardEvents } from '@shopify/events';
       const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
       if (!res.ok) return;
       const cart = await res.json();
+      const { estimatedTotal } = getShippingEstimate(cart.total_price);
 
       if (bar) {
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
@@ -71,7 +188,7 @@ import { StandardEvents } from '@shopify/events';
           bar.classList.add('luxe-mobile-bar--has-cart');
           if (checkoutButton) {
             checkoutButton.hidden = false;
-            checkoutButton.textContent = `Checkout · ${formatMoney(cart.total_price)}`;
+            checkoutButton.textContent = `Pay · ${formatMoney(estimatedTotal)}`;
           }
           if (cartBtn) cartBtn.hidden = true;
         } else {
@@ -87,6 +204,8 @@ import { StandardEvents } from '@shopify/events';
       }
 
       syncShippingNudge(cart);
+      syncCartConversion(cart);
+      syncShippingTotals(cart);
     } catch {
       /* cart fetch failed — keep server-rendered state */
     }
@@ -112,13 +231,17 @@ import { StandardEvents } from '@shopify/events';
 
   function bindCheckoutActions() {
     document.addEventListener('click', (event) => {
-      const button = event.target.closest('[data-mobile-checkout], .cart__checkout-button[name="checkout"]');
+      const button = event.target.closest(
+        '[data-mobile-checkout], [data-shipping-nudge-checkout], .cart__checkout-button[name="checkout"]'
+      );
       if (!button || button.disabled || button.hidden) return;
 
       const form =
         button.form ||
         (button.getAttribute('form') ? document.getElementById(button.getAttribute('form')) : null) ||
-        button.closest('form');
+        button.closest('form') ||
+        document.querySelector('.luxe-mobile-bar__checkout-form') ||
+        document.getElementById('cart-form');
 
       event.preventDefault();
 

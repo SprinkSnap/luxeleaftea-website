@@ -25,6 +25,12 @@
     assign faq_abs = shop.url | append: '/pages/faq'
     assign about_abs = shop.url | append: '/pages/about'
     assign contact_abs = shop.url | append: '/pages/contact'
+    assign free_ship_threshold = settings.free_shipping_threshold | default: 5000
+    assign standard_shipping_rate = settings.standard_shipping_rate | default: 595
+    assign free_ship_money = free_ship_threshold | money
+    assign standard_ship_money = standard_shipping_rate | money
+    assign free_ship_schema = free_ship_threshold | divided_by: 100.0
+    assign standard_ship_schema = standard_shipping_rate | divided_by: 100.0
   -%}
 
   <script type="application/ld+json">
@@ -48,7 +54,19 @@
         "availableLanguage": ["English"]{%- if brand_phone != blank -%},
         "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
         "email": {{ brand_email | json }}{%- endif -%}
-      }{%- endif -%}
+      }{%- endif -%},
+      "makesOffer": {
+        "@type": "Offer",
+        "name": "Standard shipping",
+        "price": {{ standard_ship_schema | json }},
+        "priceCurrency": {{ cart.currency.iso_code | default: shop.currency | json }},
+        "description": {{ 'Standard shipping ' | append: standard_ship_money | append: '. Free shipping on orders over ' | append: free_ship_money | append: '.' | json }},
+        "eligibleTransactionVolume": {
+          "@type": "PriceSpecification",
+          "minPrice": {{ free_ship_schema | json }},
+          "priceCurrency": {{ cart.currency.iso_code | default: shop.currency | json }}
+        }
+      }
     }
   </script>
 

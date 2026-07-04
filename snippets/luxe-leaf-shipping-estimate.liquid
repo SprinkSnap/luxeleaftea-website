@@ -1,0 +1,151 @@
+{%- doc -%}
+  Shared shipping math and conversion UI for cart drawer, cart page, and sticky nudge.
+
+  @param {string} [variant] - drawer-banner | cart-totals | nudge-meta
+{%- enddoc -%}
+
+{%- liquid
+  assign variant = variant | default: 'drawer-banner'
+  assign threshold = settings.free_shipping_threshold | default: 5000
+  assign standard_rate = settings.standard_shipping_rate | default: 595
+  assign threshold_money = threshold | money
+  assign standard_rate_money = standard_rate | money
+  assign cart_total = cart.total_price
+  assign remaining = threshold | minus: cart_total
+  if remaining < 0
+    assign remaining = 0
+  endif
+
+  if cart_total >= threshold
+    assign qualifies_free = true
+    assign shipping_cost = 0
+  else
+    assign qualifies_free = false
+    assign shipping_cost = standard_rate
+  endif
+
+  assign estimated_total = cart_total | plus: shipping_cost
+  assign progress = cart_total | times: 100 | divided_by: threshold
+  if progress > 100
+    assign progress = 100
+  endif
+
+  if settings.currency_code_enabled_cart_total
+    assign estimated_total_money = estimated_total | money_with_currency
+  else
+    assign estimated_total_money = estimated_total | money
+  endif
+-%}
+
+{%- case variant -%}
+  {%- when 'nudge-meta' -%}
+    data-threshold="{{ threshold }}"
+    data-threshold-label="{{ threshold_money | escape }}"
+    data-standard-rate="{{ standard_rate }}"
+    data-standard-rate-label="{{ standard_rate_money | escape }}"
+
+  {%- when 'cart-totals' -%}
+    {%- unless cart.empty? -%}
+      <div class="luxe-shipping-totals" data-shipping-totals>
+        <div class="luxe-shipping-totals__row">
+          <span class="luxe-shipping-totals__label">Subtotal</span>
+          <span class="luxe-shipping-totals__value" data-cart-subtotal-value>{{ cart.items_subtotal_price | money }}</span>
+        </div>
+        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--shipping">
+          <span class="luxe-shipping-totals__label">
+            {%- if qualifies_free -%}
+              Shipping
+            {%- else -%}
+              Standard shipping
+            {%- endif -%}
+          </span>
+          <span class="luxe-shipping-totals__value" data-shipping-cost-value>
+            {%- if qualifies_free -%}
+              <span class="luxe-shipping-totals__free">Free</span>
+            {%- else -%}
+              {{ standard_rate_money }}
+            {%- endif -%}
+          </span>
+        </div>
+        {%- unless qualifies_free -%}
+          <p class="luxe-shipping-totals__hint" data-shipping-hint>
+            Add <strong>{{ remaining | money }}</strong> for free shipping over {{ threshold_money }}
+          </p>
+        {%- else -%}
+          <p class="luxe-shipping-totals__hint luxe-shipping-totals__hint--success" data-shipping-hint>
+            {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+            Free shipping unlocked on this order
+          </p>
+        {%- endunless -%}
+        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--total">
+          <span class="luxe-shipping-totals__label luxe-shipping-totals__label--total">Order total</span>
+          <span class="luxe-shipping-totals__value luxe-shipping-totals__value--total" data-estimated-total-value>
+            {{- estimated_total_money -}}
+          </span>
+        </div>
+      </div>
+    {%- endunless -%}
+
+  {%- when 'drawer-banner' -%}
+    {%- unless cart.empty? -%}
+      <div class="luxe-cart-conversion" data-cart-conversion>
+        {%- if qualifies_free -%}
+          <p class="luxe-cart-conversion__message luxe-cart-conversion__message--success">
+            {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+            You've unlocked <strong>free shipping</strong> — lowest cost delivery on this order!
+          </p>
+          <div
+            class="luxe-cart-conversion__progress luxe-cart-conversion__progress--complete"
+            role="progressbar"
+            aria-valuenow="100"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Free shipping unlocked"
+          >
+            <span class="luxe-cart-conversion__progress-bar" style="width: 100%;"></span>
+          </div>
+        {%- else -%}
+          <p class="luxe-cart-conversion__message" data-shipping-progress-text>
+            Add <strong>{{ remaining | money }}</strong> for free shipping over {{ threshold_money }}
+          </p>
+          <div
+            class="luxe-cart-conversion__progress"
+            role="progressbar"
+            aria-valuenow="{{ progress }}"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Free shipping progress"
+            data-shipping-progress
+          >
+            <span class="luxe-cart-conversion__progress-bar" data-shipping-progress-bar style="width: {{ progress }}%;"></span>
+          </div>
+        {%- endif -%}
+
+        <div class="luxe-cart-conversion__shipping" data-shipping-estimate>
+          <span class="luxe-cart-conversion__shipping-label">
+            {%- if qualifies_free -%}
+              Shipping today
+            {%- else -%}
+              Best rate now
+            {%- endif -%}
+          </span>
+          <span class="luxe-cart-conversion__shipping-value" data-shipping-rate-value>
+            {%- if qualifies_free -%}
+              <strong>Free</strong>
+            {%- else -%}
+              Standard <strong>{{ standard_rate_money }}</strong>
+            {%- endif -%}
+          </span>
+          <span class="luxe-cart-conversion__shipping-total" data-estimated-total-inline>
+            Pay <strong>{{ estimated_total_money }}</strong> total
+          </span>
+        </div>
+
+        <ul class="luxe-cart-conversion__trust list-unstyled" role="list">
+          <li>{%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%} Packed fresh to order</li>
+          <li>{%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%} Secure checkout</li>
+          <li>{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%} Whole-leaf quality</li>
+        </ul>
+      </div>
+    {%- endunless -%}
+{%- endcase -%}

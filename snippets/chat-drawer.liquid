@@ -99,12 +99,21 @@
 
 {%- unless settings.brand_navigation == false -%}
   {%- render 'luxe-leaf-shipping-nudge' -%}
-  {%- unless template.name == 'cart' -%}
-    <nav
-      class="luxe-mobile-bar{% if cart.item_count > 0 %} luxe-mobile-bar--has-cart{% endif %}"
-      aria-label="Quick shop navigation"
-      data-mobile-shop-bar
-    >
+  {%- liquid
+    assign threshold = settings.free_shipping_threshold | default: 5000
+    assign standard_rate = settings.standard_shipping_rate | default: 595
+    if cart.total_price >= threshold
+      assign mobile_shipping_cost = 0
+    else
+      assign mobile_shipping_cost = standard_rate
+    endif
+    assign mobile_estimated_total = cart.total_price | plus: mobile_shipping_cost
+  -%}
+  <nav
+    class="luxe-mobile-bar{% if cart.item_count > 0 %} luxe-mobile-bar--has-cart{% endif %}"
+    aria-label="Quick shop navigation"
+    data-mobile-shop-bar
+  >
       <button
         type="button"
         class="luxe-mobile-bar__menu button button-secondary"
@@ -130,9 +139,9 @@
           data-mobile-checkout
           {% if cart.item_count == 0 %}hidden{% endif %}
         >
-          Checkout · {{ cart.total_price | money }}
+          Pay · {{ mobile_estimated_total | money }}
         </button>
-      </form>
+    </form>
       {%- if settings.cart_type == 'drawer' -%}
         <button
           type="button"
@@ -153,7 +162,6 @@
         </a>
       {%- endif -%}
     </nav>
-  {%- endunless -%}
 
   {%- unless settings.tea_chat_enabled == false -%}
     <script src="{{ 'luxe-leaf-tea-chat.js' | asset_url }}" defer></script>

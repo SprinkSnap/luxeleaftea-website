@@ -24,6 +24,9 @@
   assign brand_default_description = 'Shop premium loose leaf tea from Luxe Leaf Tea. Hand-selected green, oolong, pu-erh, and black teas — packed fresh to order.'
   assign meta_description = page_description | default: shop.description | default: brand_default_description
   assign og_description = meta_description
+  assign free_ship_threshold = settings.free_shipping_threshold | default: 5000
+  assign free_ship_label = free_ship_threshold | money
+  assign standard_ship_label = settings.standard_shipping_rate | default: 595 | money
 
   if request.page_type == 'index'
     assign og_title = 'Premium Loose Leaf Tea | ' | append: shop.name
@@ -32,7 +35,7 @@
   elsif request.page_type == 'collection' and collection
     case collection.handle
       when 'green-tea'
-        assign meta_description = 'Shop premium loose leaf green tea — bright, sweet whole-leaf selections packed fresh to order. Free shipping over $50.'
+        assign meta_description = 'Shop premium loose leaf green tea — bright, sweet whole-leaf selections packed fresh to order. Free shipping over ' | append: free_ship_label | append: '.'
       when 'oolong'
         assign meta_description = 'Explore premium loose leaf oolong tea — floral, layered, and perfect for multiple steeps. Packed fresh to order.'
       when 'pu-erh'
@@ -58,7 +61,7 @@
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'faq'
     assign og_title = 'FAQ | Premium Loose Leaf Tea — Brewing, Shipping & Checkout | ' | append: shop.name
-    assign meta_description = 'Premium loose leaf tea FAQ — brewing tips, secure checkout, free shipping over $50, freshness guarantee, and how to choose green, oolong, pu-erh, and black teas. Shop without leaving the page.'
+    assign meta_description = 'Premium loose leaf tea FAQ — brewing tips, secure checkout, standard shipping ' | append: standard_ship_label | append: ', free shipping over ' | append: free_ship_label | append: ', freshness guarantee, and how to choose green, oolong, pu-erh, and black teas. Shop without leaving the page.'
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'about'
     assign og_title = 'About Luxe Leaf Tea | Premium Loose Leaf Tea Boutique'

@@ -5,14 +5,26 @@
 {%- unless settings.brand_navigation == false -%}
   {%- liquid
     assign threshold = settings.free_shipping_threshold | default: 5000
+    assign standard_rate = settings.standard_shipping_rate | default: 595
     assign threshold_money = threshold | money
+    assign standard_rate_money = standard_rate | money
+    assign cart_total = cart.total_price
+    assign remaining = threshold | minus: cart_total
+    if remaining < 0
+      assign remaining = 0
+    endif
+    if cart_total >= threshold
+      assign shipping_cost = 0
+    else
+      assign shipping_cost = standard_rate
+    endif
+    assign estimated_total = cart_total | plus: shipping_cost
   -%}
 
   <aside
     class="luxe-shipping-nudge"
     data-shipping-nudge
-    data-threshold="{{ threshold }}"
-    data-threshold-label="{{ threshold_money | escape }}"
+    {% render 'luxe-leaf-shipping-estimate', variant: 'nudge-meta' %}
     data-shop-url="{{ routes.all_products_collection_url | escape }}"
     hidden
     aria-live="polite"
@@ -21,6 +33,9 @@
       <div class="luxe-shipping-nudge__copy">
         <p class="luxe-shipping-nudge__text" data-shipping-nudge-text>
           Add more for free shipping over {{ threshold_money }}
+        </p>
+        <p class="luxe-shipping-nudge__rate" data-shipping-nudge-rate>
+          Standard shipping {{ standard_rate_money }} · Pay {{ estimated_total | money }} total
         </p>
         <div
           class="luxe-shipping-nudge__progress"
@@ -44,6 +59,14 @@
           on:click="#cart-drawer/toggle"
         >
           View bag
+        </button>
+        <button
+          type="button"
+          class="luxe-shipping-nudge__checkout button"
+          data-shipping-nudge-checkout
+          hidden
+        >
+          Pay · {{ estimated_total | money }}
         </button>
       </div>
     </div>

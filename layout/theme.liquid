@@ -111,7 +111,13 @@
     {{ content_for_header }}
   </head>
 
-  <body class="page-width-wide card-hover-effect-lift luxe-leaf-theme">
+  <body
+    class="page-width-wide card-hover-effect-lift luxe-leaf-theme"
+    data-free-shipping-threshold="{{ settings.free_shipping_threshold | default: 5000 }}"
+    data-standard-shipping-rate="{{ settings.standard_shipping_rate | default: 595 }}"
+    data-free-shipping-threshold-label="{{ settings.free_shipping_threshold | default: 5000 | money | escape }}"
+    data-standard-shipping-rate-label="{{ settings.standard_shipping_rate | default: 595 | money | escape }}"
+  >
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
 
     {% render 'chat-drawer' %}

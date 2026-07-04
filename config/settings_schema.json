@@ -80,6 +80,24 @@
         },
         {
           "type": "header",
+          "content": "Checkout & shipping"
+        },
+        {
+          "type": "number",
+          "id": "free_shipping_threshold",
+          "label": "Free shipping threshold (cents)",
+          "default": 5000,
+          "info": "Cart subtotal in cents before shipping is free. Example: 5000 = $50.00."
+        },
+        {
+          "type": "number",
+          "id": "standard_shipping_rate",
+          "label": "Standard shipping rate (cents)",
+          "default": 595,
+          "info": "Estimated flat rate shown in cart and checkout nudge before free shipping unlocks. Example: 595 = $5.95."
+        },
+        {
+          "type": "header",
           "content": "SEO & analytics"
         },
         {
