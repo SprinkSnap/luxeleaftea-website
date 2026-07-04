@@ -1,28 +1,4 @@
 {%- doc -%}
-  Mobile drawer navigation links for Luxe Leaf Tea.
+  @deprecated — use luxe-leaf-brand-nav-links
 {%- enddoc -%}
-
-{%- liquid
-  assign nav_links = 'Shop Tea|/collections/all,Green Tea|/collections/green-tea,Oolong|/collections/oolong,Pu-erh|/collections/pu-erh,Black Tea|/collections/black-tea,Our Story|/pages/about,Contact|/pages/contact' | split: ','
-  assign animation_index = 0
--%}
-
-{%- for entry in nav_links -%}
-  {%- assign parts = entry | split: '|' -%}
-  {%- assign label = parts[0] -%}
-  {%- assign url = parts[1] -%}
-  {%- assign animation_index = animation_index | plus: 1 -%}
-
-  <li
-    style="--menu-drawer-animation-index: {{ animation_index }};"
-    class="menu-drawer__list-item--flat{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
-  >
-    <a
-      id="HeaderDrawer-brand-{{ label | handleize }}"
-      href="{{ url }}"
-      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
-    >
-      <span class="menu-drawer__menu-item-text wrap-text">{{ label }}</span>
-    </a>
-  </li>
-{%- endfor -%}
+{% render 'luxe-leaf-brand-nav-links', variant: 'drawer', block_settings: block_settings %}

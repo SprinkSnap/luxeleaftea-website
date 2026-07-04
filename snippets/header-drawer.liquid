@@ -109,7 +109,7 @@
             Handle menus with fewer than 3 levels of links
           {%- endcomment -%}
           {% if settings.brand_navigation != false %}
-            {% render 'luxe-leaf-brand-drawer-links', block_settings: block_settings %}
+            {% render 'luxe-leaf-brand-nav-links', variant: 'drawer', block_settings: block_settings %}
           {% elsif linklist.levels < 3 %}
             {% assign first_accordion_open = false %}
             {% assign animation_index = 0 %}

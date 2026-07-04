@@ -1,0 +1,113 @@
+{%- doc -%}
+  Luxe Leaf Tea premium navigation — desktop header and mobile drawer.
+  @param {string} variant - 'desktop' or 'drawer'
+  @param {object} [block_settings] - Drawer block settings (drawer variant only)
+{%- enddoc -%}
+
+{%- liquid
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
+
+  assign new_arrivals_url = shop_tea_url | append: '?sort_by=created-descending'
+  if collections['new-arrivals'] != blank and collections['new-arrivals'].url != blank
+    assign new_arrivals_url = collections['new-arrivals'].url
+  endif
+
+  assign best_sellers_url = shop_tea_url
+  if collections['best-sellers'] != blank and collections['best-sellers'].url != blank
+    assign best_sellers_url = collections['best-sellers'].url
+  endif
+
+  assign about_url = '/pages/about'
+  assign contact_url = '/pages/contact'
+  assign nav_labels = 'Shop Tea|New Arrivals|Best Sellers|About|Contact' | split: '|'
+-%}
+
+{%- if variant == 'drawer' -%}
+  {%- assign animation_index = 0 -%}
+  {%- for label in nav_labels -%}
+    {%- liquid
+      case forloop.index
+        when 1
+          assign url = shop_tea_url
+        when 2
+          assign url = new_arrivals_url
+        when 3
+          assign url = best_sellers_url
+        when 4
+          assign url = about_url
+        when 5
+          assign url = contact_url
+      endcase
+
+      assign is_active = false
+      if request.path == url
+        assign is_active = true
+      endif
+
+      assign animation_index = animation_index | plus: 1
+      assign drawer_key = label | handleize
+    -%}
+
+    <li
+      style="--menu-drawer-animation-index: {{ animation_index }};"
+      class="menu-drawer__list-item--flat luxe-nav-drawer__item{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+    >
+      <a
+        id="HeaderDrawer-luxe-{{ drawer_key }}"
+        href="{{ url }}"
+        class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element luxe-nav-drawer__link focus-inset{% if is_active %} menu-drawer__menu-item--active{% endif %}"
+        {% if is_active %}
+          aria-current="page"
+        {% endif %}
+      >
+        <span class="menu-drawer__menu-item-text wrap-text">{{ label }}</span>
+      </a>
+    </li>
+  {%- endfor -%}
+{%- else -%}
+  {%- for label in nav_labels -%}
+    {%- liquid
+      case forloop.index
+        when 1
+          assign url = shop_tea_url
+        when 2
+          assign url = new_arrivals_url
+        when 3
+          assign url = best_sellers_url
+        when 4
+          assign url = about_url
+        when 5
+          assign url = contact_url
+      endcase
+
+      assign is_active = false
+      if request.path == url
+        assign is_active = true
+      endif
+    -%}
+
+    <li
+      role="presentation"
+      class="menu-list__list-item luxe-nav__item"
+      on:focus="/activate"
+      on:blur="/deactivate"
+      on:pointerenter="/activate"
+      on:pointerleave="/deactivate"
+    >
+      <a
+        href="{{ url }}"
+        data-skip-node-update="true"
+        class="menu-list__link luxe-nav__link{% if is_active %} menu-list__link--active luxe-nav__link--active{% endif %}"
+        {% if is_active %}
+          aria-current="page"
+        {% endif %}
+        ref="menuitem"
+      >
+        <span class="menu-list__link-title">{{ label }}</span>
+      </a>
+    </li>
+  {%- endfor -%}
+{%- endif -%}

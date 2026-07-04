@@ -39,22 +39,22 @@ body .h4 {
 
 body .header-announcements,
 body .announcement-bar {
-  background: var(--luxe-jade-deep) !important;
-  color: var(--luxe-cream) !important;
-  border-bottom: 1px solid rgb(var(--luxe-gold-rgb) / 0.35);
+  background: #1a1a1a !important;
+  color: #faf8f2 !important;
+  border-bottom: 1px solid rgb(201 162 39 / 0.35);
 }
 
 body #header-component .header__row {
-  background: var(--luxe-cream) !important;
-  border-bottom: 1px solid rgb(var(--luxe-jade-rgb) / 0.1);
-  box-shadow: 0 1px 0 rgb(var(--luxe-gold-rgb) / 0.15);
+  background: #faf8f2 !important;
+  border-bottom: 1px solid rgb(26 26 26 / 0.08);
+  box-shadow: none;
 }
 
-body .menu-list__link {
+body #header-component .luxe-nav__link .menu-list__link-title {
   font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.045em;
+  text-transform: none;
 }
 
 body .button,
@@ -532,14 +532,14 @@ body .h4,
 #header-group,
 #header-component,
 .header__row {
-  --color-foreground: #1b4332 !important;
-  --color-foreground-rgb: 27 67 50 !important;
+  --color-foreground: #1a1a1a !important;
+  --color-foreground-rgb: 26 26 26 !important;
 }
 
 .header-actions__action,
 .header__icon--menu,
 .search-action {
-  color: #1b4332 !important;
+  color: #1a1a1a !important;
 }
 
 .shopify-section:has(.luxe-hero),

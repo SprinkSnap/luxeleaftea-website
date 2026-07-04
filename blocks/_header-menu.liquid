@@ -93,7 +93,7 @@
 
     {% capture children %}
       {% unless settings.brand_navigation == false %}
-        {% render 'luxe-leaf-brand-nav-items' %}
+        {% render 'luxe-leaf-brand-nav-links', variant: 'desktop' %}
       {% else %}
       {% for link in block_settings.menu.links %}
         <li
@@ -152,6 +152,7 @@
         </li>
       {% endfor %}
       {% endif %}
+      {% if settings.brand_navigation == false %}
       <li
         class="menu-list__list-item"
         role="presentation"
@@ -165,6 +166,7 @@
           <span class="menu-list__link-title">{{ 'actions.more' | t }}</span>
         </button>
       </li>
+      {% endif %}
     {% endcapture %}
 
     <header-menu
@@ -184,7 +186,7 @@
             class: class,
             ref: 'overflowMenu',
             children: children,
-            minimum-items: 2,
+            minimum-items: 6,
             data-testid: 'header-menu-overflow-list',
             attributes: 'data-skip-node-update'
           %}
