@@ -1,0 +1,124 @@
+{%- doc -%}
+  Reliable cart drawer opener — works even if theme-drawer.js is slow or fails.
+  Render once near end of layout/theme.liquid (after cart-drawer markup).
+{%- enddoc -%}
+
+{%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+  <script>
+    (function () {
+      if (window.__luxeCartOpenerInit) return;
+      window.__luxeCartOpenerInit = true;
+
+      var TRIGGER =
+        '[data-luxe-open-cart],[data-testid="cart-drawer-trigger"],a[aria-controls="cart-drawer"],button[aria-controls="cart-drawer"],[data-mobile-cart-toggle],[data-shipping-nudge-cart]';
+      var lockUntil = 0;
+
+      function getCartUrl() {
+        return (window.Theme && window.Theme.routes && window.Theme.routes.cart_url) || '/cart';
+      }
+
+      function forceOpenDrawer() {
+        var drawer = document.getElementById('cart-drawer');
+        if (!drawer) return false;
+
+        try {
+          if (window.customElements && window.customElements.get('theme-drawer')) {
+            window.customElements.upgrade(drawer);
+          }
+          if (typeof drawer.open === 'function') {
+            drawer.open();
+            if (drawer.hasAttribute('open') || drawer.querySelector('dialog[open]')) {
+              return true;
+            }
+          }
+        } catch (e) {}
+
+        var dialog = drawer.querySelector('dialog');
+        if (!dialog) return false;
+
+        try {
+          drawer.setAttribute('open', '');
+          var modal = window.matchMedia('(max-width: 989px)').matches;
+          if (modal) {
+            if (!dialog.open) dialog.showModal();
+          } else if (!dialog.open) {
+            dialog.show();
+          }
+          dialog.classList.add('theme-drawer__dialog--opening');
+          window.setTimeout(function () {
+            dialog.classList.remove('theme-drawer__dialog--opening');
+          }, 400);
+          drawer.dispatchEvent(new CustomEvent('theme-drawer:open', { bubbles: true }));
+          return true;
+        } catch (e) {}
+
+        return false;
+      }
+
+      function openCartDrawer(evt) {
+        if (Date.now() < lockUntil) return;
+        lockUntil = Date.now() + 450;
+
+        if (forceOpenDrawer()) {
+          if (evt) {
+            evt.preventDefault();
+            if (evt.stopPropagation) evt.stopPropagation();
+          }
+          return;
+        }
+
+        var cartUrl = getCartUrl();
+        if (evt) {
+          evt.preventDefault();
+          if (evt.stopPropagation) evt.stopPropagation();
+        }
+
+        var settled = false;
+        function goToCart() {
+          if (settled) return;
+          settled = true;
+          window.location.href = cartUrl;
+        }
+
+        var fallbackTimer = window.setTimeout(goToCart, 450);
+
+        if (window.customElements && window.customElements.whenDefined) {
+          window.customElements
+            .whenDefined('theme-drawer')
+            .then(function () {
+              if (forceOpenDrawer()) {
+                settled = true;
+                window.clearTimeout(fallbackTimer);
+                return;
+              }
+              goToCart();
+            })
+            .catch(goToCart);
+        } else {
+          goToCart();
+        }
+      }
+
+      function onCartIntent(evt) {
+        var target = evt.target;
+        if (!(target instanceof Element)) return;
+
+        if (evt.type === 'touchend' && evt.changedTouches && evt.changedTouches[0]) {
+          var touch = evt.changedTouches[0];
+          target = document.elementFromPoint(touch.clientX, touch.clientY) || target;
+        }
+
+        var trigger = target.closest(TRIGGER);
+        if (!trigger || trigger.hidden || trigger.getAttribute('aria-disabled') === 'true') return;
+
+        openCartDrawer(evt);
+      }
+
+      document.addEventListener('click', onCartIntent, true);
+      document.addEventListener('touchend', onCartIntent, { capture: true, passive: false });
+
+      window.LuxeLeaf = window.LuxeLeaf || {};
+      window.LuxeLeaf.openCart = openCartDrawer;
+    })();
+  </script>
+{%- endif -%}

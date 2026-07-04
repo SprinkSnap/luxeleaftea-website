@@ -132,6 +132,7 @@
       href="{{ routes.cart_url }}"
       class="header-actions__action button-unstyled{% if display_style == 'text' %} header-actions__text-style{% endif %}"
       role="button"
+      data-luxe-open-cart
       aria-haspopup="dialog"
       aria-expanded="false"
       aria-controls="cart-drawer"
@@ -159,71 +160,6 @@
     data-testid="cart-count-live-region"
   ></span>
 </header-actions>
-
-{%- unless settings.brand_navigation == false -%}
-  {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
-    <script>
-      (function () {
-        window.LuxeLeaf = window.LuxeLeaf || {};
-
-        window.LuxeLeaf.openCart = function (evt) {
-          if (evt) {
-            evt.preventDefault();
-            if (evt.stopPropagation) evt.stopPropagation();
-          }
-
-          var cartUrl = (window.Theme && window.Theme.routes && window.Theme.routes.cart_url) || '/cart';
-          var drawer = document.getElementById('cart-drawer');
-
-          function tryOpen(el) {
-            if (!el) return false;
-            try {
-              if (window.customElements && window.customElements.get('theme-drawer')) {
-                window.customElements.upgrade(el);
-              }
-              if (typeof el.open === 'function') {
-                el.open();
-                return true;
-              }
-              if (typeof el.toggle === 'function') {
-                el.toggle();
-                return true;
-              }
-            } catch (e) {}
-            return false;
-          }
-
-          if (tryOpen(drawer)) return false;
-
-          if (drawer && window.customElements && window.customElements.whenDefined) {
-            window.customElements.whenDefined('theme-drawer').then(function () {
-              if (!tryOpen(drawer)) window.location.href = cartUrl;
-            });
-            return false;
-          }
-
-          window.location.href = cartUrl;
-          return false;
-        };
-
-        var triggerSelector =
-          '[data-testid="cart-drawer-trigger"],a[aria-controls="cart-drawer"],button[aria-controls="cart-drawer"],[data-mobile-cart-toggle],[data-shipping-nudge-cart]';
-
-        function bindCartTriggers() {
-          document.querySelectorAll(triggerSelector).forEach(function (trigger) {
-            if (trigger.dataset.luxeCartBound === 'true') return;
-            trigger.dataset.luxeCartBound = 'true';
-            trigger.addEventListener('click', window.LuxeLeaf.openCart);
-          });
-        }
-
-        bindCartTriggers();
-        document.addEventListener('DOMContentLoaded', bindCartTriggers);
-        document.addEventListener('shopify:section:load', bindCartTriggers);
-      })();
-    </script>
-  {%- endif -%}
-{%- endunless -%}
 
 <script
   type="module"

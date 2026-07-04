@@ -24,11 +24,16 @@ function init() {
 
       if (typeof drawer?.open === 'function') {
         drawer.open();
-        return;
+        if (drawer.hasAttribute('open') || drawer.querySelector('dialog[open]')) return;
       }
 
-      if (typeof drawer?.toggle === 'function') {
-        drawer.toggle();
+      const dialog = drawer?.querySelector('dialog');
+      if (dialog) {
+        drawer?.setAttribute('open', '');
+        const modal = window.matchMedia('(max-width: 989px)').matches;
+        if (modal && !dialog.open) dialog.showModal();
+        else if (!dialog.open) dialog.show();
+        drawer?.dispatchEvent(new CustomEvent('theme-drawer:open', { bubbles: true }));
         return;
       }
 
