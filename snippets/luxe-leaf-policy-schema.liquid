@@ -3,7 +3,9 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign page_url = shop.url | append: policy.url
+  assign schema_title = policy_title | default: policy.title | default: 'Legal Policy'
+  assign schema_path = policy_url | default: policy.url | default: request.path
+  assign page_url = shop.url | append: schema_path
   assign page_desc = page_description
   if page_desc == blank
     case policy_kind
@@ -17,7 +19,7 @@
       when 'privacy'
         assign page_desc = 'Privacy Policy for ' | append: shop.name | append: ' — how we collect, use, and protect your information when you shop premium loose leaf tea.'
       else
-        assign page_desc = policy.title | append: ' for ' | append: shop.name
+        assign page_desc = schema_title | append: ' for ' | append: shop.name
     endcase
   endif
 
@@ -32,7 +34,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": {{ policy.title | json }},
+    "name": {{ schema_title | json }},
     "description": {{ page_desc | json }},
     "url": {{ page_url | json }},
     "inLanguage": {{ request.locale.iso_code | json }},
@@ -55,7 +57,7 @@
     {
       "@context": "https://schema.org",
       "@type": "MerchantReturnPolicy",
-      "name": {{ policy.title | json }},
+      "name": {{ schema_title | json }},
       "url": {{ page_url | json }},
       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
       "merchantReturnDays": 14,

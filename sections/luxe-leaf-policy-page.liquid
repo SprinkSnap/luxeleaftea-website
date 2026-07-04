@@ -3,15 +3,50 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign policy_kind = 'generic'
-  if policy == shop.privacy_policy
-    assign policy_kind = 'privacy'
-  elsif policy == shop.terms_of_service
-    assign policy_kind = 'terms'
-  elsif policy == shop.refund_policy
-    assign policy_kind = 'refund'
-  elsif policy == shop.shipping_policy
-    assign policy_kind = 'shipping'
+  assign policy_kind = section.settings.policy_kind | default: 'generic'
+  assign policy_heading = section.settings.policy_title | default: 'Legal Policy'
+  assign policy_path = page.url | default: request.path
+  assign use_admin_body = false
+  assign use_page_body = false
+
+  if request.page_type == 'policy' and policy != blank
+    assign policy_heading = policy.title
+    assign policy_path = policy.url
+
+    if policy == shop.privacy_policy
+      assign policy_kind = 'privacy'
+    elsif policy == shop.terms_of_service
+      assign policy_kind = 'terms'
+    elsif policy == shop.refund_policy
+      assign policy_kind = 'refund'
+    elsif policy == shop.shipping_policy
+      assign policy_kind = 'shipping'
+    endif
+
+    if policy.body != blank
+      assign use_admin_body = true
+    endif
+  elsif request.page_type == 'page' and page != blank
+    assign policy_path = page.url
+
+    case page.handle
+      when 'privacy-policy'
+        assign policy_kind = 'privacy'
+        assign policy_heading = 'Privacy Policy'
+      when 'terms-of-service'
+        assign policy_kind = 'terms'
+        assign policy_heading = 'Terms of Service'
+      when 'refund-policy'
+        assign policy_kind = 'refund'
+        assign policy_heading = 'Refund Policy'
+      when 'shipping-policy'
+        assign policy_kind = 'shipping'
+        assign policy_heading = 'Shipping Policy'
+    endcase
+
+    if page.content != blank
+      assign use_page_body = true
+    endif
   endif
 
   assign contact_url = pages['contact'].url | default: '/pages/contact'
@@ -23,11 +58,6 @@
 
   assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
   assign standard_ship_label = settings.standard_shipping_rate | default: 595 | money
-
-  assign use_admin_body = false
-  if policy.body != blank
-    assign use_admin_body = true
-  endif
 
   assign page_intro = section.settings.intro
   assign cta_primary_label = section.settings.cta_primary_label
@@ -94,7 +124,7 @@
       {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
       Legal · {{ shop.name }}
     </p>
-    <h1 class="luxe-policy-page__heading">{{ policy.title | escape }}</h1>
+    <h1 class="luxe-policy-page__heading">{{ policy_heading | escape }}</h1>
     {%- if page_intro != blank -%}
       <p class="luxe-policy-page__intro">{{ page_intro }}</p>
     {%- endif -%}
@@ -160,7 +190,7 @@
     {%- endcase -%}
   </div>
 
-  {%- if show_toc and use_admin_body == false -%}
+  {%- if show_toc and use_admin_body == false and use_page_body == false -%}
     <nav class="luxe-policy-page__toc" aria-label="On this page">
       <p class="luxe-policy-page__toc-label">On this page</p>
       <ul class="luxe-policy-page__toc-list list-unstyled" role="list">
@@ -202,6 +232,8 @@
     <article class="luxe-policy-page__content rte" itemscope itemtype="https://schema.org/WebPageElement">
       {%- if use_admin_body -%}
         {{ policy.body }}
+      {%- elsif use_page_body -%}
+        {{ page.content }}
       {%- else -%}
         {%- if section.settings.fallback_note != blank -%}
           <p class="luxe-policy-page__fallback-note">
@@ -262,7 +294,7 @@
   </a>
 </section>
 
-{% render 'luxe-leaf-policy-schema', policy_kind: policy_kind %}
+{% render 'luxe-leaf-policy-schema', policy_kind: policy_kind, policy_title: policy_heading, policy_url: policy_path %}
 
 {% stylesheet %}
   .luxe-policy-page {
@@ -659,6 +691,25 @@
   "tag": "section",
   "class": "luxe-policy-page-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "policy_kind",
+      "label": "Policy type (page template fallback)",
+      "info": "Used when this section is on a page template instead of Shopify's native policy route.",
+      "options": [
+        { "value": "generic", "label": "Generic" },
+        { "value": "privacy", "label": "Privacy" },
+        { "value": "terms", "label": "Terms of Service" },
+        { "value": "refund", "label": "Refund Policy" },
+        { "value": "shipping", "label": "Shipping Policy" }
+      ],
+      "default": "generic"
+    },
+    {
+      "type": "text",
+      "id": "policy_title",
+      "label": "Policy title override (optional)"
+    },
     {
       "type": "textarea",
       "id": "intro",

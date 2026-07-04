@@ -107,7 +107,7 @@
     <p>We may update these Terms from time to time. The "Last updated" date at the top reflects the latest revision. Continued use of the site after changes constitutes acceptance of the updated Terms.</p>
 
     <h2 id="policy-related">Related policies</h2>
-    <p>Your purchase is also subject to our <a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">Refund Policy</a>, <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">Shipping Policy</a>, and <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">Privacy Policy</a>.</p>
+    <p>Your purchase is also subject to our {% capture refund_link %}{% render 'luxe-leaf-policy-url', which: 'refund' %}{% endcapture %}<a href="{{ refund_link | strip }}">Refund Policy</a>, {% capture shipping_link %}{% render 'luxe-leaf-policy-url', which: 'shipping' %}{% endcapture %}<a href="{{ shipping_link | strip }}">Shipping Policy</a>, and {% capture privacy_link %}{% render 'luxe-leaf-policy-url', which: 'privacy' %}{% endcapture %}<a href="{{ privacy_link | strip }}">Privacy Policy</a>.</p>
 
     <h2 id="policy-contact">Contact</h2>
     <p>Questions about these Terms? Email <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a>, visit our <a href="{{ contact_url }}">contact page</a>, or read our <a href="{{ faq_url }}">FAQ</a>.</p>

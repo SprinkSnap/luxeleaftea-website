@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "luxe-leaf-breadcrumbs",
+      "settings": {
+        "padding-block-start": 12,
+        "padding-block-end": 0
+      }
+    },
+    "trust_bar": {
+      "type": "luxe-leaf-trust-bar",
+      "settings": {}
+    },
+    "main": {
+      "type": "luxe-leaf-legal-hub",
+      "settings": {}
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "trust_bar",
+    "main"
+  ]
+}

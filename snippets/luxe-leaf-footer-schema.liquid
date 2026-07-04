@@ -25,14 +25,24 @@
     assign faq_abs = shop.url | append: '/pages/faq'
     assign about_abs = shop.url | append: '/pages/about'
     assign contact_abs = shop.url | append: '/pages/contact'
-    assign privacy_path = shop.privacy_policy.url | default: '/policies/privacy-policy'
-    assign terms_path = shop.terms_of_service.url | default: '/policies/terms-of-service'
-    assign refund_path = shop.refund_policy.url | default: '/policies/refund-policy'
-    assign shipping_path = shop.shipping_policy.url | default: '/policies/shipping-policy'
-    assign privacy_abs = shop.url | append: privacy_path
-    assign terms_abs = shop.url | append: terms_path
-    assign refund_abs = shop.url | append: refund_path
-    assign shipping_abs = shop.url | append: shipping_path
+
+    capture privacy_url_resolved
+      render 'luxe-leaf-policy-url', which: 'privacy'
+    endcapture
+    capture terms_url_resolved
+      render 'luxe-leaf-policy-url', which: 'terms'
+    endcapture
+    capture refund_url_resolved
+      render 'luxe-leaf-policy-url', which: 'refund'
+    endcapture
+    capture shipping_url_resolved
+      render 'luxe-leaf-policy-url', which: 'shipping'
+    endcapture
+
+    assign privacy_abs = shop.url | append: privacy_url_resolved | strip
+    assign terms_abs = shop.url | append: terms_url_resolved | strip
+    assign refund_abs = shop.url | append: refund_url_resolved | strip
+    assign shipping_abs = shop.url | append: shipping_url_resolved | strip
     assign free_ship_threshold = settings.free_shipping_threshold | default: 5000
     assign standard_shipping_rate = settings.standard_shipping_rate | default: 595
     assign free_ship_money = free_ship_threshold | money

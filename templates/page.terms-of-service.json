@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "luxe-leaf-breadcrumbs",
+      "settings": {
+        "padding-block-start": 12,
+        "padding-block-end": 0
+      }
+    },
+    "trust_bar": {
+      "type": "luxe-leaf-trust-bar",
+      "settings": {}
+    },
+    "main": {
+      "type": "luxe-leaf-policy-page",
+      "settings": {
+        "policy_kind": "terms",
+        "show_toc": true,
+        "cta_text": "Shop premium loose leaf tea with clear terms and secure checkout.",
+        "cta_note": "Secure checkout · Free shipping over $50 · Packed fresh to order",
+        "mobile_shop_label": "Shop tea",
+        "padding-block-start": 24,
+        "padding-block-end": 56
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "trust_bar",
+    "main"
+  ]
+}
