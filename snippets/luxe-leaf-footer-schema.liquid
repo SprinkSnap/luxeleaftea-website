@@ -31,6 +31,11 @@
     assign standard_ship_money = standard_shipping_rate | money
     assign free_ship_schema = free_ship_threshold | divided_by: 100.0
     assign standard_ship_schema = standard_shipping_rate | divided_by: 100.0
+    if settings.logo != blank
+      assign org_logo_url = settings.logo | image_url: width: 434
+    else
+      assign org_logo_url = 'luxe-leaf-tea-logo-header.png' | asset_url
+    endif
   -%}
 
   <script type="application/ld+json">
@@ -39,6 +44,12 @@
       "@type": "Organization",
       "name": {{ shop.name | json }},
       "url": {{ shop.url | json }},
+      "logo": {
+        "@type": "ImageObject",
+        "url": {{ org_logo_url | json }},
+        "width": 434,
+        "height": 96
+      },
       "description": {{ brand_blurb | default: 'Premium loose leaf tea — whole leaves packed fresh to order.' | json }}{%- if instagram_url != blank or facebook_url != blank -%},
       "sameAs": [
         {%- if instagram_url != blank -%}

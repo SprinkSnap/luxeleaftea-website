@@ -33,6 +33,7 @@
   {% endif %}
   href="{{ routes.root_url }}"
   class="size-style spacing-style header-logo"
+  aria-label="{{ shop.name | escape }} — home"
   style="
     {% render 'size-style', settings: block_settings %}
     {% render 'spacing-style', settings: block_settings %}
@@ -101,7 +102,7 @@
   .header-logo {
     display: flex;
     height: 100%;
-    max-width: min(9rem, 34vw);
+    max-width: min(15rem, 62vw);
     overflow: hidden;
     flex: 0 1 auto;
     font-size: var(--font-size--md);
@@ -131,7 +132,7 @@
 
     @media screen and (min-width: 750px) {
       flex-shrink: 0;
-      max-width: 10rem;
+      max-width: 15rem;
     }
 
     &:hover {

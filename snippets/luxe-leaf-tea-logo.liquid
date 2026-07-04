@@ -4,11 +4,14 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign logo_height = settings.logo_height | default: 38
-  assign logo_height_mobile = settings.logo_height_mobile | default: 30
+  assign logo_height = settings.logo_height | default: 52
+  assign logo_height_mobile = settings.logo_height_mobile | default: 44
   assign logo_width = logo_height | times: 4.52 | round
   assign logo_width_mobile = logo_height_mobile | times: 4.52 | round
-  assign logo_alt = alt | default: 'Luxe Leaf Tea — premium loose leaf tea'
+  assign logo_alt = alt
+  if logo_alt == blank
+    assign logo_alt = shop.name | append: ' — premium loose leaf tea'
+  endif
   assign logo_class = class | default: 'header-logo__image'
 -%}
 
