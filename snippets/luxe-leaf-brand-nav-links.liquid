@@ -5,10 +5,10 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign brand_phone = settings.brand_phone
-  if brand_phone == blank and shop.address.phone != blank
-    assign brand_phone = shop.address.phone
-  endif
+  capture brand_phone
+    render 'luxe-leaf-brand-phone-value'
+  endcapture
+  assign brand_phone = brand_phone | strip
   assign brand_phone_href = brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-'
 
   assign shop_tea_url = routes.all_products_collection_url
@@ -137,44 +137,18 @@
   {%- endif -%}
 {%- endfor -%}
 
-{%- if brand_phone != blank -%}
-  {%- if variant == 'panel' -%}
-    <li class="luxe-brand-menu__item">
-      <a
-        href="tel:{{ brand_phone_href | escape }}"
-        id="LuxePanelNav-phone"
-        title="Call Luxe Leaf Tea customer service"
-        class="luxe-brand-menu__link luxe-brand-menu__link--phone"
-      >
-        {{ brand_phone }}
-      </a>
-    </li>
-  {%- elsif variant == 'desktop' -%}
-    <li
-      role="presentation"
-      class="menu-list__list-item luxe-nav__item luxe-nav__item--phone"
+{%- if variant == 'desktop' and brand_phone != blank -%}
+  <li
+    role="presentation"
+    class="menu-list__list-item luxe-nav__item luxe-nav__item--phone"
+  >
+    <a
+      href="tel:{{ brand_phone_href | escape }}"
+      title="Call Luxe Leaf Tea customer service"
+      data-skip-node-update="true"
+      class="menu-list__link luxe-nav__link luxe-nav__link--phone"
     >
-      <a
-        href="tel:{{ brand_phone_href | escape }}"
-        title="Call Luxe Leaf Tea customer service"
-        data-skip-node-update="true"
-        class="menu-list__link luxe-nav__link luxe-nav__link--phone"
-      >
-        <span class="menu-list__link-title">{{ brand_phone }}</span>
-      </a>
-    </li>
-  {%- elsif variant == 'drawer' -%}
-    <li
-      class="menu-drawer__list-item--flat luxe-nav-drawer__item"
-    >
-      <a
-        id="HeaderDrawer-luxe-phone"
-        href="tel:{{ brand_phone_href | escape }}"
-        title="Call Luxe Leaf Tea customer service"
-        class="menu-drawer__menu-item menu-drawer__menu-item--mainlist luxe-nav-drawer__link focus-inset luxe-nav-drawer__link--phone"
-      >
-        <span class="menu-drawer__menu-item-text wrap-text">{{ brand_phone }}</span>
-      </a>
-    </li>
-  {%- endif -%}
+      <span class="menu-list__link-title">{{ brand_phone }}</span>
+    </a>
+  </li>
 {%- endif -%}

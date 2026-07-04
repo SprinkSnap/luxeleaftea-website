@@ -109,6 +109,8 @@
       "color2": "#c9a227"
     },
     "brand_navigation": true,
+    "brand_phone": "",
+    "brand_email": "",
     "auto_open_cart_drawer": true,
     "quick_add": true,
     "mobile_quick_add": true,

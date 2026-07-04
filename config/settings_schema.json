@@ -69,7 +69,8 @@
           "type": "text",
           "id": "brand_phone",
           "label": "Customer service phone",
-          "info": "Shown in the nav menu. Falls back to your Shopify store phone if set under Settings → Store details."
+          "placeholder": "(555) 123-4567",
+          "info": "Shown prominently in the mobile menu (tap-to-call) and desktop nav. Set here or under Shopify Settings → Store details → Contact information."
         },
         {
           "type": "text",

@@ -13,7 +13,7 @@
   <button
     type="button"
     class="header__icon header__icon--menu luxe-brand-menu__toggle"
-    aria-label="Open menu — Shop Tea, About, Contact, FAQ, and customer support"
+    aria-label="Open menu — Shop Tea, phone support, About, Contact, and FAQ"
     aria-expanded="false"
     aria-controls="LuxeBrandMenuPanel"
     data-luxe-nav-toggle
@@ -63,15 +63,15 @@
         Shop Tea
       </a>
 
+      <div class="luxe-brand-menu__help">
+        {% render 'luxe-leaf-brand-nav-contact' %}
+      </div>
+
       <nav class="luxe-brand-menu__nav" aria-label="Company pages">
         <ul class="luxe-brand-menu__list list-unstyled" role="list">
           {% render 'luxe-leaf-brand-nav-links', variant: 'panel' %}
         </ul>
       </nav>
-
-      <div class="luxe-brand-menu__footer">
-        {% render 'luxe-leaf-brand-nav-contact' %}
-      </div>
     </div>
   </div>
 </div>

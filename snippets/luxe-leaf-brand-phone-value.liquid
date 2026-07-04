@@ -1,0 +1,6 @@
+{%- liquid
+  assign brand_phone = settings.brand_phone | strip
+  if brand_phone == blank and shop.address.phone != blank
+    assign brand_phone = shop.address.phone | strip
+  endif
+-%}{{- brand_phone -}}
