@@ -20,7 +20,7 @@ body {
   --color-background: var(--luxe-cream);
   --color-foreground: var(--luxe-jade);
   background: var(--luxe-cream);
-  color: rgb(var(--luxe-jade-rgb) / 0.92);
+  color: var(--luxe-jade);
 }
 
 body h1,
@@ -223,8 +223,20 @@ body.luxe-leaf-theme .luxe-hero.section > * {
   grid-column: 1 / -1;
 }
 
-body .luxe-trust-bar {
-  background: var(--luxe-jade);
+/* Horizon base.css zeroes .section backgrounds — restore dark Luxe surfaces + light text */
+body.luxe-leaf-theme .shopify-section:not(.header-section) .luxe-trust-bar.section {
+  background: var(--luxe-jade, #1b4332) !important;
+  color: #f8f6f0 !important;
+}
+
+body.luxe-leaf-theme .shopify-section:not(.header-section) .luxe-shop-cta.section {
+  background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
+  color: #f8f6f0 !important;
+}
+
+body.luxe-leaf-theme .shopify-section:not(.header-section) .luxe-proof.section {
+  background: #1b4332 !important;
+  color: #f8f6f0 !important;
 }
 
 /* Tea guide chat + mobile shop bar */
