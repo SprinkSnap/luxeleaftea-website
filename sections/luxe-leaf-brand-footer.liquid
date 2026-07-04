@@ -228,19 +228,9 @@
       <p class="luxe-brand-footer__copyright">
         &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. Premium loose leaf tea — packed fresh to order.
       </p>
-      {%- if shop.policies.size > 0 -%}
         <nav class="luxe-brand-footer__policies" aria-label="Legal policies">
-          <ul class="luxe-brand-footer__policy-list list-unstyled" role="list">
-            {%- for policy in shop.policies -%}
-              {%- if policy != blank -%}
-                <li>
-                  <a href="{{ policy.url }}" title="{{ policy.title | escape }}">{{ policy.title | escape }}</a>
-                </li>
-              {%- endif -%}
-            {%- endfor -%}
-          </ul>
+          {% render 'luxe-leaf-policy-links' %}
         </nav>
-      {%- endif -%}
     </div>
   </div>
 

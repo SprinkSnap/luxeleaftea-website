@@ -1,0 +1,25 @@
+{%- doc -%}
+  Footer legal policy links — Privacy, Terms, Refund, Shipping in consistent order.
+{%- enddoc -%}
+
+{%- liquid
+  assign privacy_url = shop.privacy_policy.url | default: '/policies/privacy-policy'
+  assign terms_url = shop.terms_of_service.url | default: '/policies/terms-of-service'
+  assign refund_url = shop.refund_policy.url | default: '/policies/refund-policy'
+  assign shipping_url = shop.shipping_policy.url | default: '/policies/shipping-policy'
+-%}
+
+<ul class="{{ list_class | default: 'luxe-brand-footer__policy-list list-unstyled' }}" role="list">
+  <li>
+    <a href="{{ privacy_url }}" title="Privacy Policy">Privacy Policy</a>
+  </li>
+  <li>
+    <a href="{{ terms_url }}" title="Terms of Service">Terms of Service</a>
+  </li>
+  <li>
+    <a href="{{ refund_url }}" title="Refund Policy">Refund Policy</a>
+  </li>
+  <li>
+    <a href="{{ shipping_url }}" title="Shipping Policy">Shipping Policy</a>
+  </li>
+</ul>

@@ -1,0 +1,268 @@
+{%- doc -%}
+  Premium legal policy page — Privacy, Terms, Refund, and Shipping with Luxe Leaf styling.
+{%- enddoc -%}
+
+{%- liquid
+  assign policy_kind = 'generic'
+  if policy == shop.privacy_policy
+    assign policy_kind = 'privacy'
+  elsif policy == shop.terms_of_service
+    assign policy_kind = 'terms'
+  elsif policy == shop.refund_policy
+    assign policy_kind = 'refund'
+  elsif policy == shop.shipping_policy
+    assign policy_kind = 'shipping'
+  endif
+
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
+  assign faq_url = pages['faq'].url | default: '/pages/faq'
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
+
+  assign use_admin_body = false
+  if policy.body != blank
+    assign use_admin_body = true
+  endif
+-%}
+
+<section
+  class="luxe-policy-page section section--page-width spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <header class="luxe-policy-page__hero">
+    <p class="luxe-policy-page__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      Legal
+    </p>
+    <h1 class="luxe-policy-page__heading">{{ policy.title | escape }}</h1>
+    {%- if section.settings.intro != blank -%}
+      <p class="luxe-policy-page__intro">{{ section.settings.intro }}</p>
+    {%- endif -%}
+  </header>
+
+  <div class="luxe-policy-page__layout">
+    <article class="luxe-policy-page__content rte">
+      {%- if use_admin_body -%}
+        {{ policy.body }}
+      {%- else -%}
+        <p class="luxe-policy-page__fallback-note">
+          {{ section.settings.fallback_note }}
+        </p>
+        {% render 'luxe-leaf-policy-default-content', policy_kind: policy_kind %}
+      {%- endif -%}
+    </article>
+
+    {%- if section.settings.show_sidebar -%}
+      <aside class="luxe-policy-page__sidebar" aria-label="Other policies">
+        <div class="luxe-policy-page__sidebar-card">
+          <h2 class="luxe-policy-page__sidebar-heading">{{ section.settings.sidebar_heading }}</h2>
+          <nav class="luxe-policy-page__nav" aria-label="Legal policies">
+            {% render 'luxe-leaf-policy-links', list_class: 'luxe-policy-page__nav-list list-unstyled' %}
+          </nav>
+          <div class="luxe-policy-page__sidebar-links">
+            <a href="{{ faq_url }}" class="luxe-policy-page__sidebar-link">FAQ</a>
+            <a href="{{ contact_url }}" class="luxe-policy-page__sidebar-link">Contact us</a>
+            <a href="{{ shop_tea_url }}" class="luxe-policy-page__sidebar-link">Shop all tea</a>
+          </div>
+        </div>
+      </aside>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-policy-page {
+    padding-block: 32px 56px;
+  }
+
+  .luxe-policy-page__hero {
+    max-width: 42rem;
+    margin-bottom: 2rem;
+  }
+
+  .luxe-policy-page__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 0.65rem;
+    color: #c9a227;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-policy-page__heading {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    line-height: 1.15;
+    color: #1b4332 !important;
+  }
+
+  .luxe-policy-page__intro {
+    margin: 0;
+    color: rgb(27 67 50 / 0.88);
+    line-height: 1.6;
+  }
+
+  .luxe-policy-page__layout {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    .luxe-policy-page__layout {
+      grid-template-columns: minmax(0, 1fr) 16rem;
+      align-items: start;
+    }
+  }
+
+  .luxe-policy-page__content {
+    padding: 1.5rem 1.25rem;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #1b4332;
+  }
+
+  .luxe-policy-page__content h2 {
+    margin: 1.75rem 0 0.65rem;
+    font-size: 1.125rem;
+    color: #1b4332 !important;
+  }
+
+  .luxe-policy-page__content h2:first-child {
+    margin-top: 0;
+  }
+
+  .luxe-policy-page__content p,
+  .luxe-policy-page__content li {
+    color: rgb(27 67 50 / 0.92);
+    line-height: 1.65;
+  }
+
+  .luxe-policy-page__content a {
+    color: #1b4332;
+    font-weight: 600;
+  }
+
+  .luxe-policy-page__content ul,
+  .luxe-policy-page__content ol {
+    padding-left: 1.25rem;
+  }
+
+  .luxe-policy-page__fallback-note {
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: rgb(201 162 39 / 0.12);
+    color: #1b4332;
+    font-size: 0.875rem;
+  }
+
+  .luxe-policy-page__sidebar-card {
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, #1b4332 0%, #0d2818 100%);
+    color: #f8f6f0;
+  }
+
+  .luxe-policy-page__sidebar-heading {
+    margin: 0 0 0.85rem;
+    font-size: 1rem;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__nav-list {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  .luxe-policy-page__nav-list a {
+    display: block;
+    padding: 0.35rem 0;
+    color: #f8f6f0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .luxe-policy-page__nav-list a:hover {
+    color: #c9a227;
+  }
+
+  .luxe-policy-page__sidebar-links {
+    display: grid;
+    gap: 0.35rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgb(248 246 240 / 0.12);
+  }
+
+  .luxe-policy-page__sidebar-link {
+    color: rgb(248 246 240 / 0.82);
+    font-size: 0.8125rem;
+    text-decoration: none;
+  }
+
+  .luxe-policy-page__sidebar-link:hover {
+    color: #c9a227;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf policy page",
+  "tag": "section",
+  "class": "luxe-policy-page-section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro (optional)",
+      "default": "Clear, honest policies for shopping premium loose leaf tea with confidence."
+    },
+    {
+      "type": "text",
+      "id": "fallback_note",
+      "label": "Fallback notice",
+      "default": "Default policy text is shown below. Customize anytime in Shopify admin → Settings → Policies."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sidebar",
+      "label": "Show policy sidebar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sidebar_heading",
+      "label": "Sidebar heading",
+      "default": "All policies"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ]
+}
+{% endschema %}

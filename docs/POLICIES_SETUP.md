@@ -1,0 +1,50 @@
+# Legal policies setup (Luxe Leaf Tea)
+
+The theme includes a premium **policy page template** and **default policy copy** for all four standard Shopify policies. Footer links point to each policy automatically.
+
+## Quick setup (Shopify admin)
+
+1. Open **Settings → Policies** in Shopify admin.
+2. For each policy below, click **Create from template** (or open the existing policy).
+3. Either:
+   - **Option A (recommended):** Customize the policy text for your business in the admin editor, or
+   - **Option B:** Leave the policy body **empty** — the theme shows built-in Luxe Leaf default text until you add admin copy.
+4. Click **Save** on each policy.
+5. In the theme editor, **Pull from GitHub** (if needed) and **Publish**.
+
+## Policy URLs
+
+| Policy | URL |
+|--------|-----|
+| Privacy Policy | `/policies/privacy-policy` |
+| Terms of Service | `/policies/terms-of-service` |
+| Refund Policy | `/policies/refund-policy` |
+| Shipping Policy | `/policies/shipping-policy` |
+
+Footer links: **Privacy Policy · Terms of Service · Refund Policy · Shipping Policy**
+
+## Theme files
+
+| File | Purpose |
+|------|---------|
+| `templates/policy.json` | Branded policy page layout |
+| `sections/luxe-leaf-policy-page.liquid` | Policy page styling + sidebar |
+| `snippets/luxe-leaf-policy-default-content.liquid` | Default copy when admin policy is empty |
+| `snippets/luxe-leaf-policy-links.liquid` | Footer + sidebar policy links |
+
+## Shipping values in policies
+
+Default policy text uses theme settings:
+
+- **Free shipping threshold:** Theme settings → Luxe Leaf → Checkout & shipping (`free_shipping_threshold`, default $50.00)
+- **Standard shipping rate:** `standard_shipping_rate` (default $5.95)
+
+Update these in **Theme settings** before publishing policies so shipping copy matches checkout.
+
+## Legal note
+
+Default policy text is a starting template only — **not legal advice**. Have a qualified attorney review policies for your jurisdiction, products, and marketing practices (email, ads, international sales).
+
+## Customize in admin
+
+After policies are created, any text you save in **Settings → Policies** replaces the theme defaults on the live site.
