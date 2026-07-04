@@ -3,21 +3,6 @@
 {%- enddoc -%}
 
 {%- liquid
-  capture luxe_page_type
-    render 'luxe-leaf-page-type'
-  endcapture
-  assign luxe_page_type = luxe_page_type | strip
-  assign render_luxe_about = false
-  if luxe_page_type == 'about'
-    assign render_luxe_about = true
-  endif
-  if template.suffix == 'about' or template contains 'page.about'
-    assign render_luxe_about = true
-  endif
--%}
-
-{%- if render_luxe_about -%}
-{%- liquid
   assign hero_image = section.settings.image
   if hero_image == blank
     assign hero_image_url = 'luxe-leaf-tea-assortment-hero.png' | asset_url
@@ -127,7 +112,6 @@
     }
   }
 </script>
-{%- endif -%}
 
 {% stylesheet %}
   .luxe-about-page {

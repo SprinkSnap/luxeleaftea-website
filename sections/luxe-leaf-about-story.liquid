@@ -1,19 +1,4 @@
 
-{%- liquid
-  capture luxe_page_type
-    render 'luxe-leaf-page-type'
-  endcapture
-  assign luxe_page_type = luxe_page_type | strip
-  assign render_luxe_about = false
-  if luxe_page_type == 'about'
-    assign render_luxe_about = true
-  endif
-  if template.suffix == 'about' or template contains 'page.about'
-    assign render_luxe_about = true
-  endif
--%}
-
-{%- if render_luxe_about -%}
 <section
   class="luxe-about section section--page-width spacing-style"
   id="our-story"
@@ -41,7 +26,6 @@
     </div>
   </div>
 </section>
-{%- endif -%}
 
 {% stylesheet %}
   .luxe-about {

@@ -1,16 +1,4 @@
 
-{%- liquid
-  capture luxe_page_type
-    render 'luxe-leaf-page-type'
-  endcapture
-  assign luxe_page_type = luxe_page_type | strip
-  assign show_luxe_proof = true
-  if template.name == 'page' and luxe_page_type != 'about'
-    assign show_luxe_proof = false
-  endif
--%}
-
-{%- if show_luxe_proof -%}
 <section
   class="luxe-proof section section--page-width spacing-style"
   style="{% render 'spacing-style', settings: section.settings %}"
@@ -37,7 +25,6 @@
     {%- endfor -%}
   </div>
 </section>
-{%- endif -%}
 
 {% stylesheet %}
   .luxe-proof {

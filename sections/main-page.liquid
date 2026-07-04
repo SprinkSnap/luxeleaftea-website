@@ -1,12 +1,8 @@
 
 
 {% liquid
-  capture luxe_page_type
-    render 'luxe-leaf-page-type'
-  endcapture
-  assign luxe_page_type = luxe_page_type | strip
   assign luxe_custom_page = false
-  if luxe_page_type == 'contact' or luxe_page_type == 'about' or luxe_page_type == 'faq'
+  if template.suffix == 'about' or template.suffix == 'contact' or template.suffix == 'faq'
     assign luxe_custom_page = true
   endif
 
