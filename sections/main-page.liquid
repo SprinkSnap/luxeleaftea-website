@@ -1,14 +1,12 @@
 
 
 {% liquid
+  capture luxe_page_type
+    render 'luxe-leaf-page-type'
+  endcapture
+  assign luxe_page_type = luxe_page_type | strip
   assign luxe_custom_page = false
-  if page.handle == 'contact' or template.suffix == 'contact'
-    assign luxe_custom_page = true
-  endif
-  if page.handle == 'about' or template.suffix == 'about'
-    assign luxe_custom_page = true
-  endif
-  if page.handle == 'faq' or template.suffix == 'faq'
+  if luxe_page_type == 'contact' or luxe_page_type == 'about' or luxe_page_type == 'faq'
     assign luxe_custom_page = true
   endif
 
@@ -38,6 +36,12 @@
     {% content_for 'blocks' %}
   </div>
 </div>
+{%- else -%}
+  {%- if page.content != blank -%}
+    <div class="section section--page-width spacing-style luxe-page-fallback">
+      <div class="rte">{{ page.content }}</div>
+    </div>
+  {%- endif -%}
 {%- endunless -%}
 
 {% schema %}

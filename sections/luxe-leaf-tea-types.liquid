@@ -3,12 +3,13 @@
 {%- enddoc -%}
 
 {%- liquid
+  capture luxe_page_type
+    render 'luxe-leaf-page-type'
+  endcapture
+  assign luxe_page_type = luxe_page_type | strip
   assign show_luxe_tea_types = true
-  if template.name == 'page'
+  if template.name == 'page' and luxe_page_type != 'about'
     assign show_luxe_tea_types = false
-    if page.handle == 'about' or template.suffix == 'about'
-      assign show_luxe_tea_types = true
-    endif
   endif
 -%}
 

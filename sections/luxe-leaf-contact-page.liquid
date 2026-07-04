@@ -3,8 +3,15 @@
 {%- enddoc -%}
 
 {%- liquid
+  capture luxe_page_type
+    render 'luxe-leaf-page-type'
+  endcapture
+  assign luxe_page_type = luxe_page_type | strip
   assign render_luxe_contact = false
-  if page.handle == 'contact' or template.suffix == 'contact'
+  if luxe_page_type == 'contact'
+    assign render_luxe_contact = true
+  endif
+  if template.suffix == 'contact' or template contains 'page.contact'
     assign render_luxe_contact = true
   endif
 -%}

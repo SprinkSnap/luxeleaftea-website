@@ -3,8 +3,15 @@
 {%- enddoc -%}
 
 {%- liquid
+  capture luxe_page_type
+    render 'luxe-leaf-page-type'
+  endcapture
+  assign luxe_page_type = luxe_page_type | strip
   assign render_luxe_about = false
-  if page.handle == 'about' or template.suffix == 'about'
+  if luxe_page_type == 'about'
+    assign render_luxe_about = true
+  endif
+  if template.suffix == 'about' or template contains 'page.about'
     assign render_luxe_about = true
   endif
 -%}
