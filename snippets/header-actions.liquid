@@ -48,9 +48,7 @@
 
 {% capture account_icon %}
   {%- unless settings.brand_navigation == false -%}
-    <span class="account-button__icon svg-wrapper">
-      {%- render 'luxe-leaf-header-icon', name: 'account' -%}
-    </span>
+    {%- render 'luxe-leaf-header-icon', name: 'account' -%}
   {%- else -%}
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -98,6 +96,9 @@
     %}
     <div
       class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover"
+      {% if settings.brand_navigation != false %}
+        aria-label="Account — sign in or view orders"
+      {% endif %}
     >
       <shopify-account
         menu="{{ customer_account_menu }}"
@@ -107,6 +108,14 @@
       >
         {% if customer %}
           <div class="account-button__fallback"></div>
+        {% elsif settings.brand_navigation != false %}
+          <span
+            slot="signed-out-avatar"
+            class="account-button__icon svg-wrapper luxe-brand-account__icon"
+            aria-hidden="true"
+          >
+            {{ account_icon }}
+          </span>
         {% else %}
           <span
             slot="signed-out-avatar"

@@ -1097,7 +1097,8 @@ body.luxe-leaf-theme #header-component .account-button.header-actions__action {
 }
 
 body.luxe-leaf-theme #header-component shopify-account [slot='signed-out-avatar'],
-body.luxe-leaf-theme #header-component .account-button__icon.svg-wrapper {
+body.luxe-leaf-theme #header-component .account-button__icon.svg-wrapper,
+body.luxe-leaf-theme #header-component .luxe-brand-account__icon {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -1106,6 +1107,10 @@ body.luxe-leaf-theme #header-component .account-button__icon.svg-wrapper {
   line-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+body.luxe-leaf-theme #header-component .account-button__text {
+  display: none !important;
 }
 
 body.luxe-leaf-theme #header-component .header-actions__action,

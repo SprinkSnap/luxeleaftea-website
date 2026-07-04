@@ -137,9 +137,26 @@
     padding: 0;
   }
 
-  #header-component .account-button__icon.svg-wrapper {
+  #header-component .account-button__text,
+  #header-component .luxe-brand-account__icon + .account-button__text {
+    display: none !important;
+  }
+
+  #header-component .account-button__icon.svg-wrapper,
+  #header-component .luxe-brand-account__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
     line-height: 0;
     flex-shrink: 0;
+  }
+
+  #header-component .luxe-brand-account__icon svg {
+    display: block;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   #header-component .luxe-tea-account-icon__leaf {
