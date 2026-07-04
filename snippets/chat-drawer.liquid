@@ -122,14 +122,17 @@
       <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
         Shop Tea
       </a>
-      <a
-        href="/checkout"
-        class="luxe-mobile-bar__checkout button"
-        data-mobile-checkout
-        {% if cart.item_count == 0 %}hidden{% endif %}
-      >
-        Checkout · {{ cart.total_price | money }}
-      </a>
+      <form action="{{ routes.cart_url }}" method="post" class="luxe-mobile-bar__checkout-form">
+        <button
+          type="submit"
+          name="checkout"
+          class="luxe-mobile-bar__checkout button"
+          data-mobile-checkout
+          {% if cart.item_count == 0 %}hidden{% endif %}
+        >
+          Checkout · {{ cart.total_price | money }}
+        </button>
+      </form>
       {%- if settings.cart_type == 'drawer' -%}
         <button
           type="button"

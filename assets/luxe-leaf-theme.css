@@ -457,7 +457,8 @@ body .luxe-trust-bar {
   .luxe-mobile-bar__menu,
   .luxe-mobile-bar__shop,
   .luxe-mobile-bar__cart,
-  .luxe-mobile-bar__checkout {
+  .luxe-mobile-bar__checkout,
+  .luxe-mobile-bar__checkout-form {
     min-height: 2.85rem;
     display: inline-flex;
     align-items: center;
@@ -497,6 +498,15 @@ body .luxe-trust-bar {
     border-color: #c9a227;
     color: #1a1a1a;
     box-shadow: 0 6px 20px rgb(201 162 39 / 0.35);
+  }
+
+  .luxe-mobile-bar__checkout-form {
+    display: contents;
+    margin: 0;
+  }
+
+  .luxe-mobile-bar__checkout-form .luxe-mobile-bar__checkout {
+    width: 100%;
   }
 
   .luxe-mobile-bar--has-cart .luxe-mobile-bar__shop {

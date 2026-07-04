@@ -26,19 +26,23 @@
 
   case variant
     when 'desktop'
-      assign nav_keys = 'shop|about|contact' | split: '|'
+      assign nav_keys = 'home|shop|about|contact' | split: '|'
     when 'panel', 'drawer'
-      assign nav_keys = 'about|contact|faq' | split: '|'
+      assign nav_keys = 'home|about|contact|faq' | split: '|'
     when 'bar'
-      assign nav_keys = 'about|contact' | split: '|'
+      assign nav_keys = 'home|about|contact' | split: '|'
     else
-      assign nav_keys = 'shop|about|contact' | split: '|'
+      assign nav_keys = 'home|shop|about|contact' | split: '|'
   endcase
 -%}
 
 {%- for nav_key in nav_keys -%}
   {%- liquid
     case nav_key
+      when 'home'
+        assign label = 'Home'
+        assign url = home_url
+        assign nav_title = 'Luxe Leaf Tea home — premium loose leaf tea'
       when 'shop'
         assign label = 'Shop Tea'
         assign url = shop_tea_url
@@ -58,7 +62,9 @@
     endcase
 
     assign is_active = false
-    if nav_key == 'shop' and request.page_type == 'collection'
+    if nav_key == 'home' and request.page_type == 'index'
+      assign is_active = true
+    elsif nav_key == 'shop' and request.page_type == 'collection'
       assign is_active = true
     elsif nav_key == 'about' and request.path == about_url
       assign is_active = true

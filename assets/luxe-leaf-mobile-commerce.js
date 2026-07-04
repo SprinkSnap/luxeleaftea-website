@@ -49,8 +49,36 @@ import { StandardEvents } from '@shopify/events';
   document.addEventListener('DOMContentLoaded', () => {
     syncBar();
     bindMobileMenuToggle();
+    bindCheckoutFallback();
   });
   document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
+
+  function bindCheckoutFallback() {
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('.cart__checkout-button[name="checkout"]');
+      if (!button || button.disabled) return;
+      if (button.form) return;
+
+      const formId = button.getAttribute('form');
+      if (!formId) return;
+
+      const form = document.getElementById(formId);
+      if (!form) return;
+
+      event.preventDefault();
+
+      if (typeof form.requestSubmit === 'function') {
+        form.requestSubmit(button);
+        return;
+      }
+
+      const checkoutField = document.createElement('input');
+      checkoutField.type = 'hidden';
+      checkoutField.name = 'checkout';
+      form.appendChild(checkoutField);
+      form.submit();
+    });
+  }
 
   function bindMobileMenuToggle() {
     const menuBtn = document.querySelector('[data-mobile-menu-toggle]');
