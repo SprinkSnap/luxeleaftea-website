@@ -678,6 +678,12 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     height: 100%;
   }
 
+  .luxe-mobile-bar__cart svg {
+    width: 1.375rem;
+    height: 1.375rem;
+    flex-shrink: 0;
+  }
+
   .luxe-mobile-bar__shop {
     background: #fff;
     border: 1px solid rgb(27 67 50 / 0.15);
