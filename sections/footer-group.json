@@ -21,6 +21,7 @@
         "brand_blurb": "Luxe Leaf Tea sources drinkable premium loose-leaf teas from China's most respected growing regions. Whole leaves, packed fresh to order — for a clearer, more aromatic cup at home.",
         "response_time": "We reply within 1 business day.",
         "show_newsletter": true,
+        "newsletter_copy": "Get new harvest alerts, brewing tips, and exclusive offers on premium loose leaf tea.",
         "newsletter_placeholder": "Your email for tea tips",
         "newsletter_button_label": "Subscribe",
         "newsletter_success_message": "Welcome — check your inbox for brewing tips soon.",

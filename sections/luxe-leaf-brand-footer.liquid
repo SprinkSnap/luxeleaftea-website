@@ -38,7 +38,7 @@
   -%}
 
   <div class="luxe-brand-footer" role="contentinfo" aria-label="Site footer">
-    <div class="luxe-brand-footer__cta section section--page-width">
+    <div class="luxe-brand-footer__cta section section--page-width" style="background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%); color: #f8f6f0;">
       <div class="luxe-brand-footer__cta-inner">
         <p class="luxe-brand-footer__eyebrow">Premium loose leaf tea</p>
         <h2 class="luxe-brand-footer__headline">{{ cta_heading }}</h2>
@@ -199,7 +199,7 @@
             {%- if show_newsletter -%}
               <div class="luxe-brand-footer__newsletter">
                 <h3 class="luxe-brand-footer__newsletter-heading">Tea tips by email</h3>
-                <p class="luxe-brand-footer__newsletter-copy">Harvest alerts, brewing tips, and new teas — no spam.</p>
+                <p class="luxe-brand-footer__newsletter-copy">{{ section.settings.newsletter_copy }}</p>
                 {% render 'luxe-leaf-footer-newsletter',
                   placeholder: section.settings.newsletter_placeholder,
                   button_label: section.settings.newsletter_button_label,
@@ -297,6 +297,12 @@
       "id": "show_newsletter",
       "label": "Show email signup",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_copy",
+      "label": "Signup description",
+      "default": "Get new harvest alerts, brewing tips, and exclusive offers on premium loose leaf tea."
     },
     {
       "type": "text",
