@@ -60,10 +60,12 @@
     assign meta_description = 'FAQ about premium loose leaf tea — brewing tips, shipping, freshness, and how to choose green, oolong, pu-erh, and black teas.'
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'about'
-    assign meta_description = "About Luxe Leaf Tea — premium loose leaf tea sourced from China's finest gardens, packed fresh to order. Shop like you're at our tea counter."
+    assign og_title = 'About Luxe Leaf Tea | Premium Loose Leaf Tea Boutique'
+    assign meta_description = "Discover Luxe Leaf Tea — a boutique for premium Chinese loose leaf tea. Whole leaves, honest origins, packed fresh to order. Shop green, oolong, pu-erh, and black teas without leaving the page."
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'contact'
-    assign meta_description = 'Contact Luxe Leaf Tea — call, email, or chat with our Tea Guide for help choosing premium loose leaf tea, orders, and brewing tips.'
+    assign og_title = 'Contact Luxe Leaf Tea | Call, Email, or Chat With Our Tea Team'
+    assign meta_description = 'Contact Luxe Leaf Tea — call, email, or chat with our Tea Guide for help choosing premium loose leaf tea, orders, brewing tips, and shipping questions. We reply within one business day.'
     assign og_description = meta_description
   endif
 
