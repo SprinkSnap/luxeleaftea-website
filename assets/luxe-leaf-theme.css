@@ -250,6 +250,33 @@ body.luxe-leaf-theme .shopify-section:not(.header-section) .luxe-proof.section {
   color: #f8f6f0 !important;
 }
 
+/* Shop CTA + footer — Horizon zeroes .section backgrounds; keep dark surfaces + cream text */
+body.luxe-leaf-theme .shopify-section:not(.header-section) .luxe-shop-cta.section h2,
+body.luxe-leaf-theme .shopify-section:not(.header-section) .luxe-shop-cta.section p {
+  color: #f8f6f0 !important;
+}
+
+body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__cta.section {
+  background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
+}
+
+body.luxe-leaf-theme .luxe-brand-footer h2,
+body.luxe-leaf-theme .luxe-brand-footer h3,
+body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__subhead,
+body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-heading,
+body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
+  color: #f8f6f0 !important;
+}
+
+.shopify-section:has(> .luxe-shop-cta),
+.shopify-section:has(.luxe-shop-cta.section) {
+  background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
+}
+
+.shopify-section:has(.luxe-brand-footer) {
+  background: linear-gradient(180deg, #0d2818 0%, #081a10 100%) !important;
+}
+
 /* Tea guide chat + mobile shop bar */
 :root {
   --luxe-mobile-bar-height: 0px;
@@ -1103,6 +1130,8 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
 
 /* ── Luxe Leaf brand footer (mobile-first, conversion + SEO) ── */
 .luxe-brand-footer {
+  position: relative;
+  z-index: 0;
   background: linear-gradient(180deg, var(--luxe-jade-deep, #0d2818) 0%, #081a10 100%);
   color: var(--luxe-cream, #f8f6f0);
   margin-top: auto;
@@ -1122,7 +1151,7 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
 .luxe-brand-footer__cta {
   padding: 2rem 1rem 1.5rem;
   text-align: center;
-  background: linear-gradient(135deg, rgb(27 67 50 / 0.55) 0%, rgb(13 40 24 / 0.35) 100%);
+  background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
   border-bottom: 1px solid rgb(248 246 240 / 0.1);
 }
 
@@ -1158,7 +1187,7 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   max-width: 32rem;
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: rgb(248 246 240 / 0.82);
+  color: #f8f6f0;
 }
 
 .luxe-brand-footer__cta-actions {
@@ -1379,7 +1408,7 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   margin: 0 0 0.75rem;
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: rgb(248 246 240 / 0.72);
+  color: rgb(248 246 240 / 0.92);
 }
 
 .luxe-brand-footer__newsletter-field {
