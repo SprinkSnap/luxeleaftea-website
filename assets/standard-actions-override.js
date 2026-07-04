@@ -14,14 +14,25 @@ function init() {
 
   actions.openCart.configure({
     async handler() {
-      /** @type {HTMLElement & {open?: () => void} | null} */
-      const drawer = document.querySelector('theme-drawer#cart-drawer');
+      /** @type {HTMLElement & { open?: () => void; toggle?: () => void } | null} */
+      const drawer = document.querySelector('theme-drawer#cart-drawer, #cart-drawer');
 
-      if (drawer?.open) {
-        drawer.open();
-      } else {
-        window.location.href = Theme.routes.cart_url || '/cart';
+      if (drawer && customElements.get('theme-drawer')) {
+        await customElements.whenDefined('theme-drawer');
+        customElements.upgrade(drawer);
       }
+
+      if (typeof drawer?.open === 'function') {
+        drawer.open();
+        return;
+      }
+
+      if (typeof drawer?.toggle === 'function') {
+        drawer.toggle();
+        return;
+      }
+
+      window.location.href = Theme.routes.cart_url || '/cart';
     },
   });
 }
