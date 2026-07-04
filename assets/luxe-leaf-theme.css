@@ -62,12 +62,59 @@ body button.button {
   border-radius: var(--luxe-radius-pill);
   font-weight: 600;
   letter-spacing: 0.03em;
+  min-height: 2.875rem;
+  padding: 0.65rem 1.35rem;
+  font-size: 0.9375rem;
+  line-height: 1.2;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-body .button:not(.button-secondary):not(.button-unstyled) {
+body .button:not(.button-unstyled):hover {
+  transform: translateY(-1px);
+}
+
+body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout) {
   background: var(--luxe-jade);
   border-color: var(--luxe-jade);
   color: #fff;
+}
+
+body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary) {
+  background: transparent;
+  border: 1.5px solid var(--luxe-jade);
+  color: var(--luxe-jade);
+}
+
+body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):hover {
+  background: rgb(var(--luxe-jade-rgb) / 0.06);
+}
+
+body .luxe-hero__button--primary,
+body .cart__checkout-button,
+body .luxe-mobile-bar__checkout {
+  background: var(--luxe-gold) !important;
+  border-color: var(--luxe-gold) !important;
+  color: var(--luxe-ink) !important;
+}
+
+body .luxe-hero__button--secondary {
+  background: transparent !important;
+  border: 1.5px solid rgb(248 246 240 / 0.85) !important;
+  color: #f8f6f0 !important;
+}
+
+body .luxe-hero__button--secondary:hover {
+  background: rgb(248 246 240 / 0.12) !important;
+}
+
+body .luxe-featured__atc,
+body .luxe-store__cta,
+body .luxe-about__button,
+body .luxe-shop-cta__button,
+body .luxe-collection-cta__button {
+  border-radius: var(--luxe-radius-pill);
+  min-height: 2.875rem;
+  font-weight: 600;
 }
 
 body .product-card,

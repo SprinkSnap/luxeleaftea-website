@@ -76,4 +76,37 @@
   #header-component .menu-list__link[aria-expanded='true'] {
     color: rgb(27 67 50 / 0.72);
   }
+
+  /* Prominent crisp brand logo lockup */
+  .header-logo {
+    position: relative;
+    z-index: 2;
+    padding-inline: 0.15rem;
+  }
+
+  .luxe-brand-logo__picture {
+    display: block;
+    line-height: 0;
+  }
+
+  .luxe-brand-logo__image,
+  .header-logo__image {
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgb(27 67 50 / 0.12));
+  }
+
+  #header-component .header__row--top {
+    min-height: 4.25rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    #header-component .header__row--top {
+      min-height: 4.75rem;
+    }
+
+    .header-logo__image,
+    .luxe-brand-logo__image {
+      min-width: 12.5rem;
+    }
+  }
 {% endstylesheet %}

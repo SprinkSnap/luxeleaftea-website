@@ -42,11 +42,12 @@
     </div>
 
     <div class="luxe-collection-hero__media">
-      {%- if collection.featured_image -%}
+      {%- assign hero_image = collection.image -%}
+      {%- if hero_image != blank -%}
         {{
-          collection.featured_image
+          hero_image
           | image_url: width: 1200
-          | image_tag: loading: 'eager', fetchpriority: 'high', alt: heading, class: 'luxe-collection-hero__image'
+          | image_tag: loading: 'eager', fetchpriority: 'high', alt: heading, class: 'luxe-collection-hero__image', widths: '600, 900, 1200'
         }}
       {%- else -%}
         <img

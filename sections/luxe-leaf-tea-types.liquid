@@ -29,13 +29,14 @@
         {%- assign url = '/collections/' | append: handle -%}
       {%- endif -%}
 
+      {%- assign type_image = collection.image -%}
       <a class="luxe-tea-types__card" href="{{ url }}" role="listitem">
         <div class="luxe-tea-types__media">
-          {%- if collection.featured_image -%}
+          {%- if type_image != blank -%}
             {{
-              collection.featured_image
+              type_image
               | image_url: width: 800
-              | image_tag: loading: 'lazy', alt: title, class: 'luxe-tea-types__image'
+              | image_tag: loading: 'lazy', alt: title, class: 'luxe-tea-types__image', widths: '400, 600, 800'
             }}
           {%- else -%}
             <img

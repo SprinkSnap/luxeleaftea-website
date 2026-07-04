@@ -66,7 +66,7 @@
     class="header-logo__image-container header-logo__image-container--original"
     data-testid="header-logo"
   >
-    {% if settings.logo != blank %}
+    {% if settings.logo != blank and settings.brand_navigation == false %}
       {% render 'image',
         image: settings.logo,
         class: 'header-logo__image',

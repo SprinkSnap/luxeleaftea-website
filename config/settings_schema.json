@@ -33,7 +33,7 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 36,
+        "default": 48,
         "visible_if": "{{ settings.logo != blank or settings.logo_inverse != blank }}",
         "info": "t:info.logo_height"
       },
@@ -45,7 +45,7 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 28,
+        "default": 40,
         "visible_if": "{{ settings.logo != blank or settings.logo_inverse != blank }}",
         "info": "t:info.logo_height"
       },
