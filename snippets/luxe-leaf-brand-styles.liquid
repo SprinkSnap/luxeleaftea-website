@@ -78,10 +78,14 @@
   #header-component .search-action .header-actions__action,
   #header-component .account-button.header-actions__action {
     color: var(--luxe-nav-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 3rem;
     height: 3rem;
     min-width: 3rem;
     min-height: 3rem;
+    padding: 0;
     border-radius: 999px;
     transition: background 0.2s ease, color 0.2s ease;
   }
@@ -119,6 +123,16 @@
     pointer-events: none;
   }
 
+  #header-component [data-testid="cart-drawer-trigger"] .svg-wrapper,
+  #header-component a[aria-controls="cart-drawer"] .svg-wrapper {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #header-component a[aria-controls="cart-drawer"],
   #header-component button[aria-controls="cart-drawer"],
   #header-component [data-testid="cart-drawer-trigger"] {
     position: relative;

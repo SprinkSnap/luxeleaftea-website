@@ -52,14 +52,14 @@
         <button type="button" class="luxe-shipping-nudge__explore button button-secondary" data-shipping-nudge-explore>
           Keep exploring
         </button>
-        <button
-          type="button"
+        <a
+          href="{{ routes.cart_url }}"
           class="luxe-shipping-nudge__cart button button-secondary"
           data-shipping-nudge-cart
-          on:click="#cart-drawer/toggle"
+          role="button"
         >
           View bag
-        </button>
+        </a>
         <button
           type="button"
           class="luxe-shipping-nudge__checkout button"

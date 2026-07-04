@@ -142,18 +142,18 @@
         </button>
       </form>
       {%- if settings.cart_type == 'drawer' -%}
-        <button
-          type="button"
+        <a
+          href="{{ routes.cart_url }}"
           class="luxe-mobile-bar__cart button button-secondary"
           data-mobile-cart-toggle
-          on:click="#cart-drawer/toggle"
+          role="button"
           aria-label="Open cart — premium loose leaf tea"
           {% if cart.item_count > 0 %}hidden{% endif %}
         >
           {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
           <span>{{ 'content.cart_title' | t }}</span>
           <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
-        </button>
+        </a>
       {%- else -%}
         <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View cart">
           {{- 'icon-cart.svg' | inline_asset_content -}}

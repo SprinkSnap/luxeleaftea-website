@@ -854,13 +854,22 @@ body.luxe-leaf-theme #header-component {
   --minimum-touch-target: 3.5rem;
 }
 
+body.luxe-leaf-theme #header-component header-actions {
+  display: flex;
+  align-items: center;
+}
+
 body.luxe-leaf-theme #header-component .header-actions__action,
 body.luxe-leaf-theme #header-component .account-button.header-actions__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 3.5rem !important;
   height: 3.5rem !important;
   min-width: 3.5rem !important;
   min-height: 3.5rem !important;
   flex-shrink: 0;
+  padding: 0;
 }
 
 body.luxe-leaf-theme #header-component .header-actions__action:not(.account-button) .svg-wrapper,
@@ -883,9 +892,21 @@ body.luxe-leaf-theme #header-component shopify-account {
 }
 
 body.luxe-leaf-theme #header-component .header-actions__cart-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 1.75rem !important;
   height: 1.75rem !important;
   pointer-events: none;
+}
+
+body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] .svg-wrapper,
+body.luxe-leaf-theme #header-component a[aria-controls="cart-drawer"] .svg-wrapper {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body.luxe-leaf-theme #header-component button[aria-controls="cart-drawer"],

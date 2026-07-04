@@ -1,16 +1,26 @@
 {%- doc -%}
-  Header bag + login tap targets and cart drawer opener (inline — always loads with header).
+  Header bag + login tap targets, cart icon alignment, and reliable cart drawer opener.
 {%- enddoc -%}
 
 {%- unless settings.brand_navigation == false -%}
   <style>
+    #header-component header-actions {
+      display: flex !important;
+      align-items: center !important;
+    }
+
     #header-component .header-actions__action,
     #header-component .account-button.header-actions__action,
     #header-component .search-action .header-actions__action {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       width: 3.5rem !important;
       height: 3.5rem !important;
       min-width: 3.5rem !important;
       min-height: 3.5rem !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
     }
 
     #header-component .header-actions__action .svg-wrapper,
@@ -32,11 +42,28 @@
       justify-content: center !important;
     }
 
-    #header-component .header-actions__cart-icon,
-    #header-component cart-icon.header-actions__cart-icon {
+    #header-component cart-icon.header-actions__cart-icon,
+    #header-component .header-actions__cart-icon {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 1.75rem !important;
+      height: 1.75rem !important;
+      margin: 0 !important;
       pointer-events: none;
     }
 
+    #header-component [data-testid="cart-drawer-trigger"] .svg-wrapper,
+    #header-component a[aria-controls="cart-drawer"] .svg-wrapper,
+    #header-component button[aria-controls="cart-drawer"] .svg-wrapper {
+      width: 1.75rem !important;
+      height: 1.75rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #header-component a[aria-controls="cart-drawer"],
     #header-component button[aria-controls="cart-drawer"],
     #header-component [data-testid="cart-drawer-trigger"] {
       position: relative;
@@ -44,6 +71,7 @@
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: rgb(201 162 39 / 0.3);
+      text-decoration: none;
     }
 
     @media screen and (max-width: 749px) {
