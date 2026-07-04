@@ -1,6 +1,6 @@
 {%- doc -%}
-  Luxe Leaf Tea premium navigation — desktop header and mobile drawer.
-  @param {string} variant - 'desktop' or 'drawer'
+  Luxe Leaf Tea premium navigation — desktop, mobile bar, panel, and drawer.
+  @param {string} variant - 'desktop', 'bar', 'panel', or 'drawer'
   @param {object} [block_settings] - Drawer block settings (drawer variant only)
 {%- enddoc -%}
 
@@ -16,39 +16,43 @@
   assign nav_labels = 'Home|Shop Tea|About|Contact' | split: '|'
 -%}
 
-{%- if variant == 'drawer' -%}
-  {%- assign animation_index = 0 -%}
-  {%- for label in nav_labels -%}
-    {%- liquid
-      case forloop.index
-        when 1
-          assign url = home_url
-        when 2
-          assign url = shop_tea_url
-        when 3
-          assign url = about_url
-        when 4
-          assign url = contact_url
-      endcase
+{%- for label in nav_labels -%}
+  {%- liquid
+    case forloop.index
+      when 1
+        assign url = home_url
+        assign nav_title = 'Luxe Leaf Tea home — premium loose leaf tea'
+      when 2
+        assign url = shop_tea_url
+        assign nav_title = 'Shop premium loose leaf tea — green, oolong, pu-erh, and black'
+      when 3
+        assign url = about_url
+        assign nav_title = 'About Luxe Leaf Tea — our story and tea sourcing'
+      when 4
+        assign url = contact_url
+        assign nav_title = 'Contact Luxe Leaf Tea — orders, questions, and wholesale'
+    endcase
 
-      assign is_active = false
-      if forloop.index == 1 and request.page_type == 'index'
-        assign is_active = true
-      elsif request.path == url
-        assign is_active = true
-      endif
+    assign is_active = false
+    if forloop.index == 1 and request.page_type == 'index'
+      assign is_active = true
+    elsif request.path == url
+      assign is_active = true
+    endif
 
-      assign animation_index = animation_index | plus: 1
-      assign drawer_key = label | handleize
-    -%}
+    assign nav_key = label | handleize
+  -%}
 
+  {%- if variant == 'drawer' -%}
+    {%- assign animation_index = forloop.index -%}
     <li
       style="--menu-drawer-animation-index: {{ animation_index }};"
       class="menu-drawer__list-item--flat luxe-nav-drawer__item{% if block_settings != blank and block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
     >
       <a
-        id="HeaderDrawer-luxe-{{ drawer_key }}"
+        id="HeaderDrawer-luxe-{{ nav_key }}"
         href="{{ url }}"
+        title="{{ nav_title | escape }}"
         class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element luxe-nav-drawer__link focus-inset{% if is_active %} menu-drawer__menu-item--active{% endif %}"
         {% if is_active %}
           aria-current="page"
@@ -57,29 +61,35 @@
         <span class="menu-drawer__menu-item-text wrap-text">{{ label }}</span>
       </a>
     </li>
-  {%- endfor -%}
-{%- else -%}
-  {%- for label in nav_labels -%}
-    {%- liquid
-      case forloop.index
-        when 1
-          assign url = home_url
-        when 2
-          assign url = shop_tea_url
-        when 3
-          assign url = about_url
-        when 4
-          assign url = contact_url
-      endcase
-
-      assign is_active = false
-      if forloop.index == 1 and request.page_type == 'index'
-        assign is_active = true
-      elsif request.path == url
-        assign is_active = true
-      endif
-    -%}
-
+  {%- elsif variant == 'bar' -%}
+    <li>
+      <a
+        href="{{ url }}"
+        id="MenuItem-luxe-{{ nav_key }}"
+        title="{{ nav_title | escape }}"
+        class="menu-list__item luxe-nav-bar__item{% if forloop.index == 2 %} luxe-nav-bar__item--shop{% endif %}{% if is_active %} menu-list__item--active luxe-nav-bar__item--active{% endif %}"
+        {% if is_active %}
+          aria-current="page"
+        {% endif %}
+      >
+        {{- label -}}
+      </a>
+    </li>
+  {%- elsif variant == 'panel' -%}
+    <li class="luxe-brand-menu__item">
+      <a
+        href="{{ url }}"
+        id="LuxePanelNav-{{ nav_key }}"
+        title="{{ nav_title | escape }}"
+        class="luxe-brand-menu__link{% if is_active %} luxe-brand-menu__link--active{% endif %}"
+        {% if is_active %}
+          aria-current="page"
+        {% endif %}
+      >
+        {{ label }}
+      </a>
+    </li>
+  {%- else -%}
     <li
       role="presentation"
       class="menu-list__list-item luxe-nav__item"
@@ -90,6 +100,7 @@
     >
       <a
         href="{{ url }}"
+        title="{{ nav_title | escape }}"
         data-skip-node-update="true"
         class="menu-list__link luxe-nav__link{% if is_active %} menu-list__link--active luxe-nav__link--active{% endif %}"
         {% if is_active %}
@@ -100,5 +111,5 @@
         <span class="menu-list__link-title">{{ label }}</span>
       </a>
     </li>
-  {%- endfor -%}
-{%- endif -%}
+  {%- endif -%}
+{%- endfor -%}

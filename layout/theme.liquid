@@ -58,6 +58,8 @@
       rel="stylesheet"
     >
     {{ 'luxe-leaf-theme.css' | asset_url | stylesheet_tag }}
+    <script type="module" src="{{ 'luxe-leaf-brand-nav.js' | asset_url }}"></script>
+    {%- render 'luxe-leaf-nav-schema' -%}
 
     {% style %}
       body {
@@ -173,12 +175,20 @@
 
         (function setHeaderMenuStyle() {
           const headerComponent = document.querySelector('#header-component');
-          if (headerComponent) {
-            const isTouchDevice = 'ontouchstart' in window && navigator.maxTouchPoints > 0;
-            const overflowList = headerComponent?.querySelector('overflow-list');
-            const hasReachedMinimum = overflowList && overflowList.hasAttribute('minimum-reached');
-            headerComponent.dataset.menuStyle = isTouchDevice || hasReachedMinimum ? 'drawer' : 'menu';
+          if (!headerComponent) return;
+
+          const isDesktop = window.matchMedia('(min-width: 750px)').matches;
+          const isBrandTheme = document.body.classList.contains('luxe-leaf-theme');
+
+          if (isBrandTheme && isDesktop) {
+            headerComponent.dataset.menuStyle = 'menu';
+            return;
           }
+
+          const isTouchDevice = 'ontouchstart' in window && navigator.maxTouchPoints > 0;
+          const overflowList = headerComponent?.querySelector('overflow-list');
+          const hasReachedMinimum = overflowList && overflowList.hasAttribute('minimum-reached');
+          headerComponent.dataset.menuStyle = isTouchDevice || hasReachedMinimum ? 'drawer' : 'menu';
         })();
       </script>
 

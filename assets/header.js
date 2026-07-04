@@ -117,6 +117,16 @@ class HeaderComponent extends Component {
    * @param {OverflowMinimumEvent} event
    */
   #handleOverflowMinimum = (event) => {
+    if (
+      document.body.classList.contains('luxe-leaf-theme') &&
+      window.matchMedia('(min-width: 750px)').matches
+    ) {
+      const overflowList = this.querySelector('overflow-list');
+      overflowList?.removeAttribute('minimum-reached');
+      this.dataset.menuStyle = 'menu';
+      return;
+    }
+
     this.#updateMenuVisibility(event.detail.minimumReached);
   };
 

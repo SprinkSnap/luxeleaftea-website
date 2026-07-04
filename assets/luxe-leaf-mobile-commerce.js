@@ -54,14 +54,15 @@ import { StandardEvents } from '@shopify/events';
 
   function bindMobileMenuToggle() {
     const menuBtn = document.querySelector('[data-mobile-menu-toggle]');
-    const drawerDetails = document.getElementById('Details-menu-drawer-container');
-    if (!menuBtn || !drawerDetails) return;
+    const panel = document.getElementById('LuxeBrandMenuPanel');
+    if (!menuBtn || !panel) return;
 
     const syncExpanded = () => {
-      menuBtn.setAttribute('aria-expanded', drawerDetails.hasAttribute('open') ? 'true' : 'false');
+      menuBtn.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
     };
 
-    drawerDetails.addEventListener('toggle', syncExpanded);
+    const observer = new MutationObserver(syncExpanded);
+    observer.observe(panel, { attributes: true, attributeFilter: ['hidden'] });
     syncExpanded();
   }
 })();
