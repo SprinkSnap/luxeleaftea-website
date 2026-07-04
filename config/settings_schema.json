@@ -99,9 +99,9 @@
         {
           "type": "number",
           "id": "estimated_tax_rate_bps",
-          "label": "Estimated sales tax (basis points)",
-          "default": 875,
-          "info": "Shown in cart before checkout. 875 = 8.75%. Set 0 to show “At checkout” instead of an estimate."
+          "label": "Fallback tax rate (basis points)",
+          "default": 0,
+          "info": "Deprecated — cart tax uses Canadian province rates. Leave at 0."
         },
         {
           "type": "header",

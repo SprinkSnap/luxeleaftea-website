@@ -1,0 +1,46 @@
+{%- doc -%}
+  Canada-wide shipping: province + city picker for accurate provincial tax in cart.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false or cart.empty? -%}
+  {%- assign ca_city_list_id = city_list_id | default: 'luxe-ca-cities' -%}
+  <div class="luxe-ca-tax" data-ca-tax-selector>
+    <p class="luxe-ca-tax__heading">Ship to (Canada only)</p>
+    <div class="luxe-ca-tax__fields">
+      <label class="luxe-ca-tax__field">
+        <span class="luxe-ca-tax__label">Province</span>
+        <select class="luxe-ca-tax__select" data-ca-province autocomplete="address-level1" required>
+          <option value="">Select province</option>
+          <option value="AB">Alberta</option>
+          <option value="BC">British Columbia</option>
+          <option value="MB">Manitoba</option>
+          <option value="NB">New Brunswick</option>
+          <option value="NL">Newfoundland and Labrador</option>
+          <option value="NS">Nova Scotia</option>
+          <option value="NT">Northwest Territories</option>
+          <option value="NU">Nunavut</option>
+          <option value="ON">Ontario</option>
+          <option value="PE">Prince Edward Island</option>
+          <option value="QC">Quebec</option>
+          <option value="SK">Saskatchewan</option>
+          <option value="YT">Yukon</option>
+        </select>
+      </label>
+      <label class="luxe-ca-tax__field">
+        <span class="luxe-ca-tax__label">City</span>
+        <input
+          class="luxe-ca-tax__input"
+          type="text"
+          data-ca-city
+          autocomplete="address-level2"
+          placeholder="e.g. Toronto"
+          list="{{ ca_city_list_id }}"
+          required
+        >
+        <datalist id="{{ ca_city_list_id }}" data-ca-city-list></datalist>
+      </label>
+    </div>
+    <p class="luxe-ca-tax__note" data-ca-tax-note hidden>Select your province and city to see exact tax for your order.</p>
+    <p class="luxe-ca-tax__rate" data-ca-tax-rate hidden></p>
+  </div>
+{%- endunless -%}

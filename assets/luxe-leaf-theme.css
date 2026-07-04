@@ -806,6 +806,73 @@ body .luxe-trust-bar {
   color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.72);
 }
 
+.luxe-ca-tax {
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.05);
+  border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.12);
+}
+
+.luxe-ca-tax__heading {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.72);
+}
+
+.luxe-ca-tax__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.luxe-ca-tax__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.luxe-ca-tax__label {
+  font-size: 0.6875rem;
+  color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
+}
+
+.luxe-ca-tax__select,
+.luxe-ca-tax__input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.18);
+  border-radius: 0.4rem;
+  background: #fff;
+  font-size: 0.8125rem;
+  color: var(--luxe-jade, #1b4332);
+}
+
+.luxe-ca-tax__note {
+  margin: 0.45rem 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.75);
+}
+
+.luxe-ca-tax__rate {
+  margin: 0.35rem 0 0;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--luxe-jade, #1b4332);
+}
+
+@media screen and (max-width: 749px) {
+  .luxe-ca-tax__fields {
+    grid-template-columns: 1fr;
+  }
+}
+
 .luxe-guest-checkout-banner {
   margin: 0 0 0.75rem;
   padding: 0.55rem 0.75rem;

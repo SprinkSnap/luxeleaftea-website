@@ -13,23 +13,49 @@ import { StandardEvents } from '@shopify/events';
   const getShippingConfig = () => {
     const body = document.body;
     const nudge = document.querySelector('[data-shipping-nudge]');
-    const totals = document.querySelector('[data-shipping-totals]');
-    const conversion = document.querySelector('[data-cart-conversion]');
     const threshold = Number(body.dataset.freeShippingThreshold || nudge?.dataset.threshold) || 5000;
     const standardRate = Number(body.dataset.standardShippingRate || nudge?.dataset.standardRate) || 595;
-    const taxRateBps =
-      Number(
-        body.dataset.estimatedTaxRateBps ||
-          nudge?.dataset.taxRateBps ||
-          totals?.dataset.taxRateBps ||
-          conversion?.dataset.taxRateBps
-      ) || 0;
     const thresholdLabel =
       nudge?.dataset.thresholdLabel || body.dataset.freeShippingThresholdLabel || formatMoney(threshold);
     const standardRateLabel =
       nudge?.dataset.standardRateLabel || body.dataset.standardShippingRateLabel || formatMoney(standardRate);
 
-    return { threshold, standardRate, taxRateBps, thresholdLabel, standardRateLabel };
+    return { threshold, standardRate, thresholdLabel, standardRateLabel };
+  };
+
+  const getCanadaTaxRateBps = () => {
+    const canadaTax = window.LuxeLeaf?.CanadaTax;
+    if (canadaTax?.isLocationComplete?.()) {
+      return canadaTax.getTaxRateBps();
+    }
+    return 0;
+  };
+
+  const getCanadaTaxLabel = () => {
+    const canadaTax = window.LuxeLeaf?.CanadaTax;
+    if (canadaTax?.isLocationComplete?.()) {
+      return canadaTax.getTaxLabel();
+    }
+    return 'Tax';
+  };
+
+  const isCanadaTaxReady = () => Boolean(window.LuxeLeaf?.CanadaTax?.isLocationComplete?.());
+
+  const syncTaxLabels = () => {
+    const label = getCanadaTaxLabel();
+    document.querySelectorAll('[data-ca-tax-label]').forEach((el) => {
+      el.textContent = isCanadaTaxReady() ? label : 'Tax';
+    });
+  };
+
+  const renderTaxValue = (taxAmount) => {
+    if (!isCanadaTaxReady()) {
+      return '<span class="luxe-shipping-totals__at-checkout" data-ca-tax-prompt>Select province &amp; city</span>';
+    }
+    if (taxAmount > 0) {
+      return `${formatMoney(taxAmount)} <span class="luxe-shipping-totals__est">est.</span>`;
+    }
+    return '<span class="luxe-shipping-totals__at-checkout">At checkout</span>';
   };
 
   const formatMoney = (cents) => {
@@ -40,11 +66,12 @@ import { StandardEvents } from '@shopify/events';
   };
 
   const getShippingEstimate = (cartTotal, itemsSubtotal = null) => {
-    const { threshold, standardRate, taxRateBps } = getShippingConfig();
+    const { threshold, standardRate } = getShippingConfig();
     const subtotal = itemsSubtotal ?? cartTotal;
     const qualifiesFree = cartTotal >= threshold;
     const shippingCost = qualifiesFree ? 0 : standardRate;
     const taxableBase = subtotal + shippingCost;
+    const taxRateBps = getCanadaTaxRateBps();
     const taxAmount = taxRateBps > 0 ? Math.round((taxableBase * taxRateBps) / 10000) : 0;
     const grandTotal = taxableBase + taxAmount;
     const remaining = Math.max(0, threshold - cartTotal);
@@ -61,6 +88,7 @@ import { StandardEvents } from '@shopify/events';
       progress,
       threshold,
       standardRate,
+      taxReady: isCanadaTaxReady(),
     };
   };
 
@@ -68,10 +96,8 @@ import { StandardEvents } from '@shopify/events';
     const conversion = document.querySelector('[data-cart-conversion]');
     if (!(conversion instanceof HTMLElement) || cart.item_count === 0) return;
 
-    const { qualifiesFree, shippingCost, grandTotal, taxAmount, subtotal, remaining, progress } = getShippingEstimate(
-      cart.total_price,
-      cart.items_subtotal_price
-    );
+    const { qualifiesFree, shippingCost, grandTotal, taxAmount, subtotal, remaining, progress, taxReady } =
+      getShippingEstimate(cart.total_price, cart.items_subtotal_price);
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const progressText = conversion.querySelector('[data-shipping-progress-text]');
@@ -101,13 +127,15 @@ import { StandardEvents } from '@shopify/events';
       rateValue.innerHTML = qualifiesFree ? '<strong>Free</strong>' : `<strong>${standardRateLabel}</strong>`;
     }
     if (taxInline) {
-      taxInline.innerHTML =
-        taxAmount > 0 ? `<strong>${formatMoney(taxAmount)}</strong>` : 'At checkout';
+      taxInline.innerHTML = renderTaxValue(taxAmount);
     }
     if (totalInline) {
-      totalInline.innerHTML = `Total <strong>${formatMoney(grandTotal)}</strong> — tap Pay below`;
+      totalInline.innerHTML = taxReady
+        ? `Total <strong>${formatMoney(grandTotal)}</strong> — tap Pay below`
+        : `Subtotal + shipping <strong>${formatMoney(subtotal + shippingCost)}</strong> — add province for tax`;
     }
 
+    syncTaxLabels();
     conversion.classList.toggle('luxe-cart-conversion--free-shipping', qualifiesFree);
   };
 
@@ -138,10 +166,7 @@ import { StandardEvents } from '@shopify/events';
         : standardRateLabel;
     }
     if (taxValue) {
-      taxValue.innerHTML =
-        taxAmount > 0
-          ? `${formatMoney(taxAmount)} <span class="luxe-shipping-totals__est">est.</span>`
-          : '<span class="luxe-shipping-totals__at-checkout">At checkout</span>';
+      taxValue.innerHTML = renderTaxValue(taxAmount);
     }
     if (hint) {
       hint.classList.toggle('luxe-shipping-totals__hint--success', qualifiesFree);
@@ -153,8 +178,11 @@ import { StandardEvents } from '@shopify/events';
       estimatedTotalEl.textContent = formatMoney(grandTotal);
     }
     if (checkoutText) {
-      checkoutText.textContent = `Pay ${formatMoney(grandTotal)} — Guest checkout`;
+      checkoutText.textContent = taxReady
+        ? `Pay ${formatMoney(grandTotal)} — Guest checkout`
+        : 'Guest checkout — select province for total';
     }
+    syncTaxLabels();
   };
 
   /**
@@ -228,7 +256,11 @@ import { StandardEvents } from '@shopify/events';
       const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
       if (!res.ok) return;
       const cart = await res.json();
-      const { estimatedTotal } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
+      syncShippingNudge(cart);
+      syncCartConversion(cart);
+      syncShippingTotals(cart);
+
+      const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
 
       if (bar) {
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
@@ -382,6 +414,30 @@ import { StandardEvents } from '@shopify/events';
     syncExpanded();
   }
 
+  async function refreshCartPricing() {
+    try {
+      const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+      if (!res.ok) return;
+      const cart = await res.json();
+      syncCartConversion(cart);
+      syncShippingTotals(cart);
+      syncShippingNudge(cart);
+
+      const bar = document.querySelector('[data-mobile-shop-bar]');
+      if (bar && cart.item_count > 0) {
+        const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
+        const checkoutButton = bar.querySelector('[data-mobile-checkout]');
+        if (checkoutButton instanceof HTMLButtonElement) {
+          checkoutButton.textContent = taxReady
+            ? `Pay · ${formatMoney(estimatedTotal)}`
+            : 'Guest checkout';
+        }
+      }
+    } catch {
+      /* keep server-rendered state */
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     syncBar();
     syncDrawerChrome();
@@ -389,7 +445,9 @@ import { StandardEvents } from '@shopify/events';
     bindCheckoutActions();
     bindSearchActions();
     bindShippingNudgeActions();
+    refreshCartPricing();
   });
+  document.addEventListener('luxe:ca-location-change', refreshCartPricing);
   document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
   document.addEventListener('theme-drawer:open', (event) => {
     if (/** @type {Element} */ (event.target).id === 'cart-drawer') syncDrawerChrome();

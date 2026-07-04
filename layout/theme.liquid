@@ -60,6 +60,7 @@
     {{ 'luxe-leaf-theme.css' | asset_url | stylesheet_tag }}
     <script type="module" src="{{ 'luxe-leaf-brand-nav.js' | asset_url }}"></script>
     {%- unless settings.brand_navigation == false -%}
+      <script src="{{ 'luxe-leaf-canada-tax.js' | asset_url }}" defer></script>
       <script type="module" src="{{ 'luxe-leaf-mobile-commerce.js' | asset_url }}"></script>
       <script type="module" src="{{ 'luxe-leaf-browse-atc.js' | asset_url }}"></script>
     {%- endunless -%}
@@ -117,7 +118,6 @@
     data-standard-shipping-rate="{{ settings.standard_shipping_rate | default: 595 }}"
     data-free-shipping-threshold-label="{{ settings.free_shipping_threshold | default: 5000 | money | escape }}"
     data-standard-shipping-rate-label="{{ settings.standard_shipping_rate | default: 595 | money | escape }}"
-    data-estimated-tax-rate-bps="{{ settings.estimated_tax_rate_bps | default: 875 }}"
   >
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
 

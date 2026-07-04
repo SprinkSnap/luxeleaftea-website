@@ -6,9 +6,9 @@
 
 {%- liquid
   assign variant = variant | default: 'drawer-banner'
+  assign city_list_id = city_list_id | default: 'luxe-ca-cities'
   assign threshold = settings.free_shipping_threshold | default: 5000
   assign standard_rate = settings.standard_shipping_rate | default: 595
-  assign tax_rate_bps = settings.estimated_tax_rate_bps | default: 875
   assign threshold_money = threshold | money
   assign standard_rate_money = standard_rate | money
   assign cart_total = cart.total_price
@@ -34,9 +34,6 @@
     for tax_line in cart.tax_lines
       assign tax_amount = tax_amount | plus: tax_line.price
     endfor
-  elsif tax_rate_bps > 0
-    assign tax_amount = taxable_base | times: tax_rate_bps | divided_by: 10000
-    assign tax_is_estimated = true
   endif
 
   assign grand_total = taxable_base | plus: tax_amount
@@ -47,11 +44,9 @@
 
   if settings.currency_code_enabled_cart_total
     assign subtotal_money = subtotal_before_tax | money_with_currency
-    assign tax_money = tax_amount | money_with_currency
     assign grand_total_money = grand_total | money_with_currency
   else
     assign subtotal_money = subtotal_before_tax | money
-    assign tax_money = tax_amount | money
     assign grand_total_money = grand_total | money
   endif
 -%}
@@ -62,16 +57,16 @@
     data-threshold-label="{{ threshold_money | escape }}"
     data-standard-rate="{{ standard_rate }}"
     data-standard-rate-label="{{ standard_rate_money | escape }}"
-    data-tax-rate-bps="{{ tax_rate_bps }}"
 
   {%- when 'cart-totals' -%}
     {%- unless cart.empty? -%}
+      {%- assign ca_selector_id = 'luxe-ca-cities-cart' -%}
       <div
         class="luxe-shipping-totals"
         data-shipping-totals
-        data-tax-rate-bps="{{ tax_rate_bps }}"
         data-grand-total="{{ grand_total }}"
       >
+        {% render 'luxe-leaf-canada-tax-selector', city_list_id: ca_selector_id %}
         <div class="luxe-shipping-totals__row">
           <span class="luxe-shipping-totals__label">Subtotal (before tax)</span>
           <span class="luxe-shipping-totals__value" data-cart-subtotal-value>{{ subtotal_money }}</span>
@@ -103,24 +98,9 @@
           </p>
         {%- endunless -%}
         <div class="luxe-shipping-totals__row luxe-shipping-totals__row--tax">
-          <span class="luxe-shipping-totals__label">
-            {%- if tax_is_estimated -%}
-              Est. sales tax
-            {%- elsif tax_amount > 0 -%}
-              Sales tax
-            {%- else -%}
-              Sales tax
-            {%- endif -%}
-          </span>
+          <span class="luxe-shipping-totals__label" data-ca-tax-label>Tax</span>
           <span class="luxe-shipping-totals__value" data-tax-value>
-            {%- if tax_amount > 0 -%}
-              {{ tax_money -}}
-              {%- if tax_is_estimated -%}
-                <span class="luxe-shipping-totals__est">est.</span>
-              {%- endif -%}
-            {%- else -%}
-              <span class="luxe-shipping-totals__at-checkout">At checkout</span>
-            {%- endif -%}
+            <span class="luxe-shipping-totals__at-checkout" data-ca-tax-prompt>Select province &amp; city</span>
           </span>
         </div>
         <div class="luxe-shipping-totals__row luxe-shipping-totals__row--total">
@@ -129,13 +109,15 @@
             {{- grand_total_money -}}
           </span>
         </div>
-        <p class="luxe-shipping-totals__footnote">All-in price before you pay — no account required.</p>
+        <p class="luxe-shipping-totals__footnote">Canada-wide delivery · Tax by province · Guest checkout</p>
       </div>
     {%- endunless -%}
 
   {%- when 'drawer-banner' -%}
     {%- unless cart.empty? -%}
-      <div class="luxe-cart-conversion" data-cart-conversion data-tax-rate-bps="{{ tax_rate_bps }}">
+      {%- assign ca_selector_id = 'luxe-ca-cities-drawer' -%}
+      <div class="luxe-cart-conversion" data-cart-conversion>
+        {% render 'luxe-leaf-canada-tax-selector', city_list_id: ca_selector_id %}
         {%- if qualifies_free -%}
           <p class="luxe-cart-conversion__message luxe-cart-conversion__message--success">
             {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
@@ -185,19 +167,9 @@
               <strong>{{ standard_rate_money }}</strong>
             {%- endif -%}
           </span>
-          <span class="luxe-cart-conversion__shipping-label">
-            {%- if tax_is_estimated -%}
-              Est. tax
-            {%- else -%}
-              Tax
-            {%- endif -%}
-          </span>
+          <span class="luxe-cart-conversion__shipping-label" data-ca-tax-label>Tax</span>
           <span class="luxe-cart-conversion__shipping-value" data-tax-value-inline>
-            {%- if tax_amount > 0 -%}
-              <strong>{{ tax_money }}</strong>
-            {%- else -%}
-              At checkout
-            {%- endif -%}
+            <span data-ca-tax-prompt>Select province &amp; city</span>
           </span>
           <span class="luxe-cart-conversion__shipping-total" data-estimated-total-inline>
             Total <strong>{{ grand_total_money }}</strong> — tap Pay below
