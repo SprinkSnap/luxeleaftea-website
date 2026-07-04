@@ -260,7 +260,6 @@
     }
   },
   "order": [
-    "trust_bar",
     "hero_home",
     "store_experience",
     "tea_types",

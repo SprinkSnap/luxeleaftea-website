@@ -219,6 +219,17 @@ body.luxe-leaf-theme .luxe-hero.section {
   padding-inline: 0;
 }
 
+@media screen and (max-width: 749px) {
+  body.luxe-leaf-theme .luxe-hero.section {
+    align-items: flex-start;
+    min-height: clamp(17rem, 58svh, 26rem);
+  }
+
+  body.luxe-leaf-theme .luxe-hero__content {
+    padding-block: 1.25rem 1.5rem;
+  }
+}
+
 body.luxe-leaf-theme .luxe-hero.section > * {
   grid-column: 1 / -1;
 }
