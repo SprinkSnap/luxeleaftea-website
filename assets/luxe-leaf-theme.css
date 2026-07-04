@@ -1427,8 +1427,11 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
 
 .luxe-brand-footer__newsletter {
   margin-top: 1.25rem;
-  padding-top: 1.15rem;
-  border-top: 1px solid rgb(248 246 240 / 0.1);
+  padding: 1rem;
+  border-radius: 0.625rem;
+  background: rgb(13 40 24 / 0.92) !important;
+  border: 1px solid rgb(248 246 240 / 0.12);
+  color: #f8f6f0 !important;
 }
 
 .luxe-brand-footer__newsletter-heading {
@@ -1436,13 +1439,13 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   font-family: 'Playfair Display', var(--font-heading--family), Georgia, serif;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--luxe-cream, #f8f6f0);
+  color: #f8f6f0 !important;
 }
 
 .luxe-brand-footer__newsletter-copy {
   margin: 0 0 0.75rem;
-  font-size: 0.8125rem;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  line-height: 1.55;
   color: #f8f6f0 !important;
 }
 

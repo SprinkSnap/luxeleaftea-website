@@ -197,9 +197,13 @@
             {%- endif -%}
 
             {%- if show_newsletter -%}
-              <div class="luxe-brand-footer__newsletter">
-                <h3 class="luxe-brand-footer__newsletter-heading">Tea tips by email</h3>
-                <p class="luxe-brand-footer__newsletter-copy" style="color: #f8f6f0;">{{ section.settings.newsletter_copy }}</p>
+              <div class="luxe-brand-footer__newsletter" style="color: #f8f6f0;">
+                <h3 class="luxe-brand-footer__newsletter-heading" style="color: #f8f6f0 !important;">
+                  {{ section.settings.newsletter_heading }}
+                </h3>
+                <p class="luxe-brand-footer__newsletter-copy" style="color: #f8f6f0 !important;">
+                  {{ section.settings.newsletter_copy }}
+                </p>
                 {% render 'luxe-leaf-footer-newsletter',
                   placeholder: section.settings.newsletter_placeholder,
                   button_label: section.settings.newsletter_button_label,
@@ -238,6 +242,27 @@
     brand_blurb: brand_blurb
   -%}
 {%- endunless -%}
+
+{% stylesheet %}
+  .luxe-brand-footer__newsletter {
+    padding: 1rem;
+    border-radius: 0.625rem;
+    background: rgb(13 40 24 / 0.92) !important;
+    border: 1px solid rgb(248 246 240 / 0.12);
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-brand-footer__newsletter-heading,
+  .luxe-brand-footer__newsletter-copy {
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-brand-footer__newsletter-copy {
+    margin: 0 0 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -297,6 +322,12 @@
       "id": "show_newsletter",
       "label": "Show email signup",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Signup heading",
+      "default": "Join the Luxe Leaf list"
     },
     {
       "type": "text",
