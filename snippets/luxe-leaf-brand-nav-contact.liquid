@@ -8,7 +8,10 @@
     render 'luxe-leaf-brand-phone-value'
   endcapture
   assign brand_phone = brand_phone | strip
-  assign brand_phone_href = brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-'
+  capture brand_phone_href
+    render 'luxe-leaf-brand-phone-href'
+  endcapture
+  assign brand_phone_href = brand_phone_href | strip
   assign contact_url = '/pages/contact'
 
   assign brand_email = settings.brand_email

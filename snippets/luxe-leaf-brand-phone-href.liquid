@@ -11,11 +11,6 @@
       assign phone_digits = phone_digits | slice: 1, 10
     endif
 
-    if phone_digits.size == 10
-      assign phone_area = phone_digits | slice: 0, 3
-      assign phone_prefix = phone_digits | slice: 3, 3
-      assign phone_line = phone_digits | slice: 6, 4
-      assign brand_phone = '(' | append: phone_area | append: ') ' | append: phone_prefix | append: '-' | append: phone_line
-    endif
+    assign brand_phone = phone_digits
   endif
 -%}{{- brand_phone -}}

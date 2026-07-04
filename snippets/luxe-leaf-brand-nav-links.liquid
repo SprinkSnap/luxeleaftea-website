@@ -9,7 +9,10 @@
     render 'luxe-leaf-brand-phone-value'
   endcapture
   assign brand_phone = brand_phone | strip
-  assign brand_phone_href = brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-'
+  capture brand_phone_href
+    render 'luxe-leaf-brand-phone-href'
+  endcapture
+  assign brand_phone_href = brand_phone_href | strip
 
   assign shop_tea_url = routes.all_products_collection_url
   if collections.all != blank and collections.all.url != blank
