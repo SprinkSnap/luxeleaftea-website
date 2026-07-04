@@ -1,0 +1,402 @@
+{%- doc -%}
+  Keep exploring — recently viewed browse rail with collection fallback and ItemList schema.
+{%- enddoc -%}
+
+{%- liquid
+  assign fallback_collection = collections[section.settings.collection]
+  if fallback_collection == blank
+    assign fallback_collection = collections.all
+  endif
+
+  assign product_limit = section.settings.product_limit | default: 4
+  assign exclude_id = blank
+  if product != blank and section.settings.exclude_current_on_product
+    assign exclude_id = product.id
+  endif
+
+  assign rail_products = blank
+  assign order_ids = blank
+  assign is_recent = false
+
+  if search.performed and search.terms contains 'id:'
+    assign rail_products = search.results
+    assign order_ids = search.terms | replace: 'id:', '' | split: ' OR '
+    assign is_recent = true
+  else
+    assign rail_products = fallback_collection.products
+  endif
+
+  assign shop_url = fallback_collection.url | default: routes.all_products_collection_url
+-%}
+
+<section
+  class="luxe-keep-exploring section section--page-width spacing-style{% if is_recent %} luxe-keep-exploring--recent{% endif %}"
+  id="keep-exploring-{{ section.id }}"
+  data-keep-exploring
+  data-section-id="{{ section.id }}"
+  {% if exclude_id != blank %}
+    data-exclude-product-id="{{ exclude_id }}"
+  {% endif %}
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="luxe-keep-exploring__header" data-keep-exploring-header>
+    <p class="luxe-keep-exploring__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      <span data-keep-exploring-eyebrow>
+        {%- if is_recent -%}
+          {{ section.settings.recent_eyebrow }}
+        {%- else -%}
+          {{ section.settings.eyebrow }}
+        {%- endif -%}
+      </span>
+    </p>
+    <div class="luxe-keep-exploring__title-row">
+      <h2 class="luxe-keep-exploring__heading" data-keep-exploring-heading>
+        {%- if is_recent -%}
+          {{ section.settings.recent_heading }}
+        {%- else -%}
+          {{ section.settings.heading }}
+        {%- endif -%}
+      </h2>
+      <a
+        href="{{ shop_url }}"
+        class="luxe-keep-exploring__view-all luxe-link-with-icon"
+        data-keep-exploring-view-all
+      >
+        {{ section.settings.view_all_label }}
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
+    </div>
+    <p class="luxe-keep-exploring__intro" data-keep-exploring-intro>
+      {%- if is_recent -%}
+        {{ section.settings.recent_intro }}
+      {%- else -%}
+        {{ section.settings.intro }}
+      {%- endif -%}
+    </p>
+  </div>
+
+  <div
+    class="luxe-keep-exploring__scroll"
+    data-keep-exploring-rail
+    role="list"
+    aria-label="{{ section.settings.heading | escape }}"
+  >
+    {% render 'luxe-leaf-keep-exploring-cards',
+      products: rail_products,
+      order_ids: order_ids,
+      limit: product_limit,
+      exclude_product_id: exclude_id
+    %}
+  </div>
+</section>
+
+{%- capture item_list_elements -%}
+  {%- assign schema_count = 0 -%}
+  {%- if order_ids != blank -%}
+    {%- for _id in order_ids -%}
+      {%- if schema_count >= product_limit -%}{%- break -%}{%- endif -%}
+      {%- assign int_id = _id | times: 1 -%}
+      {%- if exclude_id != blank and int_id == exclude_id -%}{%- continue -%}{%- endif -%}
+      {%- assign schema_product = rail_products | find: 'id', int_id -%}
+      {%- if schema_product == blank -%}{%- continue -%}{%- endif -%}
+      {%- assign schema_variant = schema_product.selected_or_first_available_variant -%}
+      {%- if schema_count > 0 -%},{%- endif -%}
+      {
+        "@type": "ListItem",
+        "position": {{ schema_count | plus: 1 }},
+        "url": {{ shop.url | append: schema_variant.url | json }},
+        "name": {{ schema_product.title | json }}
+      }
+      {%- assign schema_count = schema_count | plus: 1 -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- for schema_product in rail_products limit: product_limit -%}
+      {%- if exclude_id != blank and schema_product.id == exclude_id -%}{%- continue -%}{%- endif -%}
+      {%- assign schema_variant = schema_product.selected_or_first_available_variant -%}
+      {%- if schema_count > 0 -%},{%- endif -%}
+      {
+        "@type": "ListItem",
+        "position": {{ schema_count | plus: 1 }},
+        "url": {{ shop.url | append: schema_variant.url | json }},
+        "name": {{ schema_product.title | json }}
+      }
+      {%- assign schema_count = schema_count | plus: 1 -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if item_list_elements != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": {{ section.settings.heading | json }},
+      "itemListElement": [{{ item_list_elements }}]
+    }
+  </script>
+{%- endif -%}
+
+<script type="module" src="{{ 'luxe-leaf-keep-exploring.js' | asset_url }}"></script>
+
+{% stylesheet %}
+  .luxe-keep-exploring {
+    padding-block: 3rem;
+    background: linear-gradient(180deg, var(--luxe-cream, #f8f6f0) 0%, #fff 100%);
+  }
+
+  .luxe-keep-exploring__header {
+    margin-bottom: 1.35rem;
+  }
+
+  .luxe-keep-exploring__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.65rem;
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .luxe-keep-exploring__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .luxe-keep-exploring__heading {
+    margin: 0;
+    font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+    line-height: 1.15;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-keep-exploring__view-all {
+    color: var(--luxe-jade, #1b4332);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .luxe-keep-exploring__intro {
+    margin: 0;
+    max-width: 36rem;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.82);
+    line-height: 1.6;
+    font-size: 0.9375rem;
+  }
+
+  .luxe-keep-exploring__scroll {
+    display: flex;
+    gap: 0.85rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: var(--page-margin, 1.25rem);
+    padding-bottom: 0.35rem;
+    margin-inline: calc(-1 * var(--page-margin, 1.25rem));
+    padding-inline: var(--page-margin, 1.25rem);
+  }
+
+  .luxe-keep-exploring__scroll::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .luxe-keep-exploring__scroll::-webkit-scrollbar-thumb {
+    background: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.2);
+    border-radius: 999px;
+  }
+
+  .luxe-keep-exploring__card {
+    flex: 0 0 min(11.5rem, 72vw);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: var(--luxe-radius-lg, 0.75rem);
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.08);
+    box-shadow: var(--luxe-shadow-soft, 0 4px 20px rgb(27 67 50 / 0.06));
+    overflow: hidden;
+  }
+
+  .luxe-keep-exploring__media {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--luxe-cream-dark, #efe9dc);
+  }
+
+  .luxe-keep-exploring__media-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .luxe-keep-exploring__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .luxe-keep-exploring__body {
+    padding: 0.85rem 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
+  }
+
+  .luxe-keep-exploring__title {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+
+  .luxe-keep-exploring__title a {
+    color: var(--luxe-jade, #1b4332);
+    text-decoration: none;
+  }
+
+  .luxe-keep-exploring__price {
+    margin: 0;
+    color: var(--luxe-gold, #c9a227);
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+
+  .luxe-keep-exploring__form {
+    margin-top: auto;
+    padding-top: 0.35rem;
+  }
+
+  .luxe-keep-exploring__atc {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8125rem;
+    border-radius: 999px;
+  }
+
+  .luxe-keep-exploring__sold-out {
+    margin-top: auto;
+    font-size: 0.8125rem;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.55);
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-keep-exploring__scroll {
+      gap: 1rem;
+    }
+
+    .luxe-keep-exploring__card {
+      flex-basis: min(14rem, 22vw);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf keep exploring",
+  "tag": "section",
+  "class": "luxe-keep-exploring-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Keep exploring"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Teas worth another look"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Swipe through premium loose leaf picks — one tap to add and keep browsing."
+    },
+    {
+      "type": "text",
+      "id": "recent_eyebrow",
+      "label": "Recent eyebrow",
+      "default": "Welcome back"
+    },
+    {
+      "type": "text",
+      "id": "recent_heading",
+      "label": "Recent heading",
+      "default": "Pick up where you left off"
+    },
+    {
+      "type": "textarea",
+      "id": "recent_intro",
+      "label": "Recent intro",
+      "default": "Your recently viewed teas — add to bag without leaving the page."
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "Shop all teas"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Fallback collection",
+      "info": "Shown for first-time visitors without browsing history."
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Product limit",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "exclude_current_on_product",
+      "label": "Exclude current product on product pages",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf keep exploring",
+      "settings": {
+        "collection": "all"
+      }
+    }
+  ]
+}
+{% endschema %}

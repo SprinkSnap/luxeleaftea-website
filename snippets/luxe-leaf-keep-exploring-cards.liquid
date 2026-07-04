@@ -1,0 +1,116 @@
+{%- doc -%}
+  Horizontal product cards for the Keep exploring rail.
+
+  @param {object[]} products - Products to render
+  @param {string[]} [order_ids] - Product IDs to preserve order (recently viewed)
+  @param {number} [limit] - Max cards
+  @param {string} [exclude_product_id] - Skip this product (e.g. current PDP)
+{%- enddoc -%}
+
+{%- liquid
+  assign card_limit = limit | default: 4
+  assign cards_rendered = 0
+-%}
+
+{%- if order_ids != blank -%}
+  {%- for _id in order_ids -%}
+    {%- if cards_rendered >= card_limit -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- assign int_id = _id | times: 1 -%}
+    {%- if exclude_product_id != blank and int_id == exclude_product_id -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- assign product = products | find: 'id', int_id -%}
+    {%- if product == blank -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- assign variant = product.selected_or_first_available_variant -%}
+    <article class="luxe-keep-exploring__card" role="listitem">
+      <a href="{{ variant.url }}" class="luxe-keep-exploring__media-link">
+        <div class="luxe-keep-exploring__media">
+          {%- if product.featured_image -%}
+            {{
+              product.featured_image
+              | image_url: width: 480
+              | image_tag: loading: 'lazy', alt: product.title, class: 'luxe-keep-exploring__image', width: 240, height: 240
+            }}
+          {%- else -%}
+            <img
+              src="{{ 'luxe-leaf-tea-assortment-hero.png' | asset_url }}"
+              alt="{{ product.title }}"
+              width="240"
+              height="240"
+              loading="lazy"
+              class="luxe-keep-exploring__image"
+            >
+          {%- endif -%}
+          {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
+        </div>
+      </a>
+      <div class="luxe-keep-exploring__body">
+        <h3 class="luxe-keep-exploring__title">
+          <a href="{{ variant.url }}">{{ product.title }}</a>
+        </h3>
+        <p class="luxe-keep-exploring__price">{{ variant.price | money }}</p>
+        {%- if product.available -%}
+          {%- form 'product', product, class: 'luxe-keep-exploring__form' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            <button type="submit" name="add" class="button luxe-keep-exploring__atc">
+              Add to Bag
+            </button>
+          {%- endform -%}
+        {%- else -%}
+          <span class="luxe-keep-exploring__sold-out">Sold out</span>
+        {%- endif -%}
+      </div>
+    </article>
+    {%- assign cards_rendered = cards_rendered | plus: 1 -%}
+  {%- endfor -%}
+{%- else -%}
+  {%- for product in products limit: card_limit -%}
+    {%- if exclude_product_id != blank and product.id == exclude_product_id -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- assign variant = product.selected_or_first_available_variant -%}
+    <article class="luxe-keep-exploring__card" role="listitem">
+      <a href="{{ variant.url }}" class="luxe-keep-exploring__media-link">
+        <div class="luxe-keep-exploring__media">
+          {%- if product.featured_image -%}
+            {{
+              product.featured_image
+              | image_url: width: 480
+              | image_tag: loading: 'lazy', alt: product.title, class: 'luxe-keep-exploring__image', width: 240, height: 240
+            }}
+          {%- else -%}
+            <img
+              src="{{ 'luxe-leaf-tea-assortment-hero.png' | asset_url }}"
+              alt="{{ product.title }}"
+              width="240"
+              height="240"
+              loading="lazy"
+              class="luxe-keep-exploring__image"
+            >
+          {%- endif -%}
+          {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
+        </div>
+      </a>
+      <div class="luxe-keep-exploring__body">
+        <h3 class="luxe-keep-exploring__title">
+          <a href="{{ variant.url }}">{{ product.title }}</a>
+        </h3>
+        <p class="luxe-keep-exploring__price">{{ variant.price | money }}</p>
+        {%- if product.available -%}
+          {%- form 'product', product, class: 'luxe-keep-exploring__form' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            <button type="submit" name="add" class="button luxe-keep-exploring__atc">
+              Add to Bag
+            </button>
+          {%- endform -%}
+        {%- else -%}
+          <span class="luxe-keep-exploring__sold-out">Sold out</span>
+        {%- endif -%}
+      </div>
+    </article>
+  {%- endfor -%}
+{%- endif -%}
