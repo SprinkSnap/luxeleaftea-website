@@ -50,19 +50,17 @@ The homepage includes:
 
 ## About page
 
-Create a page in Shopify admin (required for `/pages/about` — until then, **About** in the menu scrolls to our story on the homepage):
-
-1. **Online Store → Pages → Add page**
-2. Title: `About` (handle must be `about`)
-3. Template: **Default page** or suffix **`about`** — both show the premium About layout
+1. **Online Store → Pages → About**
+2. Confirm handle is **`about`**
+3. **Theme template:** select **`about`** (recommended) or **Default page**
+4. Save, then **Themes → Publish** after pulling latest from GitHub
 
 ## Contact page
 
-Create a page in Shopify admin:
-
-1. **Online Store → Pages → Add page**
-2. Title: `Contact` (handle must be `contact`)
-3. Template: **Default page** or suffix **`contact`** — both show the premium Contact layout
+1. **Online Store → Pages → Contact**
+2. Confirm handle is **`contact`**
+3. **Theme template:** select **`contact`** (recommended) or **Default page**
+4. Save, then publish the theme
 
 ## Navigation
 

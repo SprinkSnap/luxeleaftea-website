@@ -8,6 +8,9 @@
   if luxe_page_type == 'about'
     assign render_luxe_about = true
   endif
+  if template.suffix == 'about' or template contains 'page.about'
+    assign render_luxe_about = true
+  endif
 -%}
 
 {%- if render_luxe_about -%}
