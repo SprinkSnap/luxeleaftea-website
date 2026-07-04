@@ -11,6 +11,10 @@
 
   assign tea_type = 'premium'
   assign tag_handles = product.tags | join: ',' | downcase
+  assign is_bubble_tea = false
+  if tag_handles contains 'bubble-tea' or tag_handles contains 'bubble tea'
+    assign is_bubble_tea = true
+  endif
 
   if tag_handles contains 'green-tea' or tag_handles contains 'green tea'
     assign tea_type = 'green'
@@ -49,6 +53,20 @@
       assign default_brewing = '<p><strong>Leaf:</strong> 3g per 150ml water<br><strong>Water:</strong> 185–205°F depending on tea style<br><strong>Time:</strong> 1–3 minutes<br><strong>Re-steeps:</strong> Quality loose leaf can be re-steeped multiple times</p>'
   endcase
 
+  assign title_downcase = product.title | downcase
+  if title_downcase contains 'assam'
+    assign default_origin = '<p>Bold Assam black tea from India&apos;s premier tea-growing region. Selected for brisk malt and the strength milk tea and bubble tea need.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Malt, honey, brisk<br><strong>Palate:</strong> Full-bodied, malty, classic milk-tea character<br><strong>Finish:</strong> Clean and bold — holds up to ice and dairy</p>'
+  endif
+  if title_downcase contains 'peach' and title_downcase contains 'oolong'
+    assign default_origin = '<p>Peach-scented oolong crafted for a smooth hot cup and fruit-forward bubble tea builds.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Peach, orchid, honey<br><strong>Palate:</strong> Rounded, gently sweet, lightly fruity<br><strong>Finish:</strong> Soft and crowd-pleasing — ideal for peach bubble tea</p>'
+  endif
+  if title_downcase contains 'jasmine' and is_bubble_tea
+    assign default_origin = '<p>Jasmine-scented green tea from traditional gardens. Fragrant hot, and a reliable base for jasmine green bubble tea.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Fresh jasmine, spring greens<br><strong>Palate:</strong> Light, floral, clean<br><strong>Finish:</strong> Bright and refreshing — pairs well with milk and ice</p>'
+  endif
+
   if origin == blank
     assign origin_html = default_origin
   else
@@ -62,7 +80,20 @@
   endif
 
   if brewing == blank
-    assign brewing_html = default_brewing
+    if is_bubble_tea
+      case tea_type
+        when 'green'
+          assign brewing_html = '<p><strong>Hot cup:</strong> 3g per 150ml · 175–185°F · 1–2 minutes<br><strong>Bubble tea batch:</strong> 40g per 2L water · 185°F · steep 8–10 minutes · strain · mix with milk, sweetener &amp; ice · add tapioca or fruit toppings<br><strong>Tip:</strong> Brew stronger for milk tea — the ice and dairy will soften the cup.</p>'
+        when 'oolong'
+          assign brewing_html = '<p><strong>Hot cup:</strong> 4g per 150ml · 195–205°F · 2–3 minutes<br><strong>Bubble tea batch:</strong> 45g per 2L water · 205°F · steep 10–12 minutes · strain · blend with peach syrup, milk &amp; ice for fruit milk tea<br><strong>Tip:</strong> Peach oolong shines in fruit-forward bubble tea and iced tea lattes.</p>'
+        when 'black'
+          assign brewing_html = '<p><strong>Hot cup:</strong> 3g per 150ml · 200–212°F · 3–4 minutes<br><strong>Bubble tea batch:</strong> 50g per 2L water · 205–212°F · steep 10–15 minutes · strain · classic ratio 1:30–1:40 leaf to water for milk tea · serve over ice with boba<br><strong>Tip:</strong> Assam-style black tea is the classic bold base for classic milk tea.</p>'
+        else
+          assign brewing_html = '<p><strong>Hot cup:</strong> 3g per 150ml · 185–205°F · 1–3 minutes<br><strong>Bubble tea batch:</strong> 40–50g per 2L water · just off boil · steep 10–15 minutes · strain · mix with milk, sweetener &amp; ice<br><strong>Tip:</strong> Brew a strong concentrate — ice and toppings dilute the final drink.</p>'
+      endcase
+    else
+      assign brewing_html = default_brewing
+    endif
   else
     assign brewing_html = brewing | metafield_tag
   endif
@@ -97,6 +128,12 @@
   else
     assign tea_collection_url = '/collections/all'
   endif
+
+  assign bubble_tea_collection_url = '/collections/bubble-tea'
+  assign bubble_tea_collection = collections['bubble-tea']
+  if bubble_tea_collection.url != blank
+    assign bubble_tea_collection_url = bubble_tea_collection.url
+  endif
 -%}
 
 <section
@@ -106,13 +143,17 @@
 >
   <div class="luxe-product-guide__trust">
     <span class="luxe-product-guide__trust-icon" aria-hidden="true">{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}</span>
-    {{ section.settings.trust_line }}
+    {%- if is_bubble_tea -%}
+      {{ section.settings.bubble_tea_trust_line | default: section.settings.trust_line }}
+    {%- else -%}
+      {{ section.settings.trust_line }}
+    {%- endif -%}
   </div>
 
   <div class="luxe-product-guide__accordion accordion accordion--caret accordion--dividers">
     <details class="luxe-product-guide__row" {% if section.settings.open_brewing %}open{% endif %}>
       <summary class="luxe-product-guide__summary">
-        <span>How to brew</span>
+        <span>{%- if is_bubble_tea -%}How to brew &amp; bubble tea{%- else -%}How to brew{%- endif -%}</span>
       </summary>
       <div class="luxe-product-guide__content rte">{{ brewing_html }}</div>
     </details>
@@ -133,6 +174,12 @@
   </div>
 
   <div class="luxe-product-guide__links">
+    {%- if is_bubble_tea -%}
+      <a href="{{ bubble_tea_collection_url }}" class="luxe-product-guide__link luxe-link-with-icon">
+        Shop bubble tea teas
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
+    {%- endif -%}
     <a href="{{ tea_collection_url }}" class="luxe-product-guide__link luxe-link-with-icon">
       {{ tea_collection_label }}
       {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
@@ -248,6 +295,12 @@
       "id": "trust_line",
       "label": "Trust line",
       "default": "Packed fresh to order · Premium loose leaf tea · Free shipping over $50"
+    },
+    {
+      "type": "text",
+      "id": "bubble_tea_trust_line",
+      "label": "Bubble tea trust line",
+      "default": "Drink hot or brew for bubble tea · Premium loose leaf · Free shipping over $50"
     },
     {
       "type": "checkbox",

@@ -59,6 +59,34 @@ Add one tag per product so the product page shows the correct brewing, origin, a
 | `pu-erh` | Pu-erh |
 | `black-tea` | Black |
 
+For **bubble tea** products, also add the `bubble-tea` tag. The product page will show dual brew guides (hot cup + batch ratios) and bubble-tea copy.
+
+| Tag | Tea type | Use |
+|-----|----------|-----|
+| `bubble-tea` | Any | Hot cup + bubble tea batch brewing on product page |
+
+### Bubble tea line (hot cup + boba)
+
+These teas are **for drinking hot** but **mainly for bubble tea** — strong enough for milk tea bases and fruit tea builds.
+
+| Product | Tags | Best for |
+|---------|------|----------|
+| Assam Black Tea | `black-tea`, `bubble-tea` | Classic milk tea / black boba base |
+| Peach Oolong | `oolong`, `bubble-tea` | Peach and fruit bubble teas |
+| Jasmine Green Tea | `green-tea`, `bubble-tea` | Green / jasmine bubble tea |
+
+Sample import rows are in `docs/SAMPLE_PRODUCTS_IMPORT.csv`.
+
+## 4b. Bubble Tea collection
+
+**Products → Collections → Create collection**
+
+| Title | Handle | Condition |
+|-------|--------|-----------|
+| Bubble Tea | `bubble-tea` | Product tag equals `bubble-tea` |
+
+Suggested SEO description: *Premium loose leaf teas for bubble tea — Assam, peach oolong, and jasmine green. Brew hot or batch for boba.*
+
 ## 5. Optional product metafields (advanced)
 
 Create custom metafields under **Settings → Custom data → Products**:
