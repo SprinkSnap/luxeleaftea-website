@@ -2,6 +2,17 @@
   In-store boutique experience section — sensory shopping for premium loose leaf tea.
 {%- enddoc -%}
 
+{%- liquid
+  assign show_luxe_store = true
+  if template.name == 'page'
+    assign show_luxe_store = false
+    if page.handle == 'about' or template.suffix == 'about'
+      assign show_luxe_store = true
+    endif
+  endif
+-%}
+
+{%- if show_luxe_store -%}
 <section class="luxe-store section section--page-width spacing-style" id="tea-store-experience">
   <div class="luxe-store__layout">
     <div class="luxe-store__copy">
@@ -70,6 +81,7 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-store {

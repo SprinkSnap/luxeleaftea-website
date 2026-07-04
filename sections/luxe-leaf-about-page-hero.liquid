@@ -25,6 +25,8 @@
     assign shop_tea_url = collections.all.url
   endif
 
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
+
   assign page_url = shop.url | append: page.url
   assign page_desc = section.settings.intro | strip_html | truncate: 300
 -%}
@@ -62,7 +64,7 @@
           {{ section.settings.primary_label }}
         </a>
         {%- if section.settings.secondary_label != blank -%}
-          <a href="{{ section.settings.secondary_link | default: '/pages/contact' }}" class="button button-secondary luxe-about-page__cta-secondary">
+          <a href="{{ section.settings.secondary_link | default: contact_url }}" class="button button-secondary luxe-about-page__cta-secondary">
             {{ section.settings.secondary_label }}
           </a>
         {%- endif -%}

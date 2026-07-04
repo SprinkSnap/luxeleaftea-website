@@ -1,4 +1,15 @@
 
+{%- liquid
+  assign show_luxe_proof = true
+  if template.name == 'page'
+    assign show_luxe_proof = false
+    if page.handle == 'about' or template.suffix == 'about'
+      assign show_luxe_proof = true
+    endif
+  endif
+-%}
+
+{%- if show_luxe_proof -%}
 <section
   class="luxe-proof section section--page-width spacing-style"
   style="{% render 'spacing-style', settings: section.settings %}"
@@ -25,6 +36,7 @@
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-proof {

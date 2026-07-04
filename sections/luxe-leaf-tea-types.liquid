@@ -2,6 +2,17 @@
   Tea type collection cards for homepage and collection browsing.
 {%- enddoc -%}
 
+{%- liquid
+  assign show_luxe_tea_types = true
+  if template.name == 'page'
+    assign show_luxe_tea_types = false
+    if page.handle == 'about' or template.suffix == 'about'
+      assign show_luxe_tea_types = true
+    endif
+  endif
+-%}
+
+{%- if show_luxe_tea_types -%}
 <section
   class="luxe-tea-types section section--page-width spacing-style"
   id="shop-by-type"
@@ -64,6 +75,7 @@
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-tea-types {

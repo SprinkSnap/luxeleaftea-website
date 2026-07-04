@@ -135,6 +135,63 @@
         "padding-block-end": 56
       }
     },
+    "store_experience": {
+      "type": "luxe-leaf-store-experience",
+      "settings": {
+        "eyebrow": "Shop like you're in our tea room",
+        "heading": "Premium loose leaf tea, picked for your cup",
+        "intro": "No guesswork — whole leaves you can see, smell, and steep. We pack every order fresh so your first sip tastes like it came straight from the counter.",
+        "primary_label": "Shop Premium Loose Leaf Tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Explore Tea Types",
+        "secondary_link": "shopify://collections"
+      }
+    },
+    "social_proof": {
+      "type": "luxe-leaf-social-proof",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "quote": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea.",
+            "author": "Sarah M."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. My daily ritual now.",
+            "author": "James L."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "Finally found premium loose leaf tea that feels special without being intimidating.",
+            "author": "Elena K."
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "tea_types": {
+      "type": "luxe-leaf-tea-types",
+      "settings": {
+        "eyebrow": "Shop by type",
+        "heading": "Explore premium loose leaf tea",
+        "intro": "Find your next cup — bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
+        "padding-block-start": 48,
+        "padding-block-end": 24
+      }
+    },
     "main": {
       "type": "main-page",
       "blocks": {
@@ -212,7 +269,10 @@
     "trust_bar",
     "contact",
     "about_hero",
+    "store_experience",
     "about_content",
+    "social_proof",
+    "tea_types",
     "main",
     "keep_exploring",
     "shop_cta"
