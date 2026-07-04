@@ -99,7 +99,6 @@
 
 {%- unless settings.brand_navigation == false -%}
   {%- unless template.name == 'cart' -%}
-    <script type="module" src="{{ 'luxe-leaf-mobile-commerce.js' | asset_url }}"></script>
     <nav
       class="luxe-mobile-bar{% if cart.item_count > 0 %} luxe-mobile-bar--has-cart{% endif %}"
       aria-label="Quick shop navigation"

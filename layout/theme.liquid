@@ -59,6 +59,9 @@
     >
     {{ 'luxe-leaf-theme.css' | asset_url | stylesheet_tag }}
     <script type="module" src="{{ 'luxe-leaf-brand-nav.js' | asset_url }}"></script>
+    {%- unless settings.brand_navigation == false -%}
+      <script type="module" src="{{ 'luxe-leaf-mobile-commerce.js' | asset_url }}"></script>
+    {%- endunless -%}
     {%- render 'luxe-leaf-nav-schema' -%}
 
     {% style %}

@@ -1,9 +1,12 @@
 /**
- * Mobile commerce bar — syncs checkout total after cart changes.
+ * Mobile commerce bar + reliable search/checkout actions for Luxe Leaf Tea.
  */
 import { StandardEvents } from '@shopify/events';
 
 (function initMobileCommerce() {
+  if (window.__luxeMobileCommerceInit) return;
+  window.__luxeMobileCommerceInit = true;
+
   const formatMoney = (cents) => {
     if (window.Shopify?.formatMoney) {
       return Shopify.formatMoney(cents, window.theme?.moneyFormat || '${{amount}}');
@@ -20,20 +23,20 @@ import { StandardEvents } from '@shopify/events';
       if (!res.ok) return;
       const cart = await res.json();
 
-      const checkoutLink = bar.querySelector('[data-mobile-checkout]');
+      const checkoutButton = bar.querySelector('[data-mobile-checkout]');
       const cartBtn = bar.querySelector('[data-mobile-cart-toggle]');
       const countEl = bar.querySelector('[data-mobile-cart-count]');
 
       if (cart.item_count > 0) {
         bar.classList.add('luxe-mobile-bar--has-cart');
-        if (checkoutLink) {
-          checkoutLink.hidden = false;
-          checkoutLink.textContent = `Checkout · ${formatMoney(cart.total_price)}`;
+        if (checkoutButton) {
+          checkoutButton.hidden = false;
+          checkoutButton.textContent = `Checkout · ${formatMoney(cart.total_price)}`;
         }
         if (cartBtn) cartBtn.hidden = true;
       } else {
         bar.classList.remove('luxe-mobile-bar--has-cart');
-        if (checkoutLink) checkoutLink.hidden = true;
+        if (checkoutButton) checkoutButton.hidden = true;
         if (cartBtn) cartBtn.hidden = false;
       }
 
@@ -46,38 +49,68 @@ import { StandardEvents } from '@shopify/events';
     }
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    syncBar();
-    bindMobileMenuToggle();
-    bindCheckoutFallback();
-  });
-  document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
+  function submitCartCheckout(form) {
+    if (!form) return false;
 
-  function bindCheckoutFallback() {
+    let checkoutInput = form.querySelector('input[name="checkout"]');
+    if (!checkoutInput) {
+      checkoutInput = document.createElement('input');
+      checkoutInput.type = 'hidden';
+      checkoutInput.name = 'checkout';
+      checkoutInput.value = '';
+      form.appendChild(checkoutInput);
+    }
+
+    form.method = 'post';
+    form.action = form.action || window.Theme?.routes?.cart_url || '/cart';
+    form.submit();
+    return true;
+  }
+
+  function bindCheckoutActions() {
     document.addEventListener('click', (event) => {
-      const button = event.target.closest('.cart__checkout-button[name="checkout"]');
-      if (!button || button.disabled) return;
-      if (button.form) return;
+      const button = event.target.closest('[data-mobile-checkout], .cart__checkout-button[name="checkout"]');
+      if (!button || button.disabled || button.hidden) return;
 
-      const formId = button.getAttribute('form');
-      if (!formId) return;
-
-      const form = document.getElementById(formId);
-      if (!form) return;
+      const form =
+        button.form ||
+        (button.getAttribute('form') ? document.getElementById(button.getAttribute('form')) : null) ||
+        button.closest('form');
 
       event.preventDefault();
 
-      if (typeof form.requestSubmit === 'function') {
-        form.requestSubmit(button);
-        return;
-      }
+      if (submitCartCheckout(form)) return;
 
-      const checkoutField = document.createElement('input');
-      checkoutField.type = 'hidden';
-      checkoutField.name = 'checkout';
-      form.appendChild(checkoutField);
-      form.submit();
+      window.location.href = '/checkout';
     });
+  }
+
+  function bindSearchActions() {
+    document.addEventListener(
+      'click',
+      (event) => {
+        const button = event.target.closest('.search-action button');
+        if (!button) return;
+
+        const modal = document.getElementById('search-modal');
+        if (!modal) return;
+
+        const openSearch = () => {
+          if (typeof modal.showDialog === 'function') {
+            modal.showDialog();
+            return;
+          }
+
+          customElements.whenDefined('dialog-component').then(() => {
+            customElements.upgrade(modal);
+            modal.showDialog?.();
+          });
+        };
+
+        openSearch();
+      },
+      true
+    );
   }
 
   function bindMobileMenuToggle() {
@@ -93,4 +126,12 @@ import { StandardEvents } from '@shopify/events';
     observer.observe(panel, { attributes: true, attributeFilter: ['hidden'] });
     syncExpanded();
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    syncBar();
+    bindMobileMenuToggle();
+    bindCheckoutActions();
+    bindSearchActions();
+  });
+  document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
 })();

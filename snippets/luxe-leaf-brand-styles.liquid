@@ -292,7 +292,27 @@
       grid-area: center;
       z-index: 1;
       max-width: min(10rem, 52vw);
+      pointer-events: none;
+    }
+
+    body.luxe-leaf-theme #header-component .header-logo__image-container,
+    body.luxe-leaf-theme #header-component .header-logo__image {
       pointer-events: auto;
+    }
+
+    body.luxe-leaf-theme #header-component .search-action {
+      position: relative;
+      z-index: 3;
+      grid-area: rightA !important;
+    }
+
+    body.luxe-leaf-theme #header-component .search-action--hidden-on-menu {
+      display: none !important;
+    }
+
+    body.luxe-leaf-theme #header-component header-actions {
+      position: relative;
+      z-index: 3;
     }
 
     body.luxe-leaf-theme #header-component .header__column--left,
