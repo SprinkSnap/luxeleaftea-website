@@ -21,14 +21,23 @@
     assign luxe_is_contact = true
   endif
 
+  assign luxe_is_faq = false
+  if template.suffix == 'faq'
+    assign luxe_is_faq = true
+  elsif page.handle == 'faq'
+    assign luxe_is_faq = true
+  endif
+
   if luxe_page_scope == 'about' and luxe_is_about == false
     assign luxe_scope_ok = false
   elsif luxe_page_scope == 'contact' and luxe_is_contact == false
     assign luxe_scope_ok = false
+  elsif luxe_page_scope == 'faq' and luxe_is_faq == false
+    assign luxe_scope_ok = false
   elsif luxe_page_scope == 'about_or_contact' and luxe_is_about == false and luxe_is_contact == false
     assign luxe_scope_ok = false
   elsif luxe_page_scope == 'general'
-    if luxe_is_about or luxe_is_contact
+    if luxe_is_about or luxe_is_contact or luxe_is_faq
       assign luxe_scope_ok = false
     elsif template.name != 'page'
       assign luxe_scope_ok = false
