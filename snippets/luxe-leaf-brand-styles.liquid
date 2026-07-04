@@ -66,11 +66,11 @@
     --color-account-icon: var(--luxe-nav-ink);
     background: var(--luxe-nav-ivory) !important;
     border-bottom: 1px solid rgb(26 26 26 / 0.08);
-    min-height: 4.25rem;
+    min-height: 4.75rem;
   }
 
   #header-component.header--compact .header__row--top {
-    min-height: 4rem;
+    min-height: 4.5rem;
   }
 
   #header-component .header-actions__action,
@@ -289,9 +289,9 @@
     position: relative;
     z-index: 1;
     padding-inline: 0;
-    max-width: min(15rem, 62vw);
+    max-width: min(20rem, 82vw);
     flex: 0 1 auto;
-    overflow: hidden;
+    overflow: visible;
     justify-self: center;
     margin-inline: auto;
   }
@@ -302,24 +302,24 @@
     max-width: 100%;
   }
 
-  .luxe-brand-logo__image,
-  .header-logo__image {
+  body.luxe-leaf-theme #header-component .header-logo__image,
+  body.luxe-leaf-theme #header-component .luxe-brand-logo__image {
     object-fit: contain;
     filter: none;
     max-width: 100%;
     width: auto !important;
-    height: auto !important;
-    max-height: var(--header-logo-image-height-mobile, 44px);
+    height: var(--header-logo-image-height-mobile, 56px) !important;
+    max-height: none !important;
   }
 
   @media screen and (min-width: 750px) {
     .header-logo {
-      max-width: 15rem;
+      max-width: 20rem;
     }
 
-    .header-logo__image,
-    .luxe-brand-logo__image {
-      max-height: var(--header-logo-image-height, 52px);
+    body.luxe-leaf-theme #header-component .header-logo__image,
+    body.luxe-leaf-theme #header-component .luxe-brand-logo__image {
+      height: var(--header-logo-image-height, 72px) !important;
     }
   }
 
@@ -346,7 +346,7 @@
       transform: translate(-50%, -50%);
       grid-area: center;
       z-index: 1;
-      max-width: min(14rem, 68vw);
+      max-width: min(18rem, 84vw);
       pointer-events: none;
     }
 

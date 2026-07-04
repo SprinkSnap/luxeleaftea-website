@@ -21,6 +21,16 @@
   endif
 
   assign alt_text_fallback = 'accessibility.home_logo_alt' | t: store_name: shop.name
+
+  assign brand_logo_height = 72
+  assign brand_logo_height_mobile = 56
+  assign logo_height = settings.logo_height | default: brand_logo_height
+  assign logo_height_mobile = settings.logo_height_mobile | default: brand_logo_height_mobile
+
+  unless settings.brand_navigation == false
+    assign logo_height = brand_logo_height
+    assign logo_height_mobile = brand_logo_height_mobile
+  endunless
 %}
 
 {% comment %}
@@ -32,7 +42,7 @@
     data-hidden-on-home-page
   {% endif %}
   href="{{ routes.root_url }}"
-  class="size-style spacing-style header-logo"
+  class="size-style spacing-style header-logo{% unless settings.brand_navigation == false %} header-logo--brand{% endunless %}"
   aria-label="{{ shop.name | escape }} — home"
   style="
     {% render 'size-style', settings: block_settings %}
@@ -40,27 +50,29 @@
     --font-family: var(--font-body--family);
     --font-style: var(--font-body--style);
     --font-weight: 600;
+    --header-logo-image-height: {{ logo_height }}px;
+    --header-logo-image-height-mobile: {{ logo_height_mobile }}px;
   "
   {{ block.shopify_attributes }}
 >
   {% liquid
     assign brand_logo_aspect_ratio = 4.52
 
-    if settings.logo != blank
-      assign logo_width = settings.logo_height | times: settings.logo.aspect_ratio | ceil
-      assign logo_width_mobile = settings.logo_height_mobile | times: settings.logo.aspect_ratio | ceil
+    if settings.logo != blank and settings.brand_navigation == false
+      assign logo_width = logo_height | times: settings.logo.aspect_ratio | ceil
+      assign logo_width_mobile = logo_height_mobile | times: settings.logo.aspect_ratio | ceil
     else
-      assign logo_width = settings.logo_height | times: brand_logo_aspect_ratio | round
-      assign logo_width_mobile = settings.logo_height_mobile | times: brand_logo_aspect_ratio | round
+      assign logo_width = logo_height | times: brand_logo_aspect_ratio | round
+      assign logo_width_mobile = logo_height_mobile | times: brand_logo_aspect_ratio | round
     endif
 
     if use_inverse_logo and inverse_logo != blank
-      assign inverse_logo_width = settings.logo_height | times: inverse_logo.aspect_ratio | ceil
-      assign inverse_logo_width_mobile = settings.logo_height_mobile | times: inverse_logo.aspect_ratio | ceil
-      assign inverse_logo_style = '--header-logo-image-width: ' | append: inverse_logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: inverse_logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: settings.logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: settings.logo_height_mobile | append: 'px;'
+      assign inverse_logo_width = logo_height | times: inverse_logo.aspect_ratio | ceil
+      assign inverse_logo_width_mobile = logo_height_mobile | times: inverse_logo.aspect_ratio | ceil
+      assign inverse_logo_style = '--header-logo-image-width: ' | append: inverse_logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: inverse_logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: logo_height_mobile | append: 'px;'
     endif
 
-    assign logo_style = '--header-logo-image-width: ' | append: logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: settings.logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: settings.logo_height_mobile | append: 'px;'
+    assign logo_style = '--header-logo-image-width: ' | append: logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: logo_height_mobile | append: 'px;'
   %}
 
   <span
@@ -71,13 +83,19 @@
       {% render 'image',
         image: settings.logo,
         class: 'header-logo__image',
-        height: settings.logo_height,
+        height: logo_height,
         alt_text_fallback: alt_text_fallback,
         text_fallback: shop.name,
         style: logo_style
       %}
     {% else %}
-      {% render 'luxe-leaf-tea-logo', style: logo_style, class: 'header-logo__image', alt: alt_text_fallback %}
+      {% render 'luxe-leaf-tea-logo',
+        style: logo_style,
+        class: 'header-logo__image',
+        alt: alt_text_fallback,
+        logo_height: logo_height,
+        logo_height_mobile: logo_height_mobile
+      %}
     {% endif %}
   </span>
 
@@ -89,7 +107,7 @@
       {% render 'image',
         image: inverse_logo,
         class: 'header-logo__image',
-        height: settings.logo_height,
+        height: logo_height,
         alt_text_fallback: alt_text_fallback,
         text_fallback: shop.name,
         style: inverse_logo_style
@@ -102,8 +120,8 @@
   .header-logo {
     display: flex;
     height: 100%;
-    max-width: min(15rem, 62vw);
-    overflow: hidden;
+    max-width: min(20rem, 82vw);
+    overflow: visible;
     flex: 0 1 auto;
     font-size: var(--font-size--md);
     font-family: var(--font-family);
@@ -132,7 +150,7 @@
 
     @media screen and (min-width: 750px) {
       flex-shrink: 0;
-      max-width: 15rem;
+      max-width: 20rem;
     }
 
     &:hover {
@@ -140,15 +158,24 @@
     }
   }
 
-  .header-logo__image {
+  .header-logo__image,
+  .luxe-brand-logo__image {
     object-fit: contain;
     max-width: 100%;
     width: auto !important;
-    height: auto !important;
-    max-height: var(--header-logo-image-height-mobile);
+    height: var(--header-logo-image-height-mobile, 56px) !important;
+    max-height: none;
 
     @media screen and (min-width: 750px) {
-      max-height: var(--header-logo-image-height);
+      height: var(--header-logo-image-height, 72px) !important;
+    }
+  }
+
+  .header-logo--brand {
+    max-width: min(18rem, 82vw);
+
+    @media screen and (min-width: 750px) {
+      max-width: 20rem;
     }
   }
 

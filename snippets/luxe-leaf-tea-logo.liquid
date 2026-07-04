@@ -4,8 +4,8 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign logo_height = settings.logo_height | default: 52
-  assign logo_height_mobile = settings.logo_height_mobile | default: 44
+  assign logo_height = logo_height | default: settings.logo_height | default: 72
+  assign logo_height_mobile = logo_height_mobile | default: settings.logo_height_mobile | default: 56
   assign logo_width = logo_height | times: 4.52 | round
   assign logo_width_mobile = logo_height_mobile | times: 4.52 | round
   assign logo_alt = alt
@@ -13,15 +13,28 @@
     assign logo_alt = shop.name | append: ' — premium loose leaf tea'
   endif
   assign logo_class = class | default: 'header-logo__image'
+  assign use_large_mobile_asset = false
+  if logo_height_mobile >= 48
+    assign use_large_mobile_asset = true
+  endif
 -%}
 
 <picture class="luxe-brand-logo__picture">
-  <source
-    type="image/webp"
-    media="(max-width: 749px)"
-    srcset="{{ 'luxe-leaf-tea-logo-header-sm.webp' | asset_url }} 162w, {{ 'luxe-leaf-tea-logo-header-sm-2x.webp' | asset_url }} 325w"
-    sizes="{{ logo_width_mobile }}px"
-  >
+  {%- if use_large_mobile_asset -%}
+    <source
+      type="image/webp"
+      media="(max-width: 749px)"
+      srcset="{{ 'luxe-leaf-tea-logo-header.webp' | asset_url }} 217w, {{ 'luxe-leaf-tea-logo-header-2x.webp' | asset_url }} 434w"
+      sizes="{{ logo_width_mobile }}px"
+    >
+  {%- else -%}
+    <source
+      type="image/webp"
+      media="(max-width: 749px)"
+      srcset="{{ 'luxe-leaf-tea-logo-header-sm.webp' | asset_url }} 162w, {{ 'luxe-leaf-tea-logo-header-sm-2x.webp' | asset_url }} 325w"
+      sizes="{{ logo_width_mobile }}px"
+    >
+  {%- endif -%}
   <source
     type="image/webp"
     srcset="{{ 'luxe-leaf-tea-logo-header.webp' | asset_url }} 217w, {{ 'luxe-leaf-tea-logo-header-2x.webp' | asset_url }} 434w"

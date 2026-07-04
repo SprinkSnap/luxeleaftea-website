@@ -9,8 +9,8 @@
  */
 {
   "current": {
-    "logo_height": 52,
-    "logo_height_mobile": 44,
+    "logo_height": 72,
+    "logo_height_mobile": 56,
     "page_background_color": "{{ settings.color_palette.background }}",
     "page_width": "normal",
     "page_text_color": "{{ settings.color_palette.foreground }}",
