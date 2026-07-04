@@ -9,6 +9,10 @@
  */
 {
   "sections": {
+    "trust_bar": {
+      "type": "luxe-leaf-trust-bar",
+      "settings": {}
+    },
     "hero_home": {
       "type": "luxe-leaf-hero",
       "settings": {
@@ -42,6 +46,23 @@
         "view_all_label": "Shop all teas",
         "collection": "all",
         "product_limit": 8
+      }
+    },
+    "keep_exploring": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "eyebrow": "Keep exploring",
+        "heading": "Teas worth another look",
+        "intro": "Swipe through premium loose leaf picks \u2014 one tap to add and keep browsing.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Your recently viewed teas \u2014 add to bag without leaving the page.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 40,
+        "padding-block-end": 40
       }
     },
     "tea_types": {
@@ -239,10 +260,12 @@
     }
   },
   "order": [
+    "trust_bar",
     "hero_home",
     "store_experience",
     "tea_types",
     "featured_teas",
+    "keep_exploring",
     "about_story",
     "brewing_guide",
     "home_faq",

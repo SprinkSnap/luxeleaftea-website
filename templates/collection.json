@@ -145,6 +145,23 @@
         "padding-block-end": 32
       }
     },
+    "keep_exploring": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "eyebrow": "Keep exploring",
+        "heading": "More teas to discover",
+        "intro": "Keep browsing premium loose leaf \u2014 swipe and add without losing your place.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Teas you recently viewed \u2014 one tap to add and keep shopping.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 32,
+        "padding-block-end": 32
+      }
+    },
     "collection_cta": {
       "type": "luxe-leaf-collection-cta",
       "settings": {
@@ -159,6 +176,7 @@
     "breadcrumbs",
     "collection_hero",
     "main",
+    "keep_exploring",
     "collection_cta"
   ]
 }
