@@ -63,7 +63,19 @@
           "id": "brand_navigation",
           "label": "Use Luxe Leaf Tea brand navigation",
           "default": true,
-          "info": "Shows Shop Tea, Collections, Our Story, and Contact in the header menu."
+          "info": "Desktop: Shop Tea, About, Contact. Mobile: hamburger menu with About, Contact, FAQ, plus phone and email. Shop uses the bottom bar on mobile."
+        },
+        {
+          "type": "text",
+          "id": "brand_phone",
+          "label": "Customer service phone",
+          "info": "Shown in the mobile menu. Example: (555) 123-4567"
+        },
+        {
+          "type": "text",
+          "id": "brand_email",
+          "label": "Customer service email",
+          "info": "Shown in the mobile menu. Leave blank to use your Shopify store email."
         },
         {
           "type": "header",

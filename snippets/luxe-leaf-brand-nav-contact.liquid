@@ -1,0 +1,42 @@
+{%- doc -%}
+  Phone and email for mobile nav menu — builds trust and supports conversion.
+{%- enddoc -%}
+
+{%- liquid
+  assign brand_email = settings.brand_email
+  if brand_email == blank
+    assign brand_email = shop.email
+  endif
+
+  assign brand_phone = settings.brand_phone
+  assign brand_phone_display = brand_phone
+  assign brand_phone_href = brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-'
+-%}
+
+<div class="luxe-brand-menu__contact">
+  <p class="luxe-brand-menu__contact-heading">Need help?</p>
+
+  {%- if brand_email != blank -%}
+    <a
+      class="luxe-brand-menu__contact-link luxe-brand-menu__contact-link--email"
+      href="mailto:{{ brand_email | escape }}"
+      title="Email Luxe Leaf Tea customer service"
+    >
+      <span class="luxe-brand-menu__contact-label">Email</span>
+      <span class="luxe-brand-menu__contact-value">{{ brand_email }}</span>
+    </a>
+  {%- endif -%}
+
+  {%- if brand_phone != blank -%}
+    <a
+      class="luxe-brand-menu__contact-link luxe-brand-menu__contact-link--phone"
+      href="tel:{{ brand_phone_href | escape }}"
+      title="Call Luxe Leaf Tea customer service"
+    >
+      <span class="luxe-brand-menu__contact-label">Phone</span>
+      <span class="luxe-brand-menu__contact-value">{{ brand_phone_display }}</span>
+    </a>
+  {%- endif -%}
+
+  <p class="luxe-brand-menu__trust">Free shipping on orders $50+</p>
+</div>

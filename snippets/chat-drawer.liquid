@@ -109,12 +109,15 @@
         type="button"
         class="luxe-mobile-bar__menu button button-secondary"
         data-luxe-nav-toggle
-        aria-label="Open menu — Home, Shop Tea, About, Contact"
+        aria-label="Open menu — About, Contact, FAQ, and customer support"
         aria-controls="LuxeBrandMenuPanel"
         aria-expanded="false"
         data-mobile-menu-toggle
       >
-        Menu
+        <span class="svg-wrapper luxe-mobile-bar__menu-icon" aria-hidden="true">
+          {{- 'icon-hamburger.svg' | inline_asset_content -}}
+        </span>
+        <span class="visually-hidden">Menu</span>
       </button>
       <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
         Shop Tea

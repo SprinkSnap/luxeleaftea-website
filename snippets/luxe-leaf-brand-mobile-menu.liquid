@@ -1,19 +1,12 @@
 {%- doc -%}
-  Lightweight brand mobile menu — no Horizon details/scroll-lock (avoids page freeze).
+  Lightweight brand mobile menu — hamburger overlay, no duplicate Shop CTA.
 {%- enddoc -%}
-
-{%- liquid
-  assign shop_tea_url = routes.all_products_collection_url
-  if collections.all != blank and collections.all.url != blank
-    assign shop_tea_url = collections.all.url
-  endif
--%}
 
 <div class="luxe-brand-menu" data-luxe-brand-menu>
   <button
     type="button"
     class="header__icon header__icon--menu luxe-brand-menu__toggle"
-    aria-label="Open menu — Home, Shop Tea, About, Contact"
+    aria-label="Open menu — About, Contact, FAQ, and customer support"
     aria-expanded="false"
     aria-controls="LuxeBrandMenuPanel"
     data-luxe-nav-toggle
@@ -30,7 +23,7 @@
     aria-hidden="true"
     role="dialog"
     aria-modal="true"
-    aria-label="Site navigation"
+    aria-label="Site menu"
   >
     <button
       type="button"
@@ -55,17 +48,14 @@
         </button>
       </div>
 
-      <nav class="luxe-brand-menu__nav" aria-label="Main site navigation">
+      <nav class="luxe-brand-menu__nav" aria-label="Company pages">
         <ul class="luxe-brand-menu__list list-unstyled" role="list">
           {% render 'luxe-leaf-brand-nav-links', variant: 'panel' %}
         </ul>
       </nav>
 
       <div class="luxe-brand-menu__footer">
-        <a href="{{ shop_tea_url }}" class="button luxe-brand-menu__cta">
-          Shop Premium Tea
-        </a>
-        <p class="luxe-brand-menu__trust">Free shipping on orders $50+</p>
+        {% render 'luxe-leaf-brand-nav-contact' %}
       </div>
     </div>
   </div>

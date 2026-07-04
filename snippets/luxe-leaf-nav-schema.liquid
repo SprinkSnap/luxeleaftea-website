@@ -1,5 +1,5 @@
 {%- doc -%}
-  SiteNavigationElement JSON-LD for SEO — helps search engines understand main nav.
+  SiteNavigationElement JSON-LD for SEO — full site structure for crawlers.
 {%- enddoc -%}
 
 {%- unless settings.brand_navigation == false -%}
@@ -12,18 +12,20 @@
     assign shop_abs = shop.url | append: shop_tea_url
     assign about_abs = shop.url | append: '/pages/about'
     assign contact_abs = shop.url | append: '/pages/contact'
+    assign faq_abs = shop.url | append: '/pages/faq'
   -%}
 
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SiteNavigationElement",
-      "name": ["Home", "Shop Tea", "About", "Contact"],
+      "name": ["Home", "Shop Tea", "About", "Contact", "FAQ"],
       "url": [
         {{ home_abs | json }},
         {{ shop_abs | json }},
         {{ about_abs | json }},
-        {{ contact_abs | json }}
+        {{ contact_abs | json }},
+        {{ faq_abs | json }}
       ]
     }
   </script>

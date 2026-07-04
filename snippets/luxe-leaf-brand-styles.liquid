@@ -227,24 +227,7 @@
     }
 
     body.luxe-leaf-theme #header-component .header__navigation-bar-row {
-      display: block !important;
-      background: var(--luxe-nav-ivory);
-      border-bottom: 1px solid rgb(26 26 26 / 0.08);
-    }
-
-    body.luxe-leaf-theme #header-component .luxe-nav-bar__item {
-      font-family: var(--font-body--family), 'Source Sans 3', system-ui, sans-serif;
-      font-size: 0.8125rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      color: var(--luxe-nav-ink);
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    body.luxe-leaf-theme #header-component .luxe-nav-bar__item--active {
-      color: var(--luxe-nav-jade);
-      font-weight: 600;
+      display: none !important;
     }
 
     #header-component .header__drawer .header__icon--menu {
@@ -431,7 +414,8 @@
 
   .luxe-brand-menu__link {
     display: block;
-    padding: 0.95rem 0;
+    min-height: 3rem;
+    padding: 0.85rem 0;
     border-bottom: 1px solid rgb(26 26 26 / 0.08);
     font-family: var(--font-heading--family), 'Playfair Display', Georgia, serif;
     font-size: 1.35rem;
@@ -448,52 +432,67 @@
   .luxe-brand-menu__footer {
     margin-top: auto;
     padding-top: 1.25rem;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  .luxe-brand-menu__cta {
-    width: 100%;
-    justify-content: center;
-    text-align: center;
+  .luxe-brand-menu__contact {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .luxe-brand-menu__contact-heading {
+    margin: 0 0 0.15rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--luxe-nav-gold);
+  }
+
+  .luxe-brand-menu__contact-link {
+    display: grid;
+    gap: 0.1rem;
+    min-height: 3rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid rgb(26 26 26 / 0.1);
+    border-radius: 0.625rem;
+    background: #fff;
+    color: var(--luxe-nav-ink);
+    text-decoration: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .luxe-brand-menu__contact-link:hover {
+    border-color: rgb(27 67 50 / 0.25);
+    background: rgb(27 67 50 / 0.04);
+  }
+
+  .luxe-brand-menu__contact-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(26 26 26 / 0.55);
+  }
+
+  .luxe-brand-menu__contact-value {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+    word-break: break-word;
   }
 
   .luxe-brand-menu__trust {
-    margin: 0.75rem 0 0;
+    margin: 0.5rem 0 0;
     font-size: 0.75rem;
     letter-spacing: 0.04em;
     text-align: center;
     color: rgb(26 26 26 / 0.62);
   }
 
-  /* Mobile nav strip — always-visible links for conversion */
   @media screen and (max-width: 749px) {
-    body.luxe-leaf-theme #header-component .header__navigation-bar-row {
-      position: sticky;
-      top: 0;
-      z-index: calc(var(--layer-header-menu, 12) - 1);
-    }
-
-    body.luxe-leaf-theme #header-component .menu-list--mobile .menu-list__list {
-      gap: 0.5rem 1.25rem;
-      padding-block: 0.65rem;
-    }
-
-    body.luxe-leaf-theme #header-component .luxe-nav-bar__item {
-      min-height: 2.75rem;
-      display: inline-flex;
-      align-items: center;
-      padding-inline: 0.15rem;
-    }
-
-    body.luxe-leaf-theme #header-component .luxe-nav-bar__item--shop {
-      padding: 0.35rem 0.85rem;
-      border-radius: 999px;
-      background: var(--luxe-nav-jade);
-      color: var(--luxe-nav-ivory) !important;
-      font-weight: 600;
-    }
-
-    body.luxe-leaf-theme #header-component .luxe-nav-bar__item--shop.luxe-nav-bar__item--active {
-      background: #153527;
+    .luxe-brand-menu__sheet {
+      padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
     }
   }
 {% endstylesheet %}

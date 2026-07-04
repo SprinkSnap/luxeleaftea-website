@@ -1,6 +1,6 @@
 {%- doc -%}
-  Luxe Leaf Tea premium navigation — desktop, mobile bar, panel, and drawer.
-  @param {string} variant - 'desktop', 'bar', 'panel', or 'drawer'
+  Luxe Leaf Tea navigation — variant-specific link sets for conversion-focused UX.
+  @param {string} variant - 'desktop', 'panel', 'drawer', or 'bar'
   @param {object} [block_settings] - Drawer block settings (drawer variant only)
 {%- enddoc -%}
 
@@ -13,34 +13,51 @@
   assign home_url = routes.root_url
   assign about_url = '/pages/about'
   assign contact_url = '/pages/contact'
-  assign nav_labels = 'Home|Shop Tea|About|Contact' | split: '|'
+  assign faq_url = '/pages/faq'
+
+  case variant
+    when 'desktop'
+      assign nav_keys = 'shop|about|contact' | split: '|'
+    when 'panel', 'drawer'
+      assign nav_keys = 'about|contact|faq' | split: '|'
+    when 'bar'
+      assign nav_keys = 'about|contact' | split: '|'
+    else
+      assign nav_keys = 'shop|about|contact' | split: '|'
+  endcase
 -%}
 
-{%- for label in nav_labels -%}
+{%- for nav_key in nav_keys -%}
   {%- liquid
-    case forloop.index
-      when 1
-        assign url = home_url
-        assign nav_title = 'Luxe Leaf Tea home — premium loose leaf tea'
-      when 2
+    case nav_key
+      when 'shop'
+        assign label = 'Shop Tea'
         assign url = shop_tea_url
         assign nav_title = 'Shop premium loose leaf tea — green, oolong, pu-erh, and black'
-      when 3
+      when 'about'
+        assign label = 'About'
         assign url = about_url
         assign nav_title = 'About Luxe Leaf Tea — our story and tea sourcing'
-      when 4
+      when 'contact'
+        assign label = 'Contact'
         assign url = contact_url
         assign nav_title = 'Contact Luxe Leaf Tea — orders, questions, and wholesale'
+      when 'faq'
+        assign label = 'FAQ'
+        assign url = faq_url
+        assign nav_title = 'Tea FAQ — brewing, shipping, and choosing loose leaf tea'
     endcase
 
     assign is_active = false
-    if forloop.index == 1 and request.page_type == 'index'
+    if nav_key == 'shop' and request.page_type == 'collection'
       assign is_active = true
-    elsif request.path == url
+    elsif nav_key == 'about' and request.path == about_url
+      assign is_active = true
+    elsif nav_key == 'contact' and request.path == contact_url
+      assign is_active = true
+    elsif nav_key == 'faq' and request.path == faq_url
       assign is_active = true
     endif
-
-    assign nav_key = label | handleize
   -%}
 
   {%- if variant == 'drawer' -%}
@@ -67,7 +84,7 @@
         href="{{ url }}"
         id="MenuItem-luxe-{{ nav_key }}"
         title="{{ nav_title | escape }}"
-        class="menu-list__item luxe-nav-bar__item{% if forloop.index == 2 %} luxe-nav-bar__item--shop{% endif %}{% if is_active %} menu-list__item--active luxe-nav-bar__item--active{% endif %}"
+        class="menu-list__item luxe-nav-bar__item{% if is_active %} menu-list__item--active luxe-nav-bar__item--active{% endif %}"
         {% if is_active %}
           aria-current="page"
         {% endif %}
