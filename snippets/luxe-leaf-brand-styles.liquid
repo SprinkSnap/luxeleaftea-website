@@ -46,6 +46,8 @@
     --luxe-nav-ink: #1a1a1a;
     --luxe-nav-jade: #1b4332;
     --luxe-nav-gold: #c9a227;
+    --luxe-header-logo-height-mobile: clamp(72px, 19vw, 84px);
+    --luxe-header-logo-height-desktop: 96px;
   }
 
   #header-group .header-announcements,
@@ -66,11 +68,11 @@
     --color-account-icon: var(--luxe-nav-ink);
     background: var(--luxe-nav-ivory) !important;
     border-bottom: 1px solid rgb(26 26 26 / 0.08);
-    min-height: 4.75rem;
+    min-height: 5.5rem;
   }
 
   #header-component.header--compact .header__row--top {
-    min-height: 4.5rem;
+    min-height: 5.25rem;
   }
 
   #header-component .header-actions__action,
@@ -289,7 +291,7 @@
     position: relative;
     z-index: 1;
     padding-inline: 0;
-    max-width: min(20rem, 82vw);
+    max-width: min(24rem, 92vw);
     flex: 0 1 auto;
     overflow: visible;
     justify-self: center;
@@ -308,18 +310,26 @@
     filter: none;
     max-width: 100%;
     width: auto !important;
-    height: var(--header-logo-image-height-mobile, 56px) !important;
+    height: var(--luxe-header-logo-height-mobile) !important;
     max-height: none !important;
   }
 
   @media screen and (min-width: 750px) {
     .header-logo {
-      max-width: 20rem;
+      max-width: 27rem;
     }
 
     body.luxe-leaf-theme #header-component .header-logo__image,
     body.luxe-leaf-theme #header-component .luxe-brand-logo__image {
-      height: var(--header-logo-image-height, 72px) !important;
+      height: var(--luxe-header-logo-height-desktop) !important;
+    }
+
+    #header-component .header__row--top {
+      min-height: 6.75rem;
+    }
+
+    #header-component.header--compact .header__row--top {
+      min-height: 6.5rem;
     }
   }
 
@@ -332,7 +342,7 @@
   /* Mobile drawer — smooth ivory panel */
   @media screen and (max-width: 749px) {
     body.luxe-leaf-theme #header-component .header__columns {
-      --header-mobile-bookend: 3.5rem;
+      --header-mobile-bookend: 3.25rem;
     }
 
     body.luxe-leaf-theme #header-component .header__columns {
@@ -346,8 +356,12 @@
       transform: translate(-50%, -50%);
       grid-area: center;
       z-index: 1;
-      max-width: min(18rem, 84vw);
+      max-width: min(22rem, 92vw);
       pointer-events: none;
+    }
+
+    body.luxe-leaf-theme #header-component .header-logo--brand {
+      max-width: min(22rem, 92vw);
     }
 
     body.luxe-leaf-theme #header-component .header-logo__image-container,

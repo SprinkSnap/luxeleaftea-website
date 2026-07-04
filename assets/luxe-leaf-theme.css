@@ -1058,7 +1058,7 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
 
 @media screen and (max-width: 749px) {
   body.luxe-leaf-theme #header-component .header__columns {
-    --header-mobile-bookend: 3.5rem;
+    --header-mobile-bookend: 3.25rem;
   }
 
   body.luxe-leaf-theme #header-component header-actions {

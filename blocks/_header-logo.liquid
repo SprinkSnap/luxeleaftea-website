@@ -22,8 +22,8 @@
 
   assign alt_text_fallback = 'accessibility.home_logo_alt' | t: store_name: shop.name
 
-  assign brand_logo_height = 72
-  assign brand_logo_height_mobile = 56
+  assign brand_logo_height = 96
+  assign brand_logo_height_mobile = 80
   assign logo_height = settings.logo_height | default: brand_logo_height
   assign logo_height_mobile = settings.logo_height_mobile | default: brand_logo_height_mobile
 
@@ -120,7 +120,7 @@
   .header-logo {
     display: flex;
     height: 100%;
-    max-width: min(20rem, 82vw);
+    max-width: min(24rem, 92vw);
     overflow: visible;
     flex: 0 1 auto;
     font-size: var(--font-size--md);
@@ -150,7 +150,7 @@
 
     @media screen and (min-width: 750px) {
       flex-shrink: 0;
-      max-width: 20rem;
+      max-width: 27rem;
     }
 
     &:hover {
@@ -158,24 +158,31 @@
     }
   }
 
+  .header-logo__image-container,
+  .luxe-brand-logo__picture {
+    display: flex;
+    align-items: center;
+    line-height: 0;
+  }
+
   .header-logo__image,
   .luxe-brand-logo__image {
     object-fit: contain;
     max-width: 100%;
     width: auto !important;
-    height: var(--header-logo-image-height-mobile, 56px) !important;
+    height: var(--luxe-header-logo-height-mobile, clamp(72px, 19vw, 84px)) !important;
     max-height: none;
 
     @media screen and (min-width: 750px) {
-      height: var(--header-logo-image-height, 72px) !important;
+      height: var(--luxe-header-logo-height-desktop, 96px) !important;
     }
   }
 
   .header-logo--brand {
-    max-width: min(18rem, 82vw);
+    max-width: min(22rem, 92vw);
 
     @media screen and (min-width: 750px) {
-      max-width: 20rem;
+      max-width: 27rem;
     }
   }
 
