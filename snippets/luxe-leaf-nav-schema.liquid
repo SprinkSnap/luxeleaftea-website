@@ -1,0 +1,30 @@
+{%- doc -%}
+  SiteNavigationElement JSON-LD for SEO — helps search engines understand main nav.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    assign shop_tea_url = routes.all_products_collection_url
+    if collections.all != blank and collections.all.url != blank
+      assign shop_tea_url = collections.all.url
+    endif
+    assign home_abs = shop.url | append: routes.root_url
+    assign shop_abs = shop.url | append: shop_tea_url
+    assign about_abs = shop.url | append: '/pages/about'
+    assign contact_abs = shop.url | append: '/pages/contact'
+  -%}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SiteNavigationElement",
+      "name": ["Home", "Shop Tea", "About", "Contact"],
+      "url": [
+        {{ home_abs | json }},
+        {{ shop_abs | json }},
+        {{ about_abs | json }},
+        {{ contact_abs | json }}
+      ]
+    }
+  </script>
+{%- endunless -%}

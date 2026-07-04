@@ -1,0 +1,73 @@
+{%- doc -%}
+  Lightweight brand mobile menu — no Horizon details/scroll-lock (avoids page freeze).
+{%- enddoc -%}
+
+{%- liquid
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
+-%}
+
+<div class="luxe-brand-menu" data-luxe-brand-menu>
+  <button
+    type="button"
+    class="header__icon header__icon--menu luxe-brand-menu__toggle"
+    aria-label="Open menu — Home, Shop Tea, About, Contact"
+    aria-expanded="false"
+    aria-controls="LuxeBrandMenuPanel"
+    data-luxe-nav-toggle
+  >
+    <span class="svg-wrapper luxe-brand-menu__icon" aria-hidden="true">
+      {{- 'icon-menu.svg' | inline_asset_content -}}
+    </span>
+    <span class="luxe-brand-menu__label">Menu</span>
+  </button>
+
+  <div
+    id="LuxeBrandMenuPanel"
+    class="luxe-brand-menu__panel"
+    hidden
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site navigation"
+  >
+    <button
+      type="button"
+      class="luxe-brand-menu__backdrop"
+      data-luxe-nav-close
+      aria-label="Close menu"
+      tabindex="-1"
+    ></button>
+
+    <div class="luxe-brand-menu__sheet">
+      <div class="luxe-brand-menu__header">
+        <p class="luxe-brand-menu__eyebrow">Luxe Leaf Tea</p>
+        <button
+          type="button"
+          class="luxe-brand-menu__close button-unstyled"
+          data-luxe-nav-close
+          aria-label="Close menu"
+        >
+          <span class="svg-wrapper" aria-hidden="true">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+
+      <nav class="luxe-brand-menu__nav" aria-label="Main site navigation">
+        <ul class="luxe-brand-menu__list list-unstyled" role="list">
+          {% render 'luxe-leaf-brand-nav-links', variant: 'panel' %}
+        </ul>
+      </nav>
+
+      <div class="luxe-brand-menu__footer">
+        <a href="{{ shop_tea_url }}" class="button luxe-brand-menu__cta">
+          Shop Premium Tea
+        </a>
+        <p class="luxe-brand-menu__trust">Free shipping on orders $50+</p>
+      </div>
+    </div>
+  </div>
+</div>

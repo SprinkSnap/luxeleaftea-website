@@ -19,12 +19,16 @@
       data-hydration-key="header-drawer-mobile"
       {{ block.shopify_attributes }}
     >
-      {% render 'header-drawer',
-        linklist: block_settings.menu,
-        data_header_drawer_type: 'mobile-drawer',
-        block: block,
-        section: section
-      %}
+      {% if settings.brand_navigation != false %}
+        {% render 'luxe-leaf-brand-mobile-menu' %}
+      {% else %}
+        {% render 'header-drawer',
+          linklist: block_settings.menu,
+          data_header_drawer_type: 'mobile-drawer',
+          block: block,
+          section: section
+        %}
+      {% endif %}
     </div>
 
   {% when 'navigation_bar' %}

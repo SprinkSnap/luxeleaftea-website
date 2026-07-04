@@ -58,7 +58,8 @@
       rel="stylesheet"
     >
     {{ 'luxe-leaf-theme.css' | asset_url | stylesheet_tag }}
-    <script type="module" src="{{ 'luxe-leaf-header-nav.js' | asset_url }}"></script>
+    <script type="module" src="{{ 'luxe-leaf-brand-nav.js' | asset_url }}"></script>
+    {%- render 'luxe-leaf-nav-schema' -%}
 
     {% style %}
       body {
