@@ -105,6 +105,17 @@
       aria-label="Quick shop navigation"
       data-mobile-shop-bar
     >
+      <button
+        type="button"
+        class="luxe-mobile-bar__menu button button-secondary"
+        on:click="header-drawer/toggle"
+        aria-label="Open menu — Home, Shop Tea, About, Contact"
+        aria-controls="Details-menu-drawer-container"
+        aria-expanded="false"
+        data-mobile-menu-toggle
+      >
+        Menu
+      </button>
       <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
         Shop Tea
       </a>

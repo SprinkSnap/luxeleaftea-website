@@ -101,6 +101,9 @@
   .header-logo {
     display: flex;
     height: 100%;
+    max-width: min(9rem, 34vw);
+    overflow: hidden;
+    flex: 0 1 auto;
     font-size: var(--font-size--md);
     font-family: var(--font-family);
     font-weight: var(--font-weight);
@@ -128,6 +131,7 @@
 
     @media screen and (min-width: 750px) {
       flex-shrink: 0;
+      max-width: 10rem;
     }
 
     &:hover {
@@ -137,12 +141,13 @@
 
   .header-logo__image {
     object-fit: contain;
-    height: var(--header-logo-image-height-mobile);
-    width: var(--header-logo-image-width-mobile);
+    max-width: 100%;
+    width: auto !important;
+    height: auto !important;
+    max-height: var(--header-logo-image-height-mobile);
 
     @media screen and (min-width: 750px) {
-      height: var(--header-logo-image-height);
-      width: var(--header-logo-image-width);
+      max-height: var(--header-logo-image-height);
     }
   }
 

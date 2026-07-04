@@ -46,6 +46,22 @@ import { StandardEvents } from '@shopify/events';
     }
   };
 
-  document.addEventListener('DOMContentLoaded', syncBar);
+  document.addEventListener('DOMContentLoaded', () => {
+    syncBar();
+    bindMobileMenuToggle();
+  });
   document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
+
+  function bindMobileMenuToggle() {
+    const menuBtn = document.querySelector('[data-mobile-menu-toggle]');
+    const drawerDetails = document.getElementById('Details-menu-drawer-container');
+    if (!menuBtn || !drawerDetails) return;
+
+    const syncExpanded = () => {
+      menuBtn.setAttribute('aria-expanded', drawerDetails.hasAttribute('open') ? 'true' : 'false');
+    };
+
+    drawerDetails.addEventListener('toggle', syncExpanded);
+    syncExpanded();
+  }
 })();

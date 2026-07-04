@@ -44,7 +44,7 @@
 
     <li
       style="--menu-drawer-animation-index: {{ animation_index }};"
-      class="menu-drawer__list-item--flat luxe-nav-drawer__item{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+      class="menu-drawer__list-item--flat luxe-nav-drawer__item{% if block_settings != blank and block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
     >
       <a
         id="HeaderDrawer-luxe-{{ drawer_key }}"
