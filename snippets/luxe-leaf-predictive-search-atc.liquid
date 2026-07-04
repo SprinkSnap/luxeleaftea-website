@@ -1,0 +1,37 @@
+{%- doc -%}
+  Compact add-to-cart for predictive search product cards.
+
+  @param {object} product - Product to render
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    if product == blank or product.available == false
+      assign render_atc = false
+    else
+      assign render_atc = true
+      assign variant = product.selected_or_first_available_variant
+      assign is_single_variant = false
+      if product.has_only_default_variant or product.variants_count == 1
+        assign is_single_variant = true
+      endif
+    endif
+  -%}
+
+  {%- if render_atc -%}
+    <div class="luxe-predictive-search-atc">
+      {%- if is_single_variant -%}
+        {%- form 'product', product, class: 'luxe-browse-atc-inline__form luxe-predictive-search__form' -%}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <button type="submit" name="add" class="button luxe-predictive-search-atc__button">
+            Add to Bag
+          </button>
+        {%- endform -%}
+      {%- else -%}
+        <a href="{{ product.url }}" class="button button-secondary luxe-predictive-search-atc__button luxe-predictive-search-atc__link">
+          Choose options
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endunless -%}

@@ -36,7 +36,7 @@
       endif
 
       unless settings.brand_navigation == false
-        if request.page_type == 'collection' or request.page_type == 'search'
+        if request.page_type == 'collection' or request.page_type == 'search' or request.page_type == 'product'
           if product.has_only_default_variant or product.variants_count == 1
             assign show_quick_add = false
           endif

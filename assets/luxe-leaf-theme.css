@@ -1327,3 +1327,44 @@ body.luxe-leaf-theme .content-for-layout {
   }
 }
 
+/* Predictive search shoppable cards */
+.luxe-predictive-search__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.luxe-predictive-search-atc {
+  padding: 0 0.35rem 0.35rem;
+  margin-top: auto;
+}
+
+.luxe-predictive-search-atc__button {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.75rem;
+  border-radius: 999px;
+}
+
+.luxe-predictive-search-atc__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.18);
+  color: var(--luxe-jade, #1b4332);
+}
+
+.luxe-predictive-search__form {
+  margin: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .luxe-predictive-search-atc__button {
+    min-height: 2.5rem;
+    font-size: 0.8125rem;
+  }
+}
+
