@@ -1,16 +1,16 @@
 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
   <g class="luxe-tea-menu-icon__bars">
-    <path d="M2.5 7h9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-    <path d="M2.5 12h9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-    <path d="M2.5 17h9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+    <path d="M4 12.75h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+    <path d="M4 16.25h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+    <path d="M4 19.75h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
   </g>
-  <g class="luxe-tea-menu-icon__leaf-mark">
+  <g class="luxe-tea-menu-icon__leaf-mark" transform="translate(12 7.25) scale(0.52) translate(-10 -10)">
     <path
-      d="M16.5 5.25c-1.35 1.65-2.55 2.45-3.75 3.55-.45.45-.45 1.15 0 1.6.45.45 1.15.45 1.6 0 .65-.65 1.1-1.1 1.75-1.1.65 0 1.1.45 1.75 1.1.45.45 1.15.45 1.6 0 .45-.45.45-1.15 0-1.6-1.2-1.1-2.4-1.9-3.75-3.55z"
+      d="M10 2.5c-2.2 2.8-4.5 4.2-6.5 6.2-.8.8-.8 2.1 0 2.9.8.8 2.1.8 2.9 0 1.2-1.2 2.1-2.4 3.6-2.4s2.4 1.2 3.6 2.4c.8.8 2.1.8 2.9 0 .8-.8.8-2.1 0-2.9-2-2-4.3-3.4-6.5-6.2z"
       stroke="currentColor"
-      stroke-width="1.45"
+      stroke-width="1.35"
       stroke-linejoin="round"
     />
-    <path d="M16.5 13.75V10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+    <path d="M10 17.5V11.75" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/>
   </g>
 </svg>
