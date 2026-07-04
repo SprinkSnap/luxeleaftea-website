@@ -1,0 +1,59 @@
+{%- doc -%}
+  Header bag + login tap targets and cart drawer opener (inline — always loads with header).
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  <style>
+    #header-component .header-actions__action,
+    #header-component .account-button.header-actions__action,
+    #header-component .search-action .header-actions__action {
+      width: 3.5rem !important;
+      height: 3.5rem !important;
+      min-width: 3.5rem !important;
+      min-height: 3.5rem !important;
+    }
+
+    #header-component .header-actions__action .svg-wrapper,
+    #header-component .header-actions__action svg,
+    #header-component .account-button__icon,
+    #header-component .account-button__icon svg,
+    #header-component .search-action svg {
+      width: 1.75rem !important;
+      height: 1.75rem !important;
+    }
+
+    #header-component shopify-account {
+      width: 3.5rem !important;
+      height: 3.5rem !important;
+      min-width: 3.5rem !important;
+      min-height: 3.5rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #header-component .header-actions__cart-icon,
+    #header-component cart-icon.header-actions__cart-icon {
+      pointer-events: none;
+    }
+
+    #header-component button[aria-controls="cart-drawer"],
+    #header-component [data-testid="cart-drawer-trigger"] {
+      position: relative;
+      z-index: 6;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgb(201 162 39 / 0.3);
+    }
+
+    @media screen and (max-width: 749px) {
+      #header-component .header__columns {
+        --header-mobile-bookend: 3.5rem;
+      }
+
+      #header-component header-actions {
+        z-index: 6;
+      }
+    }
+  </style>
+{%- endunless -%}

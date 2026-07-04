@@ -888,7 +888,8 @@ body.luxe-leaf-theme #header-component .header-actions__cart-icon {
   pointer-events: none;
 }
 
-body.luxe-leaf-theme #header-component [data-cart-drawer-toggle] {
+body.luxe-leaf-theme #header-component button[aria-controls="cart-drawer"],
+body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   position: relative;
   z-index: 5;
   cursor: pointer;

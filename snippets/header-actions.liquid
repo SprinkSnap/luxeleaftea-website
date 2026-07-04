@@ -1,3 +1,7 @@
+{%- unless settings.brand_navigation == false -%}
+  {%- render 'luxe-leaf-header-actions-fix' -%}
+{%- endunless -%}
+
 {% doc %}
   Header Actions Component
 
@@ -127,8 +131,7 @@
     <button
       class="header-actions__action button-unstyled{% if display_style == 'text' %} header-actions__text-style{% endif %}"
       type="button"
-      data-cart-drawer-toggle
-      onclick="return window.LuxeLeaf&&window.LuxeLeaf.openCart(event)"
+      on:click="#cart-drawer/toggle"
       aria-haspopup="dialog"
       aria-expanded="false"
       aria-controls="cart-drawer"
