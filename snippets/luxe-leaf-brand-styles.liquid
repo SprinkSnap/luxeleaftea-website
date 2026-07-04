@@ -222,6 +222,17 @@
     }
   }
 
+  /* Always show centered nav on desktop (brand menu must not collapse to drawer) */
+  @media screen and (min-width: 750px) {
+    body.luxe-leaf-theme #header-component .header-menu {
+      display: flex !important;
+    }
+
+    body.luxe-leaf-theme #header-component .header__drawer {
+      display: none !important;
+    }
+  }
+
   @keyframes luxe-nav-drawer-in {
     from {
       opacity: 0;

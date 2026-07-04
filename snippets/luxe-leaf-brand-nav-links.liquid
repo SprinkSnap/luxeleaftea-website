@@ -10,19 +10,10 @@
     assign shop_tea_url = collections.all.url
   endif
 
-  assign new_arrivals_url = shop_tea_url | append: '?sort_by=created-descending'
-  if collections['new-arrivals'] != blank and collections['new-arrivals'].url != blank
-    assign new_arrivals_url = collections['new-arrivals'].url
-  endif
-
-  assign best_sellers_url = shop_tea_url
-  if collections['best-sellers'] != blank and collections['best-sellers'].url != blank
-    assign best_sellers_url = collections['best-sellers'].url
-  endif
-
+  assign home_url = routes.root_url
   assign about_url = '/pages/about'
   assign contact_url = '/pages/contact'
-  assign nav_labels = 'Shop Tea|New Arrivals|Best Sellers|About|Contact' | split: '|'
+  assign nav_labels = 'Home|Shop Tea|About|Contact' | split: '|'
 -%}
 
 {%- if variant == 'drawer' -%}
@@ -31,19 +22,19 @@
     {%- liquid
       case forloop.index
         when 1
-          assign url = shop_tea_url
+          assign url = home_url
         when 2
-          assign url = new_arrivals_url
+          assign url = shop_tea_url
         when 3
-          assign url = best_sellers_url
-        when 4
           assign url = about_url
-        when 5
+        when 4
           assign url = contact_url
       endcase
 
       assign is_active = false
-      if request.path == url
+      if forloop.index == 1 and request.page_type == 'index'
+        assign is_active = true
+      elsif request.path == url
         assign is_active = true
       endif
 
@@ -72,19 +63,19 @@
     {%- liquid
       case forloop.index
         when 1
-          assign url = shop_tea_url
+          assign url = home_url
         when 2
-          assign url = new_arrivals_url
+          assign url = shop_tea_url
         when 3
-          assign url = best_sellers_url
-        when 4
           assign url = about_url
-        when 5
+        when 4
           assign url = contact_url
       endcase
 
       assign is_active = false
-      if request.path == url
+      if forloop.index == 1 and request.page_type == 'index'
+        assign is_active = true
+      elsif request.path == url
         assign is_active = true
       endif
     -%}
