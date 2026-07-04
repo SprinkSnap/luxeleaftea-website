@@ -51,6 +51,44 @@ body .announcement-bar {
   background: #1a1a1a !important;
   color: #faf8f2 !important;
   border-bottom: 1px solid rgb(201 162 39 / 0.35);
+  text-align: center;
+}
+
+body #header-group .announcement-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body #header-group .announcement-bar.section--page-width > * {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+body #header-group .announcement-bar__slider {
+  width: 100%;
+  justify-content: center;
+}
+
+body #header-group .announcement-bar__slides {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+body #header-group .announcement-bar__slider:not(:has(slideshow-arrows)) .announcement-bar__slides {
+  width: 100%;
+}
+
+body #header-group .announcement-bar__slide,
+body #header-group .announcement-bar__text {
+  text-align: center;
+  justify-content: center;
+}
+
+body #header-group .announcement-bar__text {
+  width: 100%;
+  margin: 0 auto;
 }
 
 body #header-component .header__row {
