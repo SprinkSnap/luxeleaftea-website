@@ -214,7 +214,6 @@ import { StandardEvents } from '@shopify/events';
   function goToCheckout(event) {
     if (event) {
       event.preventDefault();
-      event.stopPropagation();
     }
 
     window.location.assign('/checkout');

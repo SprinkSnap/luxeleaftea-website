@@ -847,6 +847,65 @@ body .h4,
   color: #1a1a1a !important;
 }
 
+/* Header login + bag — large tap targets on mobile (overrides section CSS) */
+body.luxe-leaf-theme #header-component {
+  --icon-size-md: 1.75rem;
+  --button-size: 3.5rem;
+  --minimum-touch-target: 3.5rem;
+}
+
+body.luxe-leaf-theme #header-component .header-actions__action,
+body.luxe-leaf-theme #header-component .account-button.header-actions__action {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  min-width: 3.5rem !important;
+  min-height: 3.5rem !important;
+  flex-shrink: 0;
+}
+
+body.luxe-leaf-theme #header-component .header-actions__action:not(.account-button) .svg-wrapper,
+body.luxe-leaf-theme #header-component .header-actions__action:not(.account-button) svg,
+body.luxe-leaf-theme #header-component .account-button__icon,
+body.luxe-leaf-theme #header-component .account-button__icon svg,
+body.luxe-leaf-theme #header-component .search-action svg {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+}
+
+body.luxe-leaf-theme #header-component shopify-account {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  min-width: 3.5rem !important;
+  min-height: 3.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+body.luxe-leaf-theme #header-component .header-actions__cart-icon {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  pointer-events: none;
+}
+
+body.luxe-leaf-theme #header-component [data-cart-drawer-toggle] {
+  position: relative;
+  z-index: 5;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgb(201 162 39 / 0.25);
+}
+
+@media screen and (max-width: 749px) {
+  body.luxe-leaf-theme #header-component .header__columns {
+    --header-mobile-bookend: 3.5rem;
+  }
+
+  body.luxe-leaf-theme #header-component header-actions {
+    z-index: 5;
+  }
+}
+
 .shopify-section:has(.luxe-hero),
 .shopify-section:has(.luxe-trust-bar),
 .shopify-section:has([class^='luxe-']) {

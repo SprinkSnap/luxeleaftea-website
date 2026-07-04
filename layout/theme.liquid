@@ -221,9 +221,7 @@
 
     {% render 'cart-drawer', render_wrapper: true %}
     {% render 'theme-drawer' %}
-    {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
-      <script type="module" src="{{ 'luxe-leaf-cart-drawer-toggle.js' | asset_url }}"></script>
-    {%- endif -%}
+    {% render 'luxe-leaf-cart-drawer-init' %}
 
     {% render 'search-modal' %}
 

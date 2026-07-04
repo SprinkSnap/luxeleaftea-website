@@ -1,0 +1,79 @@
+{%- doc -%}
+  Inline cart drawer opener — works without ES modules so bag icons always respond on mobile.
+{%- enddoc -%}
+
+{%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+  <script>
+    window.LuxeLeaf = window.LuxeLeaf || {};
+
+    window.LuxeLeaf._openCartDirect = function () {
+      var cartUrl = (window.Theme && window.Theme.routes && window.Theme.routes.cart_url) || '/cart';
+      var drawer = document.getElementById('cart-drawer');
+
+      try {
+        if (drawer && window.customElements && window.customElements.get('theme-drawer')) {
+          window.customElements.upgrade(drawer);
+          if (typeof drawer.open === 'function') {
+            drawer.open();
+            return false;
+          }
+          if (typeof drawer.toggle === 'function') {
+            drawer.toggle();
+            return false;
+          }
+        }
+      } catch (e) {
+        /* fall through to cart page */
+      }
+
+      window.location.href = cartUrl;
+      return false;
+    };
+
+    window.LuxeLeaf.openCart = function (evt) {
+      if (evt) {
+        evt.preventDefault();
+        if (evt.stopPropagation) evt.stopPropagation();
+      }
+
+      if (window.Shopify && window.Shopify.actions && window.Shopify.actions.openCart) {
+        window.Shopify.actions.openCart().catch(function () {
+          window.LuxeLeaf._openCartDirect();
+        });
+        return false;
+      }
+
+      return window.LuxeLeaf._openCartDirect();
+    };
+
+    (function bindCartTriggers() {
+      var selector =
+        '[data-cart-drawer-toggle],[data-testid="cart-drawer-trigger"],button[aria-controls="cart-drawer"]';
+      var locked = false;
+
+      function onIntent(evt) {
+        if (evt.type === 'touchend' && evt.changedTouches && evt.changedTouches[0]) {
+          var touch = evt.changedTouches[0];
+          var target = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (!target || !target.closest(selector)) return;
+        } else {
+          if (!evt.target.closest(selector)) return;
+        }
+
+        var trigger = evt.target.closest(selector);
+        if (!trigger || trigger.hidden || trigger.disabled) return;
+        if (locked) return;
+
+        locked = true;
+        window.setTimeout(function () {
+          locked = false;
+        }, 450);
+
+        window.LuxeLeaf.openCart(evt);
+      }
+
+      document.addEventListener('click', onIntent, true);
+      document.addEventListener('touchend', onIntent, { capture: true, passive: false });
+    })();
+  </script>
+{%- endif -%}
