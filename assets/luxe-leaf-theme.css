@@ -1443,7 +1443,7 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   margin: 0 0 0.75rem;
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: rgb(248 246 240 / 0.92);
+  color: #f8f6f0 !important;
 }
 
 .luxe-brand-footer__newsletter-field {
