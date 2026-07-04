@@ -1087,6 +1087,25 @@ body.luxe-leaf-theme #header-component {
 body.luxe-leaf-theme #header-component header-actions {
   display: flex;
   align-items: center;
+  gap: 0;
+}
+
+body.luxe-leaf-theme #header-component .account-button.header-actions__action {
+  align-self: center;
+  line-height: 0;
+  margin: 0;
+}
+
+body.luxe-leaf-theme #header-component shopify-account [slot='signed-out-avatar'],
+body.luxe-leaf-theme #header-component .account-button__icon.svg-wrapper {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  line-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 body.luxe-leaf-theme #header-component .header-actions__action,
@@ -1119,6 +1138,8 @@ body.luxe-leaf-theme #header-component shopify-account {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  align-self: center;
+  line-height: 0 !important;
 }
 
 body.luxe-leaf-theme #header-component .header-actions__cart-icon {
