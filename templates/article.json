@@ -102,11 +102,25 @@
       "settings": {
         "button_link": "shopify://collections/all"
       }
+    },
+    "keep_reading": {
+      "type": "luxe-leaf-keep-reading",
+      "settings": {
+        "blog": "tea-guides",
+        "eyebrow": "Keep reading",
+        "heading": "More tea guides to explore",
+        "intro": "Brewing tips and buying guides \u2014 stay in the story, then shop when you're ready.",
+        "view_all_label": "All tea guides",
+        "article_limit": 4,
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
     }
   },
   "order": [
     "breadcrumbs",
     "section",
+    "keep_reading",
     "article_cta"
   ]
 }

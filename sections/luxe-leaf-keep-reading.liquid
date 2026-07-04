@@ -1,0 +1,335 @@
+{%- doc -%}
+  Keep reading — editorial browse rail for Tea Guides articles (SEO internal linking).
+{%- enddoc -%}
+
+{%- liquid
+  assign guides_blog = blogs[section.settings.blog]
+  if guides_blog == blank
+    assign guides_blog = blogs['tea-guides']
+  endif
+
+  assign article_limit = section.settings.article_limit | default: 4
+  assign articles_rendered = 0
+-%}
+
+{%- if guides_blog != blank and guides_blog.articles_count > 0 -%}
+  <section
+    class="luxe-keep-reading section section--page-width spacing-style"
+    id="keep-reading"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    <div class="luxe-keep-reading__header">
+      <p class="luxe-keep-reading__eyebrow">
+        {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+        {{ section.settings.eyebrow }}
+      </p>
+      <div class="luxe-keep-reading__title-row">
+        <h2 class="luxe-keep-reading__heading">{{ section.settings.heading }}</h2>
+        {%- if guides_blog.url != blank -%}
+          <a href="{{ guides_blog.url }}" class="luxe-keep-reading__view-all luxe-link-with-icon">
+            {{ section.settings.view_all_label }}
+            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+          </a>
+        {%- endif -%}
+      </div>
+      <p class="luxe-keep-reading__intro">{{ section.settings.intro }}</p>
+    </div>
+
+    <div class="luxe-keep-reading__scroll" role="list">
+      {%- for blog_article in guides_blog.articles -%}
+        {%- if article != blank and blog_article.id == article.id -%}
+          {%- continue -%}
+        {%- endif -%}
+        <a class="luxe-keep-reading__card" href="{{ blog_article.url }}" role="listitem">
+          <div class="luxe-keep-reading__media">
+            {%- if blog_article.image -%}
+              {{
+                blog_article.image
+                | image_url: width: 640
+                | image_tag: loading: 'lazy', alt: blog_article.title, class: 'luxe-keep-reading__image', width: 320, height: 200
+              }}
+            {%- else -%}
+              <img
+                src="{{ 'luxe-leaf-tea-assortment-hero.png' | asset_url }}"
+                alt="{{ blog_article.title }}"
+                width="320"
+                height="200"
+                loading="lazy"
+                class="luxe-keep-reading__image"
+              >
+            {%- endif -%}
+          </div>
+          <div class="luxe-keep-reading__body">
+            <p class="luxe-keep-reading__meta">
+              {%- if blog_article.published_at -%}
+                {{ blog_article.published_at | date: '%b %d, %Y' }}
+              {%- endif -%}
+            </p>
+            <h3 class="luxe-keep-reading__title">{{ blog_article.title }}</h3>
+            {%- if blog_article.excerpt != blank -%}
+              <p class="luxe-keep-reading__excerpt">{{ blog_article.excerpt | strip_html | truncate: 110 }}</p>
+            {%- endif -%}
+            <span class="luxe-keep-reading__link luxe-link-with-icon">
+              Read guide
+              {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+            </span>
+          </div>
+        </a>
+        {%- assign articles_rendered = articles_rendered | plus: 1 -%}
+        {%- if articles_rendered >= article_limit -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- capture item_list_elements -%}
+    {%- assign schema_count = 0 -%}
+    {%- for blog_article in guides_blog.articles -%}
+      {%- if article != blank and blog_article.id == article.id -%}{%- continue -%}{%- endif -%}
+      {%- if schema_count >= article_limit -%}{%- break -%}{%- endif -%}
+      {%- if schema_count > 0 -%},{%- endif -%}
+      {
+        "@type": "ListItem",
+        "position": {{ schema_count | plus: 1 }},
+        "url": {{ shop.url | append: blog_article.url | json }},
+        "name": {{ blog_article.title | json }}
+      }
+      {%- assign schema_count = schema_count | plus: 1 -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if item_list_elements != blank -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": {{ section.settings.heading | json }},
+        "itemListElement": [{{ item_list_elements }}]
+      }
+    </script>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .luxe-keep-reading {
+    padding-block: 3rem;
+    background: linear-gradient(180deg, #fff 0%, var(--luxe-cream, #f8f6f0) 100%);
+  }
+
+  .luxe-keep-reading__header {
+    margin-bottom: 1.35rem;
+  }
+
+  .luxe-keep-reading__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.65rem;
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .luxe-keep-reading__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .luxe-keep-reading__heading {
+    margin: 0;
+    font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+    line-height: 1.15;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-keep-reading__view-all {
+    color: var(--luxe-jade, #1b4332);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .luxe-keep-reading__intro {
+    margin: 0;
+    max-width: 36rem;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.82);
+    line-height: 1.6;
+    font-size: 0.9375rem;
+  }
+
+  .luxe-keep-reading__scroll {
+    display: flex;
+    gap: 0.85rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: var(--page-margin, 1.25rem);
+    padding-bottom: 0.35rem;
+    margin-inline: calc(-1 * var(--page-margin, 1.25rem));
+    padding-inline: var(--page-margin, 1.25rem);
+  }
+
+  .luxe-keep-reading__card {
+    flex: 0 0 min(16rem, 78vw);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: var(--luxe-radius-lg, 0.75rem);
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.08);
+    box-shadow: var(--luxe-shadow-soft, 0 4px 20px rgb(27 67 50 / 0.06));
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .luxe-keep-reading__card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--luxe-shadow, 0 8px 28px rgb(27 67 50 / 0.1));
+  }
+
+  .luxe-keep-reading__media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--luxe-cream-dark, #efe9dc);
+  }
+
+  .luxe-keep-reading__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .luxe-keep-reading__body {
+    padding: 0.9rem 0.95rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .luxe-keep-reading__meta {
+    margin: 0;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.55);
+  }
+
+  .luxe-keep-reading__title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-keep-reading__excerpt {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.78);
+  }
+
+  .luxe-keep-reading__link {
+    margin-top: auto;
+    padding-top: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-keep-reading__scroll {
+      gap: 1rem;
+    }
+
+    .luxe-keep-reading__card {
+      flex-basis: min(18rem, 24vw);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf keep reading",
+  "tag": "section",
+  "class": "luxe-keep-reading-section",
+  "settings": [
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Defaults to Tea Guides when empty."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Keep reading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "More tea guides to explore"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Brewing tips, tea types, and buying guides — stay in the story, then shop when you're ready."
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "All tea guides"
+    },
+    {
+      "type": "range",
+      "id": "article_limit",
+      "label": "Article limit",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf keep reading"
+    }
+  ]
+}
+{% endschema %}

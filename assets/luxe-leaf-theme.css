@@ -1139,3 +1139,14 @@ body.luxe-leaf-theme .content-for-layout {
   }
 }
 
+/* Browse rail AJAX add-to-cart feedback */
+.luxe-browse-atc--adding {
+  opacity: 0.75;
+}
+
+.luxe-browse-atc--success {
+  background: var(--luxe-jade, #1b4332) !important;
+  border-color: var(--luxe-jade, #1b4332) !important;
+  color: #fff !important;
+}
+
