@@ -1,0 +1,15 @@
+{%- doc -%}
+  Product card block — inline browse add-to-cart (collection/search grids).
+{%- enddoc -%}
+
+<div {{ block.shopify_attributes }}>
+  {% render 'luxe-leaf-browse-atc-inline', product: closest.product %}
+</div>
+
+{% schema %}
+{
+  "name": "Luxe Leaf browse add to bag",
+  "tag": null,
+  "settings": []
+}
+{% endschema %}

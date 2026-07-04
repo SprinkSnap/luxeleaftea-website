@@ -1291,3 +1291,39 @@ body.luxe-leaf-theme .content-for-layout {
   color: #fff !important;
 }
 
+/* Product grid inline browse add-to-cart */
+.luxe-browse-atc-inline {
+  margin-top: 0.35rem;
+}
+
+.luxe-browse-atc-inline__form {
+  margin: 0;
+}
+
+.luxe-browse-atc-inline__button {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8125rem;
+  border-radius: 999px;
+}
+
+.luxe-browse-atc-inline__button--choose {
+  background: #fff;
+  border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.18);
+  color: var(--luxe-jade, #1b4332);
+}
+
+.luxe-browse-atc-inline__sold-out {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.55);
+}
+
+@media screen and (max-width: 749px) {
+  .luxe-browse-atc-inline__button {
+    min-height: 2.75rem;
+    font-size: 0.875rem;
+  }
+}
+

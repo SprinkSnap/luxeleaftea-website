@@ -4,7 +4,7 @@
 import { CartLinesUpdateEvent, CartErrorEvent, StandardEvents } from '@shopify/events';
 
 const BROWSE_FORM_SELECTOR =
-  '.luxe-keep-exploring__form, .luxe-featured__form, .luxe-cart-upsell__form';
+  '.luxe-keep-exploring__form, .luxe-featured__form, .luxe-cart-upsell__form, .luxe-browse-atc-inline__form';
 
 const ADDING_CLASS = 'luxe-browse-atc--adding';
 const SUCCESS_CLASS = 'luxe-browse-atc--success';
@@ -133,6 +133,18 @@ function bindBrowseAddToCart() {
     if (!(form instanceof HTMLFormElement)) return;
     if (!form.matches(BROWSE_FORM_SELECTOR)) return;
     handleBrowseAdd(form, event);
+  });
+
+  document.addEventListener('click', (event) => {
+    const chooseBtn = event.target.closest('[data-browse-atc-choose]');
+    if (!chooseBtn) return;
+
+    const card = chooseBtn.closest('product-card');
+    const quickChoose = card?.querySelector('.quick-add__button--choose');
+    if (quickChoose instanceof HTMLElement) {
+      event.preventDefault();
+      quickChoose.click();
+    }
   });
 }
 

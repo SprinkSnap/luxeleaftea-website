@@ -29,7 +29,21 @@
     {%- unless settings.brand_navigation == false -%}
       {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
     {%- endunless -%}
-    {%  if settings.quick_add or settings.mobile_quick_add %}
+    {% liquid
+      assign show_quick_add = false
+      if settings.quick_add or settings.mobile_quick_add
+        assign show_quick_add = true
+      endif
+
+      unless settings.brand_navigation == false
+        if request.page_type == 'collection' or request.page_type == 'search'
+          if product.has_only_default_variant or product.variants_count == 1
+            assign show_quick_add = false
+          endif
+        endif
+      endunless
+    %}
+    {% if show_quick_add %}
       {% render 'quick-add', product: product, section_id: section.id %}
     {% endif %}
   {% endunless %}
