@@ -1,10 +1,6 @@
 /*
  * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
+ * FAQ page — premium help center with shop-without-leaving conversion.
  * ------------------------------------------------------------
  */
 {
@@ -16,67 +12,246 @@
         "padding-block-end": 0
       }
     },
+    "trust_bar": {
+      "type": "luxe-leaf-trust-bar",
+      "settings": {}
+    },
     "faq": {
       "type": "luxe-leaf-faq-page",
       "blocks": {
-        "faq_1": {
+        "choose_1": {
           "type": "faq",
           "settings": {
+            "category": "choosing",
+            "question": "How do I choose my first premium loose leaf tea?",
+            "answer": "<p>Start with what you already enjoy — bright and sweet? Try a green like Longjing. Something floral and layered? An oolong. Rich and malty? Black tea. Every tea includes brewing notes, and our Tea Guide can recommend a first cup in one chat.</p>"
+          }
+        },
+        "choose_2": {
+          "type": "faq",
+          "settings": {
+            "category": "choosing",
+            "question": "What's the difference between green, oolong, pu-erh, and black tea?",
+            "answer": "<p><strong>Green</strong> — bright, sweet, grassy. <strong>Oolong</strong> — floral, layered, re-steeps beautifully. <strong>Pu-erh</strong> — deep, smooth, earthy. <strong>Black</strong> — rich, malty, full-bodied. All are whole-leaf premium loose leaf teas — browse by type and add to bag without leaving the site.</p>"
+          }
+        },
+        "choose_3": {
+          "type": "faq",
+          "settings": {
+            "category": "choosing",
+            "question": "I'm new to loose leaf — how much should I buy to start?",
+            "answer": "<p>Most drinkers start with 50–100g — enough for two to four weeks of daily cups. Our bestsellers below are a great first order; one tap adds to bag and opens the cart drawer so you keep browsing.</p>"
+          }
+        },
+        "brew_1": {
+          "type": "faq",
+          "settings": {
+            "category": "brewing",
             "question": "How much loose leaf tea should I use per cup?",
-            "answer": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup.</p>"
+            "answer": "<p>For most premium loose leaf teas, use about <strong>3 grams per 150ml</strong> of water (roughly one heaping teaspoon). Oolongs and pu-erh can use slightly more for a richer cup. Every tea ships with specific gram and timing guidance.</p>"
           }
         },
-        "faq_2": {
+        "brew_2": {
           "type": "faq",
           "settings": {
-            "question": "What water temperature is best for loose leaf green tea?",
-            "answer": "<p>Premium loose leaf green tea brews best at 175–185°F (80–85°C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
+            "category": "brewing",
+            "question": "What water temperature is best for green tea vs oolong?",
+            "answer": "<p><strong>Green tea:</strong> 175–185°F (80–85°C) — never boiling. <strong>Oolong:</strong> 195–205°F (90–96°C). <strong>Black & pu-erh:</strong> just off boil, around 205–212°F. Cooler water keeps delicate greens sweet, not bitter.</p>"
           }
         },
-        "faq_3": {
+        "brew_3": {
           "type": "faq",
           "settings": {
-            "question": "Can you re-steep premium loose leaf tea?",
-            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3–4 infusions; oolongs and pu-erh can offer 4–8.</p>"
+            "category": "brewing",
+            "question": "Can I re-steep premium loose leaf tea?",
+            "answer": "<p>Yes — that's one of the best reasons to choose whole leaves. Greens often yield 3–4 infusions; oolongs and pu-erh can offer 4–8. Add 30–60 seconds each re-steep, or use slightly hotter water on later rounds.</p>"
           }
         },
-        "faq_4": {
+        "brew_4": {
           "type": "faq",
           "settings": {
-            "question": "Why choose loose leaf tea over tea bags?",
-            "answer": "<p>Loose leaf tea uses whole or large leaves that unfurl in water, releasing more aroma and flavor. Premium loose leaf also re-steeps better and offers clearer origin and quality.</p>"
+            "category": "brewing",
+            "question": "Do I need special equipment to brew loose leaf tea?",
+            "answer": "<p>No. A mug with an infuser basket works perfectly for your first cup. Want to go deeper? A gaiwan or small teapot unlocks even more flavor — but premium loose leaf tastes exceptional in a simple infuser mug.</p>"
           }
         },
-        "faq_5": {
+        "order_1": {
           "type": "faq",
           "settings": {
-            "question": "How fresh is the tea when it arrives?",
-            "answer": "<p>Every order is packed fresh after you purchase — not pulled from a long-term shelf. Sealed packaging protects aroma until you open your tin or pouch.</p>"
+            "category": "orders",
+            "question": "How do I add to bag without leaving the page?",
+            "answer": "<p>Tap <strong>Add to Bag</strong> on any product card or bestseller below — your cart drawer opens instantly, no page reload. Keep browsing FAQs, collections, or tea guides, then checkout when you're ready.</p>"
           }
         },
-        "faq_6": {
+        "order_2": {
           "type": "faq",
           "settings": {
+            "category": "orders",
+            "question": "Is checkout secure? What payment methods do you accept?",
+            "answer": "<p>Yes — Shopify secure checkout with SSL encryption. We accept major credit and debit cards, Apple Pay, Google Pay, Shop Pay, and other trusted payment methods shown at checkout. Your payment details are never stored on our servers.</p>"
+          }
+        },
+        "order_3": {
+          "type": "faq",
+          "settings": {
+            "category": "orders",
+            "question": "Can I change or cancel my order after placing it?",
+            "answer": "<p>Contact us as soon as possible — call, email, or chat with our Tea Guide. If your order hasn't been packed yet, we'll do our best to update or cancel it. Once packed fresh to order, changes may not be possible.</p>"
+          }
+        },
+        "ship_1": {
+          "type": "faq",
+          "settings": {
+            "category": "shipping",
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes — free shipping on orders over $50 within the contiguous United States. See checkout for current rates on other destinations.</p>"
+            "answer": "<p>Yes — <strong>free shipping on orders over $50</strong> within the contiguous United States. Orders below $50 show exact shipping at checkout before you pay — no surprises.</p>"
+          }
+        },
+        "ship_2": {
+          "type": "faq",
+          "settings": {
+            "category": "shipping",
+            "question": "How long does shipping take?",
+            "answer": "<p>Most orders ship within 1–2 business days after packing fresh. Standard delivery is typically 3–7 business days depending on your location. You'll receive tracking as soon as your tea leaves our tea room.</p>"
+          }
+        },
+        "ship_3": {
+          "type": "faq",
+          "settings": {
+            "category": "shipping",
+            "question": "How fresh is the tea when it arrives?",
+            "answer": "<p>Every order is <strong>packed fresh after you purchase</strong> — not pulled from a long-term warehouse shelf. Sealed packaging protects aroma and flavor until you open your pouch or tin.</p>"
+          }
+        },
+        "qual_1": {
+          "type": "faq",
+          "settings": {
+            "category": "quality",
+            "question": "Why choose loose leaf tea over tea bags?",
+            "answer": "<p>Whole leaves unfurl in water — more aroma, clearer flavor, and better re-steeps. Premium loose leaf is labeled by origin and style, so you know exactly what you're drinking. No dusty fannings, no mystery blends.</p>"
+          }
+        },
+        "qual_2": {
+          "type": "faq",
+          "settings": {
+            "category": "quality",
+            "question": "Is your tea really packed fresh to order?",
+            "answer": "<p>Yes. We seal your tea after you buy — not weeks or months ahead. That's why Luxe Leaf cups taste vivid and alive, not flat like grocery-store tea sitting on a shelf.</p>"
+          }
+        },
+        "qual_3": {
+          "type": "faq",
+          "settings": {
+            "category": "quality",
+            "question": "What if I'm not happy with my tea?",
+            "answer": "<p>Reach out — we want every cup to feel worth slowing down for. Contact our tea team and we'll help you find a better match or resolve any issue with your order. We stand behind every lot we sell.</p>"
           }
         }
       },
       "block_order": [
-        "faq_1",
-        "faq_2",
-        "faq_3",
-        "faq_4",
-        "faq_5",
-        "faq_6"
+        "choose_1",
+        "choose_2",
+        "choose_3",
+        "brew_1",
+        "brew_2",
+        "brew_3",
+        "brew_4",
+        "order_1",
+        "order_2",
+        "order_3",
+        "ship_1",
+        "ship_2",
+        "ship_3",
+        "qual_1",
+        "qual_2",
+        "qual_3"
       ],
       "settings": {
-        "cta_link": "shopify://collections/all"
+        "eyebrow": "Help center",
+        "heading": "Answers that help you shop with confidence",
+        "intro": "<p>Brewing, checkout, shipping, and choosing your first cup — everything you need to buy premium loose leaf tea without hesitation. Add to bag in one tap, checkout securely, and pay in seconds.</p>",
+        "show_jump_nav": true,
+        "sidebar_eyebrow": "Still deciding?",
+        "sidebar_heading": "Shop without hesitation",
+        "sidebar_text": "Add to bag in one tap, checkout securely, and pay in seconds — packed fresh after you order.",
+        "shop_label": "Shop all teas",
+        "chat_label": "Ask our Tea Guide",
+        "contact_label": "Contact our team",
+        "cta_text": "Ready to steep? Browse premium loose leaf tea — add to bag without leaving the page.",
+        "cta_label": "Shop Premium Loose Leaf Tea",
+        "cta_link": "shopify://collections/all",
+        "cta_secondary_label": "See bestsellers below",
+        "cta_note": "Secure checkout · Apple Pay & cards accepted · Free shipping over $50",
+        "mobile_shop_label": "Shop teas — add to bag",
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
+    },
+    "featured_teas": {
+      "type": "luxe-leaf-featured-teas",
+      "settings": {
+        "page_scope": "faq",
+        "eyebrow": "Start here",
+        "heading": "Bestsellers — add to bag in one tap",
+        "intro": "No page reload. Cart drawer opens instantly so you keep browsing and checkout when ready.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 6
+      }
+    },
+    "tea_types": {
+      "type": "luxe-leaf-tea-types",
+      "settings": {
+        "page_scope": "faq",
+        "eyebrow": "Shop by type",
+        "heading": "Find your next favorite cup",
+        "intro": "Bright greens, floral oolongs, deep pu-erh, and malty black teas — browse collections without leaving the site.",
+        "padding-block-start": 48,
+        "padding-block-end": 24
+      }
+    },
+    "keep_exploring": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "page_scope": "faq",
+        "eyebrow": "Keep browsing",
+        "heading": "More teas worth a look",
+        "intro": "Swipe through premium loose leaf picks — one tap to add and keep shopping.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Your recently viewed teas — add to bag without leaving the page.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "shop_cta": {
+      "type": "luxe-leaf-shop-cta",
+      "settings": {
+        "page_scope": "faq",
+        "eyebrow": "Ready when you are",
+        "heading": "Your next perfect cup is one tap away",
+        "text": "Browse premium loose leaf tea, add to bag without leaving the site, and checkout securely — packed fresh to order.",
+        "primary_label": "Shop Premium Loose Leaf Tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Talk to our team",
+        "secondary_link": "/pages/contact",
+        "note": "Free shipping over $50 · Secure checkout · Packed fresh to order",
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     }
   },
   "order": [
     "breadcrumbs",
-    "faq"
+    "trust_bar",
+    "faq",
+    "featured_teas",
+    "tea_types",
+    "keep_exploring",
+    "shop_cta"
   ]
 }

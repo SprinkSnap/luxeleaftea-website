@@ -57,7 +57,8 @@
     assign meta_description = 'Tea guides and brewing tips for premium loose leaf tea — learn, brew, and shop with confidence.'
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'faq'
-    assign meta_description = 'FAQ about premium loose leaf tea — brewing tips, shipping, freshness, and how to choose green, oolong, pu-erh, and black teas.'
+    assign og_title = 'FAQ | Premium Loose Leaf Tea — Brewing, Shipping & Checkout | ' | append: shop.name
+    assign meta_description = 'Premium loose leaf tea FAQ — brewing tips, secure checkout, free shipping over $50, freshness guarantee, and how to choose green, oolong, pu-erh, and black teas. Shop without leaving the page.'
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'about'
     assign og_title = 'About Luxe Leaf Tea | Premium Loose Leaf Tea Boutique'
