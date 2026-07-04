@@ -4,8 +4,8 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign logo_height = logo_height | default: settings.logo_height | default: 96
-  assign logo_height_mobile = logo_height_mobile | default: settings.logo_height_mobile | default: 80
+  assign logo_height = logo_height | default: settings.logo_height | default: 56
+  assign logo_height_mobile = logo_height_mobile | default: settings.logo_height_mobile | default: 48
   assign logo_width = logo_height | times: 4.52 | round
   assign logo_width_mobile = logo_height_mobile | times: 4.52 | round
   assign logo_alt = alt

@@ -106,24 +106,27 @@
 
       body.luxe-leaf-theme #header-component .header-logo__image,
       body.luxe-leaf-theme #header-component .luxe-brand-logo__image {
-        height: clamp(72px, 19vw, 84px) !important;
+        height: 48px !important;
         max-height: none !important;
         width: auto !important;
+        object-position: left center;
+      }
+
+      body.luxe-leaf-theme #header-component .header-logo--brand .header-logo__image,
+      body.luxe-leaf-theme #header-component .header-logo--brand .luxe-brand-logo__image {
+        max-width: calc(100vw - 6.5rem);
       }
 
       @media screen and (min-width: 750px) {
         body.luxe-leaf-theme #header-component .header-logo__image,
         body.luxe-leaf-theme #header-component .luxe-brand-logo__image {
-          height: 96px !important;
-        }
-
-        body.luxe-leaf-theme #header-component .header__row--top {
-          min-height: 6.75rem;
+          height: 56px !important;
+          object-position: center;
         }
       }
 
       body.luxe-leaf-theme #header-component .header__row--top {
-        min-height: 5.5rem;
+        min-height: 3.75rem;
       }
     {% endstyle %}
 
