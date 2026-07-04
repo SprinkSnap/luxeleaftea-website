@@ -119,7 +119,7 @@
         href="{{ url }}"
         title="{{ nav_title | escape }}"
         data-skip-node-update="true"
-        class="menu-list__link luxe-nav__link{% if is_active %} menu-list__link--active luxe-nav__link--active{% endif %}"
+        class="menu-list__link luxe-nav__link{% if nav_key == 'shop' %} luxe-nav__link--shop{% endif %}{% if is_active %} menu-list__link--active luxe-nav__link--active{% endif %}"
         {% if is_active %}
           aria-current="page"
         {% endif %}

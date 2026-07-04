@@ -103,6 +103,35 @@
 
   /* Centered desktop nav */
   @media screen and (min-width: 750px) {
+    #header-component .header__columns:has(.header__column--center .header-logo) {
+      --header-left: 1fr;
+      --header-center: auto;
+      --header-right: 1fr;
+    }
+
+    #header-component .header__column--center .header-logo {
+      justify-self: center;
+    }
+
+    #header-component .header__row--bottom .header__columns {
+      justify-content: center;
+    }
+
+    #header-component .header__row--bottom .luxe-brand-nav__menu {
+      width: 100%;
+    }
+
+    #header-component .header__row--bottom .luxe-brand-nav__list {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0 1.5rem;
+      margin: 0 auto;
+      padding: 0.35rem 0 0.5rem;
+      list-style: none;
+    }
+
     #header-component .header__columns:has(.header__column--center .header-menu),
     #header-component .header__columns:has(.header__column--center header-menu) {
       --header-left: minmax(0, 10rem);
@@ -168,12 +197,34 @@
       font-weight: 600;
     }
 
+    #header-component .luxe-nav__link--shop {
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      background: var(--luxe-nav-jade);
+      color: var(--luxe-nav-ivory) !important;
+      font-weight: 600;
+    }
+
+    #header-component .luxe-nav__link--shop::after {
+      display: none;
+    }
+
+    #header-component .luxe-nav__link--shop:hover {
+      background: #153527;
+      color: var(--luxe-nav-ivory) !important;
+    }
+
+    #header-component .luxe-nav__link--shop.luxe-nav__link--active {
+      background: #153527;
+      color: var(--luxe-nav-ivory) !important;
+    }
+
     #header-component .menu-list__link-title {
       font-family: var(--font-body--family), 'Source Sans 3', system-ui, sans-serif;
     }
   }
 
-  /* Logo lockup — compact so centered nav is never covered */
+  /* Logo lockup — centered in header, compact width */
   .header-logo {
     position: relative;
     z-index: 1;
@@ -181,6 +232,8 @@
     max-width: min(9rem, 34vw);
     flex: 0 1 auto;
     overflow: hidden;
+    justify-self: center;
+    margin-inline: auto;
   }
 
   .luxe-brand-logo__picture {
@@ -218,6 +271,27 @@
 
   /* Mobile drawer — smooth ivory panel */
   @media screen and (max-width: 749px) {
+    body.luxe-leaf-theme #header-component .header__columns {
+      position: relative;
+    }
+
+    body.luxe-leaf-theme #header-component .header-logo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      grid-area: center;
+      z-index: 1;
+      max-width: min(10rem, 52vw);
+      pointer-events: auto;
+    }
+
+    body.luxe-leaf-theme #header-component .header__column--left,
+    body.luxe-leaf-theme #header-component .header__column--right {
+      position: relative;
+      z-index: 2;
+    }
+
     body.luxe-leaf-theme #header-component .header__drawer {
       display: flex !important;
     }
@@ -380,6 +454,16 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.75rem;
+  }
+
+  .luxe-brand-menu__shop-cta {
+    width: 100%;
+    min-height: 3rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.03em;
   }
 
   .luxe-brand-menu__eyebrow {
