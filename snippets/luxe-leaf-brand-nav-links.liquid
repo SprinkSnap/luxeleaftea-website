@@ -20,9 +20,9 @@
   endif
 
   assign home_url = routes.root_url
-  assign about_url = '/pages/about'
-  assign contact_url = '/pages/contact'
-  assign faq_url = '/pages/faq'
+  assign about_url = pages['about'].url | default: '/pages/about'
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
+  assign faq_url = pages['faq'].url | default: '/pages/faq'
 
   case variant
     when 'desktop'
@@ -66,11 +66,11 @@
       assign is_active = true
     elsif nav_key == 'shop' and request.page_type == 'collection'
       assign is_active = true
-    elsif nav_key == 'about' and request.path == about_url
+    elsif nav_key == 'about' and page.handle == 'about'
       assign is_active = true
-    elsif nav_key == 'contact' and request.path == contact_url
+    elsif nav_key == 'contact' and page.handle == 'contact'
       assign is_active = true
-    elsif nav_key == 'faq' and request.path == faq_url
+    elsif nav_key == 'faq' and page.handle == 'faq'
       assign is_active = true
     endif
   -%}
@@ -122,14 +122,7 @@
       </a>
     </li>
   {%- else -%}
-    <li
-      role="presentation"
-      class="menu-list__list-item luxe-nav__item"
-      on:focus="/activate"
-      on:blur="/deactivate"
-      on:pointerenter="/activate"
-      on:pointerleave="/deactivate"
-    >
+    <li role="presentation" class="menu-list__list-item luxe-nav__item">
       <a
         href="{{ url }}"
         title="{{ nav_title | escape }}"

@@ -47,7 +47,26 @@ function initBrandMobileMenu() {
   });
 
   panel.querySelectorAll('a[href]').forEach((link) => {
-    link.addEventListener('click', () => setOpen(false));
+    link.addEventListener('click', (event) => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+
+      setOpen(false);
+
+      if (link.target === '_blank') return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (href.startsWith('tel:') || href.startsWith('mailto:')) return;
+
+      const destination = link.href;
+      if (!destination) return;
+
+      const current = window.location.href.split('#')[0];
+      if (destination.split('#')[0] === current) return;
+
+      // Closing the overlay in the same tick can cancel navigation on mobile Safari.
+      event.preventDefault();
+      window.location.assign(destination);
+    });
   });
 
   document.addEventListener('keydown', (event) => {

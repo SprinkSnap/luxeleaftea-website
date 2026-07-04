@@ -56,6 +56,14 @@ Create a page in Shopify admin:
 2. Title: `About` (handle will be `about`)
 3. Template suffix: `about` (uses `templates/page.about.json`)
 
+## Contact page
+
+Create a page in Shopify admin:
+
+1. **Online Store → Pages → Add page**
+2. Title: `Contact` (handle will be `contact`)
+3. Template suffix: `contact` (uses `templates/page.contact.json`)
+
 ## Navigation
 
 Brand navigation is enabled by default (**Theme settings → Luxe Leaf Tea**):

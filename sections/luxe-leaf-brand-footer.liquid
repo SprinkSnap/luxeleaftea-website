@@ -32,6 +32,9 @@
     assign facebook_url = section.settings.facebook_url
     assign secondary_label = section.settings.secondary_cta_label
     assign secondary_url = section.settings.secondary_cta_link | default: '/pages/faq'
+    assign about_url = pages['about'].url | default: '/pages/about'
+    assign contact_url = pages['contact'].url | default: '/pages/contact'
+    assign faq_url = pages['faq'].url | default: '/pages/faq'
   -%}
 
   <div class="luxe-brand-footer" role="contentinfo" aria-label="Site footer">
@@ -145,9 +148,9 @@
             <nav aria-label="Tea guides and company information">
               <ul class="luxe-brand-footer__list list-unstyled" role="list">
                 <li><a href="/blogs/tea-guides" title="Premium loose leaf tea brewing guides">Tea Guides</a></li>
-                <li><a href="/pages/faq" title="Tea FAQ — shipping, brewing, and orders">FAQ</a></li>
-                <li><a href="/pages/about" title="About Luxe Leaf Tea — our story">Our Story</a></li>
-                <li><a href="/pages/contact" title="Contact Luxe Leaf Tea">Contact</a></li>
+                <li><a href="{{ faq_url }}" title="Tea FAQ — shipping, brewing, and orders">FAQ</a></li>
+                <li><a href="{{ about_url }}" title="About Luxe Leaf Tea — our story">Our Story</a></li>
+                <li><a href="{{ contact_url }}" title="Contact Luxe Leaf Tea">Contact</a></li>
               </ul>
             </nav>
           </details>
@@ -169,7 +172,7 @@
                 </li>
               {%- else -%}
                 <li>
-                  <a href="/pages/contact" class="luxe-brand-footer__contact-link" title="View phone and contact details">
+                  <a href="{{ contact_url }}" class="luxe-brand-footer__contact-link" title="View phone and contact details">
                     <span class="luxe-brand-footer__contact-label">Phone</span>
                     <span class="luxe-brand-footer__contact-value">Contact us</span>
                   </a>
