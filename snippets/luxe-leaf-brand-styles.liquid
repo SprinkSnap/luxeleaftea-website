@@ -306,15 +306,14 @@
     }
   }
 
-  /* Brand mobile menu — large tap target, no Horizon scroll-lock freeze */
+  /* Brand mobile menu — hamburger icon, full-screen overlay on top */
   .luxe-brand-menu__toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.35rem;
     min-width: 2.75rem;
     min-height: 2.75rem;
-    padding: 0.35rem 0.65rem;
+    padding: 0;
     border: 0;
     background: transparent;
     cursor: pointer;
@@ -322,20 +321,13 @@
 
   .luxe-brand-menu__icon {
     display: inline-flex;
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   .luxe-brand-menu__icon svg {
     width: 100%;
     height: 100%;
-  }
-
-  .luxe-brand-menu__label {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
 
   @media screen and (max-width: 749px) {
@@ -345,17 +337,22 @@
     }
 
     #header-component .luxe-brand-menu__icon {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1.625rem;
+      height: 1.625rem;
     }
   }
 
   .luxe-brand-menu__panel {
     position: fixed;
     inset: 0;
-    z-index: calc(var(--layer-menu-drawer, 20) + 2);
+    z-index: 10000;
     display: flex;
     justify-content: flex-end;
+    pointer-events: none;
+  }
+
+  .luxe-brand-menu__panel:not([hidden]) {
+    pointer-events: auto;
   }
 
   .luxe-brand-menu__panel[hidden] {
@@ -363,11 +360,12 @@
   }
 
   .luxe-brand-menu__backdrop {
-    position: absolute;
+    position: fixed;
     inset: 0;
     border: 0;
-    background: rgb(26 26 26 / 0.45);
+    background: rgb(26 26 26 / 0.5);
     cursor: pointer;
+    z-index: 0;
   }
 
   .luxe-brand-menu__sheet {
@@ -378,9 +376,9 @@
     width: min(20rem, 88vw);
     max-width: 100%;
     height: 100%;
-    padding: 1.25rem 1rem 1.5rem;
+    padding: calc(var(--header-height, 3.75rem) + 0.75rem) 1rem 1.5rem;
     background: var(--luxe-nav-ivory);
-    box-shadow: -8px 0 32px rgb(26 26 26 / 0.12);
+    box-shadow: -8px 0 32px rgb(26 26 26 / 0.18);
     animation: luxe-brand-menu-in 0.28s ease;
   }
 

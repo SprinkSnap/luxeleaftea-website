@@ -18,6 +18,11 @@ function initBrandMobileMenu() {
   const panel = document.getElementById('LuxeBrandMenuPanel');
   if (!panel) return;
 
+  // Move panel to body so it overlays the full page above header/content.
+  if (panel.parentElement !== document.body) {
+    document.body.appendChild(panel);
+  }
+
   const toggles = document.querySelectorAll('[data-luxe-nav-toggle]');
   const closes = document.querySelectorAll('[data-luxe-nav-close]');
 
