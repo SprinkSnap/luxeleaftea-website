@@ -522,13 +522,17 @@
 
   .luxe-brand-menu__icon {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 1.5rem;
     height: 1.5rem;
+    color: var(--luxe-nav-jade, #1b4332);
   }
 
   .luxe-brand-menu__icon svg {
     width: 100%;
     height: 100%;
+    display: block;
   }
 
   @media screen and (max-width: 749px) {
@@ -537,9 +541,10 @@
       min-height: 3rem;
     }
 
-    #header-component .luxe-brand-menu__icon {
-      width: 1.625rem;
-      height: 1.625rem;
+    #header-component .luxe-brand-menu__icon,
+    #header-component .luxe-brand-menu__icon--tea {
+      width: 1.75rem;
+      height: 1.75rem;
     }
   }
 

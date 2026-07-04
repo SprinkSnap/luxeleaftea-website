@@ -1,5 +1,5 @@
 {%- doc -%}
-  Lightweight brand mobile menu — hamburger overlay with Shop Tea CTA.
+  Lightweight brand mobile menu — tea leaf menu icon and full-screen overlay with Shop Tea CTA.
 {%- enddoc -%}
 
 {%- liquid
@@ -13,13 +13,13 @@
   <button
     type="button"
     class="header__icon header__icon--menu luxe-brand-menu__toggle"
-    aria-label="Open menu — Shop Tea, phone support, About, Contact, and FAQ"
+    aria-label="Open tea shop menu — Shop Tea, phone support, policies, About, Contact, and FAQ"
     aria-expanded="false"
     aria-controls="LuxeBrandMenuPanel"
     data-luxe-nav-toggle
   >
-    <span class="svg-wrapper luxe-brand-menu__icon" aria-hidden="true">
-      {{- 'icon-hamburger.svg' | inline_asset_content -}}
+    <span class="svg-wrapper luxe-brand-menu__icon luxe-brand-menu__icon--tea" aria-hidden="true">
+      {%- render 'luxe-leaf-header-icon', name: 'menu' -%}
     </span>
   </button>
 
