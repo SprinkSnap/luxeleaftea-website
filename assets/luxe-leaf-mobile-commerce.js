@@ -1,11 +1,13 @@
 /**
- * Mobile commerce bar + reliable search/checkout actions for Luxe Leaf Tea.
+ * Mobile commerce bar, shipping nudge, and reliable search/checkout actions.
  */
 import { StandardEvents } from '@shopify/events';
 
 (function initMobileCommerce() {
   if (window.__luxeMobileCommerceInit) return;
   window.__luxeMobileCommerceInit = true;
+
+  const NUDGE_HEIGHT = '3.25rem';
 
   const formatMoney = (cents) => {
     if (window.Shopify?.formatMoney) {
@@ -14,36 +16,77 @@ import { StandardEvents } from '@shopify/events';
     return `$${(cents / 100).toFixed(2)}`;
   };
 
+  /**
+   * @param {object} cart
+   */
+  const syncShippingNudge = (cart) => {
+    const nudge = document.querySelector('[data-shipping-nudge]');
+    if (!(nudge instanceof HTMLElement)) return;
+
+    const threshold = Number(nudge.dataset.threshold) || 5000;
+    const thresholdLabel = nudge.dataset.thresholdLabel || formatMoney(threshold);
+    const textEl = nudge.querySelector('[data-shipping-nudge-text]');
+    const barEl = nudge.querySelector('[data-shipping-nudge-bar]');
+    const progressEl = nudge.querySelector('[data-shipping-nudge-progress]');
+
+    const showNudge = cart.item_count > 0 && cart.total_price < threshold;
+
+    if (!showNudge) {
+      nudge.hidden = true;
+      document.documentElement.style.setProperty('--luxe-shipping-nudge-height', '0px');
+      return;
+    }
+
+    const remaining = threshold - cart.total_price;
+    const progress = Math.min(100, Math.round((cart.total_price * 100) / threshold));
+
+    if (textEl) {
+      textEl.innerHTML = `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+    }
+    if (barEl instanceof HTMLElement) {
+      barEl.style.width = `${progress}%`;
+    }
+    if (progressEl instanceof HTMLElement) {
+      progressEl.setAttribute('aria-valuenow', String(progress));
+    }
+
+    nudge.hidden = false;
+    document.documentElement.style.setProperty('--luxe-shipping-nudge-height', NUDGE_HEIGHT);
+  };
+
   const syncBar = async () => {
     const bar = document.querySelector('[data-mobile-shop-bar]');
-    if (!bar) return;
 
     try {
       const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
       if (!res.ok) return;
       const cart = await res.json();
 
-      const checkoutButton = bar.querySelector('[data-mobile-checkout]');
-      const cartBtn = bar.querySelector('[data-mobile-cart-toggle]');
-      const countEl = bar.querySelector('[data-mobile-cart-count]');
+      if (bar) {
+        const checkoutButton = bar.querySelector('[data-mobile-checkout]');
+        const cartBtn = bar.querySelector('[data-mobile-cart-toggle]');
+        const countEl = bar.querySelector('[data-mobile-cart-count]');
 
-      if (cart.item_count > 0) {
-        bar.classList.add('luxe-mobile-bar--has-cart');
-        if (checkoutButton) {
-          checkoutButton.hidden = false;
-          checkoutButton.textContent = `Checkout · ${formatMoney(cart.total_price)}`;
+        if (cart.item_count > 0) {
+          bar.classList.add('luxe-mobile-bar--has-cart');
+          if (checkoutButton) {
+            checkoutButton.hidden = false;
+            checkoutButton.textContent = `Checkout · ${formatMoney(cart.total_price)}`;
+          }
+          if (cartBtn) cartBtn.hidden = true;
+        } else {
+          bar.classList.remove('luxe-mobile-bar--has-cart');
+          if (checkoutButton) checkoutButton.hidden = true;
+          if (cartBtn) cartBtn.hidden = false;
         }
-        if (cartBtn) cartBtn.hidden = true;
-      } else {
-        bar.classList.remove('luxe-mobile-bar--has-cart');
-        if (checkoutButton) checkoutButton.hidden = true;
-        if (cartBtn) cartBtn.hidden = false;
+
+        if (countEl) {
+          countEl.textContent = cart.item_count;
+          countEl.hidden = cart.item_count === 0;
+        }
       }
 
-      if (countEl) {
-        countEl.textContent = cart.item_count;
-        countEl.hidden = cart.item_count === 0;
-      }
+      syncShippingNudge(cart);
     } catch {
       /* cart fetch failed — keep server-rendered state */
     }
@@ -113,6 +156,30 @@ import { StandardEvents } from '@shopify/events';
     );
   }
 
+  function bindShippingNudgeActions() {
+    document.addEventListener('click', (event) => {
+      const exploreBtn = event.target.closest('[data-shipping-nudge-explore]');
+      if (!exploreBtn) return;
+
+      const target =
+        document.querySelector('[data-keep-exploring]') ||
+        document.getElementById('shop-by-type') ||
+        document.getElementById('featured-teas');
+
+      if (target) {
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
+      const nudge = document.querySelector('[data-shipping-nudge]');
+      const shopUrl = nudge instanceof HTMLElement ? nudge.dataset.shopUrl : null;
+      if (shopUrl) {
+        window.location.href = shopUrl;
+      }
+    });
+  }
+
   function bindMobileMenuToggle() {
     const menuBtn = document.querySelector('[data-mobile-menu-toggle]');
     const panel = document.getElementById('LuxeBrandMenuPanel');
@@ -132,6 +199,7 @@ import { StandardEvents } from '@shopify/events';
     bindMobileMenuToggle();
     bindCheckoutActions();
     bindSearchActions();
+    bindShippingNudgeActions();
   });
   document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
 })();

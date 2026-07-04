@@ -98,6 +98,7 @@
 </script>
 
 {%- unless settings.brand_navigation == false -%}
+  {%- render 'luxe-leaf-shipping-nudge' -%}
   {%- unless template.name == 'cart' -%}
     <nav
       class="luxe-mobile-bar{% if cart.item_count > 0 %} luxe-mobile-bar--has-cart{% endif %}"

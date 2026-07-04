@@ -1,0 +1,51 @@
+{%- doc -%}
+  Sticky free-shipping progress nudge — encourages keep browsing and adding without leaving.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    assign threshold = settings.free_shipping_threshold | default: 5000
+    assign threshold_money = threshold | money
+  -%}
+
+  <aside
+    class="luxe-shipping-nudge"
+    data-shipping-nudge
+    data-threshold="{{ threshold }}"
+    data-threshold-label="{{ threshold_money | escape }}"
+    data-shop-url="{{ routes.all_products_collection_url | escape }}"
+    hidden
+    aria-live="polite"
+  >
+    <div class="luxe-shipping-nudge__inner page-width">
+      <div class="luxe-shipping-nudge__copy">
+        <p class="luxe-shipping-nudge__text" data-shipping-nudge-text>
+          Add more for free shipping over {{ threshold_money }}
+        </p>
+        <div
+          class="luxe-shipping-nudge__progress"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          data-shipping-nudge-progress
+        >
+          <span class="luxe-shipping-nudge__bar" data-shipping-nudge-bar style="width: 0%;"></span>
+        </div>
+      </div>
+      <div class="luxe-shipping-nudge__actions">
+        <button type="button" class="luxe-shipping-nudge__explore button button-secondary" data-shipping-nudge-explore>
+          Keep exploring
+        </button>
+        <button
+          type="button"
+          class="luxe-shipping-nudge__cart button"
+          data-shipping-nudge-cart
+          on:click="#cart-drawer/toggle"
+        >
+          View bag
+        </button>
+      </div>
+    </div>
+  </aside>
+{%- endunless -%}

@@ -1,0 +1,26 @@
+{%- doc -%}
+  WebSite JSON-LD with SearchAction for sitelinks search box eligibility.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    assign search_target = shop.url | append: routes.search_url | append: '?q={search_term_string}'
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "description": {{ shop.description | default: 'Premium loose leaf tea — packed fresh to order.' | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": {{ search_target | json }}
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+{%- endunless -%}
