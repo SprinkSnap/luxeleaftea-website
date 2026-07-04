@@ -181,10 +181,12 @@
   }
 
   .header-logo--brand {
-    max-width: calc(100vw - 8.75rem);
+    max-width: var(--luxe-mobile-logo-max-width, calc(100vw - 10.5rem));
 
     @media screen and (min-width: 750px) {
       max-width: 18rem;
+      margin-inline: 0;
+      padding-inline-end: 0;
     }
   }
 

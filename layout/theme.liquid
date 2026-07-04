@@ -114,7 +114,12 @@
 
       body.luxe-leaf-theme #header-component .header-logo--brand .header-logo__image,
       body.luxe-leaf-theme #header-component .header-logo--brand .luxe-brand-logo__image {
-        max-width: calc(100vw - 6.5rem);
+        max-width: min(11.25rem, calc(100vw - 10.5rem));
+      }
+
+      body.luxe-leaf-theme #header-component .header-logo--brand {
+        margin-inline-end: 0.75rem;
+        max-width: min(11.25rem, calc(100vw - 10.5rem));
       }
 
       @media screen and (min-width: 750px) {

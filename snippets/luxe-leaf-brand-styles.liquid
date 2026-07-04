@@ -48,6 +48,8 @@
     --luxe-nav-gold: #c9a227;
     --luxe-header-logo-height-mobile: 48px;
     --luxe-header-logo-height-desktop: 56px;
+    --luxe-mobile-logo-gutter-end: 6.25rem;
+    --luxe-mobile-logo-max-width: min(11.25rem, calc(100vw - 10.5rem));
   }
 
   #header-group .header-announcements,
@@ -341,32 +343,43 @@
       position: relative;
     }
 
-    /* Mobile DTC pattern: menu left, wide logo beside it, icons right — same bar height */
+    /* Mobile DTC pattern: menu left, logo beside it, clear gap before account/cart */
     body.luxe-leaf-theme #header-component .header-logo--brand {
       position: static;
       transform: none;
-      grid-column: 2 / 5;
+      grid-column: 2 / 4;
       grid-area: center;
       justify-self: start;
       align-self: center;
-      max-width: calc(100vw - 6.5rem);
+      max-width: var(--luxe-mobile-logo-max-width);
       width: auto;
-      margin-inline: 0;
+      margin-inline: 0 0.75rem;
+      padding-inline-end: 0.25rem;
       pointer-events: auto;
       z-index: 2;
+      overflow: hidden;
     }
 
     body.luxe-leaf-theme #header-component .header-logo--brand .luxe-brand-logo__picture,
     body.luxe-leaf-theme #header-component .header-logo--brand .header-logo__image-container {
-      width: 100%;
+      width: auto;
+      max-width: 100%;
     }
 
     body.luxe-leaf-theme #header-component .header-logo--brand .header-logo__image,
     body.luxe-leaf-theme #header-component .header-logo--brand .luxe-brand-logo__image {
       height: var(--luxe-header-logo-height-mobile) !important;
       width: auto !important;
-      max-width: 100%;
+      max-width: var(--luxe-mobile-logo-max-width);
       object-position: left center;
+    }
+
+    body.luxe-leaf-theme #header-component header-actions {
+      position: relative;
+      z-index: 3;
+      flex-shrink: 0;
+      margin-inline-start: auto;
+      padding-inline-start: 0.35rem;
     }
 
     /* Hide header search on phones — search stays in menu (more room for logo + cart) */
@@ -388,11 +401,6 @@
     body.luxe-leaf-theme #header-component .header-logo__image-container,
     body.luxe-leaf-theme #header-component .header-logo__image {
       pointer-events: auto;
-    }
-
-    body.luxe-leaf-theme #header-component header-actions {
-      position: relative;
-      z-index: 3;
     }
 
     body.luxe-leaf-theme #header-component .header__column--left,
