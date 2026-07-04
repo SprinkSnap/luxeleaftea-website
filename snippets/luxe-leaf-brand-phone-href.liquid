@@ -7,8 +7,11 @@
   if brand_phone != blank
     assign phone_digits = brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.' | remove: '+' | remove: 'tel:' | remove: 'Tel:'
 
-    if phone_digits.size == 11 and phone_digits | slice: 0, 1 == '1'
-      assign phone_digits = phone_digits | slice: 1, 10
+    if phone_digits.size == 11
+      assign phone_leading = phone_digits | slice: 0, 1
+      if phone_leading == '1'
+        assign phone_digits = phone_digits | slice: 1, 10
+      endif
     endif
 
     assign brand_phone = phone_digits
