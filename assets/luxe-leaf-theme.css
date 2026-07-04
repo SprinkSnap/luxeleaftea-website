@@ -88,13 +88,13 @@ body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button
   color: #fff;
 }
 
-body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn) {
+body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn):not(.luxe-faq-page__cta-secondary) {
   background: transparent;
   border: 1.5px solid var(--luxe-jade);
   color: var(--luxe-jade);
 }
 
-body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn):hover {
+body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn):not(.luxe-faq-page__cta-secondary):hover {
   background: rgb(var(--luxe-jade-rgb) / 0.06);
 }
 
@@ -118,7 +118,8 @@ body .luxe-hero__button--secondary:hover {
 
 body .luxe-shop-cta__button-secondary,
 body .luxe-collection-cta__button-secondary,
-body .luxe-brand-footer__secondary-btn {
+body .luxe-brand-footer__secondary-btn,
+body .luxe-faq-page__cta-secondary {
   background: transparent !important;
   border: 1.5px solid rgb(248 246 240 / 0.85) !important;
   color: #f8f6f0 !important;
@@ -126,7 +127,8 @@ body .luxe-brand-footer__secondary-btn {
 
 body .luxe-shop-cta__button-secondary:hover,
 body .luxe-collection-cta__button-secondary:hover,
-body .luxe-brand-footer__secondary-btn:hover {
+body .luxe-brand-footer__secondary-btn:hover,
+body .luxe-faq-page__cta-secondary:hover {
   background: rgb(248 246 240 / 0.12) !important;
   border-color: #f8f6f0 !important;
   color: #f8f6f0 !important;
