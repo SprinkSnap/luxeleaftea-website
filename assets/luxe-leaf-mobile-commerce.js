@@ -2,10 +2,13 @@
  * Mobile commerce bar, shipping nudge, and reliable search/checkout actions.
  */
 import { StandardEvents } from '@shopify/events';
+import '@theme/theme-drawer';
 
 (function initMobileCommerce() {
   if (window.__luxeMobileCommerceInit) return;
   window.__luxeMobileCommerceInit = true;
+
+  const CART_DRAWER_TOGGLE = '[data-cart-drawer-toggle]';
 
   const NUDGE_HEIGHT = '4.5rem';
   const NUDGE_HEIGHT_SUCCESS = '3.75rem';
@@ -220,6 +223,40 @@ import { StandardEvents } from '@shopify/events';
     window.location.assign('/checkout');
   }
 
+  /**
+   * Reliable cart drawer toggle — replaces declarative on:click which can fail
+   * silently when theme-drawer has not upgraded yet.
+   * @param {Event} event
+   */
+  function handleCartDrawerToggle(event) {
+    const trigger = event.target.closest(CART_DRAWER_TOGGLE);
+    if (!(trigger instanceof Element)) return;
+
+    const drawer = document.getElementById('cart-drawer');
+    if (!(drawer instanceof HTMLElement)) {
+      event.preventDefault();
+      window.location.assign(window.Theme?.routes?.cart_url || '/cart');
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    customElements.upgrade(drawer);
+
+    /** @type {{ toggle?: () => void; open?: () => void }} */
+    const drawerHost = drawer;
+
+    if (typeof drawerHost.toggle === 'function') {
+      drawerHost.toggle();
+      return;
+    }
+
+    if (typeof drawerHost.open === 'function') {
+      drawerHost.open();
+    }
+  }
+
   function bindCheckoutActions() {
     document.addEventListener(
       'click',
@@ -340,6 +377,7 @@ import { StandardEvents } from '@shopify/events';
     bindSearchActions();
     bindShippingNudgeActions();
   });
+  document.addEventListener('click', handleCartDrawerToggle, true);
   document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
   document.addEventListener('theme-drawer:open', (event) => {
     if (/** @type {Element} */ (event.target).id === 'cart-drawer') syncDrawerChrome();
