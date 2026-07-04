@@ -58,6 +58,41 @@
       </a>
     </li>
   {%- endfor -%}
+{%- elsif variant == 'bar' -%}
+  {%- for label in nav_labels -%}
+    {%- liquid
+      case forloop.index
+        when 1
+          assign url = home_url
+        when 2
+          assign url = shop_tea_url
+        when 3
+          assign url = about_url
+        when 4
+          assign url = contact_url
+      endcase
+
+      assign is_active = false
+      if forloop.index == 1 and request.page_type == 'index'
+        assign is_active = true
+      elsif request.path == url
+        assign is_active = true
+      endif
+    -%}
+
+    <li>
+      <a
+        href="{{ url }}"
+        id="MenuItem-luxe-{{ label | handleize }}"
+        class="menu-list__item luxe-nav-bar__item{% if is_active %} menu-list__item--active luxe-nav-bar__item--active{% endif %}"
+        {% if is_active %}
+          aria-current="page"
+        {% endif %}
+      >
+        {{- label -}}
+      </a>
+    </li>
+  {%- endfor -%}
 {%- else -%}
   {%- for label in nav_labels -%}
     {%- liquid

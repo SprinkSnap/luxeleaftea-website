@@ -811,7 +811,8 @@
     grid-template-columns: var(--header-template-columns);
 
     /* If menu is in center column */
-    &:has(.header__column--center header-menu) {
+    &:has(.header__column--center header-menu),
+    &:has(.header__column--center .header-menu) {
       --header-center: auto;
       --header-left: minmax(max-content, 1fr);
       --header-right: minmax(max-content, 1fr);

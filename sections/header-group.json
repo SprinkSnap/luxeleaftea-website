@@ -67,7 +67,7 @@
             "featured_products_aspect_ratio": "4 / 5",
             "featured_collections_aspect_ratio": "16 / 9",
             "image_border_radius": 0,
-            "navigation_bar": false,
+            "navigation_bar": true,
             "drawer_accordion": false,
             "drawer_accordion_expand_first": false,
             "drawer_dividers": true
