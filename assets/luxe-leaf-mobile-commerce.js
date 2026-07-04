@@ -13,14 +13,23 @@ import { StandardEvents } from '@shopify/events';
   const getShippingConfig = () => {
     const body = document.body;
     const nudge = document.querySelector('[data-shipping-nudge]');
+    const totals = document.querySelector('[data-shipping-totals]');
+    const conversion = document.querySelector('[data-cart-conversion]');
     const threshold = Number(body.dataset.freeShippingThreshold || nudge?.dataset.threshold) || 5000;
     const standardRate = Number(body.dataset.standardShippingRate || nudge?.dataset.standardRate) || 595;
+    const taxRateBps =
+      Number(
+        body.dataset.estimatedTaxRateBps ||
+          nudge?.dataset.taxRateBps ||
+          totals?.dataset.taxRateBps ||
+          conversion?.dataset.taxRateBps
+      ) || 0;
     const thresholdLabel =
       nudge?.dataset.thresholdLabel || body.dataset.freeShippingThresholdLabel || formatMoney(threshold);
     const standardRateLabel =
       nudge?.dataset.standardRateLabel || body.dataset.standardShippingRateLabel || formatMoney(standardRate);
 
-    return { threshold, standardRate, thresholdLabel, standardRateLabel };
+    return { threshold, standardRate, taxRateBps, thresholdLabel, standardRateLabel };
   };
 
   const formatMoney = (cents) => {
@@ -30,28 +39,47 @@ import { StandardEvents } from '@shopify/events';
     return `$${(cents / 100).toFixed(2)}`;
   };
 
-  const getShippingEstimate = (cartTotal) => {
-    const { threshold, standardRate } = getShippingConfig();
+  const getShippingEstimate = (cartTotal, itemsSubtotal = null) => {
+    const { threshold, standardRate, taxRateBps } = getShippingConfig();
+    const subtotal = itemsSubtotal ?? cartTotal;
     const qualifiesFree = cartTotal >= threshold;
     const shippingCost = qualifiesFree ? 0 : standardRate;
-    const estimatedTotal = cartTotal + shippingCost;
+    const taxableBase = subtotal + shippingCost;
+    const taxAmount = taxRateBps > 0 ? Math.round((taxableBase * taxRateBps) / 10000) : 0;
+    const grandTotal = taxableBase + taxAmount;
     const remaining = Math.max(0, threshold - cartTotal);
     const progress = Math.min(100, Math.round((cartTotal * 100) / threshold));
 
-    return { qualifiesFree, shippingCost, estimatedTotal, remaining, progress, threshold, standardRate };
+    return {
+      qualifiesFree,
+      shippingCost,
+      taxAmount,
+      subtotal,
+      grandTotal,
+      estimatedTotal: grandTotal,
+      remaining,
+      progress,
+      threshold,
+      standardRate,
+    };
   };
 
   const syncCartConversion = (cart) => {
     const conversion = document.querySelector('[data-cart-conversion]');
     if (!(conversion instanceof HTMLElement) || cart.item_count === 0) return;
 
-    const { qualifiesFree, shippingCost, estimatedTotal, remaining, progress } = getShippingEstimate(cart.total_price);
+    const { qualifiesFree, shippingCost, grandTotal, taxAmount, subtotal, remaining, progress } = getShippingEstimate(
+      cart.total_price,
+      cart.items_subtotal_price
+    );
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const progressText = conversion.querySelector('[data-shipping-progress-text]');
     const progressEl = conversion.querySelector('[data-shipping-progress]');
     const progressBar = conversion.querySelector('[data-shipping-progress-bar]');
+    const subtotalInline = conversion.querySelector('[data-cart-subtotal-inline]');
     const rateValue = conversion.querySelector('[data-shipping-rate-value]');
+    const taxInline = conversion.querySelector('[data-tax-value-inline]');
     const totalInline = conversion.querySelector('[data-estimated-total-inline]');
 
     if (progressText) {
@@ -66,13 +94,18 @@ import { StandardEvents } from '@shopify/events';
       progressBar.style.width = `${progress}%`;
     }
 
+    if (subtotalInline) {
+      subtotalInline.textContent = formatMoney(subtotal);
+    }
     if (rateValue) {
-      rateValue.innerHTML = qualifiesFree
-        ? '<strong>Free</strong>'
-        : `Standard <strong>${standardRateLabel}</strong>`;
+      rateValue.innerHTML = qualifiesFree ? '<strong>Free</strong>' : `<strong>${standardRateLabel}</strong>`;
+    }
+    if (taxInline) {
+      taxInline.innerHTML =
+        taxAmount > 0 ? `<strong>${formatMoney(taxAmount)}</strong>` : 'At checkout';
     }
     if (totalInline) {
-      totalInline.innerHTML = `Pay <strong>${formatMoney(estimatedTotal)}</strong> total`;
+      totalInline.innerHTML = `Total <strong>${formatMoney(grandTotal)}</strong> — tap Pay below`;
     }
 
     conversion.classList.toggle('luxe-cart-conversion--free-shipping', qualifiesFree);
@@ -82,18 +115,33 @@ import { StandardEvents } from '@shopify/events';
     const totals = document.querySelector('[data-shipping-totals]');
     if (!(totals instanceof HTMLElement) || cart.item_count === 0) return;
 
-    const { qualifiesFree, estimatedTotal, remaining } = getShippingEstimate(cart.total_price);
+    const { qualifiesFree, grandTotal, taxAmount, subtotal, remaining } = getShippingEstimate(
+      cart.total_price,
+      cart.items_subtotal_price
+    );
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
+    const subtotalValue = totals.querySelector('[data-cart-subtotal-value]');
     const hint = totals.querySelector('[data-shipping-hint]');
     const shippingValue = totals.querySelector('[data-shipping-cost-value]');
+    const taxValue = totals.querySelector('[data-tax-value]');
     const estimatedTotalEl = totals.querySelector('[data-estimated-total-value]');
     const checkoutText = document.querySelector('[data-checkout-button-text]');
+
+    if (subtotalValue) {
+      subtotalValue.textContent = formatMoney(subtotal);
+    }
 
     if (shippingValue) {
       shippingValue.innerHTML = qualifiesFree
         ? '<span class="luxe-shipping-totals__free">Free</span>'
         : standardRateLabel;
+    }
+    if (taxValue) {
+      taxValue.innerHTML =
+        taxAmount > 0
+          ? `${formatMoney(taxAmount)} <span class="luxe-shipping-totals__est">est.</span>`
+          : '<span class="luxe-shipping-totals__at-checkout">At checkout</span>';
     }
     if (hint) {
       hint.classList.toggle('luxe-shipping-totals__hint--success', qualifiesFree);
@@ -102,10 +150,10 @@ import { StandardEvents } from '@shopify/events';
         : `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
     }
     if (estimatedTotalEl) {
-      estimatedTotalEl.textContent = formatMoney(estimatedTotal);
+      estimatedTotalEl.textContent = formatMoney(grandTotal);
     }
     if (checkoutText) {
-      checkoutText.textContent = `Pay ${formatMoney(estimatedTotal)} — Secure checkout`;
+      checkoutText.textContent = `Pay ${formatMoney(grandTotal)} — Guest checkout`;
     }
   };
 
@@ -122,7 +170,10 @@ import { StandardEvents } from '@shopify/events';
       return;
     }
 
-    const { qualifiesFree, estimatedTotal, remaining, progress } = getShippingEstimate(cart.total_price);
+    const { qualifiesFree, estimatedTotal, remaining, progress } = getShippingEstimate(
+      cart.total_price,
+      cart.items_subtotal_price
+    );
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const textEl = nudge.querySelector('[data-shipping-nudge-text]');

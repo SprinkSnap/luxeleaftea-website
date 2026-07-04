@@ -97,6 +97,13 @@
           "info": "Estimated flat rate shown in cart and checkout nudge before free shipping unlocks. Example: 595 = $5.95."
         },
         {
+          "type": "number",
+          "id": "estimated_tax_rate_bps",
+          "label": "Estimated sales tax (basis points)",
+          "default": 875,
+          "info": "Shown in cart before checkout. 875 = 8.75%. Set 0 to show “At checkout” instead of an estimate."
+        },
+        {
           "type": "header",
           "content": "SEO & analytics"
         },

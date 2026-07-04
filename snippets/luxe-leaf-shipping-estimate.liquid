@@ -8,9 +8,11 @@
   assign variant = variant | default: 'drawer-banner'
   assign threshold = settings.free_shipping_threshold | default: 5000
   assign standard_rate = settings.standard_shipping_rate | default: 595
+  assign tax_rate_bps = settings.estimated_tax_rate_bps | default: 875
   assign threshold_money = threshold | money
   assign standard_rate_money = standard_rate | money
   assign cart_total = cart.total_price
+  assign subtotal_before_tax = cart.items_subtotal_price
   assign remaining = threshold | minus: cart_total
   if remaining < 0
     assign remaining = 0
@@ -24,16 +26,33 @@
     assign shipping_cost = standard_rate
   endif
 
-  assign estimated_total = cart_total | plus: shipping_cost
+  assign taxable_base = subtotal_before_tax | plus: shipping_cost
+  assign tax_amount = 0
+  assign tax_is_estimated = false
+
+  if cart.tax_lines.size > 0
+    for tax_line in cart.tax_lines
+      assign tax_amount = tax_amount | plus: tax_line.price
+    endfor
+  elsif tax_rate_bps > 0
+    assign tax_amount = taxable_base | times: tax_rate_bps | divided_by: 10000
+    assign tax_is_estimated = true
+  endif
+
+  assign grand_total = taxable_base | plus: tax_amount
   assign progress = cart_total | times: 100 | divided_by: threshold
   if progress > 100
     assign progress = 100
   endif
 
   if settings.currency_code_enabled_cart_total
-    assign estimated_total_money = estimated_total | money_with_currency
+    assign subtotal_money = subtotal_before_tax | money_with_currency
+    assign tax_money = tax_amount | money_with_currency
+    assign grand_total_money = grand_total | money_with_currency
   else
-    assign estimated_total_money = estimated_total | money
+    assign subtotal_money = subtotal_before_tax | money
+    assign tax_money = tax_amount | money
+    assign grand_total_money = grand_total | money
   endif
 -%}
 
@@ -43,18 +62,24 @@
     data-threshold-label="{{ threshold_money | escape }}"
     data-standard-rate="{{ standard_rate }}"
     data-standard-rate-label="{{ standard_rate_money | escape }}"
+    data-tax-rate-bps="{{ tax_rate_bps }}"
 
   {%- when 'cart-totals' -%}
     {%- unless cart.empty? -%}
-      <div class="luxe-shipping-totals" data-shipping-totals>
+      <div
+        class="luxe-shipping-totals"
+        data-shipping-totals
+        data-tax-rate-bps="{{ tax_rate_bps }}"
+        data-grand-total="{{ grand_total }}"
+      >
         <div class="luxe-shipping-totals__row">
-          <span class="luxe-shipping-totals__label">Subtotal</span>
-          <span class="luxe-shipping-totals__value" data-cart-subtotal-value>{{ cart.items_subtotal_price | money }}</span>
+          <span class="luxe-shipping-totals__label">Subtotal (before tax)</span>
+          <span class="luxe-shipping-totals__value" data-cart-subtotal-value>{{ subtotal_money }}</span>
         </div>
         <div class="luxe-shipping-totals__row luxe-shipping-totals__row--shipping">
           <span class="luxe-shipping-totals__label">
             {%- if qualifies_free -%}
-              Shipping
+              Shipping (lowest rate)
             {%- else -%}
               Standard shipping
             {%- endif -%}
@@ -77,18 +102,40 @@
             Free shipping unlocked on this order
           </p>
         {%- endunless -%}
-        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--total">
-          <span class="luxe-shipping-totals__label luxe-shipping-totals__label--total">Order total</span>
-          <span class="luxe-shipping-totals__value luxe-shipping-totals__value--total" data-estimated-total-value>
-            {{- estimated_total_money -}}
+        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--tax">
+          <span class="luxe-shipping-totals__label">
+            {%- if tax_is_estimated -%}
+              Est. sales tax
+            {%- elsif tax_amount > 0 -%}
+              Sales tax
+            {%- else -%}
+              Sales tax
+            {%- endif -%}
+          </span>
+          <span class="luxe-shipping-totals__value" data-tax-value>
+            {%- if tax_amount > 0 -%}
+              {{ tax_money -}}
+              {%- if tax_is_estimated -%}
+                <span class="luxe-shipping-totals__est">est.</span>
+              {%- endif -%}
+            {%- else -%}
+              <span class="luxe-shipping-totals__at-checkout">At checkout</span>
+            {%- endif -%}
           </span>
         </div>
+        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--total">
+          <span class="luxe-shipping-totals__label luxe-shipping-totals__label--total">Total</span>
+          <span class="luxe-shipping-totals__value luxe-shipping-totals__value--total" data-estimated-total-value>
+            {{- grand_total_money -}}
+          </span>
+        </div>
+        <p class="luxe-shipping-totals__footnote">All-in price before you pay — no account required.</p>
       </div>
     {%- endunless -%}
 
   {%- when 'drawer-banner' -%}
     {%- unless cart.empty? -%}
-      <div class="luxe-cart-conversion" data-cart-conversion>
+      <div class="luxe-cart-conversion" data-cart-conversion data-tax-rate-bps="{{ tax_rate_bps }}">
         {%- if qualifies_free -%}
           <p class="luxe-cart-conversion__message luxe-cart-conversion__message--success">
             {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
@@ -122,29 +169,45 @@
         {%- endif -%}
 
         <div class="luxe-cart-conversion__shipping" data-shipping-estimate>
+          <span class="luxe-cart-conversion__shipping-label">Subtotal</span>
+          <span class="luxe-cart-conversion__shipping-value" data-cart-subtotal-inline>{{ subtotal_money }}</span>
           <span class="luxe-cart-conversion__shipping-label">
             {%- if qualifies_free -%}
-              Shipping today
+              Shipping
             {%- else -%}
-              Best rate now
+              Shipping (best rate)
             {%- endif -%}
           </span>
           <span class="luxe-cart-conversion__shipping-value" data-shipping-rate-value>
             {%- if qualifies_free -%}
               <strong>Free</strong>
             {%- else -%}
-              Standard <strong>{{ standard_rate_money }}</strong>
+              <strong>{{ standard_rate_money }}</strong>
+            {%- endif -%}
+          </span>
+          <span class="luxe-cart-conversion__shipping-label">
+            {%- if tax_is_estimated -%}
+              Est. tax
+            {%- else -%}
+              Tax
+            {%- endif -%}
+          </span>
+          <span class="luxe-cart-conversion__shipping-value" data-tax-value-inline>
+            {%- if tax_amount > 0 -%}
+              <strong>{{ tax_money }}</strong>
+            {%- else -%}
+              At checkout
             {%- endif -%}
           </span>
           <span class="luxe-cart-conversion__shipping-total" data-estimated-total-inline>
-            Pay <strong>{{ estimated_total_money }}</strong> total
+            Total <strong>{{ grand_total_money }}</strong> — tap Pay below
           </span>
         </div>
 
         <ul class="luxe-cart-conversion__trust list-unstyled" role="list">
-          <li>{%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%} Packed fresh to order</li>
-          <li>{%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%} Secure checkout</li>
-          <li>{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%} Whole-leaf quality</li>
+          <li>{%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%} Guest checkout — no sign-in</li>
+          <li>{%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%} Secure SSL payment</li>
+          <li>{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%} Packed fresh to order</li>
         </ul>
       </div>
     {%- endunless -%}

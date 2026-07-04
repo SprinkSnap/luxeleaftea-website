@@ -1,0 +1,9 @@
+{%- doc -%}
+  Guest checkout reassurance — no account required before Pay.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false or cart.empty? -%}
+  <p class="luxe-guest-checkout-banner" role="status">
+    <strong>No account needed.</strong> Pay as guest — shipping &amp; tax shown below before you checkout.
+  </p>
+{%- endunless -%}

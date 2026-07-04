@@ -3,7 +3,12 @@
 
   @param {string} [accelerated_checkout_buttons_layout] - { 'vertical' } Forced layout of the additional checkout buttons, instead of relying on platform's layout.
   @param {string} [section_id] - The section ID for cart discount component.
+  @param {boolean} [brand_totals_in_summary] - When false, order total rows render only in the drawer conversion block above.
 {%- enddoc -%}
+
+{%- liquid
+  assign brand_totals_in_summary = brand_totals_in_summary | default: true, allow_false: true
+-%}
 
 {% render 'text-component-shimmer-styles' %}
 
@@ -226,28 +231,42 @@
     endif
 
     assign checkout_label = 'content.checkout' | t
+    assign grand_total = cart.total_price
     if settings.brand_navigation != false and cart.empty? == false
       assign threshold = settings.free_shipping_threshold | default: 5000
       assign standard_rate = settings.standard_shipping_rate | default: 595
+      assign tax_rate_bps = settings.estimated_tax_rate_bps | default: 875
       if cart.total_price >= threshold
         assign shipping_cost = 0
       else
         assign shipping_cost = standard_rate
       endif
-      assign estimated_total = cart.total_price | plus: shipping_cost
-      if settings.currency_code_enabled_cart_total
-        assign estimated_total_money = estimated_total | money_with_currency
-      else
-        assign estimated_total_money = estimated_total | money
+      assign taxable_base = cart.items_subtotal_price | plus: shipping_cost
+      assign tax_amount = 0
+      if cart.tax_lines.size > 0
+        for tax_line in cart.tax_lines
+          assign tax_amount = tax_amount | plus: tax_line.price
+        endfor
+      elsif tax_rate_bps > 0
+        assign tax_amount = taxable_base | times: tax_rate_bps | divided_by: 10000
       endif
-      assign checkout_label = 'Pay ' | append: estimated_total_money | append: ' — Secure checkout'
+      assign grand_total = taxable_base | plus: tax_amount
+      if settings.currency_code_enabled_cart_total
+        assign grand_total_money = grand_total | money_with_currency
+      else
+        assign grand_total_money = grand_total | money
+      endif
+      assign checkout_label = 'Pay ' | append: grand_total_money | append: ' — Guest checkout'
     elsif settings.brand_navigation != false
       assign checkout_label = 'Checkout Now — Secure Payment'
     endif
   -%}
 
   {%- if settings.brand_navigation != false and cart.empty? == false -%}
-    {% render 'luxe-leaf-shipping-estimate', variant: 'cart-totals' %}
+    {%- render 'luxe-leaf-guest-checkout-banner' -%}
+    {%- if brand_totals_in_summary -%}
+      {% render 'luxe-leaf-shipping-estimate', variant: 'cart-totals' %}
+    {%- endif -%}
   {%- endif -%}
 
   <div class="cart-totals__container{% if settings.show_installments %} cart-totals__container--has-installments{% endif %}{% if settings.brand_navigation != false and cart.empty? == false %} cart-totals__container--brand-shipping{% endif %}">
@@ -274,28 +293,13 @@
         {% endform %}
       </span>
     {% endif %}
-    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
+    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography{% if settings.brand_navigation != false and cart.empty? == false %} visually-hidden{% endif %}">
       {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
     </div>
   </div>
 </div>
 
-<div class="cart__ctas">
-  {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
-    <div
-      class="
-        additional-checkout-buttons
-        additional-checkout-buttons--priority
-        {% if accelerated_checkout_buttons_layout == 'vertical' %}additional-checkout-buttons--vertical{% endif %}
-      "
-    >
-      {{ content_for_additional_checkout_buttons }}
-    </div>
-    {%- unless settings.brand_navigation == false or cart == empty -%}
-      <p class="cart__fast-pay-note">Shop Pay, Apple Pay &amp; Google Pay — pay in seconds</p>
-    {%- endunless -%}
-  {% endif %}
-
+<div class="cart__ctas{% if settings.brand_navigation != false and cart.empty? == false %} cart__ctas--guest-first{% endif %}">
   <button
     type="submit"
     id="checkout"
@@ -306,7 +310,7 @@
     {% endif %}
     form="cart-form"
     {% if settings.brand_navigation != false and cart.empty? == false %}
-      data-checkout-estimated-total="{{ estimated_total }}"
+      data-checkout-estimated-total="{{ grand_total }}"
     {% endif %}
   >
     <span class="button-text" data-checkout-button-text>
@@ -315,9 +319,24 @@
   </button>
   {%- unless cart == empty -%}
     {%- unless settings.brand_navigation == false -%}
-      <p class="cart__checkout-note">Packed fresh to order · Secure SSL checkout</p>
+      <p class="cart__checkout-note">Guest checkout · Apple Pay &amp; cards accepted · No account required</p>
     {%- endunless -%}
   {%- endunless -%}
+
+  {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
+    <div
+      class="
+        additional-checkout-buttons
+        {% unless settings.brand_navigation != false and cart.empty? == false %}additional-checkout-buttons--priority{% endunless %}
+        {% if accelerated_checkout_buttons_layout == 'vertical' %}additional-checkout-buttons--vertical{% endif %}
+      "
+    >
+      {{ content_for_additional_checkout_buttons }}
+    </div>
+    {%- unless settings.brand_navigation == false or cart == empty -%}
+      <p class="cart__fast-pay-note">Or pay in one tap with Shop Pay — optional, no account required to checkout</p>
+    {%- endunless -%}
+  {% endif %}
 </div>
 
 {% stylesheet %}

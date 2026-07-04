@@ -117,6 +117,7 @@
     data-standard-shipping-rate="{{ settings.standard_shipping_rate | default: 595 }}"
     data-free-shipping-threshold-label="{{ settings.free_shipping_threshold | default: 5000 | money | escape }}"
     data-standard-shipping-rate-label="{{ settings.standard_shipping_rate | default: 595 | money | escape }}"
+    data-estimated-tax-rate-bps="{{ settings.estimated_tax_rate_bps | default: 875 }}"
   >
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
 

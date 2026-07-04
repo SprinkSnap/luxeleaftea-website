@@ -55,9 +55,13 @@
   "
 >
   {% if cart.empty? or force_empty %}
-    {%- if shop.customer_accounts_enabled and customer == null -%}
+    {%- if settings.brand_navigation == false and shop.customer_accounts_enabled and customer == null -%}
       <p>
         {{ 'actions.log_in_html' | t: link: routes.account_login_url }}
+      </p>
+    {%- elsif settings.brand_navigation != false -%}
+      <p class="luxe-cart-empty-guest">
+        Your bag is empty. Browse our teas — <strong>no account needed</strong> to checkout as a guest.
       </p>
     {%- endif -%}
 
