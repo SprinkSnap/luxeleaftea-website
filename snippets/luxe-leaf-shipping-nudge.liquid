@@ -54,7 +54,7 @@
         </button>
         <button
           type="button"
-          class="luxe-shipping-nudge__cart button"
+          class="luxe-shipping-nudge__cart button button-secondary"
           data-shipping-nudge-cart
           on:click="#cart-drawer/toggle"
         >
@@ -64,7 +64,7 @@
           type="button"
           class="luxe-shipping-nudge__checkout button"
           data-shipping-nudge-checkout
-          hidden
+          {% unless cart.item_count > 0 %}hidden{% endunless %}
         >
           Pay · {{ estimated_total | money }}
         </button>

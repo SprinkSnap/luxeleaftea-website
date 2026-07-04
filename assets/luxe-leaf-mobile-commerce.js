@@ -156,10 +156,10 @@ import { StandardEvents } from '@shopify/events';
       exploreBtn.hidden = qualifiesFree;
     }
     if (cartBtn instanceof HTMLElement) {
-      cartBtn.hidden = qualifiesFree;
+      cartBtn.hidden = false;
     }
     if (checkoutBtn instanceof HTMLElement) {
-      checkoutBtn.hidden = !qualifiesFree;
+      checkoutBtn.hidden = false;
       checkoutBtn.textContent = `Pay · ${formatMoney(estimatedTotal)}`;
     }
 
@@ -211,44 +211,43 @@ import { StandardEvents } from '@shopify/events';
     }
   };
 
-  function submitCartCheckout(form) {
-    if (!form) return false;
-
-    let checkoutInput = form.querySelector('input[name="checkout"]');
-    if (!checkoutInput) {
-      checkoutInput = document.createElement('input');
-      checkoutInput.type = 'hidden';
-      checkoutInput.name = 'checkout';
-      checkoutInput.value = '';
-      form.appendChild(checkoutInput);
+  function goToCheckout(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
 
-    form.method = 'post';
-    form.action = form.action || window.Theme?.routes?.cart_url || '/cart';
-    form.submit();
-    return true;
+    window.location.assign('/checkout');
   }
 
   function bindCheckoutActions() {
-    document.addEventListener('click', (event) => {
-      const button = event.target.closest(
-        '[data-mobile-checkout], [data-shipping-nudge-checkout], .cart__checkout-button[name="checkout"]'
-      );
-      if (!button || button.disabled || button.hidden) return;
+    document.addEventListener(
+      'click',
+      (event) => {
+        const button = event.target.closest('[data-shipping-nudge-checkout], [data-mobile-checkout]');
+        if (!(button instanceof HTMLButtonElement) || button.disabled || button.hidden) return;
 
-      const form =
-        button.form ||
-        (button.getAttribute('form') ? document.getElementById(button.getAttribute('form')) : null) ||
-        button.closest('form') ||
-        document.querySelector('.luxe-mobile-bar__checkout-form') ||
-        document.getElementById('cart-form');
+        goToCheckout(event);
+      },
+      true
+    );
 
-      event.preventDefault();
+    document.addEventListener(
+      'click',
+      (event) => {
+        const button = event.target.closest('.cart__checkout-button[name="checkout"]');
+        if (!(button instanceof HTMLButtonElement) || button.disabled) return;
 
-      if (submitCartCheckout(form)) return;
+        const associatedForm =
+          button.form ||
+          (button.getAttribute('form') ? document.getElementById(button.getAttribute('form')) : null);
 
-      window.location.href = '/checkout';
-    });
+        if (!(associatedForm instanceof HTMLFormElement)) {
+          goToCheckout(event);
+        }
+      },
+      true
+    );
   }
 
   function bindSearchActions() {
@@ -303,6 +302,22 @@ import { StandardEvents } from '@shopify/events';
     });
   }
 
+  function syncDrawerChrome() {
+    const cartDrawer = document.getElementById('cart-drawer');
+    const nudge = document.querySelector('[data-shipping-nudge]');
+    const bar = document.querySelector('[data-mobile-shop-bar]');
+    const drawerOpen = cartDrawer?.hasAttribute('open') === true;
+
+    document.documentElement.classList.toggle('luxe-cart-drawer-open', drawerOpen);
+
+    if (nudge instanceof HTMLElement) {
+      nudge.toggleAttribute('data-drawer-open', drawerOpen);
+    }
+    if (bar instanceof HTMLElement) {
+      bar.toggleAttribute('data-drawer-open', drawerOpen);
+    }
+  }
+
   function bindMobileMenuToggle() {
     const menuBtn = document.querySelector('[data-mobile-menu-toggle]');
     const panel = document.getElementById('LuxeBrandMenuPanel');
@@ -319,10 +334,17 @@ import { StandardEvents } from '@shopify/events';
 
   document.addEventListener('DOMContentLoaded', () => {
     syncBar();
+    syncDrawerChrome();
     bindMobileMenuToggle();
     bindCheckoutActions();
     bindSearchActions();
     bindShippingNudgeActions();
   });
   document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
+  document.addEventListener('theme-drawer:open', (event) => {
+    if (/** @type {Element} */ (event.target).id === 'cart-drawer') syncDrawerChrome();
+  });
+  document.addEventListener('theme-drawer:close', (event) => {
+    if (/** @type {Element} */ (event.target).id === 'cart-drawer') syncDrawerChrome();
+  });
 })();

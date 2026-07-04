@@ -133,15 +133,14 @@
       </a>
       <form action="{{ routes.cart_url }}" method="post" class="luxe-mobile-bar__checkout-form">
         <button
-          type="submit"
-          name="checkout"
+          type="button"
           class="luxe-mobile-bar__checkout button"
           data-mobile-checkout
           {% if cart.item_count == 0 %}hidden{% endif %}
         >
           Pay · {{ mobile_estimated_total | money }}
         </button>
-    </form>
+      </form>
       {%- if settings.cart_type == 'drawer' -%}
         <button
           type="button"

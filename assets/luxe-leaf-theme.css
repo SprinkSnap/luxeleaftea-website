@@ -802,6 +802,12 @@ body .luxe-trust-bar {
   border-color: rgb(var(--luxe-gold-rgb, 201 162 39) / 0.25);
 }
 
+html.luxe-cart-drawer-open .luxe-shipping-nudge,
+html.luxe-cart-drawer-open [data-mobile-shop-bar] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* ── Always-on overrides (ignore Horizon admin palette / Inter fonts) ── */
 body,
 .page-wrapper,
