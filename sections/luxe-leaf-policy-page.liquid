@@ -59,7 +59,7 @@
         <div class="luxe-policy-page__sidebar-card">
           <h2 class="luxe-policy-page__sidebar-heading">{{ section.settings.sidebar_heading }}</h2>
           <nav class="luxe-policy-page__nav" aria-label="Legal policies">
-            {% render 'luxe-leaf-policy-links', list_class: 'luxe-policy-page__nav-list list-unstyled' %}
+            {% render 'luxe-leaf-policy-links', variant: 'list' %}
           </nav>
           <div class="luxe-policy-page__sidebar-links">
             <a href="{{ faq_url }}" class="luxe-policy-page__sidebar-link">FAQ</a>
@@ -182,7 +182,8 @@
     padding: 0;
   }
 
-  .luxe-policy-page__nav-list a {
+  .luxe-policy-page__nav-list a,
+  .luxe-policy-page__sidebar .luxe-brand-footer__list a {
     display: block;
     padding: 0.35rem 0;
     color: #f8f6f0;
@@ -191,7 +192,8 @@
     text-decoration: none;
   }
 
-  .luxe-policy-page__nav-list a:hover {
+  .luxe-policy-page__nav-list a:hover,
+  .luxe-policy-page__sidebar .luxe-brand-footer__list a:hover {
     color: #c9a227;
   }
 

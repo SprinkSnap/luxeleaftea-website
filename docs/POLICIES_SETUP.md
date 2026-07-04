@@ -21,7 +21,15 @@ The theme includes a premium **policy page template** and **default policy copy*
 | Refund Policy | `/policies/refund-policy` |
 | Shipping Policy | `/policies/shipping-policy` |
 
-Footer links: **Privacy Policy · Terms of Service · Refund Policy · Shipping Policy**
+Policy links appear in three places (mobile-first, high-contrast tap targets):
+
+| Location | What you see |
+|----------|----------------|
+| **Footer → Legal** accordion | Privacy, Terms, Refund, Shipping |
+| **Footer bottom bar** | “Policies” label + 2×2 grid on mobile, 4-up row on desktop |
+| **Mobile menu** (hamburger) | “Policies” block with the same four links |
+
+Links use Shopify admin policy URLs when policies exist; otherwise they fall back to `/policies/…` paths above.
 
 ## Theme files
 

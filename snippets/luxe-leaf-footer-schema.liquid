@@ -25,6 +25,14 @@
     assign faq_abs = shop.url | append: '/pages/faq'
     assign about_abs = shop.url | append: '/pages/about'
     assign contact_abs = shop.url | append: '/pages/contact'
+    assign privacy_path = shop.privacy_policy.url | default: '/policies/privacy-policy'
+    assign terms_path = shop.terms_of_service.url | default: '/policies/terms-of-service'
+    assign refund_path = shop.refund_policy.url | default: '/policies/refund-policy'
+    assign shipping_path = shop.shipping_policy.url | default: '/policies/shipping-policy'
+    assign privacy_abs = shop.url | append: privacy_path
+    assign terms_abs = shop.url | append: terms_path
+    assign refund_abs = shop.url | append: refund_path
+    assign shipping_abs = shop.url | append: shipping_path
     assign free_ship_threshold = settings.free_shipping_threshold | default: 5000
     assign standard_shipping_rate = settings.standard_shipping_rate | default: 595
     assign free_ship_money = free_ship_threshold | money
@@ -85,7 +93,7 @@
     {
       "@context": "https://schema.org",
       "@type": "SiteNavigationElement",
-      "name": ["Home", "Shop All Tea", "Green Tea", "Oolong Tea", "Tea Guides", "FAQ", "About", "Contact"],
+      "name": ["Home", "Shop All Tea", "Green Tea", "Oolong Tea", "Tea Guides", "FAQ", "About", "Contact", "Privacy Policy", "Terms of Service", "Refund Policy", "Shipping Policy"],
       "url": [
         {{ home_abs | json }},
         {{ shop_abs | json }},
@@ -94,7 +102,11 @@
         {{ guides_abs | json }},
         {{ faq_abs | json }},
         {{ about_abs | json }},
-        {{ contact_abs | json }}
+        {{ contact_abs | json }},
+        {{ privacy_abs | json }},
+        {{ terms_abs | json }},
+        {{ refund_abs | json }},
+        {{ shipping_abs | json }}
       ]
     }
   </script>

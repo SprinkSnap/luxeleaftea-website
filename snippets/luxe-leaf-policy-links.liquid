@@ -1,5 +1,6 @@
 {%- doc -%}
-  Footer legal policy links — Privacy, Terms, Refund, Shipping in consistent order.
+  Legal policy links — Privacy, Terms, Refund, Shipping.
+  variant: list (footer column) | bar (legal strip) | grid (mobile 2-up)
 {%- enddoc -%}
 
 {%- liquid
@@ -7,19 +8,31 @@
   assign terms_url = shop.terms_of_service.url | default: '/policies/terms-of-service'
   assign refund_url = shop.refund_policy.url | default: '/policies/refund-policy'
   assign shipping_url = shop.shipping_policy.url | default: '/policies/shipping-policy'
+
+  assign link_variant = variant | default: 'bar'
+  if link_variant == 'list'
+    assign list_class = 'luxe-brand-footer__list list-unstyled'
+    assign link_class = 'luxe-brand-footer__policy-link'
+  elsif link_variant == 'grid'
+    assign list_class = 'luxe-brand-footer__policy-grid list-unstyled'
+    assign link_class = 'luxe-brand-footer__policy-grid-link'
+  else
+    assign list_class = list_class | default: 'luxe-brand-footer__policy-list list-unstyled'
+    assign link_class = 'luxe-brand-footer__policy-link'
+  endif
 -%}
 
-<ul class="{{ list_class | default: 'luxe-brand-footer__policy-list list-unstyled' }}" role="list">
+<ul class="{{ list_class }}" role="list">
   <li>
-    <a href="{{ privacy_url }}" title="Privacy Policy">Privacy Policy</a>
+    <a href="{{ privacy_url }}" class="{{ link_class }}" title="Luxe Leaf Tea Privacy Policy">Privacy Policy</a>
   </li>
   <li>
-    <a href="{{ terms_url }}" title="Terms of Service">Terms of Service</a>
+    <a href="{{ terms_url }}" class="{{ link_class }}" title="Luxe Leaf Tea Terms of Service">Terms of Service</a>
   </li>
   <li>
-    <a href="{{ refund_url }}" title="Refund Policy">Refund Policy</a>
+    <a href="{{ refund_url }}" class="{{ link_class }}" title="Luxe Leaf Tea Refund Policy">Refund Policy</a>
   </li>
   <li>
-    <a href="{{ shipping_url }}" title="Shipping Policy">Shipping Policy</a>
+    <a href="{{ shipping_url }}" class="{{ link_class }}" title="Luxe Leaf Tea Shipping Policy">Shipping Policy</a>
   </li>
 </ul>
