@@ -20,7 +20,11 @@
   endif
 
   assign home_url = routes.root_url
-  assign about_url = pages['about'].url | default: '/pages/about'
+  if pages['about'] != blank
+    assign about_url = pages['about'].url
+  else
+    assign about_url = routes.root_url | append: '#our-story'
+  endif
   assign contact_url = pages['contact'].url | default: '/pages/contact'
   assign faq_url = pages['faq'].url | default: '/pages/faq'
 

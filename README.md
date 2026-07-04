@@ -50,19 +50,19 @@ The homepage includes:
 
 ## About page
 
-Create a page in Shopify admin:
+Create a page in Shopify admin (required for `/pages/about` — until then, **About** in the menu scrolls to our story on the homepage):
 
 1. **Online Store → Pages → Add page**
-2. Title: `About` (handle will be `about`)
-3. Template suffix: `about` (uses `templates/page.about.json`)
+2. Title: `About` (handle must be `about`)
+3. Template: **Default page** or suffix **`about`** — both show the premium About layout
 
 ## Contact page
 
 Create a page in Shopify admin:
 
 1. **Online Store → Pages → Add page**
-2. Title: `Contact` (handle will be `contact`)
-3. Template suffix: `contact` (uses `templates/page.contact.json`)
+2. Title: `Contact` (handle must be `contact`)
+3. Template: **Default page** or suffix **`contact`** — both show the premium Contact layout
 
 ## Navigation
 

@@ -1,4 +1,12 @@
 
+{%- liquid
+  assign render_luxe_about = false
+  if page.handle == 'about' or template.suffix == 'about'
+    assign render_luxe_about = true
+  endif
+-%}
+
+{%- if render_luxe_about -%}
 <section
   class="luxe-about section section--page-width spacing-style"
   id="our-story"
@@ -26,6 +34,7 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-about {

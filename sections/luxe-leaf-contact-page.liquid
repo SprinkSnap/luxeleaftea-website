@@ -3,6 +3,14 @@
 {%- enddoc -%}
 
 {%- liquid
+  assign render_luxe_contact = false
+  if page.handle == 'contact' or template.suffix == 'contact'
+    assign render_luxe_contact = true
+  endif
+-%}
+
+{%- if render_luxe_contact -%}
+{%- liquid
   capture brand_phone
     render 'luxe-leaf-brand-phone-value'
   endcapture
@@ -277,6 +285,7 @@
     });
   });
 </script>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-contact-page {

@@ -1,11 +1,23 @@
 
 
 {% liquid
+  assign luxe_custom_page = false
+  if page.handle == 'contact' or template.suffix == 'contact'
+    assign luxe_custom_page = true
+  endif
+  if page.handle == 'about' or template.suffix == 'about'
+    assign luxe_custom_page = true
+  endif
+  if page.handle == 'faq' or template.suffix == 'faq'
+    assign luxe_custom_page = true
+  endif
+
   if section.settings.background_color != blank
     render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
   endif
 %}
 
+{%- unless luxe_custom_page -%}
 <div
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
 ></div>
@@ -26,6 +38,7 @@
     {% content_for 'blocks' %}
   </div>
 </div>
+{%- endunless -%}
 
 {% schema %}
 {

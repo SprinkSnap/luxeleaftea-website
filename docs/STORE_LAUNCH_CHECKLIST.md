@@ -82,9 +82,9 @@ Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-
 
 | Page | Handle | Template |
 |------|--------|----------|
-| About | `about` | `about` |
+| About | `about` | `about` (or default — auto-detects by handle) |
 | FAQ | `faq` | `faq` |
-| Contact | `contact` | `contact` |
+| Contact | `contact` | `contact` (or default — auto-detects by handle) |
 
 ## 5. Create Tea Guides blog
 
