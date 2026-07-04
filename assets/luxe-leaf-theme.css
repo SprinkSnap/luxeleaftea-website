@@ -565,3 +565,286 @@ body .h4,
 .shopify-section:has([class^='luxe-']) {
   display: block !important;
 }
+
+/* ── Luxe Leaf brand footer (mobile-first, conversion + SEO) ── */
+.luxe-brand-footer {
+  background: var(--luxe-jade-deep, #0d2818);
+  color: var(--luxe-cream, #f8f6f0);
+  margin-top: auto;
+}
+
+.luxe-brand-footer a {
+  color: var(--luxe-cream, #f8f6f0);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.luxe-brand-footer a:hover {
+  color: var(--luxe-gold, #c9a227);
+}
+
+.luxe-brand-footer__cta {
+  padding: 2rem 1rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgb(248 246 240 / 0.1);
+}
+
+.luxe-brand-footer__cta-inner {
+  display: grid;
+  gap: 0.85rem;
+  justify-items: center;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.luxe-brand-footer__tagline {
+  margin: 0;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  color: rgb(248 246 240 / 0.88);
+}
+
+.luxe-brand-footer__shop-btn {
+  width: 100%;
+  max-width: 18rem;
+  min-height: 3rem;
+  justify-content: center;
+  background: var(--luxe-gold, #c9a227) !important;
+  border-color: var(--luxe-gold, #c9a227) !important;
+  color: var(--luxe-ink, #1a1a1a) !important;
+  font-weight: 600;
+}
+
+.luxe-brand-footer__trust-line {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: rgb(248 246 240 / 0.65);
+}
+
+.luxe-brand-footer__main {
+  padding: 1.75rem 1rem 1.25rem;
+}
+
+.luxe-brand-footer__grid {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.luxe-brand-footer__heading {
+  margin: 0 0 0.85rem;
+  font-family: 'Playfair Display', var(--font-heading--family), Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--luxe-gold, #c9a227);
+}
+
+.luxe-brand-footer__list,
+.luxe-brand-footer__contact {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.luxe-brand-footer__list a {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding-block: 0.35rem;
+  font-size: 0.9375rem;
+}
+
+.luxe-brand-footer__contact-link {
+  display: grid;
+  gap: 0.1rem;
+  min-height: 3rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgb(248 246 240 / 0.15);
+  border-radius: 0.625rem;
+  background: rgb(248 246 240 / 0.06);
+}
+
+.luxe-brand-footer__contact-link--phone {
+  border-color: rgb(201 162 39 / 0.35);
+  background: rgb(201 162 39 / 0.1);
+}
+
+.luxe-brand-footer__contact-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(248 246 240 / 0.55);
+}
+
+.luxe-brand-footer__contact-value {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.luxe-brand-footer__newsletter-copy {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  color: rgb(248 246 240 / 0.72);
+}
+
+.luxe-brand-footer__social {
+  padding: 0 1rem 1.25rem;
+}
+
+.luxe-brand-footer__social-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+}
+
+.luxe-brand-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(248 246 240 / 0.2);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.luxe-brand-footer__legal {
+  padding: 1.25rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgb(248 246 240 / 0.12);
+  text-align: center;
+}
+
+.luxe-brand-footer__copyright {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  color: rgb(248 246 240 / 0.55);
+}
+
+.luxe-brand-footer__policy-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.luxe-brand-footer__policy-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  font-size: 0.75rem;
+  color: rgb(248 246 240 / 0.65);
+}
+
+@media screen and (min-width: 750px) {
+  .luxe-brand-footer__cta {
+    padding: 2.5rem 1.5rem 2rem;
+  }
+
+  .luxe-brand-footer__main {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .luxe-brand-footer__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem 2.5rem;
+    align-items: start;
+  }
+
+  .luxe-brand-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    text-align: left;
+    padding-inline: 1.5rem;
+  }
+
+  .luxe-brand-footer__copyright {
+    margin: 0;
+  }
+
+  .luxe-brand-footer__policy-list {
+    justify-content: flex-end;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .luxe-brand-footer {
+    padding-bottom: var(--luxe-mobile-bar-height, 4.25rem);
+  }
+}
+
+/* ── Sitewide mobile responsive + conversion ── */
+html {
+  overflow-x: clip;
+}
+
+body.luxe-leaf-theme {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body.luxe-leaf-theme img,
+body.luxe-leaf-theme video,
+body.luxe-leaf-theme svg {
+  max-width: 100%;
+  height: auto;
+}
+
+body.luxe-leaf-theme .content-for-layout {
+  overflow-x: clip;
+}
+
+@media screen and (max-width: 749px) {
+  body.luxe-leaf-theme input,
+  body.luxe-leaf-theme select,
+  body.luxe-leaf-theme textarea,
+  body.luxe-leaf-theme .field__input {
+    font-size: 16px !important;
+  }
+
+  body.luxe-leaf-theme .button,
+  body.luxe-leaf-theme button,
+  body.luxe-leaf-theme a.button {
+    min-height: 2.75rem;
+  }
+
+  body.luxe-leaf-theme .product-card,
+  body.luxe-leaf-theme .product-grid__card {
+    width: 100%;
+  }
+
+  body.luxe-leaf-theme .section {
+    padding-inline: max(1rem, env(safe-area-inset-left)) max(1rem, env(safe-area-inset-right));
+  }
+
+  body.luxe-leaf-theme table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.luxe-leaf-theme *,
+  body.luxe-leaf-theme *::before,
+  body.luxe-leaf-theme *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

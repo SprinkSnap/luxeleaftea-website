@@ -1,0 +1,186 @@
+{%- doc -%}
+  Luxe Leaf Tea premium footer — mobile-first, conversion & SEO optimized.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    assign shop_tea_url = routes.all_products_collection_url
+    if collections.all != blank and collections.all.url != blank
+      assign shop_tea_url = collections.all.url
+    endif
+
+    capture brand_phone
+      render 'luxe-leaf-brand-phone-value'
+    endcapture
+    assign brand_phone = brand_phone | strip
+    assign brand_phone_href = brand_phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-'
+
+    assign brand_email = settings.brand_email
+    if brand_email == blank
+      assign brand_email = shop.email
+    endif
+
+    assign show_newsletter = section.settings.show_newsletter
+    assign instagram_url = section.settings.instagram_url
+    assign facebook_url = section.settings.facebook_url
+  -%}
+
+  <div class="luxe-brand-footer" role="contentinfo" aria-label="Site footer">
+    <div class="luxe-brand-footer__cta section section--page-width">
+      <div class="luxe-brand-footer__cta-inner">
+        <p class="luxe-brand-footer__tagline">Premium loose leaf tea — packed fresh to order</p>
+        <a href="{{ shop_tea_url }}" class="button luxe-brand-footer__shop-btn">
+          Shop Tea
+        </a>
+        <p class="luxe-brand-footer__trust-line">Free shipping on orders $50+ · Secure checkout</p>
+      </div>
+    </div>
+
+    <div class="luxe-brand-footer__main section section--page-width">
+      <div class="luxe-brand-footer__grid">
+        <nav class="luxe-brand-footer__col" aria-label="Shop premium tea">
+          <h2 class="luxe-brand-footer__heading">Shop</h2>
+          <ul class="luxe-brand-footer__list list-unstyled" role="list">
+            <li><a href="{{ shop_tea_url }}" title="Shop all premium loose leaf tea">Shop All Tea</a></li>
+            <li><a href="/collections/green-tea" title="Premium loose leaf green tea">Green Tea</a></li>
+            <li><a href="/collections/oolong" title="Premium loose leaf oolong tea">Oolong Tea</a></li>
+            <li><a href="/collections/pu-erh" title="Premium loose leaf pu-erh tea">Pu-erh Tea</a></li>
+            <li><a href="/collections/black-tea" title="Premium loose leaf black tea">Black Tea</a></li>
+          </ul>
+        </nav>
+
+        <nav class="luxe-brand-footer__col" aria-label="Learn about tea">
+          <h2 class="luxe-brand-footer__heading">Learn</h2>
+          <ul class="luxe-brand-footer__list list-unstyled" role="list">
+            <li><a href="/blogs/tea-guides" title="Premium loose leaf tea brewing guides">Tea Guides</a></li>
+            <li><a href="/pages/faq" title="Tea FAQ — shipping, brewing, and orders">FAQ</a></li>
+            <li><a href="/pages/about" title="About Luxe Leaf Tea">Our Story</a></li>
+            <li><a href="/pages/contact" title="Contact Luxe Leaf Tea">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="luxe-brand-footer__col luxe-brand-footer__col--contact">
+          <h2 class="luxe-brand-footer__heading">Get in touch</h2>
+          <ul class="luxe-brand-footer__contact list-unstyled" role="list">
+            {%- if brand_phone != blank -%}
+              <li>
+                <a
+                  href="tel:{{ brand_phone_href | escape }}"
+                  class="luxe-brand-footer__contact-link luxe-brand-footer__contact-link--phone"
+                  title="Call Luxe Leaf Tea"
+                >
+                  <span class="luxe-brand-footer__contact-label">Phone</span>
+                  <span class="luxe-brand-footer__contact-value">{{ brand_phone }}</span>
+                </a>
+              </li>
+            {%- else -%}
+              <li>
+                <a href="/pages/contact" class="luxe-brand-footer__contact-link" title="View phone and contact details">
+                  <span class="luxe-brand-footer__contact-label">Phone</span>
+                  <span class="luxe-brand-footer__contact-value">Contact us</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if brand_email != blank -%}
+              <li>
+                <a
+                  href="mailto:{{ brand_email | escape }}"
+                  class="luxe-brand-footer__contact-link"
+                  title="Email Luxe Leaf Tea customer service"
+                >
+                  <span class="luxe-brand-footer__contact-label">Email</span>
+                  <span class="luxe-brand-footer__contact-value">{{ brand_email }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+
+          {%- if show_newsletter -%}
+            <p class="luxe-brand-footer__newsletter-copy">Join for harvest alerts &amp; brewing tips.</p>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    {%- if instagram_url != blank or facebook_url != blank -%}
+      <div class="luxe-brand-footer__social section section--page-width">
+        <nav class="luxe-brand-footer__social-nav" aria-label="Social media">
+          {%- if instagram_url != blank -%}
+            <a
+              href="{{ instagram_url }}"
+              class="luxe-brand-footer__social-link"
+              rel="noopener noreferrer"
+              target="_blank"
+              aria-label="Luxe Leaf Tea on Instagram"
+            >
+              Instagram
+            </a>
+          {%- endif -%}
+          {%- if facebook_url != blank -%}
+            <a
+              href="{{ facebook_url }}"
+              class="luxe-brand-footer__social-link"
+              rel="noopener noreferrer"
+              target="_blank"
+              aria-label="Luxe Leaf Tea on Facebook"
+            >
+              Facebook
+            </a>
+          {%- endif -%}
+        </nav>
+      </div>
+    {%- endif -%}
+
+    <div class="luxe-brand-footer__legal section section--page-width">
+      <p class="luxe-brand-footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+      </p>
+      {%- if shop.policies.size > 0 -%}
+        <nav class="luxe-brand-footer__policies" aria-label="Legal policies">
+          <ul class="luxe-brand-footer__policy-list list-unstyled" role="list">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li>
+                  <a href="{{ policy.url }}">{{ policy.title | escape }}</a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- render 'luxe-leaf-footer-schema' -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Luxe Leaf footer",
+  "tag": null,
+  "class": "luxe-brand-footer-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter hint",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf footer"
+    }
+  ]
+}
+{% endschema %}

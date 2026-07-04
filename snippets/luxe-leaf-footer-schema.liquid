@@ -1,0 +1,35 @@
+{%- doc -%}
+  Organization contactPoint JSON-LD for footer SEO.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    capture brand_phone
+      render 'luxe-leaf-brand-phone-value'
+    endcapture
+    assign brand_phone = brand_phone | strip
+
+    assign brand_email = settings.brand_email
+    if brand_email == blank
+      assign brand_email = shop.email
+    endif
+  -%}
+
+  {%- if brand_phone != blank or brand_email != blank -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": {{ shop.name | json }},
+        "url": {{ shop.url | json }},
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "availableLanguage": ["English"]{%- if brand_phone != blank -%},
+          "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
+          "email": {{ brand_email | json }}{%- endif -%}
+        }
+      }
+    </script>
+  {%- endif -%}
+{%- endunless -%}
