@@ -198,7 +198,7 @@ import { StandardEvents } from '@shopify/events';
       return;
     }
 
-    const { qualifiesFree, estimatedTotal, remaining, progress } = getShippingEstimate(
+    const { qualifiesFree, estimatedTotal, remaining, progress, taxReady } = getShippingEstimate(
       cart.total_price,
       cart.items_subtotal_price
     );
@@ -239,7 +239,9 @@ import { StandardEvents } from '@shopify/events';
     }
     if (checkoutBtn instanceof HTMLElement) {
       checkoutBtn.hidden = false;
-      checkoutBtn.textContent = `Pay · ${formatMoney(estimatedTotal)}`;
+      checkoutBtn.textContent = taxReady
+        ? `Pay · ${formatMoney(estimatedTotal)}`
+        : 'Guest checkout';
     }
 
     nudge.hidden = false;
@@ -271,7 +273,9 @@ import { StandardEvents } from '@shopify/events';
           bar.classList.add('luxe-mobile-bar--has-cart');
           if (checkoutButton) {
             checkoutButton.hidden = false;
-            checkoutButton.textContent = `Pay · ${formatMoney(estimatedTotal)}`;
+            checkoutButton.textContent = taxReady
+              ? `Pay · ${formatMoney(estimatedTotal)}`
+              : 'Guest checkout';
           }
           if (cartBtn) cartBtn.hidden = true;
         } else {
