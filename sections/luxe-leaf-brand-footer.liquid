@@ -38,6 +38,11 @@
   -%}
 
   <div class="luxe-brand-footer" role="contentinfo" aria-label="Site footer">
+    <style>
+      .luxe-brand-footer-section .luxe-brand-footer__newsletter-copy {
+        color: var(--luxe-cream, #f8f6f0) !important;
+      }
+    </style>
     <div class="luxe-brand-footer__cta section section--page-width" style="background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%); color: #f8f6f0;">
       <div class="luxe-brand-footer__cta-inner">
         <p class="luxe-brand-footer__eyebrow">Premium loose leaf tea</p>
@@ -201,7 +206,10 @@
                 <h3 class="luxe-brand-footer__newsletter-heading" style="color: #f8f6f0 !important;">
                   {{ section.settings.newsletter_heading }}
                 </h3>
-                <p class="luxe-brand-footer__newsletter-copy" style="color: #f8f6f0 !important;">
+                <p
+                  class="luxe-brand-footer__newsletter-copy luxe-text-cream"
+                  style="--color: #f8f6f0; --color-rgb: 248 246 240; color: #f8f6f0 !important;"
+                >
                   {{ section.settings.newsletter_copy }}
                 </p>
                 {% render 'luxe-leaf-footer-newsletter',

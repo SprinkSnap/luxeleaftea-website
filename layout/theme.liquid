@@ -169,6 +169,12 @@
       body.luxe-leaf-theme #header-component .header__row--top {
         min-height: 3.75rem;
       }
+
+      /* Footer newsletter signup copy — must beat global jade body/heading rules */
+      body.luxe-leaf-theme .luxe-brand-footer-section p.luxe-brand-footer__newsletter-copy,
+      body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy.luxe-text-cream {
+        color: #f8f6f0 !important;
+      }
     {% endstyle %}
 
     {% if request.design_mode %}

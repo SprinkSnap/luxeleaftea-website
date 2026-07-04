@@ -40,8 +40,10 @@ body .h4 {
 body h2.luxe-shop-cta__heading,
 body h2.luxe-brand-footer__headline,
 body h2.luxe-collection-cta__heading,
-body h3.luxe-brand-footer__newsletter-heading {
-  color: #f8f6f0;
+body h3.luxe-brand-footer__newsletter-heading,
+body p.luxe-brand-footer__newsletter-copy,
+.luxe-text-cream {
+  color: var(--luxe-cream, #f8f6f0) !important;
 }
 
 body .header-announcements,
