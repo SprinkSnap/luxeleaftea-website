@@ -69,7 +69,7 @@
           "type": "text",
           "id": "brand_phone",
           "label": "Customer service phone",
-          "info": "Shown in the mobile menu. Example: (555) 123-4567"
+          "info": "Shown in the nav menu. Falls back to your Shopify store phone if set under Settings → Store details."
         },
         {
           "type": "text",
