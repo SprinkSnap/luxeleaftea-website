@@ -4,6 +4,12 @@
   assign luxe_custom_page = false
   if template.suffix == 'about' or template.suffix == 'contact' or template.suffix == 'faq'
     assign luxe_custom_page = true
+  elsif page.handle == 'about' or page.handle == 'about-us' or page.handle == 'our-story'
+    assign luxe_custom_page = true
+  elsif page.handle == 'contact' or page.handle == 'contact-us' or page.handle == 'get-in-touch'
+    assign luxe_custom_page = true
+  elsif page.handle == 'faq'
+    assign luxe_custom_page = true
   endif
 
   if section.settings.background_color != blank

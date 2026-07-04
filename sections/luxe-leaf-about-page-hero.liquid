@@ -2,6 +2,12 @@
   About page hero — boutique tea room story with AboutPage JSON-LD.
 {%- enddoc -%}
 
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: 'about' -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
 {%- liquid
   assign hero_image = section.settings.image
   if hero_image == blank
@@ -132,6 +138,7 @@
     }
   }
 </script>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-about-page {
