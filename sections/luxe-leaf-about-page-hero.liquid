@@ -63,6 +63,26 @@
       </div>
 
       <p class="luxe-about-page__trust-line">{{ section.settings.trust_line }}</p>
+
+      {%- if section.settings.show_jump_nav -%}
+        <nav class="luxe-about-page__jump" aria-label="Explore this page">
+          <a href="#featured-teas" class="luxe-about-page__jump-link">{{ section.settings.jump_shop_label }}</a>
+          <a href="#our-story" class="luxe-about-page__jump-link">{{ section.settings.jump_story_label }}</a>
+          <a href="#reviews" class="luxe-about-page__jump-link">{{ section.settings.jump_reviews_label }}</a>
+        </nav>
+      {%- endif -%}
+
+      <ul class="luxe-about-page__stats list-unstyled" role="list" aria-label="Why shoppers choose Luxe Leaf Tea">
+        {%- if section.settings.stat_1 != blank -%}
+          <li><strong>{{ section.settings.stat_1 }}</strong><span>{{ section.settings.stat_1_label }}</span></li>
+        {%- endif -%}
+        {%- if section.settings.stat_2 != blank -%}
+          <li><strong>{{ section.settings.stat_2 }}</strong><span>{{ section.settings.stat_2_label }}</span></li>
+        {%- endif -%}
+        {%- if section.settings.stat_3 != blank -%}
+          <li><strong>{{ section.settings.stat_3 }}</strong><span>{{ section.settings.stat_3_label }}</span></li>
+        {%- endif -%}
+      </ul>
     </div>
 
     <div class="luxe-about-page__visual">
@@ -231,6 +251,70 @@
     color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
   }
 
+  .luxe-about-page__jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.15rem 0 1rem;
+  }
+
+  .luxe-about-page__jump-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.15);
+    background: #fff;
+    color: var(--luxe-jade, #1b4332);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .luxe-about-page__jump-link:hover {
+    border-color: var(--luxe-gold, #c9a227);
+    color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-about-page__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin: 0;
+  }
+
+  .luxe-about-page__stats li {
+    padding: 0.75rem 0.65rem;
+    border-radius: 0.65rem;
+    background: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.04);
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.08);
+    text-align: center;
+  }
+
+  .luxe-about-page__stats strong {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: var(--luxe-jade, #1b4332);
+    font-size: 0.9375rem;
+    line-height: 1.2;
+  }
+
+  .luxe-about-page__stats span {
+    display: block;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
+    font-size: 0.6875rem;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+  }
+
+  @media screen and (max-width: 549px) {
+    .luxe-about-page__stats {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .luxe-about-page__visual {
     position: relative;
     border-radius: 1rem;
@@ -320,6 +404,66 @@
       "id": "badge_text",
       "label": "Image badge",
       "default": "Shop like you're at the counter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_jump_nav",
+      "label": "Show page jump links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "jump_shop_label",
+      "label": "Jump link — shop",
+      "default": "Shop bestsellers"
+    },
+    {
+      "type": "text",
+      "id": "jump_story_label",
+      "label": "Jump link — story",
+      "default": "Our story"
+    },
+    {
+      "type": "text",
+      "id": "jump_reviews_label",
+      "label": "Jump link — reviews",
+      "default": "Customer love"
+    },
+    {
+      "type": "text",
+      "id": "stat_1",
+      "label": "Stat 1 value",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 label",
+      "default": "Whole leaf tea"
+    },
+    {
+      "type": "text",
+      "id": "stat_2",
+      "label": "Stat 2 value",
+      "default": "Fresh"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 label",
+      "default": "Packed after you order"
+    },
+    {
+      "type": "text",
+      "id": "stat_3",
+      "label": "Stat 3 value",
+      "default": "$50+"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 label",
+      "default": "Free shipping"
     },
     {
       "type": "image_picker",

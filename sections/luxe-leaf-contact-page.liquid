@@ -25,6 +25,15 @@
   assign page_url = shop.url | append: page.url
   assign page_desc = section.settings.intro | strip_html | truncate: 300
   assign form_id = 'ContactForm-' | append: section.id
+
+  assign welcome_image = section.settings.welcome_image
+  if welcome_image == blank
+    assign welcome_image_url = 'luxe-leaf-tea-assortment-hero.png' | asset_url
+    assign welcome_alt = 'Welcome to Luxe Leaf Tea — premium loose leaf tea boutique'
+  else
+    assign welcome_image_url = welcome_image | image_url: width: 800
+    assign welcome_alt = welcome_image.alt | default: section.settings.welcome_heading
+  endif
 -%}
 
 <section
@@ -32,14 +41,50 @@
   id="contact"
   style="{% render 'spacing-style', settings: section.settings %}"
 >
-  <header class="luxe-contact-page__header">
-    <p class="luxe-contact-page__eyebrow">
-      {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
-      {{ section.settings.eyebrow }}
-    </p>
-    <h1 class="luxe-contact-page__heading">{{ section.settings.heading }}</h1>
-    <div class="luxe-contact-page__intro rte">{{ section.settings.intro }}</div>
-  </header>
+  <div class="luxe-contact-page__hero">
+    <header class="luxe-contact-page__header">
+      <p class="luxe-contact-page__eyebrow">
+        {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+        {{ section.settings.eyebrow }}
+      </p>
+      <h1 class="luxe-contact-page__heading">{{ section.settings.heading }}</h1>
+      <div class="luxe-contact-page__intro rte">{{ section.settings.intro }}</div>
+    </header>
+
+    <aside class="luxe-contact-page__welcome" aria-label="Welcome to our tea room">
+      <div class="luxe-contact-page__welcome-visual">
+        {%- if welcome_image != blank -%}
+          {{
+            welcome_image
+            | image_url: width: 800
+            | image_tag: loading: 'eager', alt: welcome_alt, class: 'luxe-contact-page__welcome-image', widths: '400, 600, 800'
+          }}
+        {%- else -%}
+          <img
+            src="{{ welcome_image_url }}"
+            alt="{{ welcome_alt | escape }}"
+            width="800"
+            height="600"
+            loading="eager"
+            class="luxe-contact-page__welcome-image"
+          >
+        {%- endif -%}
+      </div>
+      <div class="luxe-contact-page__welcome-body">
+        <p class="luxe-contact-page__welcome-eyebrow">{{ section.settings.welcome_eyebrow }}</p>
+        <h2 class="luxe-contact-page__welcome-heading">{{ section.settings.welcome_heading }}</h2>
+        <p class="luxe-contact-page__welcome-text">{{ section.settings.welcome_text }}</p>
+        <div class="luxe-contact-page__welcome-actions">
+          <button type="button" class="button luxe-contact-page__welcome-chat" data-open-tea-guide>
+            {{ section.settings.tea_guide_label }}
+          </button>
+          <a href="{{ shop_tea_url }}" class="button button-secondary luxe-contact-page__welcome-shop">
+            {{ section.settings.shop_while_label }}
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
 
   <div class="luxe-contact-page__layout">
     <aside class="luxe-contact-page__channels" aria-label="Contact channels">
@@ -194,6 +239,22 @@
         </div>
 
         <div class="luxe-contact-page__field">
+          <label for="ContactForm-topic-{{ section.id }}">What can we help with?</label>
+          <select
+            id="ContactForm-topic-{{ section.id }}"
+            name="contact[Inquiry type]"
+            class="luxe-contact-page__input luxe-contact-page__input--select"
+            autocomplete="off"
+          >
+            <option value="Help choosing a tea">Help choosing a tea</option>
+            <option value="Order or shipping question">Order or shipping question</option>
+            <option value="Brewing guidance">Brewing guidance</option>
+            <option value="Wholesale or partnership">Wholesale or partnership</option>
+            <option value="Something else">Something else</option>
+          </select>
+        </div>
+
+        <div class="luxe-contact-page__field">
           <label for="ContactForm-body-{{ section.id }}">How can we help?</label>
           <textarea
             id="ContactForm-body-{{ section.id }}"
@@ -262,7 +323,13 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
-        "availableLanguage": ["English"]{%- if brand_phone != blank -%},
+        "availableLanguage": ["English"],
+        "hoursAvailable": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "17:00"
+        }{%- if brand_phone != blank -%},
         "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
         "email": {{ brand_email | json }}{%- endif -%}
       }
@@ -286,7 +353,100 @@
 
   .luxe-contact-page__header {
     max-width: 42rem;
+  }
+
+  .luxe-contact-page__hero {
+    display: grid;
+    gap: 1.5rem;
     margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: 900px) {
+    .luxe-contact-page__hero {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+      gap: 2rem;
+      align-items: stretch;
+    }
+  }
+
+  .luxe-contact-page__welcome {
+    display: grid;
+    border-radius: 0.85rem;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
+    box-shadow: var(--luxe-shadow-soft, 0 4px 16px rgb(27 67 50 / 0.06));
+  }
+
+  @media screen and (min-width: 600px) {
+    .luxe-contact-page__welcome {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+  }
+
+  .luxe-contact-page__welcome-visual {
+    min-height: 10rem;
+    background: var(--luxe-cream, #f8f6f0);
+  }
+
+  .luxe-contact-page__welcome-image {
+    width: 100%;
+    height: 100%;
+    min-height: 10rem;
+    object-fit: cover;
+    display: block;
+  }
+
+  .luxe-contact-page__welcome-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.15rem 1.25rem;
+  }
+
+  .luxe-contact-page__welcome-eyebrow {
+    margin: 0 0 0.45rem;
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-contact-page__welcome-heading {
+    margin: 0 0 0.55rem;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__welcome-text {
+    margin: 0 0 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.78);
+  }
+
+  .luxe-contact-page__welcome-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .luxe-contact-page__welcome-chat,
+  .luxe-contact-page__welcome-shop {
+    min-height: 2.5rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+  }
+
+  .luxe-contact-page__welcome-chat {
+    background: var(--luxe-jade, #1b4332);
+    border-color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__welcome-shop {
+    text-align: center;
   }
 
   .luxe-contact-page__eyebrow {
@@ -517,6 +677,14 @@
     min-height: 7.5rem;
   }
 
+  .luxe-contact-page__input--select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231b4332' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    padding-right: 2.25rem;
+  }
+
   .luxe-contact-page__submit {
     width: 100%;
     min-height: 2.85rem;
@@ -636,6 +804,45 @@
       "id": "intro",
       "label": "Intro",
       "default": "<p>Questions about a tea, your order, or how to brew? Reach us like you would at the counter — call, email, chat with our Tea Guide, or send a note below.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Welcome card"
+    },
+    {
+      "type": "text",
+      "id": "welcome_eyebrow",
+      "label": "Welcome eyebrow",
+      "default": "Pull up a chair"
+    },
+    {
+      "type": "text",
+      "id": "welcome_heading",
+      "label": "Welcome heading",
+      "default": "You're always welcome here"
+    },
+    {
+      "type": "textarea",
+      "id": "welcome_text",
+      "label": "Welcome text",
+      "default": "Whether it's your first loose leaf tea or your hundredth gaiwan session, our team is here — real people who love tea and love helping you find your next perfect cup."
+    },
+    {
+      "type": "text",
+      "id": "tea_guide_label",
+      "label": "Tea Guide button",
+      "default": "Chat with Tea Guide"
+    },
+    {
+      "type": "text",
+      "id": "shop_while_label",
+      "label": "Shop button",
+      "default": "Browse teas while you wait"
+    },
+    {
+      "type": "image_picker",
+      "id": "welcome_image",
+      "label": "Welcome image"
     },
     {
       "type": "text",

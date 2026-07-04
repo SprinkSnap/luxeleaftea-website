@@ -1,6 +1,7 @@
 
 <section
   class="luxe-proof section section--page-width spacing-style"
+  id="{{ section.settings.section_id | default: 'reviews' | escape }}"
   style="{% render 'spacing-style', settings: section.settings %}"
   aria-label="Customer reviews"
 >
@@ -105,6 +106,12 @@
       "id": "heading",
       "label": "Heading",
       "default": "Premium loose leaf, beautifully brewed"
+    },
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section HTML id",
+      "default": "reviews"
     },
     {
       "type": "range",
