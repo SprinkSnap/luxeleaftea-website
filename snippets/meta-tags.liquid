@@ -59,6 +59,12 @@
   elsif request.page_type == 'page' and page.handle == 'faq'
     assign meta_description = 'FAQ about premium loose leaf tea — brewing tips, shipping, freshness, and how to choose green, oolong, pu-erh, and black teas.'
     assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'about'
+    assign meta_description = "About Luxe Leaf Tea — premium loose leaf tea sourced from China's finest gardens, packed fresh to order. Shop like you're at our tea counter."
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'contact'
+    assign meta_description = 'Contact Luxe Leaf Tea — call, email, or chat with our Tea Guide for help choosing premium loose leaf tea, orders, and brewing tips.'
+    assign og_description = meta_description
   endif
 
   if request.page_type == 'product'

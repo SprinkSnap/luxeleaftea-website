@@ -1,0 +1,727 @@
+{%- doc -%}
+  Contact page — boutique help desk with channels sidebar, styled form, and ContactPage JSON-LD.
+{%- enddoc -%}
+
+{%- liquid
+  capture brand_phone
+    render 'luxe-leaf-brand-phone-value'
+  endcapture
+  assign brand_phone = brand_phone | strip
+  capture brand_phone_href
+    render 'luxe-leaf-brand-phone-href'
+  endcapture
+  assign brand_phone_href = brand_phone_href | strip
+
+  assign brand_email = settings.brand_email
+  if brand_email == blank
+    assign brand_email = shop.email
+  endif
+
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
+
+  assign page_url = shop.url | append: page.url
+  assign page_desc = section.settings.intro | strip_html | truncate: 300
+  assign form_id = 'ContactForm-' | append: section.id
+-%}
+
+<section
+  class="luxe-contact-page section section--page-width spacing-style"
+  id="contact"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <header class="luxe-contact-page__header">
+    <p class="luxe-contact-page__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+      {{ section.settings.eyebrow }}
+    </p>
+    <h1 class="luxe-contact-page__heading">{{ section.settings.heading }}</h1>
+    <div class="luxe-contact-page__intro rte">{{ section.settings.intro }}</div>
+  </header>
+
+  <div class="luxe-contact-page__layout">
+    <aside class="luxe-contact-page__channels" aria-label="Contact channels">
+      <p class="luxe-contact-page__channels-title">{{ section.settings.channels_heading }}</p>
+
+      <ul class="luxe-contact-page__channel-list list-unstyled" role="list">
+        {%- if brand_phone != blank -%}
+          <li class="luxe-contact-page__channel">
+            <span class="luxe-contact-page__channel-icon" aria-hidden="true">
+              {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+            </span>
+            <div>
+              <span class="luxe-contact-page__channel-label">Call us</span>
+              <a
+                href="tel:{{ brand_phone_href | escape }}"
+                class="luxe-contact-page__channel-value luxe-contact-page__channel-value--link"
+                title="Call Luxe Leaf Tea customer service"
+              >
+                {{ brand_phone }}
+              </a>
+              <span class="luxe-contact-page__channel-note">{{ section.settings.phone_note }}</span>
+            </div>
+          </li>
+        {%- endif -%}
+
+        {%- if brand_email != blank -%}
+          <li class="luxe-contact-page__channel">
+            <span class="luxe-contact-page__channel-icon" aria-hidden="true">
+              {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+            </span>
+            <div>
+              <span class="luxe-contact-page__channel-label">Email</span>
+              <a
+                href="mailto:{{ brand_email | escape }}"
+                class="luxe-contact-page__channel-value luxe-contact-page__channel-value--link"
+                title="Email Luxe Leaf Tea customer service"
+              >
+                {{ brand_email }}
+              </a>
+              <span class="luxe-contact-page__channel-note">{{ section.settings.email_note }}</span>
+            </div>
+          </li>
+        {%- endif -%}
+
+        {%- if section.settings.hours != blank -%}
+          <li class="luxe-contact-page__channel">
+            <span class="luxe-contact-page__channel-icon" aria-hidden="true">
+              {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+            </span>
+            <div>
+              <span class="luxe-contact-page__channel-label">Hours</span>
+              <span class="luxe-contact-page__channel-value">{{ section.settings.hours }}</span>
+              {%- if section.settings.response_time != blank -%}
+                <span class="luxe-contact-page__channel-note">{{ section.settings.response_time }}</span>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endif -%}
+      </ul>
+
+      <div class="luxe-contact-page__quick-links">
+        <p class="luxe-contact-page__quick-title">Quick help</p>
+        <ul class="luxe-contact-page__quick-list list-unstyled" role="list">
+          <li>
+            <a href="{{ shop_tea_url }}" title="Shop premium loose leaf tea">Shop all teas</a>
+          </li>
+          <li>
+            <a href="/pages/faq" title="Tea FAQ — shipping, brewing, and orders">Browse FAQ</a>
+          </li>
+          <li>
+            <button type="button" class="luxe-contact-page__chat-link button-unstyled" data-open-tea-guide>
+              Chat with our Tea Guide
+            </button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="luxe-contact-page__form-wrap">
+      <h2 class="luxe-contact-page__form-heading">{{ section.settings.form_heading }}</h2>
+      <p class="luxe-contact-page__form-intro">{{ section.settings.form_intro }}</p>
+
+      {%- form 'contact', id: form_id, class: 'luxe-contact-page__form' -%}
+        <input type="hidden" name="contact[id]" value="{{ form_id }}">
+
+        {%- liquid
+          assign form_matches = false
+          if form.id == form_id or form.id == blank
+            assign form_matches = true
+          endif
+        -%}
+
+        {%- if form.errors and form_matches -%}
+          <div class="luxe-contact-page__alert luxe-contact-page__alert--error" tabindex="-1" autofocus role="alert">
+            {%- for field in form.errors -%}
+              <p>{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</p>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if form.posted_successfully? and form_matches -%}
+          <div class="luxe-contact-page__alert luxe-contact-page__alert--success" tabindex="-1" autofocus role="status">
+            {{ section.settings.success_message }}
+          </div>
+        {%- endif -%}
+
+        <div class="luxe-contact-page__field-row">
+          <div class="luxe-contact-page__field">
+            <label for="ContactForm-name-{{ section.id }}">Name</label>
+            <input
+              type="text"
+              id="ContactForm-name-{{ section.id }}"
+              name="contact[name]"
+              autocomplete="name"
+              class="luxe-contact-page__input"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              placeholder="Your name"
+            >
+          </div>
+
+          <div class="luxe-contact-page__field">
+            <label for="ContactForm-email-{{ section.id }}">
+              Email <span aria-hidden="true">*</span>
+            </label>
+            <input
+              type="email"
+              id="ContactForm-email-{{ section.id }}"
+              name="contact[email]"
+              autocomplete="email"
+              class="luxe-contact-page__input"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              aria-required="true"
+              {% if form.errors contains 'email' and form_matches %}
+                aria-invalid="true"
+              {% endif %}
+              placeholder="you@example.com"
+            >
+          </div>
+        </div>
+
+        <div class="luxe-contact-page__field">
+          <label for="ContactForm-phone-{{ section.id }}">Phone <span class="luxe-contact-page__optional">(optional)</span></label>
+          <input
+            type="tel"
+            id="ContactForm-phone-{{ section.id }}"
+            name="contact[phone]"
+            autocomplete="tel"
+            class="luxe-contact-page__input"
+            value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+            placeholder="For order updates"
+          >
+        </div>
+
+        <div class="luxe-contact-page__field">
+          <label for="ContactForm-body-{{ section.id }}">How can we help?</label>
+          <textarea
+            id="ContactForm-body-{{ section.id }}"
+            name="contact[body]"
+            class="luxe-contact-page__input luxe-contact-page__input--textarea"
+            rows="5"
+            placeholder="Ask about a tea, your order, or brewing tips…"
+          >{{- form.body -}}</textarea>
+        </div>
+
+        <button type="submit" class="button luxe-contact-page__submit">
+          {{ section.settings.submit_label }}
+        </button>
+
+        <p class="luxe-contact-page__privacy">{{ section.settings.privacy_note }}</p>
+      {%- endform -%}
+    </div>
+  </div>
+
+  <ul class="luxe-contact-page__trust list-unstyled" role="list" aria-label="Why shop with us">
+    <li>
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      <span>Premium loose leaf only</span>
+    </li>
+    <li>
+      {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+      <span>Packed fresh to order</span>
+    </li>
+    <li>
+      {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+      <span>Free shipping $50+</span>
+    </li>
+    <li>
+      {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
+      <span>Secure checkout</span>
+    </li>
+  </ul>
+
+  {%- if brand_phone != blank -%}
+    <a
+      href="tel:{{ brand_phone_href | escape }}"
+      class="luxe-contact-page__mobile-call button"
+      title="Call Luxe Leaf Tea"
+    >
+      Call {{ brand_phone }}
+    </a>
+  {%- endif -%}
+</section>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": {{ section.settings.heading | json }},
+    "description": {{ page_desc | json }},
+    "url": {{ page_url | json }},
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }}
+    },
+    "mainEntity": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["English"]{%- if brand_phone != blank -%},
+        "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
+        "email": {{ brand_email | json }}{%- endif -%}
+      }
+    }
+  }
+</script>
+
+<script>
+  document.querySelectorAll('[data-open-tea-guide]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelector('[data-chat-launcher]')?.click();
+    });
+  });
+</script>
+
+{% stylesheet %}
+  .luxe-contact-page {
+    padding-block: 2rem 3rem;
+    background: linear-gradient(180deg, var(--luxe-cream, #f8f6f0) 0%, #fff 100%);
+  }
+
+  .luxe-contact-page__header {
+    max-width: 42rem;
+    margin-bottom: 2rem;
+  }
+
+  .luxe-contact-page__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.75rem;
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .luxe-contact-page__heading {
+    margin: 0 0 0.85rem;
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__intro {
+    margin: 0;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.88);
+    line-height: 1.65;
+    font-size: 1.0625rem;
+  }
+
+  .luxe-contact-page__intro p {
+    margin: 0;
+  }
+
+  .luxe-contact-page__layout {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: 900px) {
+    .luxe-contact-page__layout {
+      grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+  }
+
+  .luxe-contact-page__channels {
+    padding: 1.25rem;
+    border-radius: 0.85rem;
+    background: #fff;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
+    box-shadow: var(--luxe-shadow-soft, 0 4px 16px rgb(27 67 50 / 0.06));
+  }
+
+  .luxe-contact-page__channels-title {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__channel-list {
+    display: grid;
+    gap: 1rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .luxe-contact-page__channel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: start;
+  }
+
+  .luxe-contact-page__channel-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: rgb(var(--luxe-gold-rgb, 201 162 39) / 0.15);
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__channel-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.55);
+  }
+
+  .luxe-contact-page__channel-value {
+    display: block;
+    margin-top: 0.1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__channel-value--link {
+    text-decoration: none;
+  }
+
+  .luxe-contact-page__channel-value--link:hover {
+    color: var(--luxe-gold, #c9a227);
+    text-decoration: underline;
+  }
+
+  .luxe-contact-page__channel-note {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
+  }
+
+  .luxe-contact-page__quick-links {
+    padding-top: 1rem;
+    border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
+  }
+
+  .luxe-contact-page__quick-title {
+    margin: 0 0 0.65rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__quick-list {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .luxe-contact-page__quick-list a,
+  .luxe-contact-page__chat-link {
+    color: var(--luxe-jade, #1b4332);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+  }
+
+  .luxe-contact-page__quick-list a:hover,
+  .luxe-contact-page__chat-link:hover {
+    color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-contact-page__form-wrap {
+    padding: 1.35rem;
+    border-radius: 0.85rem;
+    background: #fff;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
+    box-shadow: var(--luxe-shadow-soft, 0 4px 16px rgb(27 67 50 / 0.06));
+  }
+
+  .luxe-contact-page__form-heading {
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__form-intro {
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.75);
+  }
+
+  .luxe-contact-page__form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .luxe-contact-page__field-row {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media screen and (min-width: 600px) {
+    .luxe-contact-page__field-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .luxe-contact-page__field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .luxe-contact-page__field label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__optional {
+    font-weight: 400;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.55);
+  }
+
+  .luxe-contact-page__input {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.55rem;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.18);
+    background: #fff;
+    color: var(--luxe-jade, #1b4332);
+    font: inherit;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .luxe-contact-page__input:focus {
+    outline: 2px solid rgb(var(--luxe-gold-rgb, 201 162 39) / 0.45);
+    outline-offset: 1px;
+    border-color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-contact-page__input--textarea {
+    resize: vertical;
+    min-height: 7.5rem;
+  }
+
+  .luxe-contact-page__submit {
+    width: 100%;
+    min-height: 2.85rem;
+    border-radius: 999px;
+    background: var(--luxe-jade, #1b4332);
+    border-color: var(--luxe-jade, #1b4332);
+  }
+
+  @media screen and (min-width: 600px) {
+    .luxe-contact-page__submit {
+      width: auto;
+      min-width: 12rem;
+    }
+  }
+
+  .luxe-contact-page__privacy {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.6);
+  }
+
+  .luxe-contact-page__alert {
+    padding: 0.85rem 1rem;
+    border-radius: 0.55rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .luxe-contact-page__alert p {
+    margin: 0;
+  }
+
+  .luxe-contact-page__alert p + p {
+    margin-top: 0.35rem;
+  }
+
+  .luxe-contact-page__alert--error {
+    background: rgb(180 40 40 / 0.08);
+    border: 1px solid rgb(180 40 40 / 0.25);
+    color: #6b1a1a;
+  }
+
+  .luxe-contact-page__alert--success {
+    background: rgb(27 67 50 / 0.08);
+    border: 1px solid rgb(27 67 50 / 0.2);
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-contact-page__trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    margin: 0;
+    padding-top: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.7);
+  }
+
+  .luxe-contact-page__trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .luxe-contact-page__mobile-call {
+    display: none;
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    z-index: 20;
+    min-height: 3rem;
+    border-radius: 999px;
+    background: var(--luxe-jade, #1b4332);
+    border-color: var(--luxe-jade, #1b4332);
+    text-align: center;
+    box-shadow: 0 8px 24px rgb(27 67 50 / 0.25);
+  }
+
+  @media screen and (max-width: 749px) {
+    .luxe-contact-page__mobile-call {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .luxe-contact-page {
+      padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf contact page",
+  "tag": "section",
+  "class": "luxe-contact-page-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "We're here to help"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Talk to our tea team"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>Questions about a tea, your order, or how to brew? Reach us like you would at the counter — call, email, chat with our Tea Guide, or send a note below.</p>"
+    },
+    {
+      "type": "text",
+      "id": "channels_heading",
+      "label": "Channels heading",
+      "default": "Reach us directly"
+    },
+    {
+      "type": "text",
+      "id": "phone_note",
+      "label": "Phone note",
+      "default": "Fastest for orders and shipping questions."
+    },
+    {
+      "type": "text",
+      "id": "email_note",
+      "label": "Email note",
+      "default": "We reply within one business day."
+    },
+    {
+      "type": "text",
+      "id": "hours",
+      "label": "Hours",
+      "default": "Mon–Fri, 9am–5pm ET"
+    },
+    {
+      "type": "text",
+      "id": "response_time",
+      "label": "Response time",
+      "default": "Typical reply within 24 hours."
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Send us a message"
+    },
+    {
+      "type": "text",
+      "id": "form_intro",
+      "label": "Form intro",
+      "default": "Tell us what you're looking for — we'll point you to the right loose leaf tea or help with your order."
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button",
+      "default": "Send message"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks — your message is on its way. We'll get back to you shortly."
+    },
+    {
+      "type": "text",
+      "id": "privacy_note",
+      "label": "Privacy note",
+      "default": "We use your details only to respond to your message."
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf contact page"
+    }
+  ]
+}
+{% endschema %}
