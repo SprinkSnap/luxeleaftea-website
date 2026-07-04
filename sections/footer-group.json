@@ -1,5 +1,10 @@
 /*
  * Luxe Leaf footer — brand footer with newsletter and legal policy links.
+ *
+ * NOTE: When Theme settings → Luxe Leaf → Brand navigation is enabled,
+ * layout/theme.liquid renders `luxe-leaf-brand-footer` directly and ignores
+ * this file. Keep this JSON aligned for reference and for stores with
+ * brand navigation turned off.
  */
 {
   "type": "footer",

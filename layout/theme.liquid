@@ -294,7 +294,15 @@
       </main>
 
       <footer>
-        {% sections 'footer-group' %}
+        {%- comment -%}
+          Force Luxe Leaf footer when brand navigation is on — bypasses footer-group.json
+          so Shopify theme-editor syncs cannot revert to Horizon's default footer.
+        {%- endcomment -%}
+        {%- if settings.brand_navigation != false -%}
+          {% section 'luxe-leaf-brand-footer' %}
+        {%- else -%}
+          {% sections 'footer-group' %}
+        {%- endif -%}
       </footer>
     </div>
 

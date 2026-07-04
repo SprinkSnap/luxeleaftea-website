@@ -12,6 +12,12 @@ The theme includes a premium **policy page template** and **default policy copy*
 4. Click **Save** on each policy.
 5. In the theme editor, **Pull from GitHub** (if needed) and **Publish**.
 
+## Footer override
+
+With **Brand navigation** enabled (Theme settings → Luxe Leaf), the theme **always** renders the Luxe Leaf footer from `layout/theme.liquid` — not Horizon’s default footer from `footer-group.json`. This prevents Shopify theme-editor syncs from replacing your footer and hiding policy links.
+
+To customize footer copy, open the theme editor, click the footer on any page, and edit the **Luxe Leaf footer** section.
+
 ## Policy URLs
 
 | Policy | URL |
