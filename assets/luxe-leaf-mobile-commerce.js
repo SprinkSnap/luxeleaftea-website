@@ -228,7 +228,7 @@ import { StandardEvents } from '@shopify/events';
       const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
       if (!res.ok) return;
       const cart = await res.json();
-      const { estimatedTotal } = getShippingEstimate(cart.total_price);
+      const { estimatedTotal } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
 
       if (bar) {
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
