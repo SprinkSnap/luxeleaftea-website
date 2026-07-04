@@ -507,7 +507,7 @@
     }
   }
 
-  /* Brand mobile menu — hamburger icon, full-screen overlay on top */
+  /* Brand mobile menu — tea leaf hamburger icon, full-screen overlay on top */
   .luxe-brand-menu__toggle {
     display: inline-flex;
     align-items: center;
@@ -524,9 +524,56 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
     color: var(--luxe-nav-jade, #1b4332);
+  }
+
+  .luxe-tea-menu-icon {
+    position: relative;
+    display: block;
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--luxe-nav-jade, #1b4332);
+  }
+
+  .luxe-tea-menu-icon__bars {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .luxe-tea-menu-icon__bars svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .luxe-tea-menu-icon__leaf {
+    position: absolute;
+    top: -0.2rem;
+    right: -0.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 999px;
+    background: var(--luxe-nav-ivory, #faf8f2);
+    color: var(--luxe-nav-gold, #c9a227);
+    box-shadow: 0 0 0 1px rgb(27 67 50 / 0.12);
+  }
+
+  .luxe-tea-menu-icon__leaf svg {
+    display: block;
+    width: 0.62rem;
+    height: 0.62rem;
+  }
+
+  #header-component .header__icon--summary .luxe-tea-menu-icon,
+  .header__icon--summary .luxe-tea-menu-icon {
+    width: var(--icon-size-xs, 1.75rem);
+    height: var(--icon-size-xs, 1.75rem);
   }
 
   .luxe-brand-menu__icon svg {
@@ -542,9 +589,22 @@
     }
 
     #header-component .luxe-brand-menu__icon,
-    #header-component .luxe-brand-menu__icon--tea {
-      width: 1.75rem;
-      height: 1.75rem;
+    #header-component .luxe-brand-menu__icon--tea,
+    #header-component .luxe-tea-menu-icon {
+      width: 1.875rem;
+      height: 1.875rem;
+    }
+
+    #header-component .luxe-tea-menu-icon__leaf {
+      top: -0.15rem;
+      right: -0.3rem;
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+
+    #header-component .luxe-tea-menu-icon__leaf svg {
+      width: 0.68rem;
+      height: 0.68rem;
     }
   }
 
