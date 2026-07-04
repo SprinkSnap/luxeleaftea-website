@@ -14,9 +14,40 @@ function forceDesktopMenu() {
   header.querySelector('overflow-list')?.removeAttribute('minimum-reached');
 }
 
+/**
+ * @param {HTMLAnchorElement} link
+ * @param {Event} event
+ * @param {() => void} closeMenu
+ */
+function navigateFromMenuLink(link, event, closeMenu) {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('#')) return;
+
+  if (link.target === '_blank') return;
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  if (href.startsWith('tel:') || href.startsWith('mailto:')) return;
+
+  const destination = link.href;
+  if (!destination) return;
+
+  const current = window.location.href.split('#')[0];
+  if (destination.split('#')[0] === current) {
+    closeMenu();
+    return;
+  }
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+
+  // Do not hide the overlay before navigating — iOS Safari can cancel the request.
+  window.location.href = destination;
+}
+
 function initBrandMobileMenu() {
   const panel = document.getElementById('LuxeBrandMenuPanel');
-  if (!panel) return;
+  if (!panel || panel.dataset.luxeNavBound === 'true') return;
+
+  panel.dataset.luxeNavBound = 'true';
 
   // Move panel to body so it overlays the full page above header/content.
   if (panel.parentElement !== document.body) {
@@ -24,7 +55,7 @@ function initBrandMobileMenu() {
   }
 
   const toggles = document.querySelectorAll('[data-luxe-nav-toggle]');
-  const closes = document.querySelectorAll('[data-luxe-nav-close]');
+  const closes = panel.querySelectorAll('[data-luxe-nav-close]');
 
   const isOpen = () => !panel.hidden;
 
@@ -46,28 +77,15 @@ function initBrandMobileMenu() {
     closeEl.addEventListener('click', () => setOpen(false));
   });
 
-  panel.querySelectorAll('a[href]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      const href = link.getAttribute('href');
-      if (!href || href.startsWith('#')) return;
-
-      setOpen(false);
-
-      if (link.target === '_blank') return;
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      if (href.startsWith('tel:') || href.startsWith('mailto:')) return;
-
-      const destination = link.href;
-      if (!destination) return;
-
-      const current = window.location.href.split('#')[0];
-      if (destination.split('#')[0] === current) return;
-
-      // Closing the overlay in the same tick can cancel navigation on mobile Safari.
-      event.preventDefault();
-      window.location.assign(destination);
-    });
-  });
+  panel.addEventListener(
+    'click',
+    (event) => {
+      const link = event.target.closest('a[href]');
+      if (!(link instanceof HTMLAnchorElement) || !panel.contains(link)) return;
+      navigateFromMenuLink(link, event, () => setOpen(false));
+    },
+    true
+  );
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && isOpen()) setOpen(false);
