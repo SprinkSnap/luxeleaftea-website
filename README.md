@@ -51,16 +51,19 @@ The homepage includes:
 ## About page
 
 1. **Online Store → Pages → About**
-2. Confirm handle is **`about`**
-3. **Theme template:** select **`about`** (recommended) or **Default page**
-4. Save, then **Themes → Publish** after pulling latest from GitHub
+2. Confirm handle is **`about`** (URL must be `/pages/about`)
+3. **Theme template:** **`about`** recommended — **Default page also works** after latest theme update
+4. **Themes → Pull from GitHub** (`main`) → **Publish**
+5. Hard refresh the page (close tab on mobile Safari, reopen)
+
+If content still looks old: in the theme editor, open the About page preview → **Customize** → check the template shows **about** or **Default page** with the Luxe sections visible.
 
 ## Contact page
 
 1. **Online Store → Pages → Contact**
 2. Confirm handle is **`contact`**
-3. **Theme template:** select **`contact`** (recommended) or **Default page**
-4. Save, then publish the theme
+3. **Theme template:** **`contact`** recommended — **Default page also works** after latest theme update
+4. Save, pull from GitHub, **Publish**
 
 ## Navigation
 

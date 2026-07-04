@@ -2,6 +2,12 @@
   Contact page — boutique help desk with channels sidebar, styled form, and ContactPage JSON-LD.
 {%- enddoc -%}
 
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: 'contact' -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
 {%- liquid
   capture brand_phone
     render 'luxe-leaf-brand-phone-value'
@@ -344,6 +350,7 @@
     });
   });
 </script>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-contact-page {

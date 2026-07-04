@@ -2,6 +2,12 @@
   About page journey — editorial garden-to-cup story with optional image.
 {%- enddoc -%}
 
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: 'about' -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
 {%- liquid
   assign shop_tea_url = routes.all_products_collection_url
   if collections.all != blank and collections.all.url != blank
@@ -99,6 +105,7 @@
     });
   });
 </script>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-about-journey {

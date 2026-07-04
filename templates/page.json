@@ -1,10 +1,7 @@
 /*
  * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
+ * Default page template — also serves About/Contact when handle matches.
+ * Assign templates "about" / "contact" in Shopify admin for best results.
  * ------------------------------------------------------------
  */
 {
@@ -19,6 +16,379 @@
     "trust_bar": {
       "type": "luxe-leaf-trust-bar",
       "settings": {}
+    },
+    "about_hero": {
+      "type": "luxe-leaf-about-page-hero",
+      "blocks": {
+        "pillar_origin": {
+          "type": "pillar",
+          "settings": {
+            "icon": "leaf",
+            "title": "Origin you can trust",
+            "text": "Every tea labeled by region, harvest, and style — never vague blends or mystery leaves."
+          }
+        },
+        "pillar_fresh": {
+          "type": "pillar",
+          "settings": {
+            "icon": "cup",
+            "title": "Packed fresh to order",
+            "text": "We seal after you buy — aroma stays vivid, cups taste alive, never stale from a warehouse shelf."
+          }
+        },
+        "pillar_service": {
+          "type": "pillar",
+          "settings": {
+            "icon": "truck",
+            "title": "Shop without leaving",
+            "text": "Browse by type, add to bag in one tap, chat with our Tea Guide — all from your phone."
+          }
+        }
+      },
+      "block_order": ["pillar_origin", "pillar_fresh", "pillar_service"],
+      "settings": {
+        "eyebrow": "Welcome to our tea room",
+        "heading": "The boutique for premium loose leaf tea",
+        "intro": "<p>Luxe Leaf Tea is for people who want whole leaves, honest origins, and the feeling of shopping at a real tea counter — online, on your phone, packed fresh after you order.</p><p>We source from China's most respected gardens, label every lot clearly, and guide you from first sip to daily ritual. Add to bag without leaving the page — your next perfect cup is a tap away.</p>",
+        "primary_label": "Shop premium loose leaf tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Talk to our team",
+        "secondary_link": "shopify://pages/contact",
+        "trust_line": "Whole leaves · Packed fresh to order · Free shipping over $50",
+        "badge_text": "Shop like you're at the counter",
+        "show_jump_nav": true,
+        "jump_shop_label": "Shop bestsellers",
+        "jump_story_label": "Our story",
+        "jump_reviews_label": "Customer love",
+        "stat_1": "100%",
+        "stat_1_label": "Whole leaf tea",
+        "stat_2": "Fresh",
+        "stat_2_label": "Packed after you order",
+        "stat_3": "$50+",
+        "stat_3_label": "Free shipping",
+        "padding-block-start": 40,
+        "padding-block-end": 48
+      }
+    },
+    "featured_teas_about": {
+      "type": "luxe-leaf-featured-teas",
+      "settings": {
+        "page_scope": "about",
+        "eyebrow": "Start here",
+        "heading": "Bestsellers worth your first sip",
+        "intro": "Hand-picked premium loose leaf — add to bag in one tap and keep browsing. No page reload, no leaving the site.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 6
+      }
+    },
+    "about_journey": {
+      "type": "luxe-leaf-about-journey",
+      "blocks": {
+        "step_source": {
+          "type": "step",
+          "settings": {
+            "title": "Source with intention",
+            "text": "We partner with gardens in Zhejiang, Fujian, and Yunnan — regions celebrated for centuries of tea mastery."
+          }
+        },
+        "step_cup": {
+          "type": "step",
+          "settings": {
+            "title": "Cup every lot",
+            "text": "Small batches, careful selection, and tasting notes you can trust — never mass-market blends."
+          }
+        },
+        "step_pack": {
+          "type": "step",
+          "settings": {
+            "title": "Pack fresh to order",
+            "text": "Your tea is sealed after you buy — aroma stays vivid, cups taste alive, never stale from a warehouse shelf."
+          }
+        }
+      },
+      "block_order": ["step_source", "step_cup", "step_pack"],
+      "settings": {
+        "eyebrow": "How we work",
+        "heading": "From China's finest gardens to your daily ritual",
+        "intro": "<p>Luxe Leaf Tea was built for people who want the honesty of a real tea counter — whole leaves you can see, origins you can trust, and guidance when you need it.</p>",
+        "quote": "Every cup should feel like someone poured it for you — warm, clear, and worth slowing down for.",
+        "quote_attribution": "The Luxe Leaf Tea team",
+        "primary_label": "Shop our collection",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Ask our Tea Guide",
+        "image_badge": "Sourced with care · Packed fresh",
+        "padding-block-start": 48,
+        "padding-block-end": 56
+      }
+    },
+    "about_content": {
+      "type": "luxe-leaf-about-story",
+      "blocks": {
+        "point_sourcing": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Direct sourcing",
+            "text": "We partner with gardens in Zhejiang, Fujian, and Yunnan — regions known for centuries of tea mastery."
+          }
+        },
+        "point_quality": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Quality over volume",
+            "text": "Small lots, careful selection, and tasting notes you can trust — never mass-market blends."
+          }
+        },
+        "point_freshness": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Freshness promise",
+            "text": "Packed after you order to preserve aroma, color, and the clarity of each cup."
+          }
+        },
+        "point_ritual": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Made for ritual",
+            "text": "Whether your first gaiwan or your daily mug, our teas are chosen to be drinkable, approachable, and exceptional."
+          }
+        }
+      },
+      "block_order": ["point_sourcing", "point_quality", "point_freshness", "point_ritual"],
+      "settings": {
+        "page_scope": "about",
+        "eyebrow": "From garden to cup",
+        "heading": "Premium Chinese tea, curated with care",
+        "text": "<p>Every tea in our collection is chosen for its character in the cup — the nutty sweetness of Longjing, the floral lift of a Fujian oolong, the depth of a well-aged pu-erh.</p><p>Our mission is to bring the best of Chinese loose-leaf tea to discerning drinkers who value quality, transparency, and the quiet pleasure of a well-made cup.</p>",
+        "button_label": "Shop the collection",
+        "button_link": "shopify://collections/all",
+        "image_caption": "Whole leaves that unfurl in the cup — richer flavor, better re-steeps.",
+        "padding-block-start": 32,
+        "padding-block-end": 56
+      }
+    },
+    "social_proof_about": {
+      "type": "luxe-leaf-social-proof",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "quote": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea. I added two more to my bag without leaving the page.",
+            "author": "Sarah M."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. Feels like shopping at a real tea counter — my daily ritual now.",
+            "author": "James L."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "Finally found premium loose leaf tea that feels special without being intimidating. The Tea Guide helped me pick my first oolong.",
+            "author": "Elena K."
+          }
+        }
+      },
+      "block_order": ["review_1", "review_2", "review_3"],
+      "settings": {
+        "page_scope": "about",
+        "eyebrow": "Loved by tea drinkers",
+        "heading": "Why people keep coming back",
+        "section_id": "reviews",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "tea_types": {
+      "type": "luxe-leaf-tea-types",
+      "settings": {
+        "page_scope": "about",
+        "eyebrow": "Shop by type",
+        "heading": "Find your next favorite cup",
+        "intro": "Bright greens, floral oolongs, deep pu-erh, and malty black teas — browse by type and add to bag without leaving the site.",
+        "padding-block-start": 48,
+        "padding-block-end": 24
+      }
+    },
+    "about_faq": {
+      "type": "luxe-leaf-home-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "What makes Luxe Leaf Tea different from grocery-store tea?",
+            "answer": "<p>We sell whole-leaf premium loose leaf tea only — labeled by origin, harvest, and style. Every order is packed fresh after you buy.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I shop and add to bag without leaving the About page?",
+            "answer": "<p>Yes. Scroll to our bestsellers or Keep Exploring rail — one tap adds tea to your bag and opens the cart drawer.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship nationwide?",
+            "answer": "<p>Yes — we ship across the United States. Orders over $50 qualify for free shipping.</p>"
+          }
+        }
+      },
+      "block_order": ["faq_1", "faq_2", "faq_3"],
+      "settings": {
+        "page_scope": "about",
+        "eyebrow": "Common questions",
+        "heading": "New to premium loose leaf?",
+        "intro": "Quick answers — or chat with our Tea Guide for a personal recommendation.",
+        "link_label": "See all FAQs",
+        "link_url": "/pages/faq",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "keep_exploring_about": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "page_scope": "about",
+        "eyebrow": "Keep exploring",
+        "heading": "More teas worth a second look",
+        "intro": "Swipe through premium loose leaf picks — one tap to add and keep browsing.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Your recently viewed teas — add to bag without leaving the page.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "shop_cta_about": {
+      "type": "luxe-leaf-shop-cta",
+      "settings": {
+        "page_scope": "about",
+        "eyebrow": "Ready when you are",
+        "heading": "Your next perfect cup is one tap away",
+        "text": "Browse premium loose leaf tea, add to bag without leaving the site, and checkout when you're ready — packed fresh to order.",
+        "primary_label": "Shop Premium Loose Leaf Tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Talk to our team",
+        "secondary_link": "/pages/contact",
+        "note": "Free shipping over $50 · Packed fresh to order · Secure checkout",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "contact": {
+      "type": "luxe-leaf-contact-page",
+      "settings": {
+        "eyebrow": "We're here for you",
+        "heading": "Reach our tea team — like you're at the counter",
+        "intro": "<p>Questions about a tea, your order, or how to brew? Call, email, chat with our Tea Guide, or send a note below. Real people who love tea — ready to help you feel at home.</p>",
+        "welcome_eyebrow": "Pull up a chair",
+        "welcome_heading": "You're always welcome here",
+        "welcome_text": "Whether it's your first loose leaf tea or your hundredth gaiwan session, our team is here — warm, clear guidance and zero pressure.",
+        "tea_guide_label": "Chat with Tea Guide",
+        "shop_while_label": "Browse teas while you wait",
+        "channels_heading": "Reach us directly",
+        "phone_note": "Fastest for orders and shipping — we're happy to hear from you.",
+        "email_note": "We reply within one business day, usually sooner.",
+        "hours": "Mon–Fri, 9am–5pm ET",
+        "response_time": "Typical reply within 24 hours.",
+        "form_heading": "Send us a message",
+        "form_intro": "Tell us what you're looking for — we'll point you to the right loose leaf tea or help with your order.",
+        "submit_label": "Send message",
+        "success_message": "Thanks — your message is on its way. We'll get back to you shortly. Browse teas below while you wait.",
+        "privacy_note": "We use your details only to respond to your message.",
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
+    },
+    "featured_teas_contact": {
+      "type": "luxe-leaf-featured-teas",
+      "settings": {
+        "page_scope": "contact",
+        "eyebrow": "While you wait",
+        "heading": "Shop premium loose leaf tea",
+        "intro": "Add to bag in one tap — no page reload. Keep browsing and checkout when you're ready.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4
+      }
+    },
+    "social_proof_contact": {
+      "type": "luxe-leaf-social-proof",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "quote": "Called with a brewing question — they answered in minutes and pointed me to the perfect oolong.",
+            "author": "Michael T."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "Email reply was warm and helpful. Felt like talking to someone at a tea shop, not a call center.",
+            "author": "Priya S."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "The Tea Guide helped me build my first order without leaving the site. So easy.",
+            "author": "David R."
+          }
+        }
+      },
+      "block_order": ["review_1", "review_2", "review_3"],
+      "settings": {
+        "page_scope": "contact",
+        "eyebrow": "Real support, real tea lovers",
+        "heading": "Customers feel at home here",
+        "section_id": "contact-reviews",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "keep_exploring_contact": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "page_scope": "contact",
+        "eyebrow": "Keep browsing",
+        "heading": "More teas to explore",
+        "intro": "Swipe through premium loose leaf picks — one tap to add and keep shopping.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Your recently viewed teas — one tap to add.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "shop_cta_contact": {
+      "type": "luxe-leaf-shop-cta",
+      "settings": {
+        "page_scope": "contact",
+        "eyebrow": "Ready to steep?",
+        "heading": "Find your next favorite cup",
+        "text": "Browse premium loose leaf tea, add to bag without leaving the site, and checkout when you're ready.",
+        "primary_label": "Shop Premium Loose Leaf Tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Browse FAQ",
+        "secondary_link": "/pages/faq",
+        "note": "Free shipping over $50 · Packed fresh to order · Secure checkout",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
     },
     "main": {
       "type": "main-page",
@@ -53,10 +423,7 @@
           "blocks": {}
         }
       },
-      "block_order": [
-        "heading",
-        "page-content"
-      ],
+      "block_order": ["heading", "page-content"],
       "settings": {
         "content_direction": "column",
         "gap": 32,
@@ -65,9 +432,10 @@
         "padding-block-end": 80
       }
     },
-    "keep_exploring": {
+    "keep_exploring_general": {
       "type": "luxe-leaf-keep-exploring",
       "settings": {
+        "page_scope": "general",
         "eyebrow": "Keep exploring",
         "heading": "Teas worth another look",
         "intro": "Swipe through premium loose leaf picks — one tap to add and keep browsing.",
@@ -82,9 +450,10 @@
         "padding-block-end": 40
       }
     },
-    "shop_cta": {
+    "shop_cta_general": {
       "type": "luxe-leaf-shop-cta",
       "settings": {
+        "page_scope": "general",
         "primary_link": "shopify://collections/all",
         "secondary_link": "/pages/contact",
         "padding-block-start": 64,
@@ -95,8 +464,22 @@
   "order": [
     "breadcrumbs",
     "trust_bar",
+    "about_hero",
+    "featured_teas_about",
+    "about_journey",
+    "about_content",
+    "social_proof_about",
+    "tea_types",
+    "about_faq",
+    "keep_exploring_about",
+    "shop_cta_about",
+    "contact",
+    "featured_teas_contact",
+    "social_proof_contact",
+    "keep_exploring_contact",
+    "shop_cta_contact",
     "main",
-    "keep_exploring",
-    "shop_cta"
+    "keep_exploring_general",
+    "shop_cta_general"
   ]
 }
