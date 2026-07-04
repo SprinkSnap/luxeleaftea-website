@@ -393,18 +393,27 @@
       position: relative;
     }
 
-    /* Mobile DTC pattern: menu left, logo beside it, clear gap before account/cart */
-    body.luxe-leaf-theme #header-component .header-logo--brand {
-      position: static;
-      transform: none;
-      grid-column: 2 / 4;
-      grid-area: center;
+    /* Mobile: center logo between nav icon (left) and account/cart icons (right) */
+    body.luxe-leaf-theme #header-component .header__drawer {
+      display: flex !important;
+      grid-area: leftA;
       justify-self: start;
       align-self: center;
-      max-width: var(--luxe-mobile-logo-max-width);
-      width: auto;
-      margin-inline: 0 0.75rem;
-      padding-inline-end: 0.25rem;
+    }
+
+    body.luxe-leaf-theme #header-component .header-logo--brand {
+      position: absolute;
+      left: calc((100% - var(--luxe-mobile-actions-width) + var(--header-mobile-bookend, 2.75rem)) / 2);
+      top: 50%;
+      transform: translate(-50%, -50%);
+      grid-area: unset;
+      grid-column: unset;
+      justify-self: center;
+      align-self: center;
+      max-width: min(11.25rem, calc(100vw - 11rem));
+      width: max-content;
+      margin-inline: 0;
+      padding-inline: 0;
       pointer-events: auto;
       z-index: 2;
       overflow: visible;
@@ -414,6 +423,7 @@
     body.luxe-leaf-theme #header-component .header-logo--brand .header-logo__image-container {
       width: auto;
       max-width: 100%;
+      margin-inline: auto;
     }
 
     body.luxe-leaf-theme #header-component .header-logo--brand .header-logo__image,
@@ -421,7 +431,8 @@
       height: var(--luxe-header-logo-height-mobile) !important;
       width: auto !important;
       max-width: var(--luxe-mobile-logo-max-width);
-      object-position: left center;
+      object-position: center;
+      margin-inline: auto;
     }
 
     body.luxe-leaf-theme #header-component header-actions {
@@ -483,10 +494,6 @@
     body.luxe-leaf-theme #header-component .header__column--right {
       position: relative;
       z-index: 2;
-    }
-
-    body.luxe-leaf-theme #header-component .header__drawer {
-      display: flex !important;
     }
 
     body.luxe-leaf-theme #header-component .header-menu {
