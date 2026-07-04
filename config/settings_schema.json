@@ -1,9 +1,9 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Luxe Leaf Tea",
-    "theme_version": "2.0.0",
-    "theme_author": "Luxe Leaf Tea",
+    "theme_name": "Horizon",
+    "theme_version": "4.1.1",
+    "theme_author": "Shopify",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
@@ -33,7 +33,7 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 48,
+        "default": 36,
         "visible_if": "{{ settings.logo != blank or settings.logo_inverse != blank }}",
         "info": "t:info.logo_height"
       },
@@ -45,7 +45,7 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 40,
+        "default": 28,
         "visible_if": "{{ settings.logo != blank or settings.logo_inverse != blank }}",
         "info": "t:info.logo_height"
       },
@@ -80,56 +80,6 @@
           "id": "google_site_verification",
           "label": "Google Search Console verification code",
           "info": "Paste the content value from the HTML meta tag verification method."
-        },
-        {
-          "type": "header",
-          "content": "Store conversion"
-        },
-        {
-          "type": "checkbox",
-          "id": "tea_chat_enabled",
-          "label": "Enable Luxe Leaf Tea AI chat guide",
-          "default": true,
-          "info": "Floating tea expert chat with quick answers. Works alongside Shopify Inbox."
-        },
-        {
-          "type": "text",
-          "id": "tea_chat_agent_name",
-          "label": "Tea chat guide name",
-          "default": "Mei — Tea Guide"
-        },
-        {
-          "type": "text",
-          "id": "tea_chat_api_url",
-          "label": "Tea chat AI API URL (optional)",
-          "info": "Deploy scripts/tea-chat-api and paste the URL for GPT-powered replies. Leave blank to use the built-in smart guide."
-        },
-        {
-          "type": "range",
-          "id": "free_shipping_threshold",
-          "label": "Free shipping threshold (cents)",
-          "min": 0,
-          "max": 20000,
-          "step": 500,
-          "unit": "¢",
-          "default": 5000,
-          "info": "5000 = $50. Used for cart progress bar and chat answers."
-        },
-        {
-          "type": "range",
-          "id": "low_stock_threshold",
-          "label": "Low stock alert threshold (units)",
-          "min": 1,
-          "max": 50,
-          "step": 1,
-          "default": 10,
-          "info": "Shows low-stock badges on product pages and cards."
-        },
-        {
-          "type": "text",
-          "id": "wechat_webhook_url",
-          "label": "WeChat reorder webhook URL (optional)",
-          "info": "Deploy scripts/wechat-inventory-webhook and paste the URL here. Sends WeChat alerts when stock is low. See docs/INVENTORY_WECHAT_SETUP.md."
         }
     ]
   },

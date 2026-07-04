@@ -9,7 +9,7 @@
 >
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover"
+  content="width=device-width,initial-scale=1"
 >
 <meta
   name="theme-color"
@@ -29,9 +29,6 @@
     assign meta_description = brand_default_description
     assign og_description = meta_description
   elsif request.page_type == 'collection' and collection
-    unless page_title contains shop.name
-      assign og_title = 'Premium Loose Leaf ' | append: collection.title | append: ' | ' | append: shop.name
-    endif
     case collection.handle
       when 'green-tea'
         assign meta_description = 'Shop premium loose leaf green tea — bright, sweet whole-leaf selections packed fresh to order. Free shipping over $50.'
@@ -47,9 +44,6 @@
     endif
     assign og_description = meta_description
   elsif request.page_type == 'product' and product
-    unless page_title contains 'Premium Loose Leaf Tea'
-      assign og_title = product.title | append: ' | Premium Loose Leaf Tea | ' | append: shop.name
-    endif
     assign meta_description = product.description | strip_html | truncate: 155
     if meta_description == blank
       assign meta_description = 'Shop ' | append: product.title | append: ' — premium loose leaf tea packed fresh to order from Luxe Leaf Tea.'
@@ -63,9 +57,6 @@
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'faq'
     assign meta_description = 'FAQ about premium loose leaf tea — brewing tips, shipping, freshness, and how to choose green, oolong, pu-erh, and black teas.'
-    assign og_description = meta_description
-  elsif request.page_type == 'search'
-    assign meta_description = 'Search premium loose leaf tea — green, oolong, pu-erh, and black teas from Luxe Leaf Tea.'
     assign og_description = meta_description
   endif
 
@@ -202,216 +193,3 @@
     content="{{ meta_description | escape }}"
   >
 {%- endif -%}
-
-{%- if request.page_type == 'search' -%}
-  <meta name="robots" content="noindex, follow">
-{%- endif -%}
-
-{%- if settings.google_site_verification != blank -%}
-  <meta name="google-site-verification" content="{{ settings.google_site_verification | escape }}">
-{%- endif -%}
-
-{%- if settings.ga4_measurement_id != blank -%}
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.ga4_measurement_id | escape }}"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', {{ settings.ga4_measurement_id | json }});
-  </script>
-{%- endif -%}
-
-{%- liquid
-  assign schema_shop_url = shop.url | default: request.origin
-  assign schema_logo_url = 'luxe-leaf-tea-logo.png' | asset_url | prepend: 'https:'
-  if settings.logo != blank
-    assign schema_logo_url = settings.logo | image_url: width: 500 | prepend: 'https:'
-  endif
-
-  assign org_same_as = ''
-  if settings.social_facebook_link != blank
-    assign org_same_as = org_same_as | append: settings.social_facebook_link | append: '||'
-  endif
-  if settings.social_instagram_link != blank
-    assign org_same_as = org_same_as | append: settings.social_instagram_link | append: '||'
-  endif
-  if settings.social_youtube_link != blank
-    assign org_same_as = org_same_as | append: settings.social_youtube_link | append: '||'
-  endif
-  assign org_same_as_list = org_same_as | split: '||'
--%}
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": {{ schema_shop_url | append: '/#organization' | json }},
-      "name": {{ shop.name | json }},
-      "url": {{ schema_shop_url | json }},
-      "logo": {{ schema_logo_url | json }},
-      "description": "Premium loose leaf tea sourced from trusted gardens. Hand-selected leaves packed fresh to order."
-      {%- if org_same_as != blank -%}
-      ,"sameAs": [
-        {%- for url in org_same_as_list -%}
-          {%- if url != blank -%}
-            {%- unless forloop.first -%},{%- endunless -%}
-            {{ url | json }}
-          {%- endif -%}
-        {%- endfor -%}
-      ]
-      {%- endif -%}
-    },
-    {
-      "@type": "WebSite",
-      "@id": {{ schema_shop_url | append: '/#website' | json }},
-      "url": {{ schema_shop_url | json }},
-      "name": {{ shop.name | json }},
-      "description": "Shop premium loose leaf tea — green, oolong, pu-erh, and black teas packed fresh to order.",
-      "publisher": { "@id": {{ schema_shop_url | append: '/#organization' | json }} },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": {{ schema_shop_url | append: '/search?q={search_term_string}' | json }}
-        },
-        "query-input": "required name=search_term_string"
-      }
-    }
-    {%- if request.page_type == 'index' -%}
-    ,{
-      "@type": "FAQPage",
-      "@id": {{ schema_shop_url | append: '/#faq' | json }},
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "How much loose leaf tea should I use per cup?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What water temperature is best for loose leaf green tea?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Premium loose leaf green tea brews best at 175–185°F (80–85°C). Avoid boiling water, which can make delicate leaves taste bitter."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you re-steep premium loose leaf tea?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3–4 infusions; oolongs and pu-erh can offer 4–8."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why choose loose leaf tea over tea bags?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Loose leaf tea uses whole or large leaves that unfurl in water, releasing more aroma and flavor. Premium loose leaf also re-steeps better and offers clearer origin and quality."
-          }
-        }
-      ]
-    }
-    {%- endif -%}
-    {%- if request.page_type == 'collection' and collection -%}
-    ,{
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": {{ schema_shop_url | json }}
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": {{ collection.title | json }},
-          "item": {{ schema_shop_url | append: collection.url | json }}
-        }
-      ]
-    },
-    {
-      "@type": "CollectionPage",
-      "name": {{ collection.title | json }},
-      "description": {{ collection.description | strip_html | truncate: 300 | default: 'Shop premium loose leaf tea from Luxe Leaf Tea.' | json }},
-      "url": {{ schema_shop_url | append: collection.url | json }}
-    }
-    {%- if collection.products_count > 0 -%}
-    ,{
-      "@type": "ItemList",
-      "itemListElement": [
-        {%- for item in collection.products limit: 12 -%}
-        {
-          "@type": "ListItem",
-          "position": {{ forloop.index }},
-          "name": {{ item.title | json }},
-          "url": {{ schema_shop_url | append: item.url | json }}
-        }{%- unless forloop.last -%},{%- endunless -%}
-        {%- endfor -%}
-      ]
-    }
-    {%- endif -%}
-    {%- endif -%}
-    {%- if request.page_type == 'product' and product -%}
-    ,{
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": {{ schema_shop_url | json }}
-        }
-        {%- if collection -%}
-        ,{
-          "@type": "ListItem",
-          "position": 2,
-          "name": {{ collection.title | json }},
-          "item": {{ schema_shop_url | append: collection.url | json }}
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": {{ product.title | json }},
-          "item": {{ canonical_url | json }}
-        }
-        {%- else -%}
-        ,{
-          "@type": "ListItem",
-          "position": 2,
-          "name": {{ product.title | json }},
-          "item": {{ canonical_url | json }}
-        }
-        {%- endif -%}
-      ]
-    }
-    {%- endif -%}
-    {%- if request.page_type == 'article' and article -%}
-    ,{
-      "@type": "BlogPosting",
-      "headline": {{ article.title | json }},
-      "description": {{ article.excerpt | default: article.content | strip_html | truncate: 300 | json }},
-      "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }},
-      "dateModified": {{ article.updated_at | date: '%Y-%m-%d' | json }},
-      "author": {
-        "@type": "Organization",
-        "name": {{ shop.name | json }}
-      },
-      "publisher": { "@id": {{ schema_shop_url | append: '/#organization' | json }} },
-      "mainEntityOfPage": {{ canonical_url | json }},
-      "url": {{ canonical_url | json }}
-      {%- if article.image -%}
-      ,"image": {{ article.image | image_url: width: 1200 | prepend: 'https:' | json }}
-      {%- endif -%}
-    }
-    {%- endif -%}
-  ]
-}
-</script>

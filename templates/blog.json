@@ -81,7 +81,6 @@
           "block_order": []
         }
       },
-      "block_order": [],
       "settings": {
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
