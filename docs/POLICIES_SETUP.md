@@ -37,6 +37,21 @@ Policy links appear in three places (mobile-first, high-contrast tap targets):
 
 Links use Shopify admin policy URLs when policies exist; otherwise they fall back to `/policies/…` paths above.
 
+## Policy page features (mobile + SEO)
+
+Each policy page (`/policies/terms-of-service`, `/policies/refund-policy`, `/policies/shipping-policy`) includes:
+
+| Feature | Purpose |
+|---------|---------|
+| **Policy switcher pills** | Swipe between Privacy, Terms, Refunds, Shipping on mobile |
+| **Highlight cards** | Key facts at a glance (free shipping, 14-day guarantee, etc.) |
+| **On-this-page nav** | Jump links to sections on mobile (default theme copy) |
+| **Sidebar** | All policies + FAQ / Contact / Shop links on desktop |
+| **Bottom CTA** | Policy-specific shop or contact buttons |
+| **Mobile sticky Shop button** | One-tap path to collections |
+| **JSON-LD** | WebPage schema; MerchantReturnPolicy (refund); OfferShippingDetails (shipping) |
+| **Meta descriptions** | Optimized titles/descriptions in search and social previews |
+
 ## Theme files
 
 | File | Purpose |
@@ -44,7 +59,8 @@ Links use Shopify admin policy URLs when policies exist; otherwise they fall bac
 | `templates/policy.json` | Branded policy page layout |
 | `sections/luxe-leaf-policy-page.liquid` | Policy page styling + sidebar |
 | `snippets/luxe-leaf-policy-default-content.liquid` | Default copy when admin policy is empty |
-| `snippets/luxe-leaf-policy-links.liquid` | Footer + sidebar policy links |
+| `snippets/luxe-leaf-policy-links.liquid` | Footer, sidebar, and mobile policy switcher links |
+| `snippets/luxe-leaf-policy-schema.liquid` | WebPage + policy-specific structured data |
 
 ## Shipping values in policies
 

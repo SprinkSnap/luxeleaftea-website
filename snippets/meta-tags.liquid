@@ -71,6 +71,23 @@
     assign og_title = 'Contact Luxe Leaf Tea | Call, Email, or Chat With Our Tea Team'
     assign meta_description = 'Contact Luxe Leaf Tea — call, email, or chat with our Tea Guide for help choosing premium loose leaf tea, orders, brewing tips, and shipping questions. We reply within one business day.'
     assign og_description = meta_description
+  elsif request.page_type == 'policy' and policy
+    if policy == shop.terms_of_service
+      assign og_title = 'Terms of Service | ' | append: shop.name
+      assign meta_description = 'Terms of Service for shopping premium loose leaf tea at ' | append: shop.name | append: ' — orders, secure payment, fresh packing, pricing, and acceptable use.'
+    elsif policy == shop.refund_policy
+      assign og_title = 'Refund Policy | ' | append: shop.name
+      assign meta_description = 'Refund Policy for ' | append: shop.name | append: ' — 14-day freshness guarantee, eligible returns, refund timing, and how to contact support.'
+    elsif policy == shop.shipping_policy
+      assign og_title = 'Shipping Policy | ' | append: shop.name
+      assign meta_description = 'Shipping Policy for ' | append: shop.name | append: ' — free shipping over ' | append: free_ship_label | append: ', standard shipping from ' | append: standard_ship_label | append: ', processing in 1–2 business days, and tracking.'
+    elsif policy == shop.privacy_policy
+      assign og_title = 'Privacy Policy | ' | append: shop.name
+      assign meta_description = 'Privacy Policy for ' | append: shop.name | append: ' — how we collect, use, and protect your information when you shop premium loose leaf tea online.'
+    else
+      assign meta_description = policy.title | append: ' — ' | append: shop.name
+    endif
+    assign og_description = meta_description
   endif
 
   if request.page_type == 'product'

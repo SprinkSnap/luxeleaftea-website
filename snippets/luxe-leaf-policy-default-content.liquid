@@ -1,6 +1,5 @@
 {%- doc -%}
   Default legal policy copy for Luxe Leaf Tea when Shopify admin policies are empty.
-  Paste the matching section into Settings → Policies to customize, or leave blank to use these defaults.
 {%- enddoc -%}
 
 {%- liquid
@@ -15,6 +14,11 @@
   endif
 
   assign contact_url = pages['contact'].url | default: '/pages/contact'
+  assign faq_url = pages['faq'].url | default: '/pages/faq'
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
 -%}
 
 {%- case policy_kind -%}
@@ -22,145 +26,169 @@
     <p><strong>Last updated:</strong> {{ 'now' | date: '%B %d, %Y' }}</p>
     <p>{{ shop.name }} ("we," "us," or "our") respects your privacy. This Privacy Policy explains how we collect, use, and protect personal information when you visit {{ shop.url }} or purchase premium loose leaf tea from our online store.</p>
 
-    <h2>Information we collect</h2>
+    <h2 id="policy-information">Information we collect</h2>
     <ul>
       <li><strong>Order information:</strong> name, shipping address, billing address, email, phone (if provided), and payment details processed securely by Shopify.</li>
       <li><strong>Account information:</strong> if you create an account, we store your login email and order history.</li>
       <li><strong>Marketing:</strong> if you join our email list, we store your email address and subscription preferences.</li>
       <li><strong>Support messages:</strong> information you send when contacting us or using our Tea Guide chat.</li>
-      <li><strong>Usage data:</strong> device, browser, and analytics data collected through cookies and similar technologies (see below).</li>
+      <li><strong>Usage data:</strong> device, browser, and analytics data collected through cookies and similar technologies.</li>
     </ul>
 
-    <h2>How we use information</h2>
+    <h2 id="policy-use">How we use information</h2>
     <ul>
       <li>Fulfill and ship your orders, including packed-fresh fulfillment and tracking updates.</li>
       <li>Process payments and prevent fraud.</li>
       <li>Respond to questions about tea, orders, and brewing.</li>
-      <li>Send marketing emails you opt into (you may unsubscribe anytime).</li>
+      <li>Send marketing emails you opt into (unsubscribe anytime).</li>
       <li>Improve our website, products, and customer experience.</li>
     </ul>
 
-    <h2>Sharing</h2>
-    <p>We do not sell your personal information. We share data only with service providers who help us operate our store (for example Shopify, payment processors, shipping carriers, and email providers) under appropriate confidentiality obligations, or when required by law.</p>
+    <h2 id="policy-sharing">Sharing</h2>
+    <p>We do not sell your personal information. We share data only with service providers who help us operate our store (Shopify, payment processors, shipping carriers, email providers) under appropriate confidentiality obligations, or when required by law.</p>
 
-    <h2>Cookies</h2>
-    <p>We use cookies and similar technologies for essential site functions, cart persistence, analytics, and marketing (where permitted). You can control cookies through your browser settings.</p>
+    <h2 id="policy-cookies">Cookies</h2>
+    <p>We use cookies for essential site functions, cart persistence, analytics, and marketing (where permitted). You can control cookies through your browser settings.</p>
 
-    <h2>Your choices</h2>
+    <h2 id="policy-choices">Your choices</h2>
     <ul>
       <li>Opt out of marketing emails using the unsubscribe link in any message.</li>
       <li>Request access, correction, or deletion of personal information by contacting us.</li>
       <li>Disable cookies in your browser (some site features may not work).</li>
     </ul>
 
-    <h2>Data retention</h2>
-    <p>We retain order and account records as needed to fulfill orders, comply with law, and resolve disputes.</p>
-
-    <h2>Children</h2>
-    <p>Our store is not directed to children under 13, and we do not knowingly collect their personal information.</p>
-
-    <h2>Contact</h2>
+    <h2 id="policy-contact">Contact</h2>
     <p>Questions about this Privacy Policy? Email <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a> or visit our <a href="{{ contact_url }}">contact page</a>.</p>
 
   {%- when 'terms' -%}
     <p><strong>Last updated:</strong> {{ 'now' | date: '%B %d, %Y' }}</p>
-    <p>These Terms of Service ("Terms") govern your use of {{ shop.url }} and purchases from {{ shop.name }}. By accessing our site or placing an order, you agree to these Terms.</p>
+    <p>These Terms of Service ("Terms") govern your use of {{ shop.url }} and purchases from {{ shop.name }}. By browsing our store, creating an account, or placing an order, you agree to these Terms.</p>
 
-    <h2>Eligibility</h2>
-    <p>You must be at least the age of majority in your jurisdiction to purchase tea products from our store.</p>
+    <h2 id="policy-overview">Overview</h2>
+    <p>{{ shop.name }} sells premium loose leaf tea online. We pack whole leaves fresh after you order and ship to the addresses you provide at checkout. These Terms explain your rights and responsibilities when shopping with us.</p>
 
-    <h2>Products &amp; pricing</h2>
+    <h2 id="policy-eligibility">Eligibility</h2>
+    <p>You must be at least the age of majority in your jurisdiction to purchase tea products. By placing an order, you confirm that the information you provide is accurate and that you are authorized to use the payment method selected.</p>
+
+    <h2 id="policy-products">Products &amp; pricing</h2>
     <ul>
-      <li>We sell premium loose leaf tea and related products. Descriptions, origin notes, and images are accurate to the best of our knowledge but natural variation in harvests may occur.</li>
-      <li>Prices are shown in the currency displayed at checkout and may change without notice.</li>
-      <li>We reserve the right to limit quantities or refuse orders placed in error or in violation of these Terms.</li>
+      <li>We sell premium loose leaf tea and related products. Descriptions, origin notes, and images reflect each tea to the best of our knowledge; natural variation between harvests may occur.</li>
+      <li>Prices are shown in the currency displayed at checkout and may change without notice. Promotions apply only for the stated period and cannot be combined unless we say otherwise.</li>
+      <li>We may limit quantities, correct pricing errors, or refuse orders placed in error, suspected fraud, or violation of these Terms.</li>
+      <li>Tea is a food product for personal consumption — not for resale without our written permission.</li>
     </ul>
 
-    <h2>Orders &amp; payment</h2>
-    <p>When you place an order, you offer to purchase products subject to these Terms. We may confirm, decline, or cancel orders (for example due to inventory, payment issues, or suspected fraud). Payment is processed securely through Shopify.</p>
+    <h2 id="policy-orders">Orders &amp; payment</h2>
+    <p>When you submit an order, you offer to purchase the items in your cart subject to these Terms. We may confirm, decline, or cancel orders (for example due to inventory, payment issues, or suspected fraud). Payment is processed securely through Shopify; we do not store full card numbers on our servers.</p>
+    <p>Order confirmation email is your receipt. If we cancel an order after payment, we will refund the amount charged.</p>
 
-    <h2>Fresh packing</h2>
-    <p>Tea is packed fresh after you order. Processing time is typically 1–2 business days before shipment unless otherwise stated at checkout.</p>
+    <h2 id="policy-fulfillment">Fresh packing &amp; fulfillment</h2>
+    <p>Tea is packed fresh after you order — typically within <strong>1–2 business days</strong> before shipment. Processing times may extend during peak seasons or holidays; any delay will be noted at checkout or in your order confirmation when possible.</p>
 
-    <h2>Intellectual property</h2>
-    <p>All content on this site — including text, photos, logos, and brewing guides — is owned by {{ shop.name }} or our licensors and may not be copied or reused without permission.</p>
+    <h2 id="policy-accounts">Accounts</h2>
+    <p>If you create an account, you are responsible for safeguarding your login credentials and for activity under your account. Notify us promptly if you suspect unauthorized access.</p>
 
-    <h2>Disclaimer</h2>
-    <p>Tea is a food product for personal consumption. Brewing guidance is educational and not medical advice. Our site and products are provided "as is" to the fullest extent permitted by law.</p>
+    <h2 id="policy-conduct">Acceptable use</h2>
+    <p>You agree not to misuse our website — including attempting unauthorized access, scraping content at scale, interfering with site operation, or using our brand without permission.</p>
 
-    <h2>Limitation of liability</h2>
+    <h2 id="policy-ip">Intellectual property</h2>
+    <p>All content on this site — text, photos, logos, brewing guides, and product names — is owned by {{ shop.name }} or our licensors. You may not copy, reproduce, or distribute our content without written permission.</p>
+
+    <h2 id="policy-disclaimer">Disclaimer</h2>
+    <p>Tea is a food product for personal consumption. Brewing guidance on our site is educational and not medical or health advice. Our site and products are provided "as is" to the fullest extent permitted by law.</p>
+
+    <h2 id="policy-liability">Limitation of liability</h2>
     <p>To the maximum extent permitted by law, {{ shop.name }} is not liable for indirect, incidental, or consequential damages arising from your use of the site or products. Our total liability for any claim related to an order is limited to the amount you paid for that order.</p>
 
-    <h2>Governing law</h2>
-    <p>These Terms are governed by the laws applicable where {{ shop.name }} operates, without regard to conflict-of-law rules.</p>
+    <h2 id="policy-law">Governing law</h2>
+    <p>These Terms are governed by the laws applicable where {{ shop.name }} operates, without regard to conflict-of-law rules. If a provision is unenforceable, the remaining provisions remain in effect.</p>
 
-    <h2>Changes</h2>
-    <p>We may update these Terms from time to time. Continued use of the site after changes constitutes acceptance of the updated Terms.</p>
+    <h2 id="policy-changes">Changes</h2>
+    <p>We may update these Terms from time to time. The "Last updated" date at the top reflects the latest revision. Continued use of the site after changes constitutes acceptance of the updated Terms.</p>
 
-    <h2>Contact</h2>
-    <p>Questions? Email <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a> or visit our <a href="{{ contact_url }}">contact page</a>.</p>
+    <h2 id="policy-related">Related policies</h2>
+    <p>Your purchase is also subject to our <a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">Refund Policy</a>, <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">Shipping Policy</a>, and <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">Privacy Policy</a>.</p>
+
+    <h2 id="policy-contact">Contact</h2>
+    <p>Questions about these Terms? Email <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a>, visit our <a href="{{ contact_url }}">contact page</a>, or read our <a href="{{ faq_url }}">FAQ</a>.</p>
 
   {%- when 'refund' -%}
     <p><strong>Last updated:</strong> {{ 'now' | date: '%B %d, %Y' }}</p>
-    <p>We want every cup to feel worth slowing down for. If something isn't right with your order, contact us and we'll make it right.</p>
+    <p>We want every cup to feel worth slowing down for. If something isn't right with your order, contact us — we'll respond within <strong>1 business day</strong> and work toward a fair resolution.</p>
 
-    <h2>Freshness guarantee</h2>
-    <p>Premium loose leaf tea is packed fresh after you order. If your tea arrives damaged, defective, or not as described, contact us within <strong>14 days of delivery</strong> with your order number and photos if applicable.</p>
+    <h2 id="policy-guarantee">Freshness guarantee</h2>
+    <p>Premium loose leaf tea is packed fresh after you order. If your tea arrives damaged, defective, or not as described, contact us within <strong>14 days of delivery</strong> with your order number and photos when applicable.</p>
 
-    <h2>Eligible returns &amp; refunds</h2>
+    <h2 id="policy-eligible">Eligible returns &amp; refunds</h2>
     <ul>
       <li>Items damaged in transit or fulfillment errors.</li>
-      <li>Incorrect items shipped.</li>
-      <li>Quality concerns with an unopened or minimally sampled product — we'll work with you case by case.</li>
+      <li>Incorrect items shipped (wrong tea or size).</li>
+      <li>Quality concerns with an unopened or minimally sampled product — reviewed case by case.</li>
+      <li>Orders that never arrive — we'll investigate with the carrier and replace or refund when confirmed.</li>
     </ul>
 
-    <h2>Non-returnable items</h2>
+    <h2 id="policy-non-returnable">Non-returnable items</h2>
     <ul>
-      <li>Opened tea that has been substantially used, except when quality issues are reported promptly.</li>
+      <li>Opened tea that has been substantially used, except when quality issues are reported promptly within 14 days.</li>
       <li>Gift cards and digital products.</li>
-      <li>Final sale items marked as non-returnable at purchase.</li>
+      <li>Final sale items marked non-returnable at purchase.</li>
     </ul>
 
-    <h2>How to request help</h2>
+    <h2 id="policy-how">How to request help</h2>
     <ol>
-      <li>Email <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a> or use our <a href="{{ contact_url }}">contact page</a> with your order number.</li>
-      <li>Tell us what happened — we'll respond within 1 business day.</li>
-      <li>If a return is approved, we'll provide instructions. Refunds are issued to the original payment method after we receive and inspect returned items (if applicable).</li>
+      <li>Email <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a> or use our <a href="{{ contact_url }}">contact page</a> with your order number and a brief description.</li>
+      <li>Include photos for damage or quality concerns — this helps us resolve your case faster.</li>
+      <li>If a return is approved, we'll send instructions. Ship approved returns within 14 days of approval unless we specify otherwise.</li>
+      <li>Refunds are issued to the original payment method after we receive and inspect returned items (when applicable).</li>
     </ol>
 
-    <h2>Refund timing</h2>
-    <p>Approved refunds are processed within 5–10 business days. Your bank may take additional time to post the credit.</p>
+    <h2 id="policy-timing">Refund timing</h2>
+    <p>Approved refunds are processed within <strong>5–10 business days</strong> after approval. Your bank or card issuer may take additional time to post the credit. You'll receive email confirmation when a refund is issued.</p>
 
-    <h2>Exchanges</h2>
-    <p>Prefer a different tea? Contact us — we're happy to recommend a better match or arrange an exchange when possible.</p>
+    <h2 id="policy-exchanges">Exchanges &amp; store credit</h2>
+    <p>Prefer a different tea? Contact us — we're happy to recommend a better match or arrange an exchange when inventory allows. In some cases we may offer store credit instead of a refund; we'll explain options before you ship anything back.</p>
+
+    <h2 id="policy-shipping-costs">Return shipping</h2>
+    <p>If we made an error or your order arrived damaged, we cover return shipping. For other approved returns, return shipping may be deducted from your refund unless we state otherwise.</p>
+
+    <h2 id="policy-contact">Contact</h2>
+    <p>Start a return or ask a question: <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a> · <a href="{{ contact_url }}">Contact page</a> · <a href="{{ faq_url }}">FAQ</a></p>
 
   {%- when 'shipping' -%}
     <p><strong>Last updated:</strong> {{ 'now' | date: '%B %d, %Y' }}</p>
-    <p>We pack premium loose leaf tea fresh after you order and ship to addresses within our service areas.</p>
+    <p>We pack premium loose leaf tea fresh after you order and ship to addresses within our service areas. Rates and delivery estimates are shown at checkout before you pay.</p>
 
-    <h2>Processing time</h2>
-    <p>Orders are typically packed within <strong>1–2 business days</strong> (Monday–Friday, excluding holidays). You'll receive a shipping confirmation with tracking when your tea leaves our tea room.</p>
+    <h2 id="policy-processing">Processing time</h2>
+    <p>Orders are typically packed within <strong>1–2 business days</strong> (Monday–Friday, excluding holidays). You'll receive a shipping confirmation email with tracking when your tea leaves our tea room.</p>
+    <p>Orders placed on weekends or holidays begin processing on the next business day.</p>
 
-    <h2>Shipping rates</h2>
+    <h2 id="policy-rates">Shipping rates</h2>
     <ul>
       <li><strong>Free standard shipping</strong> on orders of {{ free_ship_label }} or more (before tax, after discounts, where applicable).</li>
-      <li>Orders below {{ free_ship_label }}: standard shipping from {{ standard_ship_label }} — exact rates shown at checkout before you pay.</li>
+      <li>Orders below {{ free_ship_label }}: standard shipping from {{ standard_ship_label }} — exact rates shown at checkout.</li>
+      <li>Expedited options, when available, appear at checkout with live pricing.</li>
     </ul>
 
-    <h2>Delivery estimates</h2>
-    <p>After shipment, standard delivery is typically <strong>3–7 business days</strong> within the contiguous United States. Remote areas, weather, and carrier delays may extend transit time.</p>
+    <h2 id="policy-delivery">Delivery estimates</h2>
+    <p>After shipment, standard delivery is typically <strong>3–7 business days</strong> within the contiguous United States. Remote areas, weather, and carrier delays may extend transit time — tracking is the best guide once your package is in the carrier network.</p>
 
-    <h2>Order tracking</h2>
-    <p>Tracking is emailed when your order ships. Allow 24 hours for the carrier to scan your package.</p>
+    <h2 id="policy-tracking">Order tracking</h2>
+    <p>Tracking is emailed when your order ships. Allow up to 24 hours for the carrier to scan your package. If tracking hasn't updated after 48 hours, contact us with your order number.</p>
 
-    <h2>Incorrect addresses</h2>
-    <p>Please verify your shipping address at checkout. We cannot redirect packages once shipped and are not responsible for delays caused by incorrect addresses.</p>
+    <h2 id="policy-address">Shipping addresses</h2>
+    <p>Verify your shipping address at checkout. We cannot redirect packages once shipped and are not responsible for delays or lost packages caused by incorrect or incomplete addresses. Address changes before shipment may be possible — contact us immediately after ordering.</p>
 
-    <h2>Lost or damaged packages</h2>
-    <p>If tracking shows delivered but you didn't receive your tea, or if your order arrives damaged, contact us within 7 days at <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a>.</p>
+    <h2 id="policy-lost">Lost or damaged packages</h2>
+    <p>If tracking shows delivered but you didn't receive your tea, or if your order arrives damaged, contact us within <strong>7 days</strong> at <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a>. We'll work with the carrier and arrange a replacement or refund when appropriate.</p>
 
-    <h2>International shipping</h2>
-    <p>International availability, duties, and taxes (if any) are shown at checkout. Customers are responsible for import fees where applicable.</p>
+    <h2 id="policy-international">International &amp; remote areas</h2>
+    <p>International availability, duties, and taxes (if any) are shown at checkout. Customers are responsible for import fees where applicable. Delivery to PO boxes and APO/FPO addresses depends on carrier service — contact us if you need help before ordering.</p>
+
+    <h2 id="policy-holidays">Peak seasons &amp; holidays</h2>
+    <p>During high-volume periods, processing may take an extra business day. We'll note any extended timelines on the site or in your order confirmation when possible.</p>
+
+    <h2 id="policy-contact">Questions</h2>
+    <p>Shipping questions? Email <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a>, visit <a href="{{ contact_url }}">contact</a>, or browse our <a href="{{ faq_url }}">FAQ</a>. Ready to order? <a href="{{ shop_tea_url }}">Shop all tea</a>.</p>
 
   {%- else -%}
     <p>Policy content for {{ shop.name }}. Configure this policy in Shopify admin under <strong>Settings → Policies</strong>, or contact us at <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a>.</p>
