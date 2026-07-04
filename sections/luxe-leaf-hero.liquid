@@ -12,7 +12,7 @@
   endif
 -%}
 
-<section class="luxe-hero section section--full-width" id="shop-hero">
+<section class="luxe-hero section section--full-width section--mobile-full-width" id="shop-hero">
   <div class="luxe-hero__media-wrap">
     <img
       src="{{ hero_image }}"
@@ -26,7 +26,7 @@
     <div class="luxe-hero__overlay"></div>
   </div>
 
-  <div class="luxe-hero__content page-width">
+  <div class="luxe-hero__content">
     <div class="luxe-hero__copy">
       <p class="luxe-hero__eyebrow">{{ section.settings.eyebrow }}</p>
       <h1 class="luxe-hero__heading">{{ section.settings.heading }}</h1>
@@ -56,8 +56,12 @@
   .luxe-hero {
     position: relative;
     min-height: clamp(28rem, 72vh, 42rem);
-    display: grid;
+    display: flex;
     align-items: center;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-inline: 0;
     overflow: hidden;
     color: #f8f6f0;
   }
@@ -65,11 +69,14 @@
   .luxe-hero__media-wrap {
     position: absolute;
     inset: 0;
+    width: 100%;
   }
 
   .luxe-hero__image {
+    display: block;
     width: 100%;
     height: 100%;
+    max-width: none;
     object-fit: cover;
     object-position: center;
   }
@@ -83,7 +90,12 @@
   .luxe-hero__content {
     position: relative;
     z-index: 1;
+    width: 100%;
+    max-width: var(--page-width, 90rem);
+    margin-inline: auto;
     padding-block: 5rem 4rem;
+    padding-inline: max(var(--page-margin, 1rem), env(safe-area-inset-left))
+      max(var(--page-margin, 1rem), env(safe-area-inset-right));
   }
 
   .luxe-hero__copy {
@@ -126,12 +138,30 @@
   }
 
   @media screen and (max-width: 749px) {
+    .luxe-hero {
+      min-height: clamp(22rem, 88svh, 36rem);
+    }
+
+    .luxe-hero__overlay {
+      background: linear-gradient(
+        180deg,
+        rgb(13 40 24 / 0.88) 0%,
+        rgb(13 40 24 / 0.72) 55%,
+        rgb(13 40 24 / 0.45) 100%
+      );
+    }
+
     .luxe-hero__content {
-      padding-block: 4rem 3rem;
+      max-width: none;
+      padding-block: clamp(3rem, 12vw, 4rem) clamp(2.5rem, 10vw, 3rem);
     }
 
     .luxe-hero__copy {
       max-width: none;
+    }
+
+    .luxe-hero__heading {
+      font-size: clamp(2rem, 9vw, 2.75rem);
     }
 
     .luxe-hero__actions {
