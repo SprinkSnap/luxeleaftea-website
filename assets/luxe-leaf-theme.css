@@ -1062,7 +1062,25 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   }
 
   body.luxe-leaf-theme #header-component header-actions {
-    z-index: 5;
+    grid-column: 4 / 6;
+    z-index: 6;
+    width: 5.5rem;
+    min-width: 5.5rem;
+  }
+
+  body.luxe-leaf-theme #header-component .header-actions__action,
+  body.luxe-leaf-theme #header-component .account-button.header-actions__action {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    min-width: 2.75rem !important;
+    min-height: 2.75rem !important;
+  }
+
+  body.luxe-leaf-theme #header-component shopify-account {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    min-width: 2.75rem !important;
+    min-height: 2.75rem !important;
   }
 }
 
