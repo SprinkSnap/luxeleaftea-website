@@ -1,0 +1,45 @@
+{%- doc -%}
+  Footer newsletter signup — Shopify customer form, conversion-focused.
+{%- enddoc -%}
+
+{%- form 'customer', id: 'LuxeFooterNewsletter', class: 'luxe-brand-footer__newsletter-form' -%}
+  <input type="hidden" name="contact[tags]" value="newsletter, footer">
+
+  <div class="luxe-brand-footer__newsletter-field">
+    <label class="visually-hidden" for="LuxeFooterNewsletterEmail">
+      Email address for tea tips and harvest alerts
+    </label>
+    <input
+      id="LuxeFooterNewsletterEmail"
+      class="luxe-brand-footer__newsletter-input"
+      type="email"
+      name="contact[email]"
+      value="{{ form.email }}"
+      autocomplete="email"
+      autocapitalize="off"
+      autocorrect="off"
+      placeholder="{{ placeholder | default: 'Your email for tea tips' }}"
+      required
+      {% if form.errors %}
+        aria-invalid="true"
+        aria-describedby="LuxeFooterNewsletterError"
+      {% elsif form.posted_successfully? %}
+        aria-describedby="LuxeFooterNewsletterSuccess"
+      {% endif %}
+    >
+    <button type="submit" class="button luxe-brand-footer__newsletter-btn">
+      {{ button_label | default: 'Subscribe' }}
+    </button>
+  </div>
+
+  {%- if form.errors -%}
+    <p id="LuxeFooterNewsletterError" class="luxe-brand-footer__newsletter-message luxe-brand-footer__newsletter-message--error" role="alert">
+      {{ form.errors.translated_fields.email | capitalize }}
+      {{ form.errors.messages.email }}
+    </p>
+  {%- elsif form.posted_successfully? -%}
+    <p id="LuxeFooterNewsletterSuccess" class="luxe-brand-footer__newsletter-message luxe-brand-footer__newsletter-message--success" role="status">
+      {{ success_message | default: 'Welcome — check your inbox for brewing tips soon.' }}
+    </p>
+  {%- endif -%}
+{%- endform -%}

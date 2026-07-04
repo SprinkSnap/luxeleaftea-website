@@ -1,9 +1,14 @@
 {%- doc -%}
-  Organization contactPoint JSON-LD for footer SEO.
+  Footer SEO — Organization, SiteNavigationElement, and contact schema.
 {%- enddoc -%}
 
 {%- unless settings.brand_navigation == false -%}
   {%- liquid
+    assign shop_tea_url = routes.all_products_collection_url
+    if collections.all != blank and collections.all.url != blank
+      assign shop_tea_url = collections.all.url
+    endif
+
     capture brand_phone
       render 'luxe-leaf-brand-phone-value'
     endcapture
@@ -13,23 +18,55 @@
     if brand_email == blank
       assign brand_email = shop.email
     endif
+
+    assign home_abs = shop.url | append: routes.root_url
+    assign shop_abs = shop.url | append: shop_tea_url
+    assign guides_abs = shop.url | append: '/blogs/tea-guides'
+    assign faq_abs = shop.url | append: '/pages/faq'
+    assign about_abs = shop.url | append: '/pages/about'
+    assign contact_abs = shop.url | append: '/pages/contact'
   -%}
 
-  {%- if brand_phone != blank or brand_email != blank -%}
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": {{ shop.name | json }},
-        "url": {{ shop.url | json }},
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer service",
-          "availableLanguage": ["English"]{%- if brand_phone != blank -%},
-          "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
-          "email": {{ brand_email | json }}{%- endif -%}
-        }
-      }
-    </script>
-  {%- endif -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "description": {{ brand_blurb | default: 'Premium loose leaf tea — whole leaves packed fresh to order.' | json }}{%- if instagram_url != blank or facebook_url != blank -%},
+      "sameAs": [
+        {%- if instagram_url != blank -%}
+          {{ instagram_url | json }}{%- if facebook_url != blank -%},{%- endif -%}
+        {%- endif -%}
+        {%- if facebook_url != blank -%}
+          {{ facebook_url | json }}
+        {%- endif -%}
+      ]{%- endif -%}{%- if brand_phone != blank or brand_email != blank -%},
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["English"]{%- if brand_phone != blank -%},
+        "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
+        "email": {{ brand_email | json }}{%- endif -%}
+      }{%- endif -%}
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SiteNavigationElement",
+      "name": ["Home", "Shop All Tea", "Green Tea", "Oolong Tea", "Tea Guides", "FAQ", "About", "Contact"],
+      "url": [
+        {{ home_abs | json }},
+        {{ shop_abs | json }},
+        {{ shop.url | append: '/collections/green-tea' | json }},
+        {{ shop.url | append: '/collections/oolong' | json }},
+        {{ guides_abs | json }},
+        {{ faq_abs | json }},
+        {{ about_abs | json }},
+        {{ contact_abs | json }}
+      ]
+    }
+  </script>
 {%- endunless -%}

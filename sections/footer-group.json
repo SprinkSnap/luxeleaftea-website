@@ -14,7 +14,16 @@
     "luxe_brand_footer": {
       "type": "luxe-leaf-brand-footer",
       "settings": {
+        "cta_heading": "Ready for your next perfect cup?",
+        "cta_subhead": "Hand-selected whole leaves, packed fresh after you order — brighter aroma, clearer flavor, every steep.",
+        "secondary_cta_label": "Browse FAQ",
+        "secondary_cta_link": "/pages/faq",
+        "brand_blurb": "Luxe Leaf Tea sources drinkable premium loose-leaf teas from China's most respected growing regions. Whole leaves, packed fresh to order — for a clearer, more aromatic cup at home.",
+        "response_time": "We reply within 1 business day.",
         "show_newsletter": true,
+        "newsletter_placeholder": "Your email for tea tips",
+        "newsletter_button_label": "Subscribe",
+        "newsletter_success_message": "Welcome — check your inbox for brewing tips soon.",
         "instagram_url": "",
         "facebook_url": ""
       }
