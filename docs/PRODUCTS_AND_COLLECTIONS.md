@@ -36,6 +36,8 @@ Use the bundled assets in `/assets/` as product images:
 | `luxe-leaf-oolong-tea-product.png` | Oolong products |
 | `luxe-leaf-puerh-tea-product.png` | Pu-erh products |
 | `luxe-leaf-black-tea-product.png` | Black tea products |
+| `assets/yunnan-ctc-black-tea-product.png` | Yunnan CTC Black Tea (image 1) |
+| `assets/fujian-black-tea-product.png` | Fujian Black Tea (image 1) |
 | `luxe-leaf-tea-liquor-product.png` | Second image — brewed cup + wet leaf |
 | `luxe-leaf-tea-assortment-hero.png` | Gift sets / variety packs |
 
@@ -58,6 +60,15 @@ Add one tag per product so the product page shows the correct brewing, origin, a
 | `oolong` | Oolong |
 | `pu-erh` | Pu-erh |
 | `black-tea` | Black |
+
+### Milk tea & blending line
+
+| Product | Handle | Tags | Image (GitHub) |
+|---------|--------|------|----------------|
+| Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `assets/yunnan-ctc-black-tea-product.png` |
+| Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `assets/fujian-black-tea-product.png` |
+
+Import rows are in `docs/SAMPLE_PRODUCTS_IMPORT.csv`. After import, upload images from the paths above plus `luxe-leaf-tea-liquor-product.png` as image 2.
 
 ## 5. Optional product metafields (advanced)
 

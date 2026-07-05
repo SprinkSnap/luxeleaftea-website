@@ -49,6 +49,18 @@
       assign default_brewing = '<p><strong>Leaf:</strong> 3g per 150ml water<br><strong>Water:</strong> 185–205°F depending on tea style<br><strong>Time:</strong> 1–3 minutes<br><strong>Re-steeps:</strong> Quality loose leaf can be re-steeped multiple times</p>'
   endcase
 
+  assign title_downcase = product.title | downcase
+  if title_downcase contains 'yunnan' and title_downcase contains 'ctc'
+    assign default_origin = '<p>Yunnan CTC black tea from high-elevation gardens in Yunnan Province, China. Crush-tear-curl processing delivers bold strength and fast infusion — the style pro brewers reach for in milk tea and chai.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Earthy, malty, slightly peppery<br><strong>Palate:</strong> Full-bodied, deep reddish liquor, robust<br><strong>Finish:</strong> Smooth with lingering malt — holds dairy and ice well</p>'
+    assign default_brewing = '<p><strong>Hot cup:</strong> 3g per 150ml · 205–212°F · 3–4 minutes<br><strong>Milk tea / chai batch:</strong> 50g per 2L · just off boil · steep 10–15 minutes · strain · add milk and sweetener<br><strong>Tip:</strong> CTC brews faster than whole leaf — taste at 8 minutes for bubble tea batches.</p>'
+  endif
+  if title_downcase contains 'fujian' and title_downcase contains 'black'
+    assign default_origin = '<p>Handpicked Fujian black tea from misty highland gardens in Fujian Province, China. Carefully oxidized whole leaf prized for natural sweetness in specialty blends.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Honey, light florals, soft cocoa<br><strong>Palate:</strong> Mellow, sweet, balanced<br><strong>Finish:</strong> Clean and aromatic — rounds out bolder blend partners</p>'
+    assign default_brewing = '<p><strong>Hot cup:</strong> 3g per 150ml · 200–205°F · 3 minutes<br><strong>Blending:</strong> Use 20–40% Fujian with Assam or Yunnan CTC for softer, sweeter milk tea<br><strong>Re-steeps:</strong> 2–3 infusions</p>'
+  endif
+
   if origin == blank
     assign origin_html = default_origin
   else

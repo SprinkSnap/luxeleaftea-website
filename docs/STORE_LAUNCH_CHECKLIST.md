@@ -70,6 +70,8 @@ Then **Publish** the pushed theme in admin.
    - Tieguanyin → `luxe-leaf-oolong-tea-product.png`
    - Pu-erh → `luxe-leaf-puerh-tea-product.png`
    - Keemun → `luxe-leaf-black-tea-product.png`
+   - Yunnan CTC → `assets/yunnan-ctc-black-tea-product.png`
+   - Fujian Black → `assets/fujian-black-tea-product.png`
 3. Add second image (`luxe-leaf-tea-liquor-product.png`) where helpful
 
 See [`PRODUCTS_AND_COLLECTIONS.md`](PRODUCTS_AND_COLLECTIONS.md) for collection setup.
