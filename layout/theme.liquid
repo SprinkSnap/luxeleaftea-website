@@ -6,7 +6,25 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
-    {%- if settings.favicon != blank -%}
+    {%- if settings.brand_navigation != false -%}
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{{ 'luxe-leaf-tea-favicon-32.png' | asset_url }}"
+      >
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="{{ 'luxe-leaf-tea-favicon-16.png' | asset_url }}"
+      >
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{{ 'luxe-leaf-tea-apple-touch-icon.png' | asset_url }}"
+      >
+    {%- elsif settings.favicon != blank -%}
       <link
         rel="icon"
         type="image/png"

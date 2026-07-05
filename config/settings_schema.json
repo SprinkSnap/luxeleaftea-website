@@ -63,7 +63,7 @@
           "id": "brand_navigation",
           "label": "Use Luxe Leaf Tea brand navigation",
           "default": true,
-          "info": "Desktop: Home, Shop Tea, About, Contact. Mobile: hamburger menu with Home, About, Contact, FAQ, plus phone and email. Shop uses the bottom bar on mobile. Also forces the Luxe Leaf footer snippet (with policy links) instead of Horizon's default footer."
+          "info": "Desktop: Home, Shop Tea, About, Contact. Mobile: hamburger menu with Home, About, Contact, FAQ, plus phone and email. Shop uses the bottom bar on mobile. Also forces the Luxe Leaf footer snippet (with policy links) instead of Horizon's default footer. When enabled, the bundled Luxe Leaf horizontal logo is used in the header and footer instead of Theme settings → Logo uploads."
         },
         {
           "type": "text",
