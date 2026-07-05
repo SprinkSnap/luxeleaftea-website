@@ -26,48 +26,89 @@ The theme shows fallback photography from `assets/` until you upload collection 
 - Pu-erh → `luxe-leaf-puerh-tea-product.png`
 - Black Tea → `luxe-leaf-black-tea-product.png`
 
-## 3. Product photography standard (two images)
+## 3. Create a product to sell
 
-Every loose leaf product should have **two images** in this order:
+Each loose leaf product uses **one hero image** and a **single product description** that includes everything the shopper needs.
 
-| Slot | What to show | Why |
-|------|----------------|-----|
-| **Image 1** | **Dry loose leaf only** — pile or spread on cream/neutral background | Shows leaf quality before purchase; packaging optional (not required) |
-| **Image 2** | **Brewed tea and dry loose leaf** — cup of liquor plus dry leaf in the same frame | Proves color, clarity, and leaf character together |
+### One product image
 
-Upload in **Products → [product] → Media** with Image 1 first, Image 2 second. Alt text examples: “Dry loose leaf [tea name]” and “Brewed [tea name] with dry loose leaf.”
+Upload **one image only** in **Products → [product] → Media**:
 
-### Bundled theme assets (Image 1 → Image 2)
+| What to show | Brewed tea **and** dry loose leaf in the same frame |
+|--------------|-----------------------------------------------------|
+| Alt text example | “Brewed [tea name] with dry loose leaf” |
+| Background | Cream or neutral — packaging optional |
 
-| Product | Image 1 (dry leaf) | Image 2 (brewed + dry leaf) |
-|---------|--------------------|-----------------------------|
-| Dragon Well Green Tea | `luxe-leaf-green-tea-product.png` | `luxe-leaf-green-tea-product-2.png` |
-| Tieguanyin Oolong | `luxe-leaf-oolong-tea-product.png` | `luxe-leaf-oolong-tea-product-2.png` |
-| Aged Yunnan Pu-erh | `luxe-leaf-puerh-tea-product.png` | `luxe-leaf-puerh-tea-product-2.png` |
-| Keemun Black Tea | `luxe-leaf-black-tea-product.png` | `luxe-leaf-black-tea-product-2.png` |
-| Yunnan CTC Black Tea | `yunnan-ctc-black-tea-product.png` | `yunnan-ctc-black-tea-product-2.png` |
-| Fujian Black Tea | `fujian-black-tea-product.png` | `fujian-black-tea-product-2.png` |
+Bundled theme assets (brewed cup + dry leaf):
 
-Image 2 files in the repo are **placeholder composites** (brewed cup + dry leaf) until you shoot real product photos. Replace them in admin when ready — same filenames are not required in Shopify.
+| Product | Image file |
+|---------|------------|
+| Dragon Well Green Tea | `luxe-leaf-green-tea-product-2.png` |
+| Tieguanyin Oolong | `luxe-leaf-oolong-tea-product-2.png` |
+| Aged Yunnan Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
+| Keemun Black Tea | `luxe-leaf-black-tea-product-2.png` |
+| Yunnan CTC Black Tea | `yunnan-ctc-black-tea-product-2.png` |
+| Fujian Black Tea | `fujian-black-tea-product-2.png` |
+
+These are placeholder composites until you shoot real photos. Replace in Shopify admin when ready.
 
 Other assets:
 
 | Asset | Use for |
 |-------|---------|
+| `luxe-leaf-*-product.png` | Collection fallbacks only (dry leaf) |
 | `luxe-leaf-tea-assortment-hero.png` | Gift sets / variety packs, homepage hero |
 
-### Recommended product description template
+### Product description (all in one field)
 
+Put **description, brew instructions, and nutrition facts** in the product **Description** field (Shopify admin or CSV `Body (HTML)`). Order:
+
+1. **Opening** — 2–3 sentences on taste and why it is premium  
+2. **Origin & best for** — region and use case  
+3. **How to brew** — leaf amount, water temp, steep time, re-steeps  
+4. **Nutrition facts** — per 8 fl oz prepared tea (no milk/sweetener)
+
+Copy-paste HTML template for a new product:
+
+```html
+<p>[2–3 sentences on taste and character.]</p>
+<p><strong>Origin:</strong> [Region]<br><strong>Best for:</strong> [Use case]</p>
+<h3>How to brew</h3>
+<ul>
+  <li><strong>Leaf:</strong> 3g per 150ml water</li>
+  <li><strong>Water:</strong> [Temperature]</li>
+  <li><strong>Steep:</strong> [Time]</li>
+  <li><strong>Re-steeps:</strong> [Count]</li>
+</ul>
+<h3>Nutrition facts</h3>
+<table>
+  <tbody>
+    <tr><td>Calories</td><td>0</td></tr>
+    <tr><td>Total Fat</td><td>0 g</td></tr>
+    <tr><td>Sodium</td><td>0 mg</td></tr>
+    <tr><td>Total Carbohydrate</td><td>0 g</td></tr>
+    <tr><td>Protein</td><td>0 g</td></tr>
+    <tr><td>Caffeine</td><td>[range] mg</td></tr>
+  </tbody>
+</table>
+<p><em>Per 8 fl oz (240 ml) prepared tea — 3g loose leaf, no milk or sweetener. Values are approximate. Caffeine varies with steep time and leaf amount.</em></p>
 ```
-[2–3 sentences on taste and why it's premium]
 
-**Origin:** [Region, harvest season]
-**Best for:** [Morning ritual / Afternoon / Gifting]
+**Caffeine ranges (plain brewed tea):** green 25–35 mg · oolong 30–40 mg · pu-erh 30–45 mg · black 40–70 mg · Yunnan CTC 50–80 mg · Fujian black 35–50 mg.
+
+### Quick import
+
+Import ready-made rows from `docs/SAMPLE_PRODUCTS_IMPORT.csv` — each row already includes the full description, brew steps, and nutrition table. After import, upload the matching `*-product-2.png` as the only product image.
+
+Regenerate the CSV after editing product copy:
+
+```bash
+python3 scripts/generate_sample_products_csv.py
 ```
 
-## 4. Tag products for auto brewing guides
+## 4. Tag products for collections
 
-Add one tag per product so the product page shows the correct brewing, origin, and tasting defaults:
+Add one tea-type tag per product so collections auto-fill:
 
 | Tag | Tea type |
 |-----|----------|
@@ -78,24 +119,22 @@ Add one tag per product so the product page shows the correct brewing, origin, a
 
 ### Milk tea & blending line
 
-| Product | Handle | Tags | Image 1 | Image 2 |
-|---------|--------|------|---------|---------|
-| Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `yunnan-ctc-black-tea-product.png` | `yunnan-ctc-black-tea-product-2.png` |
-| Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `fujian-black-tea-product.png` | `fujian-black-tea-product-2.png` |
-
-Import rows are in `docs/SAMPLE_PRODUCTS_IMPORT.csv`. After import, upload **Image 1** then **Image 2** per the table in section 3.
+| Product | Handle | Tags | Product image |
+|---------|--------|------|---------------|
+| Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `yunnan-ctc-black-tea-product-2.png` |
+| Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `fujian-black-tea-product-2.png` |
 
 ## 5. Optional product metafields (advanced)
+
+Only needed if you want extra content outside the main description. Brewing, origin, and nutrition now live in the product **Description** by default.
 
 Create custom metafields under **Settings → Custom data → Products**:
 
 | Namespace & key | Type | Purpose |
 |-----------------|------|---------|
-| `custom.origin` | Rich text | Origin & harvest accordion |
-| `custom.tasting_notes` | Rich text | Tasting notes accordion |
-| `custom.brewing_guide` | Rich text | Brewing accordion |
-
-When set, these override the tag-based defaults on the product page.
+| `custom.origin` | Rich text | Optional extra origin copy |
+| `custom.tasting_notes` | Rich text | Optional extra tasting copy |
+| `custom.brewing_guide` | Rich text | Optional extra brewing copy |
 
 ## 6. SEO titles (examples)
 

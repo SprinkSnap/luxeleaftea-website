@@ -64,22 +64,17 @@ Then **Publish** the pushed theme in admin.
 
 **Products → Import**
 
-1. Import [`SAMPLE_PRODUCTS_IMPORT.csv`](SAMPLE_PRODUCTS_IMPORT.csv)
-2. Upload **two images per product** (Image 1 first, Image 2 second):
-   - **Image 1** — dry loose leaf only
-   - **Image 2** — brewed tea **and** dry loose leaf in the same shot
-3. Theme asset pairs (download from GitHub `assets/` or upload after theme sync):
+1. Import [`SAMPLE_PRODUCTS_IMPORT.csv`](SAMPLE_PRODUCTS_IMPORT.csv) — descriptions include brew steps and nutrition facts
+2. Upload **one image per product** — brewed tea **and** dry loose leaf (`*-product-2.png` from theme assets):
 
-   | Product | Image 1 | Image 2 |
-   |---------|---------|---------|
-   | Dragon Well | `luxe-leaf-green-tea-product.png` | `luxe-leaf-green-tea-product-2.png` |
-   | Tieguanyin | `luxe-leaf-oolong-tea-product.png` | `luxe-leaf-oolong-tea-product-2.png` |
-   | Pu-erh | `luxe-leaf-puerh-tea-product.png` | `luxe-leaf-puerh-tea-product-2.png` |
-   | Keemun | `luxe-leaf-black-tea-product.png` | `luxe-leaf-black-tea-product-2.png` |
-   | Yunnan CTC | `yunnan-ctc-black-tea-product.png` | `yunnan-ctc-black-tea-product-2.png` |
-   | Fujian Black | `fujian-black-tea-product.png` | `fujian-black-tea-product-2.png` |
-
-   Image 2 files are placeholders until you replace them with real photography.
+   | Product | Image |
+   |---------|-------|
+   | Dragon Well | `luxe-leaf-green-tea-product-2.png` |
+   | Tieguanyin | `luxe-leaf-oolong-tea-product-2.png` |
+   | Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
+   | Keemun | `luxe-leaf-black-tea-product-2.png` |
+   | Yunnan CTC | `yunnan-ctc-black-tea-product-2.png` |
+   | Fujian Black | `fujian-black-tea-product-2.png` |
 
 See [`PRODUCTS_AND_COLLECTIONS.md`](PRODUCTS_AND_COLLECTIONS.md) for collection setup.
 
@@ -120,7 +115,7 @@ Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-
 ## 8. Verify live
 
 - [ ] Homepage sections render (hero, tea types, FAQ, guides, CTA)
-- [ ] Product pages show brewing accordions and internal links
+- [ ] Product pages show full description with brew steps and nutrition facts
 - [ ] Collection pages show hero + bottom CTA
 - [ ] Cart shows trust line
 - [ ] FAQ page at `/pages/faq`
