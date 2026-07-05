@@ -65,14 +65,21 @@ Then **Publish** the pushed theme in admin.
 **Products → Import**
 
 1. Import [`SAMPLE_PRODUCTS_IMPORT.csv`](SAMPLE_PRODUCTS_IMPORT.csv)
-2. After import, upload product images from theme assets:
-   - Dragon Well → `luxe-leaf-green-tea-product.png`
-   - Tieguanyin → `luxe-leaf-oolong-tea-product.png`
-   - Pu-erh → `luxe-leaf-puerh-tea-product.png`
-   - Keemun → `luxe-leaf-black-tea-product.png`
-   - Yunnan CTC → `assets/yunnan-ctc-black-tea-product.png`
-   - Fujian Black → `assets/fujian-black-tea-product.png`
-3. Add second image (`luxe-leaf-tea-liquor-product.png`) where helpful
+2. Upload **two images per product** (Image 1 first, Image 2 second):
+   - **Image 1** — dry loose leaf only
+   - **Image 2** — brewed tea **and** dry loose leaf in the same shot
+3. Theme asset pairs (download from GitHub `assets/` or upload after theme sync):
+
+   | Product | Image 1 | Image 2 |
+   |---------|---------|---------|
+   | Dragon Well | `luxe-leaf-green-tea-product.png` | `luxe-leaf-green-tea-product-2.png` |
+   | Tieguanyin | `luxe-leaf-oolong-tea-product.png` | `luxe-leaf-oolong-tea-product-2.png` |
+   | Pu-erh | `luxe-leaf-puerh-tea-product.png` | `luxe-leaf-puerh-tea-product-2.png` |
+   | Keemun | `luxe-leaf-black-tea-product.png` | `luxe-leaf-black-tea-product-2.png` |
+   | Yunnan CTC | `yunnan-ctc-black-tea-product.png` | `yunnan-ctc-black-tea-product-2.png` |
+   | Fujian Black | `fujian-black-tea-product.png` | `fujian-black-tea-product-2.png` |
+
+   Image 2 files are placeholders until you replace them with real photography.
 
 See [`PRODUCTS_AND_COLLECTIONS.md`](PRODUCTS_AND_COLLECTIONS.md) for collection setup.
 

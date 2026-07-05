@@ -26,20 +26,35 @@ The theme shows fallback photography from `assets/` until you upload collection 
 - Pu-erh → `luxe-leaf-puerh-tea-product.png`
 - Black Tea → `luxe-leaf-black-tea-product.png`
 
-## 3. Add products with photography
+## 3. Product photography standard (two images)
 
-Use the bundled assets in `/assets/` as product images:
+Every loose leaf product should have **two images** in this order:
+
+| Slot | What to show | Why |
+|------|----------------|-----|
+| **Image 1** | **Dry loose leaf only** — pile or spread on cream/neutral background | Shows leaf quality before purchase; packaging optional (not required) |
+| **Image 2** | **Brewed tea and dry loose leaf** — cup of liquor plus dry leaf in the same frame | Proves color, clarity, and leaf character together |
+
+Upload in **Products → [product] → Media** with Image 1 first, Image 2 second. Alt text examples: “Dry loose leaf [tea name]” and “Brewed [tea name] with dry loose leaf.”
+
+### Bundled theme assets (Image 1 → Image 2)
+
+| Product | Image 1 (dry leaf) | Image 2 (brewed + dry leaf) |
+|---------|--------------------|-----------------------------|
+| Dragon Well Green Tea | `luxe-leaf-green-tea-product.png` | `luxe-leaf-green-tea-product-2.png` |
+| Tieguanyin Oolong | `luxe-leaf-oolong-tea-product.png` | `luxe-leaf-oolong-tea-product-2.png` |
+| Aged Yunnan Pu-erh | `luxe-leaf-puerh-tea-product.png` | `luxe-leaf-puerh-tea-product-2.png` |
+| Keemun Black Tea | `luxe-leaf-black-tea-product.png` | `luxe-leaf-black-tea-product-2.png` |
+| Yunnan CTC Black Tea | `yunnan-ctc-black-tea-product.png` | `yunnan-ctc-black-tea-product-2.png` |
+| Fujian Black Tea | `fujian-black-tea-product.png` | `fujian-black-tea-product-2.png` |
+
+Image 2 files in the repo are **placeholder composites** (brewed cup + dry leaf) until you shoot real product photos. Replace them in admin when ready — same filenames are not required in Shopify.
+
+Other assets:
 
 | Asset | Use for |
 |-------|---------|
-| `luxe-leaf-green-tea-product.png` | Green tea products |
-| `luxe-leaf-oolong-tea-product.png` | Oolong products |
-| `luxe-leaf-puerh-tea-product.png` | Pu-erh products |
-| `luxe-leaf-black-tea-product.png` | Black tea products |
-| `assets/yunnan-ctc-black-tea-product.png` | Yunnan CTC Black Tea (image 1) |
-| `assets/fujian-black-tea-product.png` | Fujian Black Tea (image 1) |
-| `luxe-leaf-tea-liquor-product.png` | Second image — brewed cup + wet leaf |
-| `luxe-leaf-tea-assortment-hero.png` | Gift sets / variety packs |
+| `luxe-leaf-tea-assortment-hero.png` | Gift sets / variety packs, homepage hero |
 
 ### Recommended product description template
 
@@ -63,12 +78,12 @@ Add one tag per product so the product page shows the correct brewing, origin, a
 
 ### Milk tea & blending line
 
-| Product | Handle | Tags | Image (GitHub) |
-|---------|--------|------|----------------|
-| Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `assets/yunnan-ctc-black-tea-product.png` |
-| Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `assets/fujian-black-tea-product.png` |
+| Product | Handle | Tags | Image 1 | Image 2 |
+|---------|--------|------|---------|---------|
+| Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `yunnan-ctc-black-tea-product.png` | `yunnan-ctc-black-tea-product-2.png` |
+| Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `fujian-black-tea-product.png` | `fujian-black-tea-product-2.png` |
 
-Import rows are in `docs/SAMPLE_PRODUCTS_IMPORT.csv`. After import, upload images from the paths above plus `luxe-leaf-tea-liquor-product.png` as image 2.
+Import rows are in `docs/SAMPLE_PRODUCTS_IMPORT.csv`. After import, upload **Image 1** then **Image 2** per the table in section 3.
 
 ## 5. Optional product metafields (advanced)
 
