@@ -55,36 +55,38 @@
         </button>
       </div>
 
-      <a
-        href="{{ shop_tea_url }}"
-        class="button luxe-brand-menu__shop-cta"
-        title="Shop premium loose leaf tea — green, oolong, pu-erh, and black"
-      >
-        Shop Tea
-      </a>
+      <div class="luxe-brand-menu__scroll">
+        <a
+          href="{{ shop_tea_url }}"
+          class="button luxe-brand-menu__shop-cta"
+          title="Shop premium loose leaf tea — green, oolong, pu-erh, and black"
+        >
+          Shop Tea
+        </a>
 
-      <a
-        href="{{ routes.search_url }}"
-        class="luxe-brand-menu__search"
-        title="Search premium loose leaf tea"
-      >
-        Search teas
-      </a>
+        <a
+          href="{{ routes.search_url }}"
+          class="luxe-brand-menu__search"
+          title="Search premium loose leaf tea"
+        >
+          Search teas
+        </a>
 
-      <div class="luxe-brand-menu__help">
-        {% render 'luxe-leaf-brand-nav-contact' %}
+        <div class="luxe-brand-menu__help">
+          {% render 'luxe-leaf-brand-nav-contact' %}
+        </div>
+
+        <nav class="luxe-brand-menu__nav" aria-label="Company pages">
+          <ul class="luxe-brand-menu__list list-unstyled" role="list">
+            {% render 'luxe-leaf-brand-nav-links', variant: 'panel' %}
+          </ul>
+        </nav>
+
+        <nav class="luxe-brand-menu__legal" aria-label="Legal policies">
+          <p class="luxe-brand-menu__legal-label">Policies</p>
+          {% render 'luxe-leaf-policy-links', variant: 'list' %}
+        </nav>
       </div>
-
-      <nav class="luxe-brand-menu__nav" aria-label="Company pages">
-        <ul class="luxe-brand-menu__list list-unstyled" role="list">
-          {% render 'luxe-leaf-brand-nav-links', variant: 'panel' %}
-        </ul>
-      </nav>
-
-      <nav class="luxe-brand-menu__legal" aria-label="Legal policies">
-        <p class="luxe-brand-menu__legal-label">Policies</p>
-        {% render 'luxe-leaf-policy-links', variant: 'list' %}
-      </nav>
     </div>
   </div>
 </div>
