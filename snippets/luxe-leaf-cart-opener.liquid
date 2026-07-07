@@ -125,12 +125,12 @@
           return;
         }
 
-        var cartUrl = getCartUrl();
         if (evt) {
           evt.preventDefault();
           if (evt.stopPropagation) evt.stopPropagation();
         }
 
+        var cartUrl = getCartUrl();
         var settled = false;
         function goToCart() {
           if (settled) return;

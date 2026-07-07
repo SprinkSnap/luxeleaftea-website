@@ -53,24 +53,24 @@
           <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">Keep exploring</span>
           <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Explore</span>
         </button>
-        <a
-          href="{{ routes.cart_url }}"
+        <button
+          type="button"
           class="luxe-shipping-nudge__cart button button-secondary"
           data-shipping-nudge-cart
           data-luxe-open-cart
-          role="button"
-          aria-label="View bag"
+          aria-label="View bag — review items before checkout"
         >
           <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">View bag</span>
           <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Bag</span>
-        </a>
+        </button>
         <button
           type="button"
           class="luxe-shipping-nudge__checkout button"
           data-shipping-nudge-checkout
+          aria-label="Go to secure checkout"
           {% unless cart.item_count > 0 %}hidden{% endunless %}
         >
-          Pay · {{ estimated_total | money }}
+          Checkout
         </button>
       </div>
     </div>

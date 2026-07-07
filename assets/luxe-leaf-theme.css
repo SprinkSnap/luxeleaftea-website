@@ -753,6 +753,11 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     background: #1b4332;
     border-color: #1b4332;
     color: #fff;
+    font-weight: 700;
+  }
+
+  .luxe-shipping-nudge__checkout {
+    font-weight: 700;
   }
 
   .luxe-mobile-bar {
@@ -771,11 +776,11 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-mobile-bar--has-cart {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   body.luxe-has-shipping-nudge .luxe-mobile-bar--has-cart {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   body.luxe-has-shipping-nudge .luxe-mobile-bar--has-cart .luxe-mobile-bar__checkout-form {
@@ -813,6 +818,16 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     flex-direction: column;
     gap: 0.1rem;
     position: relative;
+    background: #fff;
+    border: 1.5px solid rgb(27 67 50 / 0.2);
+    color: #1b4332;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .luxe-mobile-bar--has-cart .luxe-mobile-bar__cart {
+    border-color: #1b4332;
+    background: rgb(27 67 50 / 0.06);
   }
 
   .luxe-mobile-bar__cart-icon {
