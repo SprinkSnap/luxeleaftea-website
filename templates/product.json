@@ -334,9 +334,9 @@
           },
           "block_order": [
             "group_icgrde",
+            "inventory_status",
             "divider_VJhene",
             "variant_picker_R3rGDr",
-            "inventory_status",
             "buy_buttons_eYQEYi",
             "trust_line_product",
             "text_aEtTtq"

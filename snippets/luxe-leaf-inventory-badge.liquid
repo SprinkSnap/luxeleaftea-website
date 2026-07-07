@@ -3,6 +3,7 @@
   @param {object} product - Product object
   @param {object} [variant] - Optional variant; defaults to selected/first available
   @param {string} [class] - Extra CSS classes
+  @param {string} [placement] - inline | card-meta | pdp (default: inline)
 {%- enddoc -%}
 
 {%- liquid
@@ -33,8 +34,16 @@
   endif
 -%}
 
+{%- liquid
+  assign badge_placement = placement | default: 'inline'
+  assign placement_class = 'luxe-stock-badge--' | append: badge_placement
+-%}
+
 {%- if show_badge -%}
-  <span class="luxe-stock-badge {{ badge_class }}{% if class != blank %} {{ class }}{% endif %}" role="status">
+  <span
+    class="luxe-stock-badge {{ badge_class }} {{ placement_class }}{% if class != blank %} {{ class }}{% endif %}"
+    role="status"
+  >
     {{ badge_text }}
   </span>
 {%- endif -%}
@@ -67,10 +76,17 @@
     color: rgb(0 0 0 / 0.55);
   }
 
-  .luxe-stock-badge--overlay {
-    position: absolute;
-    top: 0.65rem;
-    left: 0.65rem;
-    z-index: 2;
+  .luxe-stock-badge--card-meta {
+    align-self: flex-start;
+    margin-block: 0.15rem 0;
+  }
+
+  .luxe-stock-badge--pdp {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .luxe-stock-badge-row {
+    margin-block-start: 0.35rem;
   }
 {% endstylesheet %}

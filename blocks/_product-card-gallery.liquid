@@ -26,9 +26,6 @@
         </div>
       {%- endif -%}
     </div>
-    {%- unless settings.brand_navigation == false -%}
-      {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
-    {%- endunless -%}
     {% liquid
       assign show_quick_add = false
       if settings.quick_add or settings.mobile_quick_add
@@ -50,6 +47,12 @@
 {% endcapture %}
 
 {% render 'card-gallery', children: children %}
+
+{%- unless settings.brand_navigation == false -%}
+  <div class="luxe-stock-badge-row">
+    {% render 'luxe-leaf-inventory-badge', product: product, placement: 'card-meta' %}
+  </div>
+{%- endunless -%}
 
 {% # Title and price for the zoomed out grid view %}
 <div class="product-grid-view-zoom-out--details">
