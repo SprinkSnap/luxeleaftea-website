@@ -1,0 +1,82 @@
+{%- doc -%}
+  Plain-text product availability for PDP and cards — never overlays product photos.
+  @param {object} product - Product object
+  @param {object} [variant] - Optional variant; defaults to selected/first available
+{%- enddoc -%}
+
+{%- liquid
+  assign v = variant | default: product.selected_or_first_available_variant
+  assign threshold = settings.low_stock_threshold | default: 10
+  assign show_line = false
+  assign status = ''
+  assign line_text = ''
+
+  if v.inventory_management == 'shopify'
+    if v.inventory_quantity <= 0 and v.inventory_policy == 'deny'
+      assign show_line = true
+      assign status = 'sold-out'
+      assign line_text = 'Sold out'
+    elsif v.inventory_quantity > 0 and v.inventory_quantity <= threshold
+      assign show_line = true
+      assign status = 'low'
+      assign line_text = 'Only ' | append: v.inventory_quantity | append: ' left — ships fresh'
+    elsif v.available
+      assign show_line = true
+      assign status = 'in-stock'
+      assign line_text = 'In stock — ships fresh'
+    endif
+  elsif product.available
+    assign show_line = true
+    assign status = 'in-stock'
+    assign line_text = 'In stock — ships fresh'
+  endif
+-%}
+
+{%- if show_line -%}
+  <p class="product-availability-line product-availability-line--{{ status }}" role="status">
+    {{ line_text }}
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-availability-line {
+    margin: 0.35rem 0 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+
+  .product-availability-line--in-stock {
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .product-availability-line--low {
+    color: #7a5c00;
+  }
+
+  .product-availability-line--sold-out {
+    color: rgb(0 0 0 / 0.55);
+  }
+
+  .product-availability-line-wrap {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Never show stock messaging over product photography */
+  .product-information__media .product-availability-line,
+  .product-information__media .luxe-stock-badge,
+  .card-gallery .product-availability-line,
+  .card-gallery .luxe-stock-badge,
+  .media-gallery .product-availability-line,
+  .media-gallery .luxe-stock-badge,
+  .luxe-keep-exploring__media .product-availability-line,
+  .luxe-keep-exploring__media .luxe-stock-badge,
+  .luxe-featured__media .product-availability-line,
+  .luxe-featured__media .luxe-stock-badge {
+    display: none !important;
+  }
+{% endstylesheet %}

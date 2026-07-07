@@ -88,6 +88,16 @@
   {%- endif -%}
 </product-price>
 
+{%- unless settings.brand_navigation == false -%}
+  <product-inventory
+    class="product-availability-line-wrap"
+    data-product-id="{{ product_resource.id }}"
+    id="Inventory-{{ section.id }}-{{ block.id }}"
+  >
+    {% render 'luxe-leaf-product-availability', product: product_resource, variant: selected_variant %}
+  </product-inventory>
+{%- endunless -%}
+
 {% schema %}
 {
   "name": "t:names.product_price",

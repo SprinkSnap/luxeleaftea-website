@@ -52,7 +52,7 @@
           <a href="{{ variant.url }}">{{ product.title }}</a>
         </h3>
         <p class="luxe-keep-exploring__price">{{ variant.price | money }}</p>
-        {% render 'luxe-leaf-inventory-badge', product: product, placement: 'card-meta' %}
+        {% render 'luxe-leaf-product-availability', product: product %}
         {%- if product.available -%}
           {%- form 'product', product, class: 'luxe-keep-exploring__form' -%}
             <input type="hidden" name="id" value="{{ variant.id }}">
@@ -99,7 +99,7 @@
           <a href="{{ variant.url }}">{{ product.title }}</a>
         </h3>
         <p class="luxe-keep-exploring__price">{{ variant.price | money }}</p>
-        {% render 'luxe-leaf-inventory-badge', product: product, placement: 'card-meta' %}
+        {% render 'luxe-leaf-product-availability', product: product %}
         {%- if product.available -%}
           {%- form 'product', product, class: 'luxe-keep-exploring__form' -%}
             <input type="hidden" name="id" value="{{ variant.id }}">
