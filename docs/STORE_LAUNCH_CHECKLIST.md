@@ -73,6 +73,7 @@ Then **Publish** the pushed theme in admin.
    | Tieguanyin | `luxe-leaf-oolong-tea-product-2.png` |
    | Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
    | Keemun | `luxe-leaf-black-tea-product-2.png` |
+   | Premium Assam | `premium-assam-black-tea-product-2.png` |
    | Yunnan CTC | `yunnan-ctc-black-tea-product-2.png` |
    | Fujian Black | `fujian-black-tea-product-2.png` |
 

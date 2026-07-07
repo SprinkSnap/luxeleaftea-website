@@ -47,6 +47,7 @@ Bundled theme assets (brewed cup + dry leaf):
 | Tieguanyin Oolong | `luxe-leaf-oolong-tea-product-2.png` |
 | Aged Yunnan Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
 | Keemun Black Tea | `luxe-leaf-black-tea-product-2.png` |
+| Premium Assam Black Tea | `premium-assam-black-tea-product-2.png` |
 | Yunnan CTC Black Tea | `yunnan-ctc-black-tea-product-2.png` |
 | Fujian Black Tea | `fujian-black-tea-product-2.png` |
 
@@ -121,6 +122,7 @@ Add one tea-type tag per product so collections auto-fill:
 
 | Product | Handle | Tags | Product image |
 |---------|--------|------|---------------|
+| Premium Assam Black Tea | `premium-assam-black-tea` | `black-tea`, `assam`, `blend`, `bubble-tea`, `milk-tea`, `breakfast` | `premium-assam-black-tea-product-2.png` |
 | Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `yunnan-ctc-black-tea-product-2.png` |
 | Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `fujian-black-tea-product-2.png` |
 

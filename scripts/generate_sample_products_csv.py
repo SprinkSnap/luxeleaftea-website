@@ -253,6 +253,66 @@ PRODUCTS = [
         "SEO Description": "Premium Fujian black tea — honey-sweet floral loose leaf for sipping or blending. Smooth milk tea base. Fresh packed.",
         "Image Asset": "fujian-black-tea-product-2.png",
     },
+    {
+        "Handle": "premium-assam-black-tea",
+        "Title": "Premium Assam Black Tea",
+        "Body (HTML)": body(
+            "<p><strong>Bold. Malty. Full-bodied.</strong> Wake up to the rich, satisfying taste of our Premium Assam Black Tea — "
+            "expertly blended from high-quality Yunnan CTC and smooth Fujian black tea. Deep amber cup, bold malty aroma, "
+            "rich body, and an exceptionally smooth finish that lingers after every sip.</p>",
+            "<p>Classic breakfast tea, creamy milk tea, masala chai, or refreshing iced tea — this versatile loose leaf blend "
+            "delivers outstanding flavor, consistency, and quality in every brew.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Bold, full-bodied black tea with a naturally rich malty flavor</li>"
+            "<li>Smooth, mellow finish with a pleasant long-lasting aftertaste</li>"
+            "<li>Expert blend of premium Yunnan CTC and Fujian black teas</li>"
+            "<li>Brews quickly while maintaining exceptional depth and aroma</li>"
+            "<li>Delicious hot or iced — perfect for milk tea, bubble tea, and chai</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Taste:</strong> Bold, rich, malty, smooth</li>"
+            "<li><strong>Aroma:</strong> Warm, earthy, lightly sweet</li>"
+            "<li><strong>Body:</strong> Full-bodied</li>"
+            "<li><strong>Finish:</strong> Clean, mellow, lingering</li>"
+            "</ul>",
+            "<p><strong>Origin:</strong> Yunnan CTC + Fujian Province, China — premium Chinese black tea blend<br>"
+            "<strong>Best for:</strong> Breakfast tea, milk tea, bubble tea, masala chai, iced tea, caf&eacute; use</p>",
+            "<h3>Premium tea origins</h3>"
+            "<p><strong>Yunnan CTC</strong> — Bold strength, rich color, and deep body from renowned Yunnan mountains. "
+            "Fast infusion makes it an excellent foundation for milk tea and chai.</p>"
+            "<p><strong>Fujian black tea</strong> — Floral aroma, gentle honey sweetness, and remarkable smoothness "
+            "that balances the strength of the Yunnan tea.</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2–3g per 150ml (about 1 teaspoon)</li>"
+            "<li><strong>Water:</strong> 203–212°F (95–100°C)</li>"
+            "<li><strong>Steep:</strong> 3–5 minutes — adjust to taste</li>"
+            "<li><strong>Milk tea / chai:</strong> 50g per 2L · just off boil · 10–15 minutes · strain · add milk and sweetener</li>"
+            "<li><strong>Re-steeps:</strong> 2–3 infusions</li>"
+            "</ul>",
+            "<p>Every batch is carefully selected for consistent flavor, vibrant aroma, and premium quality — "
+            "the bold character and dependable performance tea lovers expect.</p>",
+            nutrition_table("45–70 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Black Tea",
+        "Tags": "black-tea, assam, blend, bubble-tea, milk-tea, breakfast, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "100g",
+        "Variant SKU": "LL-ASSAM-100",
+        "Variant Grams": "100",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "22.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Assam Black Tea Loose Leaf | Malty Breakfast Blend | Luxe Leaf Tea",
+        "SEO Description": "Bold malty Assam-style loose leaf black tea — Yunnan CTC and Fujian blend for breakfast, milk tea, chai, and bubble tea. Packed fresh to order.",
+        "Image Asset": "premium-assam-black-tea-product-2.png",
+    },
 ]
 
 FIELDNAMES = [
