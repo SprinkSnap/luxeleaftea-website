@@ -71,10 +71,46 @@
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      position: relative !important;
+      overflow: visible !important;
+      pointer-events: none;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .svg-wrapper {
       width: 1.75rem !important;
       height: 1.75rem !important;
-      margin: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble {
+      --cart-bubble-size: 17px;
+      position: absolute !important;
+      top: 0.2rem !important;
+      right: 0 !important;
+      width: var(--cart-bubble-size) !important;
+      min-width: var(--cart-bubble-size) !important;
+      height: var(--cart-bubble-size) !important;
       pointer-events: none;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble__background {
+      background-color: var(--luxe-nav-gold, #c9a227) !important;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble__text {
+      color: var(--luxe-nav-ink, #1a1a1a) !important;
+      font-size: 0.5625rem !important;
+      font-weight: 700 !important;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon--has-cart .svg-wrapper svg {
+      mask: none !important;
+      -webkit-mask: none !important;
     }
 
     #header-component [data-testid="cart-drawer-trigger"] .svg-wrapper,
@@ -125,6 +161,11 @@
         height: 2.75rem !important;
         min-width: 2.75rem !important;
         min-height: 2.75rem !important;
+      }
+      #header-component cart-icon.header-actions__cart-icon .cart-bubble {
+        --cart-bubble-size: 16px;
+        top: 0.05rem !important;
+        right: -0.05rem !important;
       }
     }
   </style>

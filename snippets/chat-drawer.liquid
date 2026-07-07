@@ -151,9 +151,11 @@
           aria-label="Open cart — premium loose leaf tea"
           {% if cart.item_count > 0 %}hidden{% endif %}
         >
-          {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
-          <span>{{ 'content.cart_title' | t }}</span>
-          <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+          <span class="luxe-mobile-bar__cart-icon" aria-hidden="true">
+            {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
+            <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+          </span>
+          <span class="luxe-mobile-bar__cart-label">{{ 'content.cart_title' | t }}</span>
         </a>
       {%- else -%}
         <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View cart">
