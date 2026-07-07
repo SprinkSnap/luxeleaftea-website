@@ -1,0 +1,71 @@
+{%- doc -%}
+  Mobile-first cart quantity stepper — plain HTML, no custom elements.
+  Controlled by luxe-leaf-cart-controls.js.
+
+  @param {object} item - Cart line item
+  @param {number} cart_line - 1-based line index for cart/change.js
+  @param {boolean} [can_update_quantity] - Whether quantity can be changed
+{%- enddoc -%}
+
+{%- liquid
+  assign min_qty = item.variant.quantity_rule.min | default: 1
+  assign step_qty = item.variant.quantity_rule.increment | default: 1
+  assign max_qty = item.variant.quantity_rule.max
+-%}
+
+<div
+  class="luxe-cart-stepper"
+  data-luxe-cart-line="{{ cart_line }}"
+  data-luxe-cart-key="{{ item.key }}"
+  {% if can_update_quantity == false %}
+    data-luxe-cart-stepper-disabled
+  {% endif %}
+>
+  <button
+    type="button"
+    class="luxe-cart-stepper__btn luxe-cart-stepper__btn--minus"
+    data-luxe-cart-qty="decrease"
+    aria-label="{{ 'accessibility.decrease_quantity' | t }}"
+    {% if can_update_quantity == false %}
+      disabled
+    {% endif %}
+  >
+    <span class="luxe-cart-stepper__glyph" aria-hidden="true">−</span>
+  </button>
+
+  <output
+    class="luxe-cart-stepper__value"
+    data-luxe-cart-qty-value
+    for="luxe-cart-qty-{{ cart_line }}"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    {{- item.quantity -}}
+  </output>
+
+  <input
+    type="hidden"
+    id="luxe-cart-qty-{{ cart_line }}"
+    data-luxe-cart-qty-input
+    data-cart-line="{{ cart_line }}"
+    data-cart-key="{{ item.key }}"
+    value="{{ item.quantity }}"
+    data-min="{{ min_qty }}"
+    data-step="{{ step_qty }}"
+    {% if max_qty %}
+      data-max="{{ max_qty }}"
+    {% endif %}
+  >
+
+  <button
+    type="button"
+    class="luxe-cart-stepper__btn luxe-cart-stepper__btn--plus"
+    data-luxe-cart-qty="increase"
+    aria-label="{{ 'accessibility.increase_quantity' | t }}"
+    {% if can_update_quantity == false %}
+      disabled
+    {% endif %}
+  >
+    <span class="luxe-cart-stepper__glyph" aria-hidden="true">+</span>
+  </button>
+</div>

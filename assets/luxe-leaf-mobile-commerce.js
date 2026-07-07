@@ -270,11 +270,8 @@ import { StandardEvents } from '@shopify/events';
     }
     if (checkoutBtn instanceof HTMLElement) {
       checkoutBtn.hidden = false;
-      checkoutBtn.textContent = taxReady ? `Pay · ${formatMoney(estimatedTotal)}` : 'Checkout';
-      checkoutBtn.setAttribute(
-        'aria-label',
-        taxReady ? `Pay ${formatMoney(estimatedTotal)} — guest checkout` : 'Guest checkout — select province for total'
-      );
+      checkoutBtn.textContent = 'Checkout';
+      checkoutBtn.setAttribute('aria-label', 'Go to secure checkout');
     }
 
     nudge.hidden = false;
@@ -305,26 +302,36 @@ import { StandardEvents } from '@shopify/events';
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
         const cartBtn = bar.querySelector('[data-mobile-cart-toggle]');
         const countEl = bar.querySelector('[data-mobile-cart-count]');
+        const cartLabel = bar.querySelector('[data-mobile-cart-label]');
 
         if (cart.item_count > 0) {
           bar.classList.add('luxe-mobile-bar--has-cart');
-          if (checkoutButton) {
-            checkoutButton.hidden = false;
-            checkoutButton.textContent = taxReady ? `Pay · ${formatMoney(estimatedTotal)}` : 'Checkout';
-            checkoutButton.setAttribute(
-              'aria-label',
-              taxReady ? `Pay ${formatMoney(estimatedTotal)} — guest checkout` : 'Guest checkout — select province for total'
-            );
-          }
-          if (cartBtn) cartBtn.hidden = true;
         } else {
           bar.classList.remove('luxe-mobile-bar--has-cart');
-          if (checkoutButton) checkoutButton.hidden = true;
-          if (cartBtn) cartBtn.hidden = false;
         }
 
-        if (countEl) {
-          countEl.textContent = cart.item_count;
+        if (checkoutButton instanceof HTMLButtonElement) {
+          checkoutButton.hidden = cart.item_count === 0;
+          checkoutButton.textContent = 'Checkout';
+          checkoutButton.setAttribute('aria-label', 'Go to secure checkout');
+        }
+
+        if (cartBtn instanceof HTMLElement) {
+          cartBtn.hidden = false;
+          cartBtn.setAttribute(
+            'aria-label',
+            cart.item_count > 0
+              ? `View bag — ${cart.item_count} ${cart.item_count === 1 ? 'item' : 'items'}`
+              : 'View bag'
+          );
+        }
+
+        if (cartLabel instanceof HTMLElement) {
+          cartLabel.textContent = cart.item_count > 0 ? `Bag (${cart.item_count})` : 'Bag';
+        }
+
+        if (countEl instanceof HTMLElement) {
+          countEl.textContent = String(cart.item_count);
           countEl.hidden = cart.item_count === 0;
         }
       }
@@ -337,7 +344,17 @@ import { StandardEvents } from '@shopify/events';
     }
   };
 
+  function isBagTrigger(element) {
+    return Boolean(
+      element.closest(
+        '[data-luxe-open-cart],[data-shipping-nudge-cart],[data-mobile-cart-toggle],[data-testid="cart-drawer-trigger"],[aria-controls="cart-drawer"]'
+      )
+    );
+  }
+
   function goToCheckout(event) {
+    if (event?.target instanceof Element && isBagTrigger(event.target)) return;
+
     if (event) {
       event.preventDefault();
     }
@@ -349,6 +366,9 @@ import { StandardEvents } from '@shopify/events';
     document.addEventListener(
       'click',
       (event) => {
+        if (!(event.target instanceof Element)) return;
+        if (isBagTrigger(event.target)) return;
+
         const button = event.target.closest('[data-shipping-nudge-checkout], [data-mobile-checkout]');
         if (!(button instanceof HTMLButtonElement) || button.disabled || button.hidden) return;
 
@@ -468,14 +488,10 @@ import { StandardEvents } from '@shopify/events';
 
       const bar = document.querySelector('[data-mobile-shop-bar]');
       if (bar && cart.item_count > 0) {
-        const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
         if (checkoutButton instanceof HTMLButtonElement) {
-          checkoutButton.textContent = taxReady ? `Pay · ${formatMoney(estimatedTotal)}` : 'Checkout';
-          checkoutButton.setAttribute(
-            'aria-label',
-            taxReady ? `Pay ${formatMoney(estimatedTotal)} — guest checkout` : 'Guest checkout — select province for total'
-          );
+          checkoutButton.textContent = 'Checkout';
+          checkoutButton.setAttribute('aria-label', 'Go to secure checkout');
         }
       }
     } catch {

@@ -233,18 +233,44 @@ body .cart-drawer__summary .cart__checkout-button {
 
 /* Cart bag: quantity controls + remove */
 body .cart-drawer__items .cart-items__action-bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  column-gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+}
+
+body .cart-drawer__items .cart-items__action-bar__qty {
+  width: 100%;
+  overflow: visible;
 }
 
 body .cart-drawer__items .cart-items__quantity-controls {
   display: flex;
   align-items: center;
-  width: auto;
-  max-width: 8.75rem;
-  flex: 0 1 auto;
+  width: 100%;
+  max-width: none;
+  flex: 1 1 auto;
+}
+
+body .cart-drawer__items .luxe-cart-stepper {
+  width: 100%;
+  max-width: 12.5rem;
+  min-height: 3.25rem;
+  pointer-events: auto;
+}
+
+body .cart-drawer__items .luxe-cart-stepper__btn {
+  min-width: 3.25rem;
+  min-height: 3.25rem;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+body .cart-drawer__items .luxe-cart-stepper__value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1b4332;
 }
 
 body .cart-drawer__items .cart-items__remove {
@@ -260,10 +286,26 @@ body .cart-drawer__items .cart-items__remove {
 }
 
 body .cart-drawer__items .cart-items__remove--labeled {
-  width: auto !important;
-  min-width: 5.75rem;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 3.25rem;
   height: auto;
-  padding: 0 0.85rem;
+  padding: 0 1.1rem;
+  color: #8b2e2e;
+  border-color: rgb(139 46 46 / 0.22);
+}
+
+@media screen and (min-width: 750px) {
+  body .cart-drawer__items .cart-items__action-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  body .cart-drawer__items .cart-items__remove--labeled {
+    width: auto !important;
+    min-width: 6.5rem;
+  }
 }
 
 body .cart-drawer__items .cart-items__remove .svg-wrapper {
@@ -275,15 +317,6 @@ body .cart-drawer__items .cart-items__remove .svg-wrapper {
 body .cart-drawer__items .cart-items__remove-link {
   color: #1b4332;
   font-weight: 500;
-}
-
-body .cart-drawer__items .quantity-selector {
-  pointer-events: auto;
-}
-
-body .cart-drawer__items .quantity-selector :is(.quantity-minus, .quantity-plus) {
-  pointer-events: auto;
-  cursor: pointer;
 }
 
 body .cart__checkout-note {
@@ -720,6 +753,11 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     background: #1b4332;
     border-color: #1b4332;
     color: #fff;
+    font-weight: 700;
+  }
+
+  .luxe-shipping-nudge__checkout {
+    font-weight: 700;
   }
 
   .luxe-mobile-bar {
@@ -738,11 +776,11 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-mobile-bar--has-cart {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   body.luxe-has-shipping-nudge .luxe-mobile-bar--has-cart {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   body.luxe-has-shipping-nudge .luxe-mobile-bar--has-cart .luxe-mobile-bar__checkout-form {
@@ -780,6 +818,16 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     flex-direction: column;
     gap: 0.1rem;
     position: relative;
+    background: #fff;
+    border: 1.5px solid rgb(27 67 50 / 0.2);
+    color: #1b4332;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .luxe-mobile-bar--has-cart .luxe-mobile-bar__cart {
+    border-color: #1b4332;
+    background: rgb(27 67 50 / 0.06);
   }
 
   .luxe-mobile-bar__cart-icon {
@@ -2012,10 +2060,16 @@ body.luxe-leaf-theme .content-for-layout {
     padding-inline: max(1rem, env(safe-area-inset-left)) max(1rem, env(safe-area-inset-right));
   }
 
-  body.luxe-leaf-theme table {
+  body.luxe-leaf-theme table:not(.cart-items__table) {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  body.luxe-leaf-theme .cart-items__table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
   }
 }
 

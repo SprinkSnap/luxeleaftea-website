@@ -391,22 +391,11 @@
                           {{- 'content.quantity' | t -}}
                         </span>
                         <div class="cart-items__quantity-controls">
-                          {% render 'quantity-selector',
-                            product: item.product,
-                            variant: item.variant,
-                            in_cart_quantity: item.quantity,
+                          {% render 'luxe-cart-stepper',
+                            item: item,
                             cart_line: forloop.index,
-                            class: 'cart-primary-typography',
                             can_update_quantity: can_update_quantity
                           %}
-
-                          {% if show_cart_volume_pricing %}
-                            {% render 'volume-pricing-info',
-                              variant: item.variant,
-                              unique_id: item.index,
-                              quantity: item.quantity
-                            %}
-                          {% endif %}
                         </div>
                       </div>
 
@@ -414,7 +403,9 @@
                         class="button button-unstyled cart-items__remove cart-items__remove--labeled"
                         type="button"
                         aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
-                        on:click="/onLineItemRemove/{{ forloop.index }}"
+                        data-luxe-cart-action="remove"
+                        data-luxe-cart-line="{{ forloop.index }}"
+                        data-luxe-cart-key="{{ item.key }}"
                         {% if can_remove == false %}
                           hidden
                         {% endif %}
@@ -535,6 +526,11 @@
 
   .cart-items-disabled {
     pointer-events: none;
+  }
+
+  .cart-items-component.cart-items-disabled .cart-items__quantity,
+  .cart-items-component.cart-items-disabled .cart-items__remove {
+    opacity: 0.55;
   }
 
   .cart-items__wrapper {
@@ -790,6 +786,10 @@
     font-size: var(--font-size--sm);
     height: auto;
     flex-shrink: 0;
+  }
+
+  .cart-items--luxe .cart-items__quantity .quantity-selector {
+    flex: none;
   }
 
   .cart-items__quantity-controls > .volume-pricing-info {
