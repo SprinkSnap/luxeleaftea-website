@@ -84,7 +84,7 @@
       ref="quantityInput"
       aria-live="polite"
       aria-label="{{ 'accessibility.quantity' | t }}"
-      {% if resolved_cart_line != null %}
+      {% if is_cart_context %}
         data-cart-line="{{ resolved_cart_line }}"
       {% endif %}
       {% if variant.quantity_rule.max %}

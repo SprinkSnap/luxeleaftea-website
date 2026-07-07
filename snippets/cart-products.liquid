@@ -382,7 +382,9 @@
                         hidden
                       {% endif %}
                     >
-                      {{- 'icon-delete.svg' | inline_asset_content -}}
+                      <span class="svg-wrapper" aria-hidden="true">
+                        {{- 'icon-delete.svg' | inline_asset_content -}}
+                      </span>
                       <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
                     </button>
                   </div>

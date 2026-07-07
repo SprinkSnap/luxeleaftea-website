@@ -231,6 +231,45 @@ body .cart-drawer__summary .cart__checkout-button {
   animation: luxe-checkout-pulse 2.5s ease-in-out infinite;
 }
 
+/* Cart bag: quantity controls + remove */
+body .cart-drawer__items .cart-items__quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+body .cart-drawer__items .cart-items__remove {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  color: #1b4332;
+  opacity: 1;
+  visibility: visible;
+}
+
+body .cart-drawer__items .cart-items__remove .svg-wrapper {
+  display: inline-flex;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+body .cart-drawer__items .cart-items__remove-link {
+  color: #1b4332;
+  font-weight: 500;
+}
+
+body .cart-drawer__items .quantity-selector {
+  pointer-events: auto;
+}
+
+body .cart-drawer__items .quantity-selector :is(.quantity-minus, .quantity-plus) {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 body .cart__checkout-note {
   margin: 0.5rem 0 0;
   width: 100%;
