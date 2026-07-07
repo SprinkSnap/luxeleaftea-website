@@ -43,6 +43,10 @@
 
 {% render 'text-component-shimmer-styles' %}
 
+{% if settings.brand_navigation != false %}
+  {% render 'luxe-leaf-cart-drawer-ux' %}
+{% endif %}
+
 <div
   {{ block.shopify_attributes }}
   class="cart-items__wrapper{% if context == 'drawer' and cart.empty? or force_empty %} cart-items__wrapper--drawer-empty{% endif %}"
@@ -88,7 +92,7 @@
       method="post"
     >
       <div
-        class="cart-items spacing-style{% if block_settings.dividers %} cart-items--dividers{% endif %}"
+        class="cart-items spacing-style{% if block_settings.dividers %} cart-items--dividers{% endif %}{% if settings.brand_navigation != false %} cart-items--luxe{% endif %}{% if context == 'drawer' %} cart-items--drawer{% endif %}"
         style="{%  render 'spacing-style', settings: block_settings %} --cart-items-gap:{{ block_settings.gap | append: "px" }};"
       >
         <table
@@ -147,7 +151,7 @@
               <tr
                 id="CartItem-{{ item.key }}"
                 role="row"
-                class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}{% if context == 'drawer' %}{% unless item.unit_price_measurement %} cart-items__table-row--full-width-variants{% endunless %}{% endif %}"
+                class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}{% if settings.brand_navigation != false %}{% unless item.unit_price_measurement %} cart-items__table-row--luxe-card{% endunless %}{% elsif context == 'drawer' %}{% unless item.unit_price_measurement %} cart-items__table-row--full-width-variants{% endunless %}{% endif %}"
                 ref="cartItemRows[]"
                 data-parent-key="{{ item.parent_relationship.parent.key }}"
                 data-key="{{ item.key }}"
@@ -212,7 +216,7 @@
                       %}
                     </div>
                     {% assign can_remove = item.instructions.can_remove | default: true, allow_false: true %}
-                    {% if can_remove != false %}
+                    {% if can_remove != false and settings.brand_navigation == false %}
                       <button
                         type="button"
                         class="cart-items__remove-link button-unstyled"
@@ -222,6 +226,24 @@
                         {{ 'actions.remove' | t }}
                       </button>
                     {% endif %}
+                    {%- if settings.brand_navigation != false -%}
+                      <p class="cart-items__unit-price-inline">
+                        {%- if item.original_price != item.final_price -%}
+                          <span class="visually-hidden">{{ 'content.price_sale' | t }}</span>
+                          {{ item.final_price | money }}
+                          <span class="visually-hidden">{{ 'content.price_regular' | t }}</span>
+                          <s class="compare-at-price">
+                            {%- if item.variant.compare_at_price > item.original_price -%}
+                              {{ item.variant.compare_at_price | money }}
+                            {%- else -%}
+                              {{ item.original_price | money }}
+                            {%- endif -%}
+                          </s>
+                        {%- else -%}
+                          {{ item.original_price | money }} each
+                        {%- endif -%}
+                      </p>
+                    {%- endif -%}
                     {% if item.product.vendor and block_settings.vendor %}
                       <p>
                         {{ item.product.vendor }}
@@ -355,6 +377,55 @@
                       assign show_cart_volume_pricing = true
                     endif
                   -%}
+                  {% if settings.brand_navigation != false %}
+                    <div
+                      class="cart-items__action-bar"
+                      role="group"
+                      aria-labelledby="CartQtyLabel-{{ forloop.index }}"
+                    >
+                      <div class="cart-items__action-bar__qty">
+                        <span
+                          class="cart-items__qty-label"
+                          id="CartQtyLabel-{{ forloop.index }}"
+                        >
+                          {{- 'content.quantity' | t -}}
+                        </span>
+                        <div class="cart-items__quantity-controls">
+                          {% render 'quantity-selector',
+                            product: item.product,
+                            variant: item.variant,
+                            in_cart_quantity: item.quantity,
+                            cart_line: forloop.index,
+                            class: 'cart-primary-typography',
+                            can_update_quantity: can_update_quantity
+                          %}
+
+                          {% if show_cart_volume_pricing %}
+                            {% render 'volume-pricing-info',
+                              variant: item.variant,
+                              unique_id: item.index,
+                              quantity: item.quantity
+                            %}
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      <button
+                        class="button button-unstyled cart-items__remove cart-items__remove--labeled"
+                        type="button"
+                        aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
+                        on:click="/onLineItemRemove/{{ forloop.index }}"
+                        {% if can_remove == false %}
+                          hidden
+                        {% endif %}
+                      >
+                        <span class="svg-wrapper" aria-hidden="true">
+                          {{- 'icon-delete.svg' | inline_asset_content -}}
+                        </span>
+                        <span class="cart-items__remove-text">{{ 'actions.remove' | t }}</span>
+                      </button>
+                    </div>
+                  {% else %}
                   <div class="cart-items__quantity-controls">
                     {% render 'quantity-selector',
                       product: item.product,
@@ -388,6 +459,7 @@
                       <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
                     </button>
                   </div>
+                  {% endif %}
                 </td>
                 <td
                   class="cart-items__error hidden"
