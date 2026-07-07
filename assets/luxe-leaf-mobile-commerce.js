@@ -7,8 +7,38 @@ import { StandardEvents } from '@shopify/events';
   if (window.__luxeMobileCommerceInit) return;
   window.__luxeMobileCommerceInit = true;
 
-  const NUDGE_HEIGHT = '4.5rem';
-  const NUDGE_HEIGHT_SUCCESS = '3.75rem';
+  const NUDGE_HEIGHT_FALLBACK = '5.5rem';
+  const NUDGE_HEIGHT_SUCCESS_FALLBACK = '4.5rem';
+
+  let nudgeResizeObserver = null;
+
+  const syncNudgeHeight = () => {
+    const nudge = document.querySelector('[data-shipping-nudge]');
+    if (!(nudge instanceof HTMLElement) || nudge.hidden) {
+      document.documentElement.style.setProperty('--luxe-shipping-nudge-height', '0px');
+      document.body.classList.remove('luxe-has-shipping-nudge');
+      return;
+    }
+
+    const height = `${Math.ceil(nudge.getBoundingClientRect().height)}px`;
+    document.documentElement.style.setProperty('--luxe-shipping-nudge-height', height);
+    document.body.classList.add('luxe-has-shipping-nudge');
+  };
+
+  const observeNudgeHeight = () => {
+    const nudge = document.querySelector('[data-shipping-nudge]');
+    if (!(nudge instanceof HTMLElement)) return;
+
+    if (nudgeResizeObserver) {
+      nudgeResizeObserver.disconnect();
+    }
+
+    nudgeResizeObserver = new ResizeObserver(() => {
+      syncNudgeHeight();
+    });
+    nudgeResizeObserver.observe(nudge);
+    syncNudgeHeight();
+  };
 
   const getShippingConfig = () => {
     const body = document.body;
@@ -195,6 +225,7 @@ import { StandardEvents } from '@shopify/events';
     if (cart.item_count === 0) {
       nudge.hidden = true;
       document.documentElement.style.setProperty('--luxe-shipping-nudge-height', '0px');
+      document.body.classList.remove('luxe-has-shipping-nudge');
       return;
     }
 
@@ -239,16 +270,22 @@ import { StandardEvents } from '@shopify/events';
     }
     if (checkoutBtn instanceof HTMLElement) {
       checkoutBtn.hidden = false;
-      checkoutBtn.textContent = taxReady
-        ? `Pay · ${formatMoney(estimatedTotal)}`
-        : 'Guest checkout';
+      checkoutBtn.textContent = taxReady ? `Pay · ${formatMoney(estimatedTotal)}` : 'Checkout';
+      checkoutBtn.setAttribute(
+        'aria-label',
+        taxReady ? `Pay ${formatMoney(estimatedTotal)} — guest checkout` : 'Guest checkout — select province for total'
+      );
     }
 
     nudge.hidden = false;
     document.documentElement.style.setProperty(
       '--luxe-shipping-nudge-height',
-      qualifiesFree ? NUDGE_HEIGHT_SUCCESS : NUDGE_HEIGHT
+      qualifiesFree ? NUDGE_HEIGHT_SUCCESS_FALLBACK : NUDGE_HEIGHT_FALLBACK
     );
+    requestAnimationFrame(() => {
+      observeNudgeHeight();
+      syncNudgeHeight();
+    });
   };
 
   const syncBar = async () => {
@@ -273,9 +310,11 @@ import { StandardEvents } from '@shopify/events';
           bar.classList.add('luxe-mobile-bar--has-cart');
           if (checkoutButton) {
             checkoutButton.hidden = false;
-            checkoutButton.textContent = taxReady
-              ? `Pay · ${formatMoney(estimatedTotal)}`
-              : 'Guest checkout';
+            checkoutButton.textContent = taxReady ? `Pay · ${formatMoney(estimatedTotal)}` : 'Checkout';
+            checkoutButton.setAttribute(
+              'aria-label',
+              taxReady ? `Pay ${formatMoney(estimatedTotal)} — guest checkout` : 'Guest checkout — select province for total'
+            );
           }
           if (cartBtn) cartBtn.hidden = true;
         } else {
@@ -432,9 +471,11 @@ import { StandardEvents } from '@shopify/events';
         const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
         if (checkoutButton instanceof HTMLButtonElement) {
-          checkoutButton.textContent = taxReady
-            ? `Pay · ${formatMoney(estimatedTotal)}`
-            : 'Guest checkout';
+          checkoutButton.textContent = taxReady ? `Pay · ${formatMoney(estimatedTotal)}` : 'Checkout';
+          checkoutButton.setAttribute(
+            'aria-label',
+            taxReady ? `Pay ${formatMoney(estimatedTotal)} — guest checkout` : 'Guest checkout — select province for total'
+          );
         }
       }
     } catch {
@@ -449,6 +490,7 @@ import { StandardEvents } from '@shopify/events';
     bindCheckoutActions();
     bindSearchActions();
     bindShippingNudgeActions();
+    observeNudgeHeight();
     refreshCartPricing();
   });
   document.addEventListener('luxe:ca-location-change', refreshCartPricing);

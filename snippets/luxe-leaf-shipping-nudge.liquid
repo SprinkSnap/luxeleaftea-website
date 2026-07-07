@@ -50,7 +50,8 @@
       </div>
       <div class="luxe-shipping-nudge__actions">
         <button type="button" class="luxe-shipping-nudge__explore button button-secondary" data-shipping-nudge-explore>
-          Keep exploring
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">Keep exploring</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Explore</span>
         </button>
         <a
           href="{{ routes.cart_url }}"
@@ -58,8 +59,10 @@
           data-shipping-nudge-cart
           data-luxe-open-cart
           role="button"
+          aria-label="View bag"
         >
-          View bag
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">View bag</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Bag</span>
         </a>
         <button
           type="button"
