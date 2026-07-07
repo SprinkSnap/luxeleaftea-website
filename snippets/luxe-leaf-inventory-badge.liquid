@@ -82,8 +82,29 @@
   }
 
   .luxe-stock-badge--pdp {
-    font-size: 0.75rem;
-    padding: 0.35rem 0.65rem;
+    display: inline-flex;
+    font-size: 0.8125rem;
+    padding: 0.35rem 0;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    border-radius: 0;
+    background: transparent;
+    font-weight: 600;
+  }
+
+  .luxe-stock-badge--pdp.luxe-stock-badge--in-stock {
+    background: transparent;
+    color: var(--luxe-jade);
+  }
+
+  .luxe-stock-badge--pdp.luxe-stock-badge--low {
+    background: transparent;
+    color: #7a5c00;
+  }
+
+  .luxe-stock-badge--pdp.luxe-stock-badge--sold-out {
+    background: transparent;
+    color: rgb(0 0 0 / 0.55);
   }
 
   .luxe-stock-badge-row {

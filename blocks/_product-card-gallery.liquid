@@ -48,12 +48,6 @@
 
 {% render 'card-gallery', children: children %}
 
-{%- unless settings.brand_navigation == false -%}
-  <div class="luxe-stock-badge-row">
-    {% render 'luxe-leaf-inventory-badge', product: product, placement: 'card-meta' %}
-  </div>
-{%- endunless -%}
-
 {% # Title and price for the zoomed out grid view %}
 <div class="product-grid-view-zoom-out--details">
   {% if product == blank %}

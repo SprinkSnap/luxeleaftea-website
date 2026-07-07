@@ -2171,3 +2171,20 @@ body.luxe-leaf-theme .content-for-layout {
   }
 }
 
+/* PDP: keep buy-box availability visible — sticky gallery was covering content below the hero */
+@media screen and (max-width: 749px) {
+  .product-information__media media-gallery.sticky-content {
+    position: relative;
+    top: auto;
+  }
+
+  .product-information .product-details {
+    position: relative;
+    z-index: 1;
+    background: inherit;
+  }
+
+  .product-inventory__status--luxe {
+    margin-block: 0.35rem 0.65rem;
+  }
+}
