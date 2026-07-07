@@ -102,8 +102,8 @@
             %}
             {%- if settings.brand_navigation != false -%}
               <p class="luxe-cart-drawer__subtitle">
-                <strong>{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}</strong>
-                in your bag · Guest checkout — no account needed · Adjust quantity below
+                <strong>{{ cart.item_count }} {% if cart.item_count == 1 %}tea{% else %}teas{% endif %}</strong>
+                in your bag · Tap <strong>+ / −</strong> to adjust · Guest checkout, no account needed
               </p>
             {%- endif -%}
           {%- endif -%}
@@ -191,13 +191,16 @@
     background-color: var(--color-background);
     flex-grow: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .cart-drawer__items {
     display: flex;
     flex-direction: column;
     padding-inline: var(--cart-drawer-padding);
-    overflow-y: auto;
+    padding-block: 0.25rem 0.5rem;
+    overflow-y: visible;
   }
 
   .cart-drawer__items .cart-items__table-row {

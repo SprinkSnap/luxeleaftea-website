@@ -1,12 +1,11 @@
 /**
- * Self-contained cart quantity and remove controls for Luxe Leaf.
- * Calls /cart/change.js directly and refreshes cart sections — does not rely
- * on Horizon component upgrades (which can fail when theme modules 404).
+ * Luxe Leaf cart controls — mobile-first quantity stepper and remove.
+ * Posts directly to /cart/change.js and refreshes cart sections.
  */
 import { CartErrorEvent, CartLinesUpdateEvent } from '@shopify/events';
 
-/** @type {number | null} */
-let pendingLine = null;
+/** @type {string | null} */
+let pendingKey = null;
 
 /**
  * @returns {string[]}
@@ -54,8 +53,7 @@ function replaceSectionMarkup(sectionId, html) {
 
   const doc = new DOMParser().parseFromString(html, 'text/html');
   const fresh =
-    doc.getElementById(`shopify-section-${sectionId}`) ??
-    doc.body.firstElementChild;
+    doc.getElementById(`shopify-section-${sectionId}`) ?? doc.body.firstElementChild;
 
   if (!(fresh instanceof HTMLElement)) return;
 
@@ -63,11 +61,20 @@ function replaceSectionMarkup(sectionId, html) {
 }
 
 /**
- * @param {string[]} sectionIds
- * @param {Record<string, string>} sections
+ * @param {string} sectionId
  */
-async function refreshCartSections(sectionIds, sections) {
-  /** @type {((sectionId: string, html: string, options: { mode?: string }) => Promise<void>) | null} */
+async function fetchSectionHtml(sectionId) {
+  const url = new URL(window.location.href);
+  url.searchParams.set('section_id', sectionId);
+  return fetch(url.toString(), { headers: { Accept: 'text/html' } }).then((r) => r.text());
+}
+
+/**
+ * @param {string[]} sectionIds
+ * @param {Record<string, string>} [sections]
+ */
+async function refreshCartSections(sectionIds, sections = {}) {
+  /** @type {((id: string, html: string, opts: { mode?: string }) => Promise<void>) | null} */
   let morphSection = null;
 
   try {
@@ -77,8 +84,15 @@ async function refreshCartSections(sectionIds, sections) {
   }
 
   for (const sectionId of sectionIds) {
-    const html = sections[sectionId];
-    if (!html) continue;
+    let html = sections[sectionId];
+
+    if (!html) {
+      try {
+        html = await fetchSectionHtml(sectionId);
+      } catch {
+        continue;
+      }
+    }
 
     const cartComponent = document.querySelector(`cart-items-component[data-section-id="${sectionId}"]`);
     const isDrawer = cartComponent?.hasAttribute('data-drawer');
@@ -88,7 +102,7 @@ async function refreshCartSections(sectionIds, sections) {
         await morphSection(sectionId, html, { mode: isDrawer ? 'hydration' : 'full' });
         continue;
       } catch {
-        /* fall through to DOM replace */
+        /* fall through */
       }
     }
 
@@ -102,6 +116,9 @@ async function refreshCartSections(sectionIds, sections) {
  */
 function setCartBusy(cartItems, busy) {
   cartItems.classList.toggle('cart-items-disabled', busy);
+  cartItems.querySelectorAll('.luxe-cart-stepper').forEach((stepper) => {
+    stepper.classList.toggle('luxe-cart-stepper--busy', busy);
+  });
 }
 
 /**
@@ -109,62 +126,94 @@ function setCartBusy(cartItems, busy) {
  */
 function getLineContext(target) {
   const row = target.closest('tr[data-key]');
-  if (!row) return null;
+  const stepper = target.closest('.luxe-cart-stepper');
 
-  const input = row.querySelector('input[data-cart-line]');
+  const input =
+    stepper?.querySelector('[data-luxe-cart-qty-input]') ??
+    row?.querySelector('input[data-cart-line]');
+
   if (!(input instanceof HTMLInputElement)) return null;
 
   const line = Number(input.dataset.cartLine);
-  if (!line) return null;
+  const lineKey = input.dataset.cartKey || row?.dataset.key || '';
+  const display = stepper?.querySelector('[data-luxe-cart-qty-value]');
 
-  return { row, input, line };
+  return {
+    row,
+    input,
+    display,
+    line,
+    lineKey,
+    min: Number(input.dataset.min) || 1,
+    step: Number(input.dataset.step) || 1,
+    max: input.dataset.max ? Number(input.dataset.max) : null,
+  };
 }
 
 /**
  * @param {HTMLElement} removeButton
  */
-function getRemoveLine(removeButton) {
-  const fromData = Number(removeButton.dataset.luxeCartLine);
-  if (fromData) return fromData;
+function getRemoveContext(removeButton) {
+  const line = Number(removeButton.dataset.luxeCartLine);
+  const lineKey = removeButton.dataset.luxeCartKey ?? '';
+  const ctx = getLineContext(removeButton);
 
-  const onClick = removeButton.getAttribute('on:click') ?? '';
-  const match = onClick.match(/onLineItemRemove\/(\d+)/);
-  if (match) return Number(match[1]);
+  return {
+    line: line || ctx?.line || 0,
+    lineKey: lineKey || ctx?.lineKey || '',
+  };
+}
 
-  return getLineContext(removeButton)?.line ?? 0;
+/**
+ * @param {HTMLElement | null | undefined} display
+ * @param {number} quantity
+ * @param {HTMLInputElement} input
+ */
+function setQuantityDisplay(display, quantity, input) {
+  input.value = String(quantity);
+  input.defaultValue = String(quantity);
+  if (display instanceof HTMLElement) {
+    display.textContent = String(quantity);
+  }
 }
 
 /**
  * @param {HTMLElement} cartItems
- * @param {number} line
- * @param {number} quantity
+ * @param {{ line: number, lineKey: string, quantity: number }} config
  */
-async function changeCartLine(cartItems, line, quantity) {
-  if (!line || pendingLine === line) return;
+async function changeCartLine(cartItems, { line, lineKey, quantity }) {
+  const lockKey = lineKey || String(line);
+  if (!lockKey || pendingKey === lockKey) return;
 
-  pendingLine = line;
+  pendingKey = lockKey;
   setCartBusy(cartItems, true);
 
   const sectionIds = getCartSectionIds();
-  const body = JSON.stringify({
-    line,
+  /** @type {Record<string, unknown>} */
+  const payload = {
     quantity,
     sections: sectionIds.join(','),
     sections_url: window.location.pathname,
-  });
+  };
+
+  if (lineKey) {
+    payload.id = lineKey;
+  } else {
+    payload.line = line;
+  }
 
   const deferred = CartLinesUpdateEvent.createPromise();
   document.dispatchEvent(
     new CartLinesUpdateEvent({
       action: quantity === 0 ? 'remove' : 'update',
       context: 'cart',
-      lines: [{ quantity }],
+      lines: [{ id: lineKey || String(line), quantity }],
       promise: deferred.promise,
     })
   );
 
   try {
-    const response = await fetch(getCartChangeUrl(), cartJsonFetch(body));
+    const response = await fetch(getCartChangeUrl(), cartJsonFetch(JSON.stringify(payload)));
     const text = await response.text();
     const data = JSON.parse(text);
 
@@ -173,9 +222,7 @@ async function changeCartLine(cartItems, line, quantity) {
       throw new Error(message);
     }
 
-    if (data.sections) {
-      await refreshCartSections(sectionIds, data.sections);
-    }
+    await refreshCartSections(sectionIds, data.sections ?? {});
 
     deferred.resolve({
       cart: CartLinesUpdateEvent.createCartFromAjaxResponse(data),
@@ -196,7 +243,7 @@ async function changeCartLine(cartItems, line, quantity) {
       })
     );
   } finally {
-    pendingLine = null;
+    pendingKey = null;
     setCartBusy(cartItems, false);
   }
 }
@@ -213,46 +260,40 @@ function handleCartControl(event) {
     return;
   }
 
-  const removeButton = target.closest(
-    '[data-luxe-cart-action="remove"], .cart-items__remove, .cart-items__remove-link'
-  );
+  const removeButton = target.closest('[data-luxe-cart-action="remove"]');
   if (removeButton instanceof HTMLElement) {
-    const line = getRemoveLine(removeButton);
-    if (!line) return;
+    const { line, lineKey } = getRemoveContext(removeButton);
+    if (!line && !lineKey) return;
 
     event.preventDefault();
     event.stopImmediatePropagation();
-    changeCartLine(cartItems, line, 0);
+    changeCartLine(cartItems, { line, lineKey, quantity: 0 });
     return;
   }
 
-  const minusBtn = target.closest('[data-luxe-cart-qty="decrease"], .quantity-minus');
-  const plusBtn = target.closest('[data-luxe-cart-qty="increase"], .quantity-plus');
-  const qtyButton = minusBtn || plusBtn;
-  if (!(qtyButton instanceof HTMLElement)) return;
+  const minusBtn = target.closest('[data-luxe-cart-qty="decrease"]');
+  const plusBtn = target.closest('[data-luxe-cart-qty="increase"]');
+  if (!minusBtn && !plusBtn) return;
 
-  const ctx = getLineContext(qtyButton);
+  const ctx = getLineContext(target);
   if (!ctx || ctx.input.disabled) return;
 
-  const { input, line } = ctx;
-  const min = Number(input.min) || 1;
-  const step = Number(input.step) || 1;
-  const max = input.max ? Number(input.max) : null;
-  const current = Number(input.value) || min;
-
+  const current = Number(ctx.input.value) || ctx.min;
   let next = current;
+
   if (minusBtn) {
-    next = Math.max(min, current - step);
+    next = Math.max(ctx.min, current - ctx.step);
   } else {
-    next = max != null ? Math.min(max, current + step) : current + step;
+    next = ctx.max != null ? Math.min(ctx.max, current + ctx.step) : current + ctx.step;
   }
 
   if (next === current) return;
 
   event.preventDefault();
   event.stopImmediatePropagation();
-  input.value = String(next);
-  changeCartLine(cartItems, line, next);
+
+  setQuantityDisplay(ctx.display, next, ctx.input);
+  changeCartLine(cartItems, { line: ctx.line, lineKey: ctx.lineKey, quantity: next });
 }
 
 function initCartControls() {

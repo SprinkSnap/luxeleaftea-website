@@ -391,23 +391,11 @@
                           {{- 'content.quantity' | t -}}
                         </span>
                         <div class="cart-items__quantity-controls">
-                          {% render 'quantity-selector',
-                            product: item.product,
-                            variant: item.variant,
-                            in_cart_quantity: item.quantity,
+                          {% render 'luxe-cart-stepper',
+                            item: item,
                             cart_line: forloop.index,
-                            class: 'cart-primary-typography',
-                            can_update_quantity: can_update_quantity,
-                            luxe_cart_controls: true
+                            can_update_quantity: can_update_quantity
                           %}
-
-                          {% if show_cart_volume_pricing %}
-                            {% render 'volume-pricing-info',
-                              variant: item.variant,
-                              unique_id: item.index,
-                              quantity: item.quantity
-                            %}
-                          {% endif %}
                         </div>
                       </div>
 
@@ -417,6 +405,7 @@
                         aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
                         data-luxe-cart-action="remove"
                         data-luxe-cart-line="{{ forloop.index }}"
+                        data-luxe-cart-key="{{ item.key }}"
                         {% if can_remove == false %}
                           hidden
                         {% endif %}

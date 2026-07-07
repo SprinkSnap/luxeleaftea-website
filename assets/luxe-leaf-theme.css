@@ -247,28 +247,30 @@ body .cart-drawer__items .cart-items__action-bar__qty {
 body .cart-drawer__items .cart-items__quantity-controls {
   display: flex;
   align-items: center;
-  width: auto;
+  width: 100%;
   max-width: none;
   flex: 1 1 auto;
 }
 
-body .cart-drawer__items .cart-items__quantity .quantity-selector {
-  --quantity-selector-width: 11.5rem;
-
-  flex: none;
-  width: var(--quantity-selector-width);
-  min-width: var(--quantity-selector-width);
+body .cart-drawer__items .luxe-cart-stepper {
+  width: 100%;
+  max-width: 12.5rem;
+  min-height: 3.25rem;
   pointer-events: auto;
 }
 
-body .cart-drawer__items .cart-items__quantity .quantity-selector :is(.quantity-minus, .quantity-plus) {
-  width: 3rem;
-  height: 3rem;
-  min-width: 3rem;
-  min-height: 3rem;
+body .cart-drawer__items .luxe-cart-stepper__btn {
+  min-width: 3.25rem;
+  min-height: 3.25rem;
   pointer-events: auto;
   cursor: pointer;
   touch-action: manipulation;
+}
+
+body .cart-drawer__items .luxe-cart-stepper__value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1b4332;
 }
 
 body .cart-drawer__items .cart-items__remove {
@@ -286,9 +288,11 @@ body .cart-drawer__items .cart-items__remove {
 body .cart-drawer__items .cart-items__remove--labeled {
   width: 100% !important;
   min-width: 0;
-  min-height: 3rem;
+  min-height: 3.25rem;
   height: auto;
-  padding: 0 1rem;
+  padding: 0 1.1rem;
+  color: #8b2e2e;
+  border-color: rgb(139 46 46 / 0.22);
 }
 
 @media screen and (min-width: 750px) {
@@ -313,15 +317,6 @@ body .cart-drawer__items .cart-items__remove .svg-wrapper {
 body .cart-drawer__items .cart-items__remove-link {
   color: #1b4332;
   font-weight: 500;
-}
-
-body .cart-drawer__items .quantity-selector {
-  pointer-events: auto;
-}
-
-body .cart-drawer__items .quantity-selector :is(.quantity-minus, .quantity-plus) {
-  pointer-events: auto;
-  cursor: pointer;
 }
 
 body .cart__checkout-note {
@@ -2050,10 +2045,16 @@ body.luxe-leaf-theme .content-for-layout {
     padding-inline: max(1rem, env(safe-area-inset-left)) max(1rem, env(safe-area-inset-right));
   }
 
-  body.luxe-leaf-theme table {
+  body.luxe-leaf-theme table:not(.cart-items__table) {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  body.luxe-leaf-theme .cart-items__table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
   }
 }
 
