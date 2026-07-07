@@ -337,12 +337,6 @@
                     | default: true, allow_false: true
                   %}
                   <div class="cart-items__quantity-controls">
-                    {% render 'volume-pricing-info',
-                      variant: item.variant,
-                      unique_id: item.index,
-                      quantity: item.quantity
-                    %}
-
                     {% render 'quantity-selector',
                       product: item.product,
                       variant: item.variant,
@@ -350,6 +344,12 @@
                       line_index: item.index,
                       class: 'cart-primary-typography',
                       can_update_quantity: can_update_quantity
+                    %}
+
+                    {% render 'volume-pricing-info',
+                      variant: item.variant,
+                      unique_id: item.index,
+                      quantity: item.quantity
                     %}
 
                     <button
@@ -672,14 +672,17 @@
     width: fit-content;
   }
 
-  .cart-items__quantity-controls > .volume-pricing-info {
-    margin-inline-start: calc(-1 * var(--minimum-touch-target) - var(--gap-xs));
-  }
-
   .cart-items__quantity .quantity-selector {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     font-size: var(--font-size--sm);
     height: auto;
+    flex-shrink: 0;
+  }
+
+  .cart-items__quantity-controls > .volume-pricing-info {
+    flex-shrink: 0;
   }
 
   .cart-items__remove {

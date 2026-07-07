@@ -62,7 +62,7 @@
     </button>
     <input
       type="number"
-      name="{% if line_index %}updates[]{% else %}quantity{% endif %}"
+      name="{% if line_index != null %}updates[]{% else %}quantity{% endif %}"
       value="{{ in_cart_quantity | default: variant.quantity_rule.min | default: 1 }}"
       data-cart-quantity="{{ cart | item_count_for_variant: variant.id }}"
       min="{{ min_quantity }}"
@@ -72,7 +72,7 @@
       ref="quantityInput"
       aria-live="polite"
       aria-label="{{ 'accessibility.quantity' | t }}"
-      {% if line_index %}
+      {% if line_index != null %}
         data-cart-line="{{ line_index | plus: 1 }}"
       {% endif %}
       {% if variant.quantity_rule.max %}
