@@ -80,6 +80,11 @@
     assign default_tasting = '<p><strong>Aroma:</strong> Warm, inviting tea fragrance with subtle sweetness<br><strong>Palate:</strong> Bold, smooth, and beautifully balanced<br><strong>Body:</strong> Medium to full-bodied<br><strong>Finish:</strong> Clean, mellow, and pleasantly lingering</p>'
     assign default_brewing = '<p><strong>Leaf:</strong> 2g per 200ml water<br><strong>Water:</strong> 95–100°C (203–212°F)<br><strong>Steep:</strong> 3–5 minutes · strain before serving<br><strong>Thai iced tea:</strong> Brew strong, sweeten, pour over ice with condensed or evaporated milk<br><strong>Storage:</strong> Cool, dry place · reseal after opening · best within 6 months</p>'
   endif
+  if title_downcase contains 'mocastar'
+    assign default_origin = '<p><strong>Mocastar Blend Tea 金裝大排檔</strong> — a premium Hong Kong-style loose leaf black tea blend inspired by the iconic <strong>Cha Chaan Teng (茶餐廳)</strong> tradition. Crafted for the bold strength and silky smoothness behind authentic silk stocking milk tea.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Rich black tea with warm roasted notes<br><strong>Palate:</strong> Bold, smooth, and beautifully balanced<br><strong>Body:</strong> Full-bodied with a silky mouthfeel<br><strong>Finish:</strong> Clean, rich, and pleasantly lingering — holds up beautifully with milk</p>'
+    assign default_brewing = '<p><strong>Leaf:</strong> 8–10g per 500ml water<br><strong>Water:</strong> 95–100°C (203–212°F)<br><strong>Steep:</strong> 5–8 minutes · strain thoroughly<br><strong>Hong Kong milk tea:</strong> Add evaporated milk or sweetened condensed milk — serve hot or over ice<br><strong>Tip:</strong> Brew strong for the classic Cha Chaan Teng character</p>'
+  endif
 
   if origin == blank
     assign origin_html = default_origin

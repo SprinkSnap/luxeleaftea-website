@@ -578,6 +578,74 @@ PRODUCTS = [
         "SEO Description": "ChaTraMue Original Thai Tea Mix 400g — authentic loose leaf for Thai iced tea, milk tea, and Cha Yen. Bold smooth flavor since 1945. Ships from Luxe Leaf Tea.",
         "Image Asset": "luxe-leaf-black-tea-product-2.png",
     },
+    {
+        "Handle": "mocastar-blend-tea-hong-kong-milk-tea",
+        "Title": "Mocastar Blend Tea 金裝大排檔",
+        "Body (HTML)": body(
+            "<p><strong>Premium Hong Kong style milk tea loose leaf blend</strong></p>",
+            "<p>Bring the authentic taste of Hong Kong&rsquo;s famous <strong>Cha Chaan Teng</strong> caf&eacute;s into your "
+            "home or business with <strong>Mocastar Blend Tea 金裝大排檔</strong>. Expertly crafted to create rich, smooth, "
+            "and full-bodied milk tea, this premium loose leaf black tea blend delivers the bold character and silky finish "
+            "that have made Hong Kong-style milk tea a beloved classic.</p>",
+            "<p>Designed to pair beautifully with evaporated milk or sweetened condensed milk, every cup offers a deep "
+            "tea aroma, robust flavor, and creamy texture that&rsquo;s perfect for traditional "
+            "<strong>Silk Stocking Milk Tea (絲襪奶茶)</strong>, iced milk tea, or specialty caf&eacute; beverages.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Authentic Hong Kong-style loose leaf black tea blend</li>"
+            "<li>Bold, rich flavor with a smooth, creamy finish</li>"
+            "<li>Perfectly balanced for milk tea and iced tea</li>"
+            "<li>Excellent with evaporated milk or sweetened condensed milk</li>"
+            "<li>Caf&eacute;-quality brewing for home or commercial use</li>"
+            "<li>Full-bodied tea that maintains its character even when mixed with milk</li>"
+            "<li>Suitable for bubble tea shops, caf&eacute;s, restaurants, and tea enthusiasts</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Rich black tea with warm roasted notes</li>"
+            "<li><strong>Taste:</strong> Bold, smooth, and beautifully balanced</li>"
+            "<li><strong>Body:</strong> Full-bodied with a silky mouthfeel</li>"
+            "<li><strong>Finish:</strong> Clean, rich, and pleasantly lingering</li>"
+            "</ul>",
+            "<h3>Inspired by Hong Kong tea culture</h3>"
+            "<p>Inspired by the traditional tea served in Hong Kong&rsquo;s iconic <strong>Cha Chaan Teng (茶餐廳)</strong>, "
+            "this carefully blended loose leaf tea is crafted to deliver the signature strength and smoothness needed for "
+            "authentic Hong Kong milk tea. Its bold flavor stands up beautifully to milk without losing the distinctive "
+            "character of the tea.</p>",
+            "<p><strong>Product name:</strong> Mocastar Blend Tea 金裝大排檔<br>"
+            "<strong>Tea type:</strong> Premium loose leaf black tea blend<br>"
+            "<strong>Style:</strong> Hong Kong milk tea blend<br>"
+            "<strong>Best for:</strong> Hong Kong milk tea, silk stocking tea (絲襪奶茶), iced milk tea, bubble tea, "
+            "tea lattes, caf&eacute;s, restaurants, and bubble tea shops</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 8–10g per 500ml water</li>"
+            "<li><strong>Water:</strong> 95–100°C (203–212°F)</li>"
+            "<li><strong>Steep:</strong> 5–8 minutes</li>"
+            "<li><strong>Serve:</strong> Strain thoroughly before adding evaporated milk or sweetened condensed milk — "
+            "serve hot or over ice</li>"
+            "</ul>",
+            "<p>Every batch is blended to deliver the bold aroma, smooth texture, and consistent performance that "
+            "authentic Hong Kong milk tea is known for — a rich and satisfying tea experience in every cup.</p>",
+            nutrition_table("45–70 mg"),
+        ),
+        "Vendor": "Mocastar",
+        "Type": "Hong Kong Milk Tea",
+        "Tags": "black-tea, hong-kong-milk-tea, mocastar, milk-tea, bubble-tea, silk-stocking-tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "500g",
+        "Variant SKU": "MOC-HK-500",
+        "Variant Grams": "500",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "18.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Mocastar Blend Tea 金裝大排檔 | Hong Kong Milk Tea | Luxe Leaf Tea",
+        "SEO Description": "Mocastar Blend Tea — premium Hong Kong-style loose leaf for silk stocking milk tea, iced milk tea, and bubble tea. Bold smooth Cha Chaan Teng character.",
+        "Image Asset": "premium-assam-black-tea-product-2.png",
+    },
 ]
 
 FIELDNAMES = [

@@ -54,6 +54,7 @@ Bundled theme assets (brewed cup + dry leaf):
 | Yunnan CTC Black Tea | `yunnan-ctc-black-tea-product-2.png` |
 | Fujian Black Tea | `fujian-black-tea-product-2.png` |
 | ChaTraMue Original Thai Tea Mix 400g | `luxe-leaf-black-tea-product-2.png` (placeholder until product photos) |
+| Mocastar Blend Tea 金裝大排檔 | `premium-assam-black-tea-product-2.png` (placeholder until product photos) |
 
 These are placeholder composites until you shoot real photos. Replace in Shopify admin when ready.
 
@@ -135,6 +136,7 @@ Add one tea-type tag per product so collections auto-fill:
 | Product | Handle | Tags | Product image |
 |---------|--------|------|---------------|
 | ChaTraMue Original Thai Tea Mix 400g | `chatramue-original-thai-tea-mix-400g` | `black-tea`, `thai-tea`, `chatramue`, `milk-tea`, `bubble-tea`, `iced-tea`, `bestseller` | `luxe-leaf-black-tea-product-2.png` |
+| Mocastar Blend Tea 金裝大排檔 | `mocastar-blend-tea-hong-kong-milk-tea` | `black-tea`, `hong-kong-milk-tea`, `mocastar`, `milk-tea`, `bubble-tea`, `silk-stocking-tea`, `bestseller` | `premium-assam-black-tea-product-2.png` |
 
 ### Green tea line
 
