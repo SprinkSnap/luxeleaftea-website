@@ -105,7 +105,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>You may also like</h3>",
+                "text": "<h2 id=\"cart-recommendations-heading\">You may also like</h2><p>Popular loose leaf teas to pair with your order — add in one tap.</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -150,7 +150,7 @@
           "name": "t:names.product_card",
           "static": true,
           "settings": {
-            "product_card_gap": 4,
+            "product_card_gap": 10,
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
@@ -165,7 +165,7 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "adapt",
+                "image_ratio": "portrait",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -221,26 +221,33 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "luxe_cart_browse_atc": {
+              "type": "luxe-leaf-browse-atc",
+              "name": "Luxe Leaf browse add to bag",
+              "settings": {},
+              "blocks": {}
             }
           },
           "block_order": [
             "product_card_gallery_PEPpfq",
             "product_title_WNMpHe",
-            "price_yXfkPX"
+            "price_yXfkPX",
+            "luxe_cart_browse_atc"
           ]
         }
       },
-      "name": "Featured collection",
+      "name": "Cart recommendations",
       "settings": {
         "collection": "all",
         "layout_type": "grid",
-        "carousel_on_mobile": false,
+        "carousel_on_mobile": true,
         "max_products": 4,
-        "columns": 4,
+        "columns": 2,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
+        "columns_gap": 20,
+        "rows_gap": 28,
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
