@@ -127,6 +127,13 @@ Add one tea-type tag per product so collections auto-fill:
 | Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `yunnan-ctc-black-tea-product-2.png` |
 | Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `fujian-black-tea-product-2.png` |
 
+### Green tea line
+
+| Product | Handle | Tags | Product image |
+|---------|--------|------|---------------|
+| Dragon Well Green Tea | `dragon-well-green-tea` | `green-tea`, `Green Tea` | `luxe-leaf-green-tea-product-2.png` |
+| Premium Jasmine Green Tea | `premium-jasmine-green-tea` | `green-tea`, `jasmine`, `jasmine-tea`, `bestseller` | `luxe-leaf-green-tea-product-2.png` |
+
 ## 5. Optional product metafields (advanced)
 
 Only needed if you want extra content outside the main description. Brewing, origin, and nutrition now live in the product **Description** by default.
