@@ -439,6 +439,77 @@ PRODUCTS = [
         "SEO Description": "Premium peach oolong loose leaf — creamy Jinxuan Milk Oolong with naturally sweet peach aroma. Perfect for milk tea, bubble tea, and iced tea. Packed fresh to order.",
         "Image Asset": "luxe-leaf-oolong-tea-product-2.png",
     },
+    {
+        "Handle": "premium-jasmine-falling-snow-tea",
+        "Title": "Premium Jasmine Falling Snow Tea",
+        "Body (HTML)": body(
+            "<p><strong>Naturally scented with rare Sibao jasmine flowers</strong></p>",
+            "<p>Experience the elegance of authentic Chinese jasmine tea with our Premium Jasmine Falling Snow Tea, "
+            "expertly crafted from premium loose leaf tea and naturally scented with rare "
+            "<strong>Sibao Jasmine Flowers</strong>.</p>",
+            "<p>Harvested at peak bloom and traditionally layered with fresh tea leaves, Sibao jasmine blossoms "
+            "gently infuse the tea with their natural fragrance over multiple scenting cycles. The result is a "
+            "remarkably smooth tea with a fresh floral aroma, delicate sweetness, and a clean finish that lingers "
+            "beautifully after every sip.</p>",
+            "<p>Unlike artificially flavored jasmine teas, our Jasmine Falling Snow Tea contains "
+            "<strong>no artificial flavors or fragrance oils</strong> — only the pure harmony of premium tea leaves "
+            "and genuine jasmine blossoms.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Naturally scented with rare Sibao Jasmine Flowers</li>"
+            "<li>Rich floral aroma that&rsquo;s elegant, fresh, and never overpowering</li>"
+            "<li>Smooth, clean finish with low bitterness</li>"
+            "<li>No artificial flavors, fragrances, or additives</li>"
+            "<li>Carefully crafted using traditional jasmine scenting methods</li>"
+            "<li>Delicious hot or iced</li>"
+            "<li>Perfect for milk tea, fruit tea, lemon tea, bubble tea, or everyday enjoyment</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Fresh jasmine blossoms with an elegant floral bouquet</li>"
+            "<li><strong>Taste:</strong> Smooth, naturally sweet, and delicately floral</li>"
+            "<li><strong>Body:</strong> Light to medium-bodied with a silky mouthfeel</li>"
+            "<li><strong>Finish:</strong> Clean, refreshing, and beautifully lingering</li>"
+            "</ul>",
+            "<h3>Rare Sibao Jasmine Flowers</h3>"
+            "<p>Sibao Jasmine is prized by tea artisans for its exceptional fragrance and purity. Each blossom is "
+            "carefully handpicked at full bloom, when its natural aroma is at its peak. Rather than relying on "
+            "artificial flavorings, the blossoms are traditionally layered with premium tea leaves over multiple "
+            "rounds, allowing the delicate floral fragrance to infuse naturally — creating a tea with remarkable "
+            "depth, elegance, and lasting aroma.</p>",
+            "<p><strong>Origin:</strong> Premium loose leaf tea + Sibao Jasmine Flowers, China<br>"
+            "<strong>Best for:</strong> Daily sipping, iced jasmine tea, lemon jasmine tea, milk tea, fruit tea, "
+            "bubble tea, gifts, and specialty caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2–3g (1 teaspoon) per 150ml</li>"
+            "<li><strong>Water:</strong> 80–85°C (176–185°F)</li>"
+            "<li><strong>Steep:</strong> 2–3 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 2–4 infusions</li>"
+            "<li><strong>Tip:</strong> Avoid boiling water for the most delicate floral aroma</li>"
+            "</ul>",
+            "<p>Every batch is crafted to showcase the true beauty of naturally scented jasmine tea — fragrant, "
+            "smooth, and exceptionally refreshing, with authentic floral aroma and carefully selected tea leaves "
+            "in every cup.</p>",
+            nutrition_table("25–35 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "green-tea, jasmine, jasmine-tea, falling-snow, sibao, Green Tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-JASMINE-FS-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "24.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Jasmine Falling Snow Tea | Sibao Jasmine | Luxe Leaf Tea",
+        "SEO Description": "Naturally scented Jasmine Falling Snow loose leaf tea — rare Sibao jasmine flowers, smooth floral cup. Hot, iced, milk tea, and lemon jasmine. Packed fresh to order.",
+        "Image Asset": "luxe-leaf-green-tea-product-2.png",
+    },
 ]
 
 FIELDNAMES = [

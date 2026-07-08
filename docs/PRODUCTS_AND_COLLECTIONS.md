@@ -45,6 +45,7 @@ Bundled theme assets (brewed cup + dry leaf):
 |---------|------------|
 | Dragon Well Green Tea | `luxe-leaf-green-tea-product-2.png` |
 | Premium Jasmine Green Tea | `luxe-leaf-green-tea-product-2.png` (placeholder until jasmine photos) |
+| Premium Jasmine Falling Snow Tea | `luxe-leaf-green-tea-product-2.png` (placeholder until falling snow photos) |
 | Tieguanyin Oolong | `luxe-leaf-oolong-tea-product-2.png` |
 | Premium Peach Oolong Tea | `luxe-leaf-oolong-tea-product-2.png` (placeholder until peach photos) |
 | Aged Yunnan Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
@@ -134,6 +135,7 @@ Add one tea-type tag per product so collections auto-fill:
 |---------|--------|------|---------------|
 | Dragon Well Green Tea | `dragon-well-green-tea` | `green-tea`, `Green Tea` | `luxe-leaf-green-tea-product-2.png` |
 | Premium Jasmine Green Tea | `premium-jasmine-green-tea` | `green-tea`, `jasmine`, `jasmine-tea`, `bestseller` | `luxe-leaf-green-tea-product-2.png` |
+| Premium Jasmine Falling Snow Tea | `premium-jasmine-falling-snow-tea` | `green-tea`, `jasmine`, `jasmine-tea`, `falling-snow`, `sibao`, `bestseller` | `luxe-leaf-green-tea-product-2.png` |
 
 ### Oolong line
 
