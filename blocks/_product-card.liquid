@@ -10,8 +10,10 @@
 
 {% capture children %}
   {% content_for 'blocks', closest.product: product %}
-  {%- if product != blank and product_view_context == 'cart' or request.page_type == 'cart' -%}
-    {% render 'luxe-leaf-cart-recommendation-atc', product: product %}
+  {%- if product != blank -%}
+    {%- if product_view_context == 'cart' or request.page_type == 'cart' -%}
+      {% render 'luxe-leaf-cart-recommendation-atc', product: product %}
+    {%- endif -%}
   {%- endif -%}
 {% endcapture %}
 
