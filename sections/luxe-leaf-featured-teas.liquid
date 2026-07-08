@@ -61,7 +61,6 @@
             <a href="{{ variant.url }}">{{ product.title }}</a>
           </h3>
           <p class="luxe-featured__price">{{ variant.price | money }}</p>
-          {% render 'luxe-leaf-product-availability', product: product %}
           {%- if product.available -%}
             {%- form 'product', product, class: 'luxe-featured__form' -%}
               <input type="hidden" name="id" value="{{ variant.id }}">

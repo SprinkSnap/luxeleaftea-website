@@ -60,7 +60,7 @@
   data-product-id="{{ product.id }}"
 >
   {%- if settings.brand_navigation != false -%}
-    {% render 'luxe-leaf-product-availability', product: closest.product, variant: variant %}
+    {% render 'luxe-leaf-product-availability', product: closest.product, variant: variant, context: 'pdp' %}
   {%- else -%}
     <span
       class="product-inventory__status"
