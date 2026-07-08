@@ -4,7 +4,7 @@
 import { CartLinesUpdateEvent, CartErrorEvent, StandardEvents } from '@shopify/events';
 
 const BROWSE_FORM_SELECTOR =
-  '.luxe-keep-exploring__form, .luxe-featured__form, .luxe-cart-upsell__form, .luxe-browse-atc-inline__form';
+  '.luxe-keep-exploring__form, .luxe-featured__form, .luxe-cart-upsell__form, .luxe-browse-atc-inline__form, .luxe-cart-recommendation__form';
 
 const ADDING_CLASS = 'luxe-browse-atc--adding';
 const SUCCESS_CLASS = 'luxe-browse-atc--success';
@@ -110,7 +110,10 @@ async function handleBrowseAdd(form, event) {
     button.classList.add(SUCCESS_CLASS);
     setButtonLabel(button, 'Added ✓');
 
-    window.Shopify?.actions?.openCart?.();
+    const onCartPage = window.location.pathname.replace(/\/$/, '') === '/cart';
+    if (!onCartPage) {
+      window.Shopify?.actions?.openCart?.();
+    }
 
     window.setTimeout(() => resetButton(button), 1800);
   } catch (error) {

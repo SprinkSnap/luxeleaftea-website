@@ -105,7 +105,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h2 id=\"cart-recommendations-heading\">You may also like</h2><p>Popular loose leaf teas to pair with your order — add in one tap.</p>",
+                "text": "<h2 id=\"cart-recommendations-heading\">You may also like</h2><p>Popular loose leaf teas to pair with your order — tap <strong>Add to Cart</strong> without leaving your bag.</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -165,7 +165,7 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "portrait",
+                "image_ratio": "square",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -243,7 +243,7 @@
         "layout_type": "grid",
         "carousel_on_mobile": true,
         "max_products": 4,
-        "columns": 2,
+        "columns": 4,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
         "columns_gap": 20,

@@ -3,7 +3,11 @@
 {%- enddoc -%}
 
 <div {{ block.shopify_attributes }}>
-  {% render 'luxe-leaf-browse-atc-inline', product: closest.product %}
+  {%- if request.page_type == 'cart' -%}
+    {% render 'luxe-leaf-cart-recommendation-atc', product: closest.product %}
+  {%- else -%}
+    {% render 'luxe-leaf-browse-atc-inline', product: closest.product %}
+  {%- endif -%}
 </div>
 
 {% schema %}
