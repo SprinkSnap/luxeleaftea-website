@@ -53,6 +53,7 @@ Bundled theme assets (brewed cup + dry leaf):
 | Premium Assam Black Tea | `premium-assam-black-tea-product-2.png` |
 | Yunnan CTC Black Tea | `yunnan-ctc-black-tea-product-2.png` |
 | Fujian Black Tea | `fujian-black-tea-product-2.png` |
+| ChaTraMue Original Thai Tea Mix 400g | `luxe-leaf-black-tea-product-2.png` (placeholder until product photos) |
 
 These are placeholder composites until you shoot real photos. Replace in Shopify admin when ready.
 
@@ -128,6 +129,12 @@ Add one tea-type tag per product so collections auto-fill:
 | Premium Assam Black Tea | `premium-assam-black-tea` | `black-tea`, `assam`, `blend`, `bubble-tea`, `milk-tea`, `breakfast` | `premium-assam-black-tea-product-2.png` |
 | Yunnan CTC Black Tea | `yunnan-ctc-black-tea` | `black-tea`, `bubble-tea`, `ctc`, `yunnan` | `yunnan-ctc-black-tea-product-2.png` |
 | Fujian Black Tea | `fujian-black-tea` | `black-tea`, `fujian`, `blend-friendly` | `fujian-black-tea-product-2.png` |
+
+### Branded tea line
+
+| Product | Handle | Tags | Product image |
+|---------|--------|------|---------------|
+| ChaTraMue Original Thai Tea Mix 400g | `chatramue-original-thai-tea-mix-400g` | `black-tea`, `thai-tea`, `chatramue`, `milk-tea`, `bubble-tea`, `iced-tea`, `bestseller` | `luxe-leaf-black-tea-product-2.png` |
 
 ### Green tea line
 

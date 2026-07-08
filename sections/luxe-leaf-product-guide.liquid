@@ -75,6 +75,11 @@
     assign default_tasting = '<p><strong>Aroma:</strong> Fresh, ripe peaches with elegant floral notes<br><strong>Palate:</strong> Smooth creamy oolong with naturally sweet peach flavor<br><strong>Body:</strong> Medium-bodied with a silky texture<br><strong>Finish:</strong> Clean, mellow, floral, and pleasantly lingering</p>'
     assign default_brewing = '<p><strong>Leaf:</strong> 3–5g per 150ml<br><strong>Water:</strong> 90–95°C (194–203°F)<br><strong>Steep:</strong> 3–4 minutes<br><strong>Re-steeps:</strong> 3–5 infusions<br><strong>Tip:</strong> Excellent hot, iced, or as a peach milk tea and bubble tea base.</p>'
   endif
+  if title_downcase contains 'chatramue' or title_downcase contains 'thai tea mix'
+    assign default_origin = '<p><strong>ChaTraMue</strong> — Thailand&rsquo;s iconic tea brand since 1945, crafted from carefully selected tea leaves for the bold flavor and signature aroma behind authentic Thai iced tea and milk tea.<br><br><strong>Country of origin:</strong> Thailand · 400g loose leaf mix</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Warm, inviting tea fragrance with subtle sweetness<br><strong>Palate:</strong> Bold, smooth, and beautifully balanced<br><strong>Body:</strong> Medium to full-bodied<br><strong>Finish:</strong> Clean, mellow, and pleasantly lingering</p>'
+    assign default_brewing = '<p><strong>Leaf:</strong> 2g per 200ml water<br><strong>Water:</strong> 95–100°C (203–212°F)<br><strong>Steep:</strong> 3–5 minutes · strain before serving<br><strong>Thai iced tea:</strong> Brew strong, sweeten, pour over ice with condensed or evaporated milk<br><strong>Storage:</strong> Cool, dry place · reseal after opening · best within 6 months</p>'
+  endif
 
   if origin == blank
     assign origin_html = default_origin

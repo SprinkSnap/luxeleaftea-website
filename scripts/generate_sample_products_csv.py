@@ -510,6 +510,74 @@ PRODUCTS = [
         "SEO Description": "Naturally scented Jasmine Falling Snow loose leaf tea — rare Sibao jasmine flowers, smooth floral cup. Hot, iced, milk tea, and lemon jasmine. Packed fresh to order.",
         "Image Asset": "luxe-leaf-green-tea-product-2.png",
     },
+    {
+        "Handle": "chatramue-original-thai-tea-mix-400g",
+        "Title": "ChaTraMue Original Thai Tea Mix 400g",
+        "Body (HTML)": body(
+            "<p><strong>Authentic Thai tea since 1945</strong></p>",
+            "<p>Experience the rich taste and vibrant tradition of Thailand with "
+            "<strong>ChaTraMue Original Thai Tea Mix</strong>. Crafted from carefully selected tea leaves, "
+            "this authentic loose leaf tea is renowned for its bold flavor, smooth finish, and signature aroma "
+            "that have made it a favorite in Thai caf&eacute;s and homes for generations.</p>",
+            "<p>Whether you&rsquo;re recreating a refreshing glass of Thai iced tea, preparing a creamy Thai milk tea, "
+            "or enjoying a comforting hot cup, ChaTraMue delivers the authentic caf&eacute;-style flavor that tea "
+            "lovers around the world know and enjoy.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Authentic Thai tea with a rich, full-bodied flavor</li>"
+            "<li>Smooth, mellow taste with a naturally fragrant aroma</li>"
+            "<li>Premium loose leaf tea for consistent brewing</li>"
+            "<li>Ideal for hot tea, iced tea, milk tea, and specialty beverages</li>"
+            "<li>Easy to prepare at home or in caf&eacute;s</li>"
+            "<li>Trusted Thai tea brand with a heritage dating back to 1945</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Warm, inviting tea fragrance with subtle sweetness</li>"
+            "<li><strong>Taste:</strong> Bold, smooth, and beautifully balanced</li>"
+            "<li><strong>Body:</strong> Medium to full-bodied</li>"
+            "<li><strong>Finish:</strong> Clean, mellow, and pleasantly lingering</li>"
+            "</ul>",
+            "<p><strong>Brand:</strong> ChaTraMue<br>"
+            "<strong>Product type:</strong> Original Thai Tea Mix (loose leaf)<br>"
+            "<strong>Net weight:</strong> 400g<br>"
+            "<strong>Origin:</strong> Thailand<br>"
+            "<strong>Best for:</strong> Thai iced tea (Cha Yen), Thai milk tea, hot Thai tea, lemon tea, "
+            "bubble tea, tea lattes, home brewing, and caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2g per 200ml water</li>"
+            "<li><strong>Water:</strong> 95–100°C (203–212°F)</li>"
+            "<li><strong>Steep:</strong> 3–5 minutes</li>"
+            "<li><strong>Serve:</strong> Strain before serving — enjoy plain or with sweetened condensed milk, "
+            "evaporated milk, sugar, or fresh lime</li>"
+            "</ul>",
+            "<h3>Storage</h3><ul>"
+            "<li>Store in a cool, dry place away from direct sunlight, heat, and moisture</li>"
+            "<li>Reseal the bag tightly after opening to preserve freshness and aroma</li>"
+            "<li>For best quality, enjoy within 6 months after opening</li>"
+            "</ul>",
+            "<p>For decades, ChaTraMue has been enjoyed for its authentic character and dependable quality — "
+            "a versatile classic for traditional Thai beverages and creative caf&eacute;-style recipes alike.</p>",
+            nutrition_table("40–70 mg"),
+        ),
+        "Vendor": "ChaTraMue",
+        "Type": "Thai Tea",
+        "Tags": "black-tea, thai-tea, chatramue, milk-tea, bubble-tea, iced-tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "400g",
+        "Variant SKU": "CTR-THAI-400",
+        "Variant Grams": "400",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "15.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "ChaTraMue Original Thai Tea Mix 400g | Authentic Thai Iced Tea | Luxe Leaf Tea",
+        "SEO Description": "ChaTraMue Original Thai Tea Mix 400g — authentic loose leaf for Thai iced tea, milk tea, and Cha Yen. Bold smooth flavor since 1945. Ships from Luxe Leaf Tea.",
+        "Image Asset": "luxe-leaf-black-tea-product-2.png",
+    },
 ]
 
 FIELDNAMES = [
