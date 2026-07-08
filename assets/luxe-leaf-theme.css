@@ -2171,11 +2171,16 @@ body.luxe-leaf-theme .content-for-layout {
   }
 }
 
-/* PDP: stock line lives in buy box above Add to Bag — never on the hero image */
+/* PDP: stock line in buy box only — keep gallery swipe/zoom working */
 .product-information__media media-gallery.sticky-content,
 .product-information__media media-gallery {
   position: relative;
   top: auto;
+}
+
+.product-information__media slideshow-component,
+.product-information__media slideshow-slides {
+  touch-action: pan-x pinch-zoom;
 }
 
 @media screen and (max-width: 749px) {
