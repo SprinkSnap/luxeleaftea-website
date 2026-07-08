@@ -373,6 +373,72 @@ PRODUCTS = [
         "SEO Description": "Naturally scented jasmine green tea — Yunnan Maojian and Guangxi jasmine blossoms. Smooth floral loose leaf for hot, iced, and milk tea. Packed fresh to order.",
         "Image Asset": "luxe-leaf-green-tea-product-2.png",
     },
+    {
+        "Handle": "premium-peach-oolong-tea",
+        "Title": "Premium Peach Oolong Tea",
+        "Body (HTML)": body(
+            "<p><strong>Naturally sweet · Creamy Jinxuan oolong · Delicate peach aroma</strong></p>",
+            "<p>Discover the perfect harmony of premium <strong>Jinxuan Milk Oolong</strong> and the naturally sweet "
+            "fragrance of ripe peaches. Our Premium Peach Oolong Tea is carefully crafted to deliver a smooth, creamy "
+            "cup with a refreshing peach aroma that is elegant, balanced, and never overpowering.</p>",
+            "<p>Unlike heavily flavored fruit teas, this blend lets the rich character of authentic Jinxuan Oolong "
+            "shine through while complementing it with a soft, juicy peach fragrance. Every sip is silky, refreshing, "
+            "and beautifully aromatic.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Premium Jinxuan (Milk Oolong) loose leaf tea</li>"
+            "<li>Naturally sweet peach aroma that&rsquo;s smooth and never artificial</li>"
+            "<li>Creamy, silky mouthfeel with a mellow floral finish</li>"
+            "<li>Perfect balance between fruity sweetness and authentic oolong flavor</li>"
+            "<li>Low bitterness and exceptionally smooth</li>"
+            "<li>Delicious served hot, iced, or as bubble tea</li>"
+            "<li>Excellent for milk tea, fruit tea, tea lattes, and specialty beverages</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Fresh, ripe peaches with elegant floral notes</li>"
+            "<li><strong>Taste:</strong> Smooth creamy oolong with naturally sweet peach flavor</li>"
+            "<li><strong>Body:</strong> Medium-bodied with a silky texture</li>"
+            "<li><strong>Finish:</strong> Clean, mellow, floral, and pleasantly lingering</li>"
+            "</ul>",
+            "<h3>Crafted with premium Jinxuan Oolong</h3>"
+            "<p>Our tea begins with carefully selected <strong>Jinxuan Oolong</strong>, often called "
+            "<strong>Milk Oolong</strong>, prized for its naturally creamy texture, buttery smooth finish, "
+            "and delicate floral aroma. The premium oolong base beautifully enhances the fresh peach fragrance, "
+            "creating a tea that&rsquo;s vibrant, refreshing, and remarkably balanced without masking the "
+            "tea&rsquo;s natural character.</p>",
+            "<p><strong>Origin:</strong> Taiwanese-style Jinxuan Milk Oolong, China<br>"
+            "<strong>Best for:</strong> Peach milk tea, fruit tea, bubble tea, tea lattes, cold brew, iced tea, "
+            "and caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 3–5g per 150ml</li>"
+            "<li><strong>Water:</strong> 90–95°C (194–203°F)</li>"
+            "<li><strong>Steep:</strong> 3–4 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 3–5 infusions</li>"
+            "</ul>",
+            "<p>Every batch is carefully selected to deliver consistent flavor, exceptional aroma, and premium quality — "
+            "the smooth richness of authentic Jinxuan Oolong combined with the gentle sweetness of peach creates "
+            "a luxurious tea experience that is refreshing, comforting, and unforgettable.</p>",
+            nutrition_table("30–40 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "oolong, peach, peach-tea, milk-tea, bubble-tea, fruit-tea, Oolong, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-PEACH-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "22.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Peach Oolong Tea Loose Leaf | Jinxuan Milk Oolong | Luxe Leaf Tea",
+        "SEO Description": "Premium peach oolong loose leaf — creamy Jinxuan Milk Oolong with naturally sweet peach aroma. Perfect for milk tea, bubble tea, and iced tea. Packed fresh to order.",
+        "Image Asset": "luxe-leaf-oolong-tea-product-2.png",
+    },
 ]
 
 FIELDNAMES = [

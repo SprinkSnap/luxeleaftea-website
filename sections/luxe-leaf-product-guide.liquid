@@ -65,6 +65,11 @@
     assign default_tasting = '<p><strong>Aroma:</strong> Fresh jasmine blossoms with an elegant floral bouquet<br><strong>Palate:</strong> Smooth, lightly sweet, fresh vegetal notes balanced by delicate jasmine<br><strong>Body:</strong> Light to medium-bodied<br><strong>Finish:</strong> Clean, crisp, refreshing, and beautifully lingering</p>'
     assign default_brewing = '<p><strong>Leaf:</strong> 2–3g (1 teaspoon) per 150ml<br><strong>Water:</strong> 80–85°C (175–185°F) — avoid boiling water<br><strong>Steep:</strong> 2–3 minutes<br><strong>Re-steeps:</strong> 2–3 infusions<br><strong>Tip:</strong> Lower temperature preserves the most delicate floral aroma.</p>'
   endif
+  if title_downcase contains 'peach'
+    assign default_origin = '<p><strong>Jinxuan Milk Oolong</strong> — carefully selected Taiwanese-style oolong prized for its naturally creamy texture, buttery smooth finish, and delicate floral aroma.<br><br>The premium oolong base is complemented with a soft, juicy peach fragrance that enhances — never masks — the tea&rsquo;s authentic character.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Fresh, ripe peaches with elegant floral notes<br><strong>Palate:</strong> Smooth creamy oolong with naturally sweet peach flavor<br><strong>Body:</strong> Medium-bodied with a silky texture<br><strong>Finish:</strong> Clean, mellow, floral, and pleasantly lingering</p>'
+    assign default_brewing = '<p><strong>Leaf:</strong> 3–5g per 150ml<br><strong>Water:</strong> 90–95°C (194–203°F)<br><strong>Steep:</strong> 3–4 minutes<br><strong>Re-steeps:</strong> 3–5 infusions<br><strong>Tip:</strong> Excellent hot, iced, or as a peach milk tea and bubble tea base.</p>'
+  endif
 
   if origin == blank
     assign origin_html = default_origin

@@ -46,6 +46,7 @@ Bundled theme assets (brewed cup + dry leaf):
 | Dragon Well Green Tea | `luxe-leaf-green-tea-product-2.png` |
 | Premium Jasmine Green Tea | `luxe-leaf-green-tea-product-2.png` (placeholder until jasmine photos) |
 | Tieguanyin Oolong | `luxe-leaf-oolong-tea-product-2.png` |
+| Premium Peach Oolong Tea | `luxe-leaf-oolong-tea-product-2.png` (placeholder until peach photos) |
 | Aged Yunnan Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
 | Keemun Black Tea | `luxe-leaf-black-tea-product-2.png` |
 | Premium Assam Black Tea | `premium-assam-black-tea-product-2.png` |
@@ -133,6 +134,13 @@ Add one tea-type tag per product so collections auto-fill:
 |---------|--------|------|---------------|
 | Dragon Well Green Tea | `dragon-well-green-tea` | `green-tea`, `Green Tea` | `luxe-leaf-green-tea-product-2.png` |
 | Premium Jasmine Green Tea | `premium-jasmine-green-tea` | `green-tea`, `jasmine`, `jasmine-tea`, `bestseller` | `luxe-leaf-green-tea-product-2.png` |
+
+### Oolong line
+
+| Product | Handle | Tags | Product image |
+|---------|--------|------|---------------|
+| Tieguanyin Oolong | `tieguanyin-oolong` | `oolong`, `Oolong` | `luxe-leaf-oolong-tea-product-2.png` |
+| Premium Peach Oolong Tea | `premium-peach-oolong-tea` | `oolong`, `peach`, `peach-tea`, `milk-tea`, `bubble-tea`, `fruit-tea`, `bestseller` | `luxe-leaf-oolong-tea-product-2.png` (placeholder until peach photos) |
 
 ## 5. Optional product metafields (advanced)
 
