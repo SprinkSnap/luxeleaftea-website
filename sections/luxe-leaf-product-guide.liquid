@@ -60,6 +60,11 @@
     assign default_tasting = '<p><strong>Aroma:</strong> Honey, light florals, soft cocoa<br><strong>Palate:</strong> Mellow, sweet, balanced<br><strong>Finish:</strong> Clean and aromatic — rounds out bolder blend partners</p>'
     assign default_brewing = '<p><strong>Hot cup:</strong> 3g per 150ml · 200–205°F · 3 minutes<br><strong>Blending:</strong> Use 20–40% Fujian with Assam or Yunnan CTC for softer, sweeter milk tea<br><strong>Re-steeps:</strong> 2–3 infusions</p>'
   endif
+  if title_downcase contains 'jasmine'
+    assign default_origin = '<p><strong>Yunnan Maojian green tea</strong> — spring-harvested needle leaves from mist-covered Yunnan mountains, selected for a vibrant, clean cup and smooth finish.<br><br><strong>Guangxi jasmine blossoms</strong> — handpicked at peak bloom and layered with the tea through a traditional multi-round scenting process. No artificial flavors or oils.</p>'
+    assign default_tasting = '<p><strong>Aroma:</strong> Fresh jasmine blossoms with an elegant floral bouquet<br><strong>Palate:</strong> Smooth, lightly sweet, fresh vegetal notes balanced by delicate jasmine<br><strong>Body:</strong> Light to medium-bodied<br><strong>Finish:</strong> Clean, crisp, refreshing, and beautifully lingering</p>'
+    assign default_brewing = '<p><strong>Leaf:</strong> 2–3g (1 teaspoon) per 150ml<br><strong>Water:</strong> 80–85°C (175–185°F) — avoid boiling water<br><strong>Steep:</strong> 2–3 minutes<br><strong>Re-steeps:</strong> 2–3 infusions<br><strong>Tip:</strong> Lower temperature preserves the most delicate floral aroma.</p>'
+  endif
 
   if origin == blank
     assign origin_html = default_origin

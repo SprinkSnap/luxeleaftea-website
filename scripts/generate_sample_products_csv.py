@@ -313,6 +313,66 @@ PRODUCTS = [
         "SEO Description": "Bold malty Assam-style loose leaf black tea — Yunnan CTC and Fujian blend for breakfast, milk tea, chai, and bubble tea. Packed fresh to order.",
         "Image Asset": "premium-assam-black-tea-product-2.png",
     },
+    {
+        "Handle": "premium-jasmine-green-tea",
+        "Title": "Premium Jasmine Green Tea",
+        "Body (HTML)": body(
+            "<p><strong>Naturally scented · Fresh floral aroma · Smooth &amp; refreshing</strong></p>",
+            "<p>Experience authentic Chinese jasmine tea crafted from spring-harvested "
+            "<strong>Yunnan Maojian green tea</strong> and naturally scented with fresh "
+            "<strong>Guangxi jasmine blossoms</strong>. Using a traditional multi-layer scenting process, "
+            "fragrant jasmine flowers are carefully layered with premium green tea leaves over multiple rounds, "
+            "allowing the delicate floral aroma to infuse naturally — without artificial flavors or oils.</p>",
+            "<p>The result is an exceptionally smooth, refreshing loose leaf tea with a clean finish, "
+            "gentle sweetness, and a captivating jasmine fragrance in every cup.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Naturally scented with real Guangxi jasmine blossoms</li>"
+            "<li>Premium Yunnan Maojian green tea harvested in early spring</li>"
+            "<li>Delicate floral aroma with naturally sweet notes</li>"
+            "<li>Smooth, refreshing taste with low bitterness and low astringency</li>"
+            "<li>No artificial flavors, fragrances, or additives</li>"
+            "<li>Perfect for hot tea, iced tea, fruit tea, milk tea, and cold brew</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Fresh jasmine blossoms with an elegant floral bouquet</li>"
+            "<li><strong>Taste:</strong> Smooth, lightly sweet, fresh vegetal notes balanced by delicate jasmine</li>"
+            "<li><strong>Body:</strong> Light to medium-bodied</li>"
+            "<li><strong>Finish:</strong> Clean, crisp, refreshing, and beautifully lingering</li>"
+            "</ul>",
+            "<p><strong>Origin:</strong> Yunnan Maojian green tea + Guangxi jasmine blossoms, China<br>"
+            "<strong>Best for:</strong> Daily sipping, iced jasmine tea, fruit tea, milk tea, gifts, and caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2–3g (1 teaspoon) per 150ml</li>"
+            "<li><strong>Water:</strong> 80–85°C (175–185°F)</li>"
+            "<li><strong>Steep:</strong> 2–3 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 2–3 infusions</li>"
+            "<li><strong>Tip:</strong> Avoid boiling water for the most delicate floral aroma</li>"
+            "</ul>",
+            "<p>Every batch combines carefully selected Yunnan Maojian green tea with naturally fragrant "
+            "Guangxi jasmine blossoms using a traditional scenting method perfected over generations — "
+            "authentic Chinese jasmine tea with remarkable freshness, elegance, and balance.</p>",
+            nutrition_table("25–35 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "green-tea, jasmine, jasmine-tea, Green Tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-JASMINE-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "20.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Jasmine Green Tea Loose Leaf | Naturally Scented | Luxe Leaf Tea",
+        "SEO Description": "Naturally scented jasmine green tea — Yunnan Maojian and Guangxi jasmine blossoms. Smooth floral loose leaf for hot, iced, and milk tea. Packed fresh to order.",
+        "Image Asset": "luxe-leaf-green-tea-product-2.png",
+    },
 ]
 
 FIELDNAMES = [

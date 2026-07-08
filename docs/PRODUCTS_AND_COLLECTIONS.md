@@ -44,6 +44,7 @@ Bundled theme assets (brewed cup + dry leaf):
 | Product | Image file |
 |---------|------------|
 | Dragon Well Green Tea | `luxe-leaf-green-tea-product-2.png` |
+| Premium Jasmine Green Tea | `luxe-leaf-green-tea-product-2.png` (placeholder until jasmine photos) |
 | Tieguanyin Oolong | `luxe-leaf-oolong-tea-product-2.png` |
 | Aged Yunnan Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
 | Keemun Black Tea | `luxe-leaf-black-tea-product-2.png` |
