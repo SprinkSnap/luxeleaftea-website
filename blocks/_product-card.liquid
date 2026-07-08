@@ -10,6 +10,9 @@
 
 {% capture children %}
   {% content_for 'blocks', closest.product: product %}
+  {%- if product != blank and product_view_context == 'cart' or request.page_type == 'cart' -%}
+    {% render 'luxe-leaf-cart-recommendation-atc', product: product %}
+  {%- endif -%}
 {% endcapture %}
 
 {% render 'product-card', children: children, product: product, product_view_context: product_view_context %}

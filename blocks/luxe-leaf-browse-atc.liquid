@@ -3,11 +3,10 @@
 {%- enddoc -%}
 
 <div {{ block.shopify_attributes }}>
-  {%- if request.page_type == 'cart' -%}
-    {% render 'luxe-leaf-cart-recommendation-atc', product: closest.product %}
-  {%- else -%}
+  {%- comment -%} Cart page ATC is injected in blocks/_product-card.liquid (product_view_context: cart) {%- endcomment -%}
+  {%- unless request.page_type == 'cart' -%}
     {% render 'luxe-leaf-browse-atc-inline', product: closest.product %}
-  {%- endif -%}
+  {%- endunless -%}
 </div>
 
 {% schema %}
