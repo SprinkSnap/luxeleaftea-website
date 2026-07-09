@@ -32,10 +32,18 @@
     <div class="luxe-shipping-nudge__inner page-width">
       <div class="luxe-shipping-nudge__copy">
         <p class="luxe-shipping-nudge__text" data-shipping-nudge-text>
-          Add more for free shipping over {{ threshold_money }}
+          {%- if cart_total >= threshold -%}
+            <strong>Free shipping unlocked!</strong> Secure your tea before you go.
+          {%- else -%}
+            Add <strong>{{ remaining | money }}</strong> for free shipping over {{ threshold_money }}
+          {%- endif -%}
         </p>
         <p class="luxe-shipping-nudge__rate" data-shipping-nudge-rate>
-          Standard shipping {{ standard_rate_money }} · Pay {{ estimated_total | money }} total
+          {%- if cart_total >= threshold -%}
+            Pay {{ estimated_total | money }} total · Checkout in seconds
+          {%- else -%}
+            Standard shipping {{ standard_rate_money }} · Pay {{ estimated_total | money }} total
+          {%- endif -%}
         </p>
         <div
           class="luxe-shipping-nudge__progress"
@@ -50,8 +58,8 @@
       </div>
       <div class="luxe-shipping-nudge__actions">
         <button type="button" class="luxe-shipping-nudge__explore button button-secondary" data-shipping-nudge-explore>
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">Keep exploring</span>
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Explore</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">Keep Exploring</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Keep Exploring</span>
         </button>
         <button
           type="button"
@@ -60,8 +68,8 @@
           data-luxe-open-cart
           aria-label="View bag — review items before checkout"
         >
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">View bag</span>
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Bag</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">View Bag</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">View Bag</span>
         </button>
         <button
           type="button"
