@@ -27,42 +27,63 @@ export class ZoomDialog extends Component {
   #highResImagesLoaded = /** @type {Set<string>} */ (new Set());
   #currentIndex = 0;
 
+  /**
+   * Scrollable gallery list inside the dialog (horizontal snap).
+   * @returns {HTMLElement | null}
+   */
+  get #gallery() {
+    return this.refs.dialog?.querySelector('.dialog-zoomed-gallery') ?? null;
+  }
+
   connectedCallback() {
     super.connectedCallback();
-    this.refs.dialog.addEventListener('scroll', this.handleScroll);
+    const gallery = this.#gallery;
+    gallery?.addEventListener('scroll', this.handleScroll, { passive: true });
+    this.refs.dialog.addEventListener('scroll', this.handleScroll, { passive: true });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    const gallery = this.#gallery;
+    gallery?.removeEventListener('scroll', this.handleScroll);
     this.refs.dialog.removeEventListener('scroll', this.handleScroll);
   }
 
   /**
    * Opens the zoom dialog.
    *
-   * @param {number} index - The index of the media to zoom.
-   * @param {PointerEvent} event - The pointer event.
+   * @param {number|string} index - The index of the media to zoom.
+   * @param {PointerEvent} [event] - The pointer event.
    */
   async open(index, event) {
-    event.preventDefault();
-    this.#currentIndex = index;
+    event?.preventDefault?.();
+    const targetIndex = Number(index) || 0;
+    this.#currentIndex = targetIndex;
 
     const { dialog, media, thumbnails } = this.refs;
-    const targetImage = media[index];
-    const targetThumbnail = thumbnails.children[index];
+    const targetImage = media[targetIndex];
+    const targetThumbnail = thumbnails?.children?.[targetIndex];
 
     const open = () => {
       dialog.showModal();
 
-      for (const target of [targetThumbnail, targetImage]) {
-        target?.scrollIntoView({ behavior: 'instant' });
-      }
+      requestAnimationFrame(() => {
+        targetImage?.scrollIntoView({ behavior: 'instant', inline: 'center', block: 'nearest' });
+        if (targetThumbnail instanceof HTMLElement) {
+          targetThumbnail.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' });
+        }
+      });
     };
 
     /** @type {HTMLElement | null} */
-    const sourceImage = event.target instanceof Element ? event.target.closest('li,slideshow-slide') : null;
+    const sourceImage =
+      event?.target instanceof Element ? event.target.closest('li,slideshow-slide') : null;
 
-    if (!supportsViewTransitions() || isLowPowerDevice() || !sourceImage || !targetImage) return open();
+    if (!supportsViewTransitions() || isLowPowerDevice() || !sourceImage || !targetImage) {
+      open();
+      this.selectThumbnail(targetIndex, { behavior: 'instant' });
+      return;
+    }
 
     const itemTransitionName = `gallery-item-open`;
     sourceImage.style.setProperty('view-transition-name', itemTransitionName);
@@ -81,7 +102,7 @@ export class ZoomDialog extends Component {
     document.documentElement.style.removeProperty('--gallery-media-focal-point');
     targetImage.style.removeProperty('view-transition-name');
 
-    this.selectThumbnail(index, { behavior: 'instant' });
+    this.selectThumbnail(targetIndex, { behavior: 'instant' });
   }
 
   /**
@@ -115,15 +136,19 @@ export class ZoomDialog extends Component {
   }
 
   /**
-   * Handles the scroll event of the dialog, which is used to update the active thumbnail when the corresponding image is visible in the main view.
+   * Handles the scroll event of the gallery, which is used to update the active thumbnail when the corresponding image is visible in the main view.
    * @param {Event} event - The scroll event.
    */
   handleScroll = debounce(async () => {
     const { media, thumbnails } = this.refs;
+    if (!media?.length) return;
 
     const mostVisibleElement = await getMostVisibleElement(media);
     const activeIndex = media.indexOf(mostVisibleElement);
-    const targetThumbnail = thumbnails.children[activeIndex];
+    if (activeIndex < 0) return;
+
+    this.#currentIndex = activeIndex;
+    const targetThumbnail = thumbnails?.children?.[activeIndex];
 
     if (!targetThumbnail || !(targetThumbnail instanceof HTMLElement)) return;
 
@@ -247,7 +272,7 @@ export class ZoomDialog extends Component {
    */
   async handleThumbnailClick(index) {
     const behavior = prefersReducedMotion() ? 'instant' : 'smooth';
-    this.selectThumbnail(index, { behavior });
+    this.selectThumbnail(Number(index), { behavior });
   }
 
   /**
@@ -256,9 +281,10 @@ export class ZoomDialog extends Component {
    */
   async handleThumbnailPointerEnter(index) {
     const { media } = this.refs;
-    if (!media[index]) return;
+    const i = Number(index);
+    if (!media[i]) return;
 
-    this.loadHighResolutionImage(media[index]);
+    this.loadHighResolutionImage(media[i]);
   }
 
   /**
@@ -269,17 +295,18 @@ export class ZoomDialog extends Component {
    */
   async selectThumbnail(index, options = { behavior: 'smooth' }) {
     const { media, thumbnails } = this.refs;
-    if (!media?.[index]) return;
-    if (isNaN(index) || index < 0 || index >= media.length) return;
+    const targetIndex = Number(index);
+    if (!media?.[targetIndex]) return;
+    if (isNaN(targetIndex) || targetIndex < 0 || targetIndex >= media.length) return;
 
-    this.#currentIndex = index;
+    this.#currentIndex = targetIndex;
 
     if (thumbnails?.children?.length) {
-      const targetThumbnail = thumbnails.children[index];
+      const targetThumbnail = thumbnails.children[targetIndex];
 
       if (targetThumbnail instanceof HTMLElement) {
         Array.from(thumbnails.querySelectorAll('button')).forEach((button, i) => {
-          button.setAttribute('aria-selected', `${i === index}`);
+          button.setAttribute('aria-selected', `${i === targetIndex}`);
         });
 
         scrollIntoView(targetThumbnail, {
@@ -291,16 +318,18 @@ export class ZoomDialog extends Component {
       }
     }
 
-    const targetImage = media[index];
+    const targetImage = media[targetIndex];
 
     if (targetImage) {
       targetImage.scrollIntoView({
         behavior: options.behavior,
+        inline: 'center',
+        block: 'nearest',
       });
 
       this.loadHighResolutionImage(targetImage);
     }
-    this.dispatchEvent(new ZoomMediaSelectedEvent(index));
+    this.dispatchEvent(new ZoomMediaSelectedEvent(targetIndex));
   }
 }
 
