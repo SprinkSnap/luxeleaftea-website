@@ -2183,6 +2183,72 @@ body.luxe-leaf-theme .content-for-layout {
   touch-action: pan-x pinch-zoom;
 }
 
+/* PDP gallery: thumbnails top-left, large image right, expand affordance */
+@media screen and (min-width: 750px) {
+  .product-information__media .media-gallery--carousel slideshow-component:has(
+      slideshow-controls[thumbnails][pagination-position='left']
+    ) {
+    align-items: start;
+    gap: 0.85rem;
+    grid-template:
+      'controls container' auto
+      'controls arrows' min-content
+      / auto minmax(0, 1fr);
+  }
+
+  .product-information__media slideshow-controls[thumbnails][pagination-position='left'] {
+    align-self: start;
+    max-height: min(70vh, 36rem);
+  }
+
+  .product-information__media
+    slideshow-controls[thumbnails][pagination-position='left']
+    .slideshow-controls__thumbnails {
+    gap: 0.55rem;
+  }
+
+  .product-information__media
+    slideshow-controls[thumbnails][pagination-position='left']
+    .slideshow-controls__thumbnail {
+    border: 1px solid rgb(27 67 50 / 0.12);
+    border-radius: 0.35rem;
+    overflow: hidden;
+  }
+
+  .product-information__media
+    slideshow-controls[thumbnails][pagination-position='left']
+    .slideshow-controls__thumbnail[aria-selected='true'] {
+    border-color: #1b4332;
+    outline: 2px solid #c9a227;
+    outline-offset: 1px;
+  }
+
+  .product-information__media slideshow-slide {
+    cursor: zoom-in;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .product-information__media .media-gallery__mobile-controls[thumbnails] {
+    margin-block-start: 0.65rem;
+  }
+
+  .product-information__media
+    .media-gallery__mobile-controls[thumbnails]
+    .slideshow-controls__thumbnails {
+    justify-content: flex-start;
+    gap: 0.45rem;
+  }
+
+  .product-information__media slideshow-slide {
+    cursor: zoom-in;
+  }
+}
+
+.product-information__media .product-media-container__zoom-button {
+  cursor: zoom-in;
+}
+
 /* PDP: images left, sticky checkout right, description full-width below (no overlap) */
 @media screen and (min-width: 750px) {
   .product-information__grid.product-information--media-left {
