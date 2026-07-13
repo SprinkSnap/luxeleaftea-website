@@ -458,36 +458,45 @@
           on:keydown="/handleKeyDown"
           scroll-lock
         >
-          <button
-            type="button"
-            class="button button-unstyled close-button dialog-zoomed-gallery__close-button"
-            aria-label="{{ 'actions.close' | t }}"
-            on:click="/close"
-          >
-            <span class="visually-hidden">{{ 'actions.close' | t }}</span>
-            {{ 'icon-close.svg' | inline_asset_content }}
-          </button>
+          <div class="luxe-zoom-controls" role="toolbar" aria-label="Image controls">
+            {% if sorted_media.size > 1 %}
+              <button
+                type="button"
+                class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--prev"
+                aria-label="{{ 'accessibility.slideshow_previous' | t | default: 'Previous image' }}"
+                on:click="/navigatePrevious"
+              >
+                <span class="visually-hidden">{{ 'accessibility.slideshow_previous' | t | default: 'Previous image' }}</span>
+                {{ 'icon-chevron-left.svg' | inline_asset_content }}
+              </button>
+            {% else %}
+              <span class="luxe-zoom-controls__spacer" aria-hidden="true"></span>
+            {% endif %}
 
-          {% if sorted_media.size > 1 %}
             <button
               type="button"
-              class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--prev"
-              aria-label="{{ 'accessibility.slideshow_previous' | t | default: 'Previous image' }}"
-              on:click="/navigatePrevious"
+              class="button button-unstyled dialog-zoomed-gallery__close-button"
+              aria-label="{{ 'actions.close' | t }}"
+              on:click="/close"
             >
-              <span class="visually-hidden">{{ 'accessibility.slideshow_previous' | t | default: 'Previous image' }}</span>
-              {{ 'icon-chevron-left.svg' | inline_asset_content }}
+              <span class="visually-hidden">{{ 'actions.close' | t }}</span>
+              {{ 'icon-close.svg' | inline_asset_content }}
             </button>
-            <button
-              type="button"
-              class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--next"
-              aria-label="{{ 'accessibility.slideshow_next' | t | default: 'Next image' }}"
-              on:click="/navigateNext"
-            >
-              <span class="visually-hidden">{{ 'accessibility.slideshow_next' | t | default: 'Next image' }}</span>
-              {{ 'icon-chevron-right.svg' | inline_asset_content }}
-            </button>
-          {% endif %}
+
+            {% if sorted_media.size > 1 %}
+              <button
+                type="button"
+                class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--next"
+                aria-label="{{ 'accessibility.slideshow_next' | t | default: 'Next image' }}"
+                on:click="/navigateNext"
+              >
+                <span class="visually-hidden">{{ 'accessibility.slideshow_next' | t | default: 'Next image' }}</span>
+                {{ 'icon-chevron-right.svg' | inline_asset_content }}
+              </button>
+            {% else %}
+              <span class="luxe-zoom-controls__spacer" aria-hidden="true"></span>
+            {% endif %}
+          </div>
 
           <div class="dialog-thumbnails-list-container">
             <scroll-hint
@@ -841,88 +850,24 @@
     }
   }
 
-  /* Bottom bar: ← X → — X between arrows and larger */
-  button.close-button.dialog-zoomed-gallery__close-button {
+  /* Bottom toolbar handles ← X → layout in global CSS (.luxe-zoom-controls) */
+  .luxe-zoom-controls {
     position: fixed;
-    top: auto;
-    bottom: max(1.15rem, env(safe-area-inset-bottom, 0px));
     left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: 4.25rem;
-    height: 4.25rem;
-    color: #1b4332;
-    mix-blend-mode: normal;
-    opacity: 1;
-    z-index: calc(var(--layer-overlay) + 3);
-    background: rgb(255 255 255 / 0.92);
-    border: 1px solid rgb(27 67 50 / 0.15);
-    border-radius: 999px;
-    box-shadow: 0 4px 18px rgb(27 67 50 / 0.14);
-  }
-
-  button.close-button.dialog-zoomed-gallery__close-button:hover {
-    background: #fff;
-    color: #1b4332;
-    opacity: 1;
-  }
-
-  button.close-button.dialog-zoomed-gallery__close-button svg {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-
-  button.dialog-zoomed-gallery__nav {
-    position: fixed;
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px));
     top: auto;
-    bottom: max(1.4rem, calc(env(safe-area-inset-bottom, 0px) + 0.25rem));
-    transform: none;
-    z-index: calc(var(--layer-overlay) + 2);
-    width: 3.5rem;
-    height: 3.5rem;
-    display: inline-flex;
+    transform: translateX(-50%);
+    z-index: calc(var(--layer-overlay) + 3);
+    display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-    background: rgb(255 255 255 / 0.92);
-    border: 1px solid rgb(27 67 50 / 0.15);
-    color: #1b4332;
-    box-shadow: 0 4px 18px rgb(27 67 50 / 0.14);
-    cursor: pointer;
+    gap: 0.85rem;
   }
 
-  button.dialog-zoomed-gallery__nav:hover {
-    background: #fff;
-  }
-
-  button.dialog-zoomed-gallery__nav svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .dialog-zoomed-gallery__nav--prev {
-    left: calc(50% - 6.5rem);
-    right: auto;
-  }
-
-  .dialog-zoomed-gallery__nav--next {
-    left: calc(50% + 3rem);
-    right: auto;
-  }
-
-  @media screen and (min-width: 750px) {
-    button.dialog-zoomed-gallery__nav {
-      width: 3.5rem;
-      height: 3.5rem;
-    }
-
-    .dialog-zoomed-gallery__nav--prev {
-      left: calc(50% - 6.5rem);
-    }
-
-    .dialog-zoomed-gallery__nav--next {
-      left: calc(50% + 3rem);
-    }
+  .dialog-zoomed-gallery__close-button,
+  .dialog-zoomed-gallery__nav {
+    position: static;
+    inset: auto;
+    transform: none;
   }
 
   /* Mobile thumbnails styling */
@@ -934,29 +879,6 @@
     .media-gallery__mobile-controls[thumbnails] .slideshow-controls__thumbnail {
       width: var(--thumbnail-width);
       height: auto;
-    }
-
-    button.close-button.dialog-zoomed-gallery__close-button {
-      width: 3.75rem;
-      height: 3.75rem;
-    }
-
-    button.close-button.dialog-zoomed-gallery__close-button svg {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-
-    button.dialog-zoomed-gallery__nav {
-      width: 3.1rem;
-      height: 3.1rem;
-    }
-
-    .dialog-zoomed-gallery__nav--prev {
-      left: calc(50% - 5.75rem);
-    }
-
-    .dialog-zoomed-gallery__nav--next {
-      left: calc(50% + 2.65rem);
     }
   }
 
