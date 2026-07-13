@@ -2,28 +2,41 @@
 
 {% liquid
   assign block_settings = block.settings
+  assign use_brand_logo = false
+  if settings.brand_navigation != false
+    assign use_brand_logo = true
+  endif
+
   assign image = settings.logo
 
   if block_settings.inverse and settings.logo_inverse
     assign image = settings.logo_inverse
   endif
+
+  if use_brand_logo
+    assign brand_logo_height = block_settings.pixel_height | default: 48
+    assign brand_logo_height_mobile = block_settings.pixel_height_mobile | default: brand_logo_height
+    assign brand_logo_width = brand_logo_height | times: 4.52 | round
+  endif
 %}
 
-{%- if image -%}
-  {% capture logo_image %}
-    {{-
-      image
-      | image_url: width: 3840
-      | image_tag:
-        width: image.width,
-        widths: '240, 352, 832, 1200, 1600, 1920, 2560, 3840',
-        height: image.height,
-        class: 'logo-block__image',
-        alt: shop.name,
-        sizes: '(min-width: 750px) calc(var(--logo-width)), 100vw'
-    -}}
-  {% endcapture %}
-{%- endif -%}
+{%- unless use_brand_logo -%}
+  {%- if image -%}
+    {% capture logo_image %}
+      {{-
+        image
+        | image_url: width: 3840
+        | image_tag:
+          width: image.width,
+          widths: '240, 352, 832, 1200, 1600, 1920, 2560, 3840',
+          height: image.height,
+          class: 'logo-block__image',
+          alt: shop.name,
+          sizes: '(min-width: 750px) calc(var(--logo-width)), 100vw'
+      -}}
+    {% endcapture %}
+  {%- endif -%}
+{%- endunless -%}
 
 <div
   class="
@@ -34,7 +47,10 @@
     {% if block_settings.unit == 'percent' %}
       --logo-width: {{ block_settings.percent_width }}%;
     {% else %}
-      {% if image %}
+      {% if use_brand_logo %}
+        --logo-width: {{ brand_logo_width }}px;
+        --logo-height: {{ brand_logo_height }}px;
+      {% elsif image %}
         --logo-width: {{ image.width | times: 1.00 | divided_by: image.height | times: block_settings.pixel_height }}px;
       {% else %}
         --logo-width: {{ shop.name.size | times: 0.65 }}em;
@@ -59,7 +75,16 @@
   "
   {{ block.shopify_attributes }}
 >
-  {% if logo_image %}
+  {% if use_brand_logo %}
+    <div class="logo-block__image-wrapper">
+      {% render 'luxe-leaf-tea-logo',
+        class: 'logo-block__image',
+        alt: shop.name,
+        logo_height: brand_logo_height,
+        logo_height_mobile: brand_logo_height_mobile
+      %}
+    </div>
+  {% elsif logo_image %}
     <div class="logo-block__image-wrapper">
       {{ logo_image }}
     </div>

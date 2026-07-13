@@ -1,0 +1,687 @@
+#!/usr/bin/env python3
+"""Generate docs/SAMPLE_PRODUCTS_IMPORT.csv with full product descriptions."""
+
+import csv
+from pathlib import Path
+
+NUTRITION_FOOTER = (
+    '<p><em>Per 8 fl oz (240 ml) prepared tea — 3g loose leaf, no milk or sweetener. '
+    'Values are approximate. Caffeine varies with steep time and leaf amount.</em></p>'
+)
+
+
+def nutrition_table(caffeine: str) -> str:
+    rows = [
+        ("Calories", "0"),
+        ("Total Fat", "0 g"),
+        ("Sodium", "0 mg"),
+        ("Total Carbohydrate", "0 g"),
+        ("Protein", "0 g"),
+        ("Caffeine", caffeine),
+    ]
+    body = "".join(f"<tr><td>{label}</td><td>{value}</td></tr>" for label, value in rows)
+    return f"<h3>Nutrition facts</h3><table><tbody>{body}</tbody></table>{NUTRITION_FOOTER}"
+
+
+def body(*parts: str) -> str:
+    return "".join(parts)
+
+
+PRODUCTS = [
+    {
+        "Handle": "dragon-well-green-tea",
+        "Title": "Dragon Well Green Tea",
+        "Body (HTML)": body(
+            "<p>Bright, sweet premium loose leaf green tea with a classic chestnut aroma and clean finish. "
+            "Hand-selected whole leaves from Zhejiang — perfect for daily ritual.</p>",
+            "<p><strong>Origin:</strong> Zhejiang Province, China<br>"
+            "<strong>Best for:</strong> Morning and afternoon sipping</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 3g per 150ml water (about 1 tsp)</li>"
+            "<li><strong>Water:</strong> 175–185°F (80–85°C)</li>"
+            "<li><strong>Steep:</strong> 1–2 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 3–4 infusions — add 15–30 seconds each time</li>"
+            "</ul>",
+            nutrition_table("25–35 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "green-tea, Green Tea",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-GREEN-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "18.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Dragon Well Green Tea | Premium Loose Leaf Tea | Luxe Leaf Tea",
+        "SEO Description": "Shop Dragon Well premium loose leaf green tea — bright sweet whole leaves packed fresh to order.",
+        "Image Asset": "luxe-leaf-green-tea-product-2.png",
+    },
+    {
+        "Handle": "tieguanyin-oolong",
+        "Title": "Tieguanyin Oolong",
+        "Body (HTML)": body(
+            "<p>Floral, creamy premium loose leaf oolong with orchid notes and a soft, layered cup. "
+            "Rolled leaves that unfurl beautifully across multiple steeps.</p>",
+            "<p><strong>Origin:</strong> Fujian Province, China<br>"
+            "<strong>Best for:</strong> Slow sipping and re-steeping</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 4g per 150ml water</li>"
+            "<li><strong>Water:</strong> 195–205°F (90–96°C)</li>"
+            "<li><strong>Steep:</strong> 2–3 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 4–6 infusions — shorten first re-steep slightly</li>"
+            "</ul>",
+            nutrition_table("30–40 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "oolong, Oolong",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-OOLONG-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "22.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Tieguanyin Oolong | Premium Loose Leaf Tea | Luxe Leaf Tea",
+        "SEO Description": "Shop Tieguanyin premium loose leaf oolong — floral layered whole leaves packed fresh to order.",
+        "Image Asset": "luxe-leaf-oolong-tea-product-2.png",
+    },
+    {
+        "Handle": "aged-yunnan-puerh",
+        "Title": "Aged Yunnan Pu-erh",
+        "Body (HTML)": body(
+            "<p>Deep, smooth premium loose leaf pu-erh with earthy cocoa notes and a naturally sweet finish. "
+            "Selected for richness across many infusions.</p>",
+            "<p><strong>Origin:</strong> Yunnan Province, China<br>"
+            "<strong>Best for:</strong> Mindful breaks and daily ritual</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 4–5g per 150ml water</li>"
+            "<li><strong>Water:</strong> 205–212°F (96–100°C)</li>"
+            "<li><strong>Rinse:</strong> 20–30 seconds, discard water</li>"
+            "<li><strong>Steep:</strong> 2–3 minutes after rinse</li>"
+            "<li><strong>Re-steeps:</strong> 6–8 infusions</li>"
+            "</ul>",
+            nutrition_table("30–45 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "pu-erh, Pu-erh",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-PUERH-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "24.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Aged Yunnan Pu-erh | Premium Loose Leaf Tea | Luxe Leaf Tea",
+        "SEO Description": "Shop aged Yunnan premium loose leaf pu-erh — deep smooth tea ideal for re-steeping.",
+        "Image Asset": "luxe-leaf-puerh-tea-product-2.png",
+    },
+    {
+        "Handle": "keemun-black-tea",
+        "Title": "Keemun Black Tea",
+        "Body (HTML)": body(
+            "<p>Rich, malty premium loose leaf black tea with cocoa depth and a polished, copper-bright liquor. "
+            "Full-bodied and satisfying.</p>",
+            "<p><strong>Origin:</strong> Anhui Province, China<br>"
+            "<strong>Best for:</strong> Morning ritual</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 3g per 150ml water</li>"
+            "<li><strong>Water:</strong> 200–212°F (93–100°C)</li>"
+            "<li><strong>Steep:</strong> 3–4 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 2–3 infusions</li>"
+            "</ul>",
+            nutrition_table("40–70 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "black-tea, Black Tea",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-BLACK-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "16.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Keemun Black Tea | Premium Loose Leaf Tea | Luxe Leaf Tea",
+        "SEO Description": "Shop Keemun premium loose leaf black tea — rich malty whole leaves packed fresh to order.",
+        "Image Asset": "luxe-leaf-black-tea-product-2.png",
+    },
+    {
+        "Handle": "yunnan-ctc-black-tea",
+        "Title": "Yunnan CTC Black Tea",
+        "Body (HTML)": body(
+            "<p>Bold, earthy Yunnan CTC black tea — crush-tear-curl loose leaf that brews fast and strong. "
+            "Deep reddish liquor with a malty, slightly peppery finish. Built for milk tea, masala chai, and bubble tea bases.</p>",
+            "<ul>"
+            "<li><strong>Fast and bold</strong> — CTC leaf infuses quickly for café-speed batches</li>"
+            "<li><strong>Earthy and malty</strong> — Rich body that holds up to milk and sweetener</li>"
+            "<li><strong>Blend-friendly</strong> — Pairs with Assam, Fujian, and house blends</li>"
+            "</ul>",
+            "<p><strong>Origin:</strong> Yunnan Province, China — high-elevation gardens<br>"
+            "<strong>Best for:</strong> Milk tea, chai, bubble tea, strong breakfast cups</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Hot cup:</strong> 3g per 150ml · 205–212°F · 3–4 minutes</li>"
+            "<li><strong>Milk tea / chai batch:</strong> 50g per 2L · just off boil · steep 10–15 minutes · strain · add milk and sweetener</li>"
+            "<li><strong>Tip:</strong> CTC brews faster than whole leaf — taste at 8 minutes for bubble tea batches</li>"
+            "</ul>",
+            nutrition_table("50–80 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Black Tea",
+        "Tags": "black-tea, bubble-tea, ctc, yunnan, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "100g",
+        "Variant SKU": "LL-YUN-CTC-100",
+        "Variant Grams": "100",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "19.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Yunnan CTC Black Tea for Milk Tea & Chai | Luxe Leaf Tea",
+        "SEO Description": "Bold earthy Yunnan CTC loose leaf — fast-brewing base for milk tea chai and bubble tea. Packed fresh to order.",
+        "Image Asset": "yunnan-ctc-black-tea-product-2.png",
+    },
+    {
+        "Handle": "fujian-black-tea",
+        "Title": "Fujian Black Tea",
+        "Body (HTML)": body(
+            "<p>Smooth Fujian black tea with natural honey sweetness, soft cocoa, and light florals. "
+            "Handpicked loose leaf — mellow enough to sip straight, refined enough to lift premium blends.</p>",
+            "<ul>"
+            "<li><strong>Naturally sweet</strong> — Honey, cocoa, and floral notes without harshness</li>"
+            "<li><strong>Artisan origin</strong> — Misty Fujian highlands, carefully oxidized whole leaf</li>"
+            "<li><strong>Blend-ready</strong> — Softens bold teas; shines in fruit and milk tea builds</li>"
+            "</ul>",
+            "<p><strong>Origin:</strong> Fujian Province, China<br>"
+            "<strong>Best for:</strong> Straight sipping, fruit teas, milk tea blends, custom house mixes</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Hot cup:</strong> 3g per 150ml · 200–205°F · 3 minutes</li>"
+            "<li><strong>Blending:</strong> Use 20–40% Fujian with Assam or Yunnan CTC for softer, sweeter milk tea</li>"
+            "<li><strong>Re-steeps:</strong> 2–3 infusions</li>"
+            "</ul>",
+            nutrition_table("35–50 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Black Tea",
+        "Tags": "black-tea, fujian, blend-friendly",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-FJ-BLACK-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "18.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Fujian Black Tea — Smooth Honey Loose Leaf | Luxe Leaf Tea",
+        "SEO Description": "Premium Fujian black tea — honey-sweet floral loose leaf for sipping or blending. Smooth milk tea base. Fresh packed.",
+        "Image Asset": "fujian-black-tea-product-2.png",
+    },
+    {
+        "Handle": "premium-assam-black-tea",
+        "Title": "Premium Assam Black Tea",
+        "Body (HTML)": body(
+            "<p><strong>Bold. Malty. Full-bodied.</strong> Wake up to the rich, satisfying taste of our Premium Assam Black Tea — "
+            "expertly blended from high-quality Yunnan CTC and smooth Fujian black tea. Deep amber cup, bold malty aroma, "
+            "rich body, and an exceptionally smooth finish that lingers after every sip.</p>",
+            "<p>Classic breakfast tea, creamy milk tea, masala chai, or refreshing iced tea — this versatile loose leaf blend "
+            "delivers outstanding flavor, consistency, and quality in every brew.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Bold, full-bodied black tea with a naturally rich malty flavor</li>"
+            "<li>Smooth, mellow finish with a pleasant long-lasting aftertaste</li>"
+            "<li>Expert blend of premium Yunnan CTC and Fujian black teas</li>"
+            "<li>Brews quickly while maintaining exceptional depth and aroma</li>"
+            "<li>Delicious hot or iced — perfect for milk tea, bubble tea, and chai</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Taste:</strong> Bold, rich, malty, smooth</li>"
+            "<li><strong>Aroma:</strong> Warm, earthy, lightly sweet</li>"
+            "<li><strong>Body:</strong> Full-bodied</li>"
+            "<li><strong>Finish:</strong> Clean, mellow, lingering</li>"
+            "</ul>",
+            "<p><strong>Origin:</strong> Yunnan CTC + Fujian Province, China — premium Chinese black tea blend<br>"
+            "<strong>Best for:</strong> Breakfast tea, milk tea, bubble tea, masala chai, iced tea, caf&eacute; use</p>",
+            "<h3>Premium tea origins</h3>"
+            "<p><strong>Yunnan CTC</strong> — Bold strength, rich color, and deep body from renowned Yunnan mountains. "
+            "Fast infusion makes it an excellent foundation for milk tea and chai.</p>"
+            "<p><strong>Fujian black tea</strong> — Floral aroma, gentle honey sweetness, and remarkable smoothness "
+            "that balances the strength of the Yunnan tea.</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2–3g per 150ml (about 1 teaspoon)</li>"
+            "<li><strong>Water:</strong> 203–212°F (95–100°C)</li>"
+            "<li><strong>Steep:</strong> 3–5 minutes — adjust to taste</li>"
+            "<li><strong>Milk tea / chai:</strong> 50g per 2L · just off boil · 10–15 minutes · strain · add milk and sweetener</li>"
+            "<li><strong>Re-steeps:</strong> 2–3 infusions</li>"
+            "</ul>",
+            "<p>Every batch is carefully selected for consistent flavor, vibrant aroma, and premium quality — "
+            "the bold character and dependable performance tea lovers expect.</p>",
+            nutrition_table("45–70 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Black Tea",
+        "Tags": "black-tea, assam, blend, bubble-tea, milk-tea, breakfast, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "100g",
+        "Variant SKU": "LL-ASSAM-100",
+        "Variant Grams": "100",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "22.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Assam Black Tea Loose Leaf | Malty Breakfast Blend | Luxe Leaf Tea",
+        "SEO Description": "Bold malty Assam-style loose leaf black tea — Yunnan CTC and Fujian blend for breakfast, milk tea, chai, and bubble tea. Packed fresh to order.",
+        "Image Asset": "premium-assam-black-tea-product-2.png",
+    },
+    {
+        "Handle": "premium-jasmine-green-tea",
+        "Title": "Premium Jasmine Green Tea",
+        "Body (HTML)": body(
+            "<p><strong>Naturally scented · Fresh floral aroma · Smooth &amp; refreshing</strong></p>",
+            "<p>Experience authentic Chinese jasmine tea crafted from spring-harvested "
+            "<strong>Yunnan Maojian green tea</strong> and naturally scented with fresh "
+            "<strong>Guangxi jasmine blossoms</strong>. Using a traditional multi-layer scenting process, "
+            "fragrant jasmine flowers are carefully layered with premium green tea leaves over multiple rounds, "
+            "allowing the delicate floral aroma to infuse naturally — without artificial flavors or oils.</p>",
+            "<p>The result is an exceptionally smooth, refreshing loose leaf tea with a clean finish, "
+            "gentle sweetness, and a captivating jasmine fragrance in every cup.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Naturally scented with real Guangxi jasmine blossoms</li>"
+            "<li>Premium Yunnan Maojian green tea harvested in early spring</li>"
+            "<li>Delicate floral aroma with naturally sweet notes</li>"
+            "<li>Smooth, refreshing taste with low bitterness and low astringency</li>"
+            "<li>No artificial flavors, fragrances, or additives</li>"
+            "<li>Perfect for hot tea, iced tea, fruit tea, milk tea, and cold brew</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Fresh jasmine blossoms with an elegant floral bouquet</li>"
+            "<li><strong>Taste:</strong> Smooth, lightly sweet, fresh vegetal notes balanced by delicate jasmine</li>"
+            "<li><strong>Body:</strong> Light to medium-bodied</li>"
+            "<li><strong>Finish:</strong> Clean, crisp, refreshing, and beautifully lingering</li>"
+            "</ul>",
+            "<p><strong>Origin:</strong> Yunnan Maojian green tea + Guangxi jasmine blossoms, China<br>"
+            "<strong>Best for:</strong> Daily sipping, iced jasmine tea, fruit tea, milk tea, gifts, and caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2–3g (1 teaspoon) per 150ml</li>"
+            "<li><strong>Water:</strong> 80–85°C (175–185°F)</li>"
+            "<li><strong>Steep:</strong> 2–3 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 2–3 infusions</li>"
+            "<li><strong>Tip:</strong> Avoid boiling water for the most delicate floral aroma</li>"
+            "</ul>",
+            "<p>Every batch combines carefully selected Yunnan Maojian green tea with naturally fragrant "
+            "Guangxi jasmine blossoms using a traditional scenting method perfected over generations — "
+            "authentic Chinese jasmine tea with remarkable freshness, elegance, and balance.</p>",
+            nutrition_table("25–35 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "green-tea, jasmine, jasmine-tea, Green Tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-JASMINE-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "20.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Jasmine Green Tea Loose Leaf | Naturally Scented | Luxe Leaf Tea",
+        "SEO Description": "Naturally scented jasmine green tea — Yunnan Maojian and Guangxi jasmine blossoms. Smooth floral loose leaf for hot, iced, and milk tea. Packed fresh to order.",
+        "Image Asset": "luxe-leaf-green-tea-product-2.png",
+    },
+    {
+        "Handle": "premium-peach-oolong-tea",
+        "Title": "Premium Peach Oolong Tea",
+        "Body (HTML)": body(
+            "<p><strong>Naturally sweet · Creamy Jinxuan oolong · Delicate peach aroma</strong></p>",
+            "<p>Discover the perfect harmony of premium <strong>Jinxuan Milk Oolong</strong> and the naturally sweet "
+            "fragrance of ripe peaches. Our Premium Peach Oolong Tea is carefully crafted to deliver a smooth, creamy "
+            "cup with a refreshing peach aroma that is elegant, balanced, and never overpowering.</p>",
+            "<p>Unlike heavily flavored fruit teas, this blend lets the rich character of authentic Jinxuan Oolong "
+            "shine through while complementing it with a soft, juicy peach fragrance. Every sip is silky, refreshing, "
+            "and beautifully aromatic.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Premium Jinxuan (Milk Oolong) loose leaf tea</li>"
+            "<li>Naturally sweet peach aroma that&rsquo;s smooth and never artificial</li>"
+            "<li>Creamy, silky mouthfeel with a mellow floral finish</li>"
+            "<li>Perfect balance between fruity sweetness and authentic oolong flavor</li>"
+            "<li>Low bitterness and exceptionally smooth</li>"
+            "<li>Delicious served hot, iced, or as bubble tea</li>"
+            "<li>Excellent for milk tea, fruit tea, tea lattes, and specialty beverages</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Fresh, ripe peaches with elegant floral notes</li>"
+            "<li><strong>Taste:</strong> Smooth creamy oolong with naturally sweet peach flavor</li>"
+            "<li><strong>Body:</strong> Medium-bodied with a silky texture</li>"
+            "<li><strong>Finish:</strong> Clean, mellow, floral, and pleasantly lingering</li>"
+            "</ul>",
+            "<h3>Crafted with premium Jinxuan Oolong</h3>"
+            "<p>Our tea begins with carefully selected <strong>Jinxuan Oolong</strong>, often called "
+            "<strong>Milk Oolong</strong>, prized for its naturally creamy texture, buttery smooth finish, "
+            "and delicate floral aroma. The premium oolong base beautifully enhances the fresh peach fragrance, "
+            "creating a tea that&rsquo;s vibrant, refreshing, and remarkably balanced without masking the "
+            "tea&rsquo;s natural character.</p>",
+            "<p><strong>Origin:</strong> Taiwanese-style Jinxuan Milk Oolong, China<br>"
+            "<strong>Best for:</strong> Peach milk tea, fruit tea, bubble tea, tea lattes, cold brew, iced tea, "
+            "and caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 3–5g per 150ml</li>"
+            "<li><strong>Water:</strong> 90–95°C (194–203°F)</li>"
+            "<li><strong>Steep:</strong> 3–4 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 3–5 infusions</li>"
+            "</ul>",
+            "<p>Every batch is carefully selected to deliver consistent flavor, exceptional aroma, and premium quality — "
+            "the smooth richness of authentic Jinxuan Oolong combined with the gentle sweetness of peach creates "
+            "a luxurious tea experience that is refreshing, comforting, and unforgettable.</p>",
+            nutrition_table("30–40 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "oolong, peach, peach-tea, milk-tea, bubble-tea, fruit-tea, Oolong, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-PEACH-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "22.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Peach Oolong Tea Loose Leaf | Jinxuan Milk Oolong | Luxe Leaf Tea",
+        "SEO Description": "Premium peach oolong loose leaf — creamy Jinxuan Milk Oolong with naturally sweet peach aroma. Perfect for milk tea, bubble tea, and iced tea. Packed fresh to order.",
+        "Image Asset": "luxe-leaf-oolong-tea-product-2.png",
+    },
+    {
+        "Handle": "premium-jasmine-falling-snow-tea",
+        "Title": "Premium Jasmine Falling Snow Tea",
+        "Body (HTML)": body(
+            "<p><strong>Naturally scented with rare Sibao jasmine flowers</strong></p>",
+            "<p>Experience the elegance of authentic Chinese jasmine tea with our Premium Jasmine Falling Snow Tea, "
+            "expertly crafted from premium loose leaf tea and naturally scented with rare "
+            "<strong>Sibao Jasmine Flowers</strong>.</p>",
+            "<p>Harvested at peak bloom and traditionally layered with fresh tea leaves, Sibao jasmine blossoms "
+            "gently infuse the tea with their natural fragrance over multiple scenting cycles. The result is a "
+            "remarkably smooth tea with a fresh floral aroma, delicate sweetness, and a clean finish that lingers "
+            "beautifully after every sip.</p>",
+            "<p>Unlike artificially flavored jasmine teas, our Jasmine Falling Snow Tea contains "
+            "<strong>no artificial flavors or fragrance oils</strong> — only the pure harmony of premium tea leaves "
+            "and genuine jasmine blossoms.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Naturally scented with rare Sibao Jasmine Flowers</li>"
+            "<li>Rich floral aroma that&rsquo;s elegant, fresh, and never overpowering</li>"
+            "<li>Smooth, clean finish with low bitterness</li>"
+            "<li>No artificial flavors, fragrances, or additives</li>"
+            "<li>Carefully crafted using traditional jasmine scenting methods</li>"
+            "<li>Delicious hot or iced</li>"
+            "<li>Perfect for milk tea, fruit tea, lemon tea, bubble tea, or everyday enjoyment</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Fresh jasmine blossoms with an elegant floral bouquet</li>"
+            "<li><strong>Taste:</strong> Smooth, naturally sweet, and delicately floral</li>"
+            "<li><strong>Body:</strong> Light to medium-bodied with a silky mouthfeel</li>"
+            "<li><strong>Finish:</strong> Clean, refreshing, and beautifully lingering</li>"
+            "</ul>",
+            "<h3>Rare Sibao Jasmine Flowers</h3>"
+            "<p>Sibao Jasmine is prized by tea artisans for its exceptional fragrance and purity. Each blossom is "
+            "carefully handpicked at full bloom, when its natural aroma is at its peak. Rather than relying on "
+            "artificial flavorings, the blossoms are traditionally layered with premium tea leaves over multiple "
+            "rounds, allowing the delicate floral fragrance to infuse naturally — creating a tea with remarkable "
+            "depth, elegance, and lasting aroma.</p>",
+            "<p><strong>Origin:</strong> Premium loose leaf tea + Sibao Jasmine Flowers, China<br>"
+            "<strong>Best for:</strong> Daily sipping, iced jasmine tea, lemon jasmine tea, milk tea, fruit tea, "
+            "bubble tea, gifts, and specialty caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2–3g (1 teaspoon) per 150ml</li>"
+            "<li><strong>Water:</strong> 80–85°C (176–185°F)</li>"
+            "<li><strong>Steep:</strong> 2–3 minutes</li>"
+            "<li><strong>Re-steeps:</strong> 2–4 infusions</li>"
+            "<li><strong>Tip:</strong> Avoid boiling water for the most delicate floral aroma</li>"
+            "</ul>",
+            "<p>Every batch is crafted to showcase the true beauty of naturally scented jasmine tea — fragrant, "
+            "smooth, and exceptionally refreshing, with authentic floral aroma and carefully selected tea leaves "
+            "in every cup.</p>",
+            nutrition_table("25–35 mg"),
+        ),
+        "Vendor": "Luxe Leaf Tea",
+        "Type": "Tea",
+        "Tags": "green-tea, jasmine, jasmine-tea, falling-snow, sibao, Green Tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "50g",
+        "Variant SKU": "LL-JASMINE-FS-50",
+        "Variant Grams": "50",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "24.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Premium Jasmine Falling Snow Tea | Sibao Jasmine | Luxe Leaf Tea",
+        "SEO Description": "Naturally scented Jasmine Falling Snow loose leaf tea — rare Sibao jasmine flowers, smooth floral cup. Hot, iced, milk tea, and lemon jasmine. Packed fresh to order.",
+        "Image Asset": "luxe-leaf-green-tea-product-2.png",
+    },
+    {
+        "Handle": "chatramue-original-thai-tea-mix-400g",
+        "Title": "ChaTraMue Original Thai Tea Mix 400g",
+        "Body (HTML)": body(
+            "<p><strong>Authentic Thai tea since 1945</strong></p>",
+            "<p>Experience the rich taste and vibrant tradition of Thailand with "
+            "<strong>ChaTraMue Original Thai Tea Mix</strong>. Crafted from carefully selected tea leaves, "
+            "this authentic loose leaf tea is renowned for its bold flavor, smooth finish, and signature aroma "
+            "that have made it a favorite in Thai caf&eacute;s and homes for generations.</p>",
+            "<p>Whether you&rsquo;re recreating a refreshing glass of Thai iced tea, preparing a creamy Thai milk tea, "
+            "or enjoying a comforting hot cup, ChaTraMue delivers the authentic caf&eacute;-style flavor that tea "
+            "lovers around the world know and enjoy.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Authentic Thai tea with a rich, full-bodied flavor</li>"
+            "<li>Smooth, mellow taste with a naturally fragrant aroma</li>"
+            "<li>Premium loose leaf tea for consistent brewing</li>"
+            "<li>Ideal for hot tea, iced tea, milk tea, and specialty beverages</li>"
+            "<li>Easy to prepare at home or in caf&eacute;s</li>"
+            "<li>Trusted Thai tea brand with a heritage dating back to 1945</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Warm, inviting tea fragrance with subtle sweetness</li>"
+            "<li><strong>Taste:</strong> Bold, smooth, and beautifully balanced</li>"
+            "<li><strong>Body:</strong> Medium to full-bodied</li>"
+            "<li><strong>Finish:</strong> Clean, mellow, and pleasantly lingering</li>"
+            "</ul>",
+            "<p><strong>Brand:</strong> ChaTraMue<br>"
+            "<strong>Product type:</strong> Original Thai Tea Mix (loose leaf)<br>"
+            "<strong>Net weight:</strong> 400g<br>"
+            "<strong>Origin:</strong> Thailand<br>"
+            "<strong>Best for:</strong> Thai iced tea (Cha Yen), Thai milk tea, hot Thai tea, lemon tea, "
+            "bubble tea, tea lattes, home brewing, and caf&eacute; service</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 2g per 200ml water</li>"
+            "<li><strong>Water:</strong> 95–100°C (203–212°F)</li>"
+            "<li><strong>Steep:</strong> 3–5 minutes</li>"
+            "<li><strong>Serve:</strong> Strain before serving — enjoy plain or with sweetened condensed milk, "
+            "evaporated milk, sugar, or fresh lime</li>"
+            "</ul>",
+            "<h3>Storage</h3><ul>"
+            "<li>Store in a cool, dry place away from direct sunlight, heat, and moisture</li>"
+            "<li>Reseal the bag tightly after opening to preserve freshness and aroma</li>"
+            "<li>For best quality, enjoy within 6 months after opening</li>"
+            "</ul>",
+            "<p>For decades, ChaTraMue has been enjoyed for its authentic character and dependable quality — "
+            "a versatile classic for traditional Thai beverages and creative caf&eacute;-style recipes alike.</p>",
+            nutrition_table("40–70 mg"),
+        ),
+        "Vendor": "ChaTraMue",
+        "Type": "Thai Tea",
+        "Tags": "black-tea, thai-tea, chatramue, milk-tea, bubble-tea, iced-tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "400g",
+        "Variant SKU": "CTR-THAI-400",
+        "Variant Grams": "400",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "15.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "ChaTraMue Original Thai Tea Mix 400g | Authentic Thai Iced Tea | Luxe Leaf Tea",
+        "SEO Description": "ChaTraMue Original Thai Tea Mix 400g — authentic loose leaf for Thai iced tea, milk tea, and Cha Yen. Bold smooth flavor since 1945. Ships from Luxe Leaf Tea.",
+        "Image Asset": "luxe-leaf-black-tea-product-2.png",
+    },
+    {
+        "Handle": "mocastar-blend-tea-hong-kong-milk-tea",
+        "Title": "Mocastar Blend Tea 金裝大排檔",
+        "Body (HTML)": body(
+            "<p><strong>Premium Hong Kong style milk tea loose leaf blend</strong></p>",
+            "<p>Bring the authentic taste of Hong Kong&rsquo;s famous <strong>Cha Chaan Teng</strong> caf&eacute;s into your "
+            "home or business with <strong>Mocastar Blend Tea 金裝大排檔</strong>. Expertly crafted to create rich, smooth, "
+            "and full-bodied milk tea, this premium loose leaf black tea blend delivers the bold character and silky finish "
+            "that have made Hong Kong-style milk tea a beloved classic.</p>",
+            "<p>Designed to pair beautifully with evaporated milk or sweetened condensed milk, every cup offers a deep "
+            "tea aroma, robust flavor, and creamy texture that&rsquo;s perfect for traditional "
+            "<strong>Silk Stocking Milk Tea (絲襪奶茶)</strong>, iced milk tea, or specialty caf&eacute; beverages.</p>",
+            "<h3>Why you&rsquo;ll love it</h3><ul>"
+            "<li>Authentic Hong Kong-style loose leaf black tea blend</li>"
+            "<li>Bold, rich flavor with a smooth, creamy finish</li>"
+            "<li>Perfectly balanced for milk tea and iced tea</li>"
+            "<li>Excellent with evaporated milk or sweetened condensed milk</li>"
+            "<li>Caf&eacute;-quality brewing for home or commercial use</li>"
+            "<li>Full-bodied tea that maintains its character even when mixed with milk</li>"
+            "<li>Suitable for bubble tea shops, caf&eacute;s, restaurants, and tea enthusiasts</li>"
+            "</ul>",
+            "<h3>Flavor profile</h3><ul>"
+            "<li><strong>Aroma:</strong> Rich black tea with warm roasted notes</li>"
+            "<li><strong>Taste:</strong> Bold, smooth, and beautifully balanced</li>"
+            "<li><strong>Body:</strong> Full-bodied with a silky mouthfeel</li>"
+            "<li><strong>Finish:</strong> Clean, rich, and pleasantly lingering</li>"
+            "</ul>",
+            "<h3>Inspired by Hong Kong tea culture</h3>"
+            "<p>Inspired by the traditional tea served in Hong Kong&rsquo;s iconic <strong>Cha Chaan Teng (茶餐廳)</strong>, "
+            "this carefully blended loose leaf tea is crafted to deliver the signature strength and smoothness needed for "
+            "authentic Hong Kong milk tea. Its bold flavor stands up beautifully to milk without losing the distinctive "
+            "character of the tea.</p>",
+            "<p><strong>Product name:</strong> Mocastar Blend Tea 金裝大排檔<br>"
+            "<strong>Tea type:</strong> Premium loose leaf black tea blend<br>"
+            "<strong>Style:</strong> Hong Kong milk tea blend<br>"
+            "<strong>Best for:</strong> Hong Kong milk tea, silk stocking tea (絲襪奶茶), iced milk tea, bubble tea, "
+            "tea lattes, caf&eacute;s, restaurants, and bubble tea shops</p>",
+            "<h3>How to brew</h3><ul>"
+            "<li><strong>Leaf:</strong> 8–10g per 500ml water</li>"
+            "<li><strong>Water:</strong> 95–100°C (203–212°F)</li>"
+            "<li><strong>Steep:</strong> 5–8 minutes</li>"
+            "<li><strong>Serve:</strong> Strain thoroughly before adding evaporated milk or sweetened condensed milk — "
+            "serve hot or over ice</li>"
+            "</ul>",
+            "<p>Every batch is blended to deliver the bold aroma, smooth texture, and consistent performance that "
+            "authentic Hong Kong milk tea is known for — a rich and satisfying tea experience in every cup.</p>",
+            nutrition_table("45–70 mg"),
+        ),
+        "Vendor": "Mocastar",
+        "Type": "Hong Kong Milk Tea",
+        "Tags": "black-tea, hong-kong-milk-tea, mocastar, milk-tea, bubble-tea, silk-stocking-tea, bestseller",
+        "Published": "TRUE",
+        "Option1 Name": "Size",
+        "Option1 Value": "500g",
+        "Variant SKU": "MOC-HK-500",
+        "Variant Grams": "500",
+        "Variant Inventory Tracker": "shopify",
+        "Variant Inventory Qty": "100",
+        "Variant Inventory Policy": "deny",
+        "Variant Fulfillment Service": "manual",
+        "Variant Price": "18.00",
+        "Variant Requires Shipping": "TRUE",
+        "Variant Taxable": "TRUE",
+        "Status": "active",
+        "SEO Title": "Mocastar Blend Tea 金裝大排檔 | Hong Kong Milk Tea | Luxe Leaf Tea",
+        "SEO Description": "Mocastar Blend Tea — premium Hong Kong-style loose leaf for silk stocking milk tea, iced milk tea, and bubble tea. Bold smooth Cha Chaan Teng character.",
+        "Image Asset": "premium-assam-black-tea-product-2.png",
+    },
+]
+
+FIELDNAMES = [
+    "Handle",
+    "Title",
+    "Body (HTML)",
+    "Vendor",
+    "Type",
+    "Tags",
+    "Published",
+    "Option1 Name",
+    "Option1 Value",
+    "Variant SKU",
+    "Variant Grams",
+    "Variant Inventory Tracker",
+    "Variant Inventory Qty",
+    "Variant Inventory Policy",
+    "Variant Fulfillment Service",
+    "Variant Price",
+    "Variant Requires Shipping",
+    "Variant Taxable",
+    "Status",
+    "SEO Title",
+    "SEO Description",
+]
+
+
+def main() -> None:
+    out = Path(__file__).resolve().parents[1] / "docs" / "SAMPLE_PRODUCTS_IMPORT.csv"
+    rows = [{k: p[k] for k in FIELDNAMES} for p in PRODUCTS]
+    with out.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=FIELDNAMES, quoting=csv.QUOTE_MINIMAL)
+        writer.writeheader()
+        writer.writerows(rows)
+    print(f"Wrote {len(rows)} products to {out}")
+
+
+if __name__ == "__main__":
+    main()

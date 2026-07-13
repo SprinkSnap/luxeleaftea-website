@@ -140,14 +140,6 @@
       {%- endif -%}
     </div>
   </div>
-
-  <a
-    href="{{ shop_tea_url }}"
-    class="luxe-faq-page__mobile-shop button"
-    title="Shop premium loose leaf tea"
-  >
-    {{ section.settings.mobile_shop_label }}
-  </a>
 </section>
 
 {%- if section.blocks.size > 0 -%}
@@ -470,33 +462,6 @@
     letter-spacing: 0.04em;
     opacity: 0.85;
   }
-
-  .luxe-faq-page__mobile-shop {
-    display: none;
-    position: fixed;
-    left: 1rem;
-    right: 1rem;
-    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-    z-index: 20;
-    min-height: 3rem;
-    border-radius: 999px;
-    background: var(--luxe-jade, #1b4332);
-    border-color: var(--luxe-jade, #1b4332);
-    text-align: center;
-    box-shadow: 0 8px 24px rgb(27 67 50 / 0.25);
-  }
-
-  @media screen and (max-width: 749px) {
-    .luxe-faq-page__mobile-shop {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .luxe-faq-page {
-      padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
-    }
-  }
 {% endstylesheet %}
 
 {% schema %}
@@ -606,12 +571,6 @@
       "id": "cta_note",
       "label": "CTA note",
       "default": "Secure checkout · Apple Pay & cards accepted · Free shipping over $50"
-    },
-    {
-      "type": "text",
-      "id": "mobile_shop_label",
-      "label": "Mobile sticky shop button",
-      "default": "Shop teas — add to bag"
     },
     {
       "type": "range",

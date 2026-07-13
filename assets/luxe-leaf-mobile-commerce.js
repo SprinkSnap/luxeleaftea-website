@@ -7,8 +7,38 @@ import { StandardEvents } from '@shopify/events';
   if (window.__luxeMobileCommerceInit) return;
   window.__luxeMobileCommerceInit = true;
 
-  const NUDGE_HEIGHT = '4.5rem';
-  const NUDGE_HEIGHT_SUCCESS = '3.75rem';
+  const NUDGE_HEIGHT_FALLBACK = '5.5rem';
+  const NUDGE_HEIGHT_SUCCESS_FALLBACK = '4.5rem';
+
+  let nudgeResizeObserver = null;
+
+  const syncNudgeHeight = () => {
+    const nudge = document.querySelector('[data-shipping-nudge]');
+    if (!(nudge instanceof HTMLElement) || nudge.hidden) {
+      document.documentElement.style.setProperty('--luxe-shipping-nudge-height', '0px');
+      document.body.classList.remove('luxe-has-shipping-nudge');
+      return;
+    }
+
+    const height = `${Math.ceil(nudge.getBoundingClientRect().height)}px`;
+    document.documentElement.style.setProperty('--luxe-shipping-nudge-height', height);
+    document.body.classList.add('luxe-has-shipping-nudge');
+  };
+
+  const observeNudgeHeight = () => {
+    const nudge = document.querySelector('[data-shipping-nudge]');
+    if (!(nudge instanceof HTMLElement)) return;
+
+    if (nudgeResizeObserver) {
+      nudgeResizeObserver.disconnect();
+    }
+
+    nudgeResizeObserver = new ResizeObserver(() => {
+      syncNudgeHeight();
+    });
+    nudgeResizeObserver.observe(nudge);
+    syncNudgeHeight();
+  };
 
   const getShippingConfig = () => {
     const body = document.body;
@@ -65,17 +95,17 @@ import { StandardEvents } from '@shopify/events';
     return `$${(cents / 100).toFixed(2)}`;
   };
 
-  const getShippingEstimate = (cartTotal, itemsSubtotal = null) => {
+  const getShippingEstimate = (merchandiseTotal) => {
     const { threshold, standardRate } = getShippingConfig();
-    const subtotal = itemsSubtotal ?? cartTotal;
-    const qualifiesFree = cartTotal >= threshold;
+    const subtotal = merchandiseTotal;
+    const qualifiesFree = merchandiseTotal >= threshold;
     const shippingCost = qualifiesFree ? 0 : standardRate;
     const taxableBase = subtotal + shippingCost;
     const taxRateBps = getCanadaTaxRateBps();
     const taxAmount = taxRateBps > 0 ? Math.round((taxableBase * taxRateBps) / 10000) : 0;
     const grandTotal = taxableBase + taxAmount;
-    const remaining = Math.max(0, threshold - cartTotal);
-    const progress = Math.min(100, Math.round((cartTotal * 100) / threshold));
+    const remaining = Math.max(0, threshold - merchandiseTotal);
+    const progress = Math.min(100, Math.round((merchandiseTotal * 100) / threshold));
 
     return {
       qualifiesFree,
@@ -97,7 +127,7 @@ import { StandardEvents } from '@shopify/events';
     if (!(conversion instanceof HTMLElement) || cart.item_count === 0) return;
 
     const { qualifiesFree, shippingCost, grandTotal, taxAmount, subtotal, remaining, progress, taxReady } =
-      getShippingEstimate(cart.total_price, cart.items_subtotal_price);
+      getShippingEstimate(cart.total_price);
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const progressText = conversion.querySelector('[data-shipping-progress-text]');
@@ -143,10 +173,7 @@ import { StandardEvents } from '@shopify/events';
     const totals = document.querySelector('[data-shipping-totals]');
     if (!(totals instanceof HTMLElement) || cart.item_count === 0) return;
 
-    const { qualifiesFree, grandTotal, taxAmount, subtotal, remaining } = getShippingEstimate(
-      cart.total_price,
-      cart.items_subtotal_price
-    );
+    const { qualifiesFree, grandTotal, taxAmount, subtotal, remaining } = getShippingEstimate(cart.total_price);
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const subtotalValue = totals.querySelector('[data-cart-subtotal-value]');
@@ -195,13 +222,11 @@ import { StandardEvents } from '@shopify/events';
     if (cart.item_count === 0) {
       nudge.hidden = true;
       document.documentElement.style.setProperty('--luxe-shipping-nudge-height', '0px');
+      document.body.classList.remove('luxe-has-shipping-nudge');
       return;
     }
 
-    const { qualifiesFree, estimatedTotal, remaining, progress, taxReady } = getShippingEstimate(
-      cart.total_price,
-      cart.items_subtotal_price
-    );
+    const { qualifiesFree, estimatedTotal, remaining, progress, taxReady } = getShippingEstimate(cart.total_price);
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const textEl = nudge.querySelector('[data-shipping-nudge-text]');
@@ -239,16 +264,19 @@ import { StandardEvents } from '@shopify/events';
     }
     if (checkoutBtn instanceof HTMLElement) {
       checkoutBtn.hidden = false;
-      checkoutBtn.textContent = taxReady
-        ? `Pay · ${formatMoney(estimatedTotal)}`
-        : 'Guest checkout';
+      checkoutBtn.textContent = 'Checkout';
+      checkoutBtn.setAttribute('aria-label', 'Go to secure checkout');
     }
 
     nudge.hidden = false;
     document.documentElement.style.setProperty(
       '--luxe-shipping-nudge-height',
-      qualifiesFree ? NUDGE_HEIGHT_SUCCESS : NUDGE_HEIGHT
+      qualifiesFree ? NUDGE_HEIGHT_SUCCESS_FALLBACK : NUDGE_HEIGHT_FALLBACK
     );
+    requestAnimationFrame(() => {
+      observeNudgeHeight();
+      syncNudgeHeight();
+    });
   };
 
   const syncBar = async () => {
@@ -262,30 +290,42 @@ import { StandardEvents } from '@shopify/events';
       syncCartConversion(cart);
       syncShippingTotals(cart);
 
-      const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
+      const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price);
 
       if (bar) {
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
         const cartBtn = bar.querySelector('[data-mobile-cart-toggle]');
         const countEl = bar.querySelector('[data-mobile-cart-count]');
+        const cartLabel = bar.querySelector('[data-mobile-cart-label]');
 
         if (cart.item_count > 0) {
           bar.classList.add('luxe-mobile-bar--has-cart');
-          if (checkoutButton) {
-            checkoutButton.hidden = false;
-            checkoutButton.textContent = taxReady
-              ? `Pay · ${formatMoney(estimatedTotal)}`
-              : 'Guest checkout';
-          }
-          if (cartBtn) cartBtn.hidden = true;
         } else {
           bar.classList.remove('luxe-mobile-bar--has-cart');
-          if (checkoutButton) checkoutButton.hidden = true;
-          if (cartBtn) cartBtn.hidden = false;
         }
 
-        if (countEl) {
-          countEl.textContent = cart.item_count;
+        if (checkoutButton instanceof HTMLButtonElement) {
+          checkoutButton.hidden = cart.item_count === 0;
+          checkoutButton.textContent = 'Checkout';
+          checkoutButton.setAttribute('aria-label', 'Go to secure checkout');
+        }
+
+        if (cartBtn instanceof HTMLElement) {
+          cartBtn.hidden = false;
+          cartBtn.setAttribute(
+            'aria-label',
+            cart.item_count > 0
+              ? `View bag — ${cart.item_count} ${cart.item_count === 1 ? 'item' : 'items'}`
+              : 'View bag'
+          );
+        }
+
+        if (cartLabel instanceof HTMLElement) {
+          cartLabel.textContent = cart.item_count > 0 ? `Bag (${cart.item_count})` : 'Bag';
+        }
+
+        if (countEl instanceof HTMLElement) {
+          countEl.textContent = String(cart.item_count);
           countEl.hidden = cart.item_count === 0;
         }
       }
@@ -298,7 +338,17 @@ import { StandardEvents } from '@shopify/events';
     }
   };
 
+  function isBagTrigger(element) {
+    return Boolean(
+      element.closest(
+        '[data-luxe-open-cart],[data-shipping-nudge-cart],[data-mobile-cart-toggle],[data-testid="cart-drawer-trigger"],[aria-controls="cart-drawer"]'
+      )
+    );
+  }
+
   function goToCheckout(event) {
+    if (event?.target instanceof Element && isBagTrigger(event.target)) return;
+
     if (event) {
       event.preventDefault();
     }
@@ -310,6 +360,9 @@ import { StandardEvents } from '@shopify/events';
     document.addEventListener(
       'click',
       (event) => {
+        if (!(event.target instanceof Element)) return;
+        if (isBagTrigger(event.target)) return;
+
         const button = event.target.closest('[data-shipping-nudge-checkout], [data-mobile-checkout]');
         if (!(button instanceof HTMLButtonElement) || button.disabled || button.hidden) return;
 
@@ -429,12 +482,10 @@ import { StandardEvents } from '@shopify/events';
 
       const bar = document.querySelector('[data-mobile-shop-bar]');
       if (bar && cart.item_count > 0) {
-        const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
         if (checkoutButton instanceof HTMLButtonElement) {
-          checkoutButton.textContent = taxReady
-            ? `Pay · ${formatMoney(estimatedTotal)}`
-            : 'Guest checkout';
+          checkoutButton.textContent = 'Checkout';
+          checkoutButton.setAttribute('aria-label', 'Go to secure checkout');
         }
       }
     } catch {
@@ -449,6 +500,7 @@ import { StandardEvents } from '@shopify/events';
     bindCheckoutActions();
     bindSearchActions();
     bindShippingNudgeActions();
+    observeNudgeHeight();
     refreshCartPricing();
   });
   document.addEventListener('luxe:ca-location-change', refreshCartPricing);

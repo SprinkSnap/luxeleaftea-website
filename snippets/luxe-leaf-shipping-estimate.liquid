@@ -10,14 +10,16 @@
   assign standard_rate = settings.standard_shipping_rate | default: 595
   assign threshold_money = threshold | money
   assign standard_rate_money = standard_rate | money
-  assign cart_total = cart.total_price
-  assign subtotal_before_tax = cart.items_subtotal_price
-  assign remaining = threshold | minus: cart_total
+  # cart.total_price (after discounts, before tax/shipping) drives threshold,
+  # remaining, progress, and subtotal so "Add $X" matches the subtotal shown.
+  assign free_shipping_base = cart.total_price
+  assign subtotal_before_tax = free_shipping_base
+  assign remaining = threshold | minus: free_shipping_base
   if remaining < 0
     assign remaining = 0
   endif
 
-  if cart_total >= threshold
+  if free_shipping_base >= threshold
     assign qualifies_free = true
     assign shipping_cost = 0
   else
@@ -35,7 +37,7 @@
   endif
 
   assign grand_total = taxable_base | plus: tax_amount
-  assign progress = cart_total | times: 100 | divided_by: threshold
+  assign progress = free_shipping_base | times: 100 | divided_by: threshold
   if progress > 100
     assign progress = 100
   endif

@@ -59,27 +59,31 @@
   {{ block.shopify_attributes }}
   data-product-id="{{ product.id }}"
 >
-  <span
-    class="product-inventory__status"
-  >
+  {%- if settings.brand_navigation != false -%}
+    {% render 'luxe-leaf-product-availability', product: closest.product, variant: variant, context: 'pdp' %}
+  {%- else -%}
     <span
-      class="svg-wrapper product-inventory__icon product-inventory__icon-{{ status }}"
+      class="product-inventory__status"
     >
-      {{ 'icon-inventory.svg' | inline_asset_content }}
+      <span
+        class="svg-wrapper product-inventory__icon product-inventory__icon-{{ status }}"
+      >
+        {{ 'icon-inventory.svg' | inline_asset_content }}
+      </span>
+      <span
+        class="product-inventory__text"
+        id="Inventory-{{ section.id }}"
+        role="status"
+        aria-label="{{ 'accessibility.inventory_status' | t }}"
+      >
+        {%- if show_quantity -%}
+          {{ 'content.inventory_low_stock_show_count' | t: count: inventory_quantity }}
+        {%- else -%}
+          {{- translation_key | t -}}
+        {%- endif -%}
+      </span>
     </span>
-    <span
-      class="product-inventory__text"
-      id="Inventory-{{ section.id }}"
-      role="status"
-      aria-label="{{ 'accessibility.inventory_status' | t }}"
-    >
-      {%- if show_quantity -%}
-        {{ 'content.inventory_low_stock_show_count' | t: count: inventory_quantity }}
-      {%- else -%}
-        {{- translation_key | t -}}
-      {%- endif -%}
-    </span>
-  </span>
+  {%- endif -%}
 </product-inventory>
 
 {% stylesheet %}
@@ -111,6 +115,11 @@
 
   .product-inventory__icon circle:first-of-type {
     opacity: 0.3;
+  }
+
+  .product-inventory__status--luxe {
+    display: block;
+    margin-block: 0.15rem 0.35rem;
   }
 {% endstylesheet %}
 

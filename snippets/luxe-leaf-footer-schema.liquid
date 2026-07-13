@@ -49,11 +49,7 @@
     assign standard_ship_money = standard_shipping_rate | money
     assign free_ship_schema = free_ship_threshold | divided_by: 100.0
     assign standard_ship_schema = standard_shipping_rate | divided_by: 100.0
-    if settings.logo != blank
-      assign org_logo_url = settings.logo | image_url: width: 434
-    else
-      assign org_logo_url = 'luxe-leaf-tea-logo-header.png' | asset_url
-    endif
+    assign org_logo_url = 'luxe-leaf-tea-logo-header-2x.png' | asset_url
   -%}
 
   <script type="application/ld+json">

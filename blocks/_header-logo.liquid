@@ -104,14 +104,24 @@
       class="header-logo__image-container header-logo__image-container--inverse"
       data-testid="header-logo-inverse"
     >
-      {% render 'image',
-        image: inverse_logo,
-        class: 'header-logo__image',
-        height: logo_height,
-        alt_text_fallback: alt_text_fallback,
-        text_fallback: shop.name,
-        style: inverse_logo_style
-      %}
+      {% if settings.brand_navigation == false %}
+        {% render 'image',
+          image: inverse_logo,
+          class: 'header-logo__image',
+          height: logo_height,
+          alt_text_fallback: alt_text_fallback,
+          text_fallback: shop.name,
+          style: inverse_logo_style
+        %}
+      {% else %}
+        {% render 'luxe-leaf-tea-logo',
+          style: inverse_logo_style,
+          class: 'header-logo__image',
+          alt: alt_text_fallback,
+          logo_height: logo_height,
+          logo_height_mobile: logo_height_mobile
+        %}
+      {% endif %}
     </span>
   {% endif %}
 </a>
