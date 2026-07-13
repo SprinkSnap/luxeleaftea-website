@@ -2396,71 +2396,86 @@ zoom-dialog.luxe-zoom-dialog dialog {
   object-fit: contain !important;
 }
 
-/* Bottom controls: ←  X  →  (X between arrows, larger) */
-.luxe-zoom-dialog button.close-button.dialog-zoomed-gallery__close-button,
-.luxe-zoom-dialog .dialog-zoomed-gallery__close-button {
+/* Bottom control bar: ← X → (structural, not free-floating top close) */
+.luxe-zoom-dialog .luxe-zoom-controls {
   position: fixed !important;
-  top: auto !important;
-  bottom: max(1.15rem, env(safe-area-inset-bottom, 0px)) !important;
   left: 50% !important;
   right: auto !important;
+  top: auto !important;
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px)) !important;
   transform: translateX(-50%) !important;
-  width: 4.25rem !important;
-  height: 4.25rem !important;
+  z-index: 110 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.94);
+  border: 1px solid rgb(27 67 50 / 0.14);
+  box-shadow: 0 8px 28px rgb(27 67 50 / 0.16);
+}
+
+.luxe-zoom-dialog .luxe-zoom-controls__spacer {
+  width: 3.15rem;
+  height: 3.15rem;
+}
+
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__close-button,
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__nav {
+  position: static !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
+  margin: 0 !important;
   color: #1b4332 !important;
-  background: #fff !important;
-  border: 1px solid rgb(27 67 50 / 0.18) !important;
+  background: #f8f6f0 !important;
+  border: 1px solid rgb(27 67 50 / 0.14) !important;
   border-radius: 999px !important;
-  box-shadow: 0 6px 22px rgb(27 67 50 / 0.18) !important;
+  box-shadow: none !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
-  z-index: 101 !important;
   cursor: pointer;
 }
 
-.luxe-zoom-dialog button.close-button.dialog-zoomed-gallery__close-button svg,
-.luxe-zoom-dialog .dialog-zoomed-gallery__close-button svg {
-  width: 1.75rem !important;
-  height: 1.75rem !important;
-}
-
-.luxe-zoom-dialog button.dialog-zoomed-gallery__nav,
-.luxe-zoom-dialog .dialog-zoomed-gallery__nav {
-  position: fixed !important;
-  top: auto !important;
-  bottom: max(1.4rem, calc(env(safe-area-inset-bottom, 0px) + 0.25rem)) !important;
-  transform: none !important;
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__close-button {
   width: 3.5rem !important;
   height: 3.5rem !important;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  color: #1b4332 !important;
+  order: 0;
+}
+
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__nav--prev {
+  order: -1;
+  width: 3.15rem !important;
+  height: 3.15rem !important;
+}
+
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__nav--next {
+  order: 1;
+  width: 3.15rem !important;
+  height: 3.15rem !important;
+}
+
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__close-button svg {
+  width: 1.35rem !important;
+  height: 1.35rem !important;
+}
+
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__nav svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__close-button:hover,
+.luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__nav:hover {
   background: #fff !important;
-  border: 1px solid rgb(27 67 50 / 0.18) !important;
-  border-radius: 999px !important;
-  box-shadow: 0 6px 22px rgb(27 67 50 / 0.18) !important;
   opacity: 1 !important;
-  z-index: 100 !important;
-  cursor: pointer;
-}
-
-.luxe-zoom-dialog .dialog-zoomed-gallery__nav--prev {
-  left: calc(50% - 6.5rem) !important;
-  right: auto !important;
-}
-
-.luxe-zoom-dialog .dialog-zoomed-gallery__nav--next {
-  left: calc(50% + 3rem) !important;
-  right: auto !important;
-}
-
-.luxe-zoom-dialog .dialog-zoomed-gallery__nav svg {
-  width: 1.5rem !important;
-  height: 1.5rem !important;
 }
 
 /* Keep lightbox thumbs horizontal above the ← X → bar */
@@ -2468,7 +2483,7 @@ zoom-dialog.luxe-zoom-dialog dialog {
   position: fixed !important;
   left: 0 !important;
   right: 0 !important;
-  bottom: max(5.75rem, calc(env(safe-area-inset-bottom, 0px) + 5.75rem)) !important;
+  bottom: max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 5.5rem)) !important;
   top: auto !important;
   width: 100% !important;
   display: flex !important;
@@ -2524,36 +2539,31 @@ zoom-dialog.luxe-zoom-dialog dialog {
     max-height: min(54vh, 420px) !important;
   }
 
-  .luxe-zoom-dialog button.close-button.dialog-zoomed-gallery__close-button,
-  .luxe-zoom-dialog .dialog-zoomed-gallery__close-button {
-    width: 3.75rem !important;
-    height: 3.75rem !important;
+  .luxe-zoom-dialog .luxe-zoom-controls {
+    gap: 0.65rem;
+    padding: 0.35rem 0.5rem;
     bottom: max(0.85rem, env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  .luxe-zoom-dialog button.close-button.dialog-zoomed-gallery__close-button svg,
-  .luxe-zoom-dialog .dialog-zoomed-gallery__close-button svg {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
+  .luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__close-button {
+    width: 3.25rem !important;
+    height: 3.25rem !important;
   }
 
-  .luxe-zoom-dialog button.dialog-zoomed-gallery__nav,
-  .luxe-zoom-dialog .dialog-zoomed-gallery__nav {
-    width: 3.1rem !important;
-    height: 3.1rem !important;
-    bottom: max(1.1rem, calc(env(safe-area-inset-bottom, 0px) + 0.25rem)) !important;
+  .luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__nav--prev,
+  .luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__nav--next,
+  .luxe-zoom-dialog .luxe-zoom-controls__spacer {
+    width: 2.95rem !important;
+    height: 2.95rem !important;
   }
 
-  .luxe-zoom-dialog .dialog-zoomed-gallery__nav--prev {
-    left: calc(50% - 5.75rem) !important;
-  }
-
-  .luxe-zoom-dialog .dialog-zoomed-gallery__nav--next {
-    left: calc(50% + 2.65rem) !important;
+  .luxe-zoom-dialog .luxe-zoom-controls .dialog-zoomed-gallery__close-button svg {
+    width: 1.2rem !important;
+    height: 1.2rem !important;
   }
 
   .luxe-zoom-dialog .dialog-thumbnails-list-container {
-    bottom: max(5.35rem, calc(env(safe-area-inset-bottom, 0px) + 5.35rem)) !important;
+    bottom: max(5.1rem, calc(env(safe-area-inset-bottom, 0px) + 5.1rem)) !important;
   }
 }
 
