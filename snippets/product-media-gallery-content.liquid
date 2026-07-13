@@ -511,6 +511,28 @@
             <span class="visually-hidden">{{ 'actions.close' | t }}</span>
             {{ 'icon-close.svg' | inline_asset_content }}
           </button>
+
+          {% if sorted_media.size > 1 %}
+            <button
+              type="button"
+              class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--prev"
+              aria-label="{{ 'accessibility.slideshow_previous' | t | default: 'Previous image' }}"
+              on:click="/navigatePrevious"
+            >
+              <span class="visually-hidden">{{ 'accessibility.slideshow_previous' | t | default: 'Previous image' }}</span>
+              {{ 'icon-chevron-left.svg' | inline_asset_content }}
+            </button>
+            <button
+              type="button"
+              class="button button-unstyled dialog-zoomed-gallery__nav dialog-zoomed-gallery__nav--next"
+              aria-label="{{ 'accessibility.slideshow_next' | t | default: 'Next image' }}"
+              on:click="/navigateNext"
+            >
+              <span class="visually-hidden">{{ 'accessibility.slideshow_next' | t | default: 'Next image' }}</span>
+              {{ 'icon-chevron-right.svg' | inline_asset_content }}
+            </button>
+          {% endif %}
+
           <div class="dialog-thumbnails-list-container">
             <scroll-hint
               class="dialog-thumbnails-list list-unstyled"
@@ -566,9 +588,6 @@
                 class="{{ product_media_container_class | remove: 'media-fit-cover' }} product-media-container--{{ media.media_type }}{% if media.media_type == 'image' %} product-media-container--zoomable{% endif %}"
                 style="{% if block_settings.aspect_ratio == 'adapt' %} --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};{% endif %}"
                 ref="media[]"
-                {% if media.media_type == 'image' %}
-                  on:click="/close"
-                {% endif %}
               >
                 {% if media.media_type == 'image' %}
                   <drag-zoom-wrapper class="product-media__drag-zoom-wrapper">
@@ -774,7 +793,7 @@
   }
 
   .dialog-zoomed-gallery {
-    cursor: zoom-out;
+    cursor: default;
   }
 
   .dialog--preloading {
@@ -863,26 +882,106 @@
     }
   }
 
-  .dialog-zoomed-gallery__close-button {
-    color: #fff;
-    mix-blend-mode: difference;
-    z-index: var(--layer-raised);
+  /* Higher specificity than base .close-button (top-right) so X stays centered */
+  button.close-button.dialog-zoomed-gallery__close-button {
+    position: fixed;
+    top: max(1rem, env(safe-area-inset-top, 0px));
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translateX(-50%);
+    width: 3rem;
+    height: 3rem;
+    color: #1b4332;
+    mix-blend-mode: normal;
+    opacity: 1;
+    z-index: calc(var(--layer-overlay) + 2);
+    background: rgb(255 255 255 / 0.92);
+    border: 1px solid rgb(27 67 50 / 0.15);
+    border-radius: 999px;
+    box-shadow: 0 4px 18px rgb(27 67 50 / 0.14);
+  }
+
+  button.close-button.dialog-zoomed-gallery__close-button:hover {
+    background: #fff;
+    color: #1b4332;
+    opacity: 1;
+  }
+
+  button.close-button.dialog-zoomed-gallery__close-button svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  button.dialog-zoomed-gallery__nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: calc(var(--layer-overlay) + 2);
+    width: 3rem;
+    height: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    border: 1px solid rgb(27 67 50 / 0.15);
+    color: #1b4332;
+    box-shadow: 0 4px 18px rgb(27 67 50 / 0.14);
+    cursor: pointer;
+  }
+
+  button.dialog-zoomed-gallery__nav:hover {
+    background: #fff;
+  }
+
+  button.dialog-zoomed-gallery__nav svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .dialog-zoomed-gallery__nav--prev {
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+  }
+
+  .dialog-zoomed-gallery__nav--next {
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
+  }
+
+  @media screen and (min-width: 750px) {
+    button.dialog-zoomed-gallery__nav {
+      width: 3.25rem;
+      height: 3.25rem;
+    }
+
+    .dialog-zoomed-gallery__nav--prev {
+      left: max(1.25rem, env(safe-area-inset-left, 0px));
+    }
+
+    .dialog-zoomed-gallery__nav--next {
+      right: max(1.25rem, env(safe-area-inset-right, 0px));
+    }
   }
 
   /* Mobile thumbnails styling */
   @media screen and (max-width: 749px) {
     .media-gallery__mobile-controls[thumbnails] {
-      --thumbnail-width: 44px;
+      --thumbnail-width: 52px;
     }
 
     .media-gallery__mobile-controls[thumbnails] .slideshow-controls__thumbnail {
       width: var(--thumbnail-width);
       height: auto;
     }
+
+    button.dialog-zoomed-gallery__nav {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
   }
 
   .dialog-zoomed-gallery .product-media-container--zoomable.product-media-container--image {
-    cursor: zoom-out;
+    cursor: default;
   }
 
   .dialog-zoomed-gallery .product-media-container--video deferred-media,

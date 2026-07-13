@@ -65,16 +65,29 @@
 
 <div
   ref="cardGallery"
-  class="card-gallery card-gallery-{{ block.id }} spacing-style border-style{% if has_badges %} card-gallery--badge-{{ badge_position }}{% endif %}"
+  class="
+    card-gallery
+    card-gallery-{{ block.id }}
+    spacing-style
+    border-style
+    {% if has_badges %} card-gallery--badge-{{ badge_position }}{% endif %}
+    {% if settings.show_second_image_on_hover != false and product.media.size > 1 %} card-gallery--hover-swap{% endif %}
+  "
   style="
     {% render 'border-override', settings: block_settings %}
     {% render 'spacing-style', settings: block_settings %}
     --gallery-aspect-ratio: {{ ratio }};
   "
   data-product-id="{{ product.id }}"
-  {% if settings.show_second_image_on_hover != false %}
-    on:pointerenter="/previewImage"
-    on:pointerleave="/resetImage"
+  {% if settings.show_second_image_on_hover != false and product.media.size > 1 %}
+    {%- comment -%}
+      Prefer CSS hover overlay (.card-gallery--hover-swap). Keep JS preview as a fallback
+      only when carousel mode can advance slides; overlay covers the common carousel-off case.
+    {%- endcomment -%}
+    {% if settings.product_card_carousel %}
+      on:pointerenter="/previewImage"
+      on:pointerleave="/resetImage"
+    {% endif %}
   {% endif %}
   {% if settings.transition_to_main_product %}
     data-view-transition-to-main-product
@@ -120,6 +133,12 @@
               # hide all variant images that aren't the first one
               assign hidden = true
             endif
+          endif
+
+          # Capture the first alternate image for a CSS hover overlay (works even when the
+          # slideshow is disabled / carousel is off, and when the alt shot is variant-only).
+          if settings.show_second_image_on_hover != false and hover_media == blank and forloop.first == false and media.media_type == 'image'
+            assign hover_media = media
           endif
 
           # Performance improvement: don't render more than 5 visible images into the slideshow
@@ -171,6 +190,26 @@
         show_arrows: show_arrows,
         attributes: slideshow_attributes
       %}
+      {%- if settings.show_second_image_on_hover != false and hover_media != blank -%}
+        {%- liquid
+          assign hover_alt = hover_media.alt | strip
+          if hover_alt == blank
+            assign hover_alt = product.title | append: ' — detail view'
+          endif
+        -%}
+        <div class="card-gallery__hover-image" aria-hidden="true">
+          {{
+            hover_media.preview_image
+            | image_url: width: 800
+            | image_tag:
+              loading: 'lazy',
+              class: 'card-gallery__hover-img',
+              sizes: image_sizes,
+              widths: '240, 352, 500, 800',
+              alt: hover_alt
+          }}
+        </div>
+      {%- endif -%}
     </a>
   {% elsif product != blank and product.media.size == 0 %}
     <div class="product-card-gallery__title-placeholder">
@@ -203,9 +242,42 @@
 
 {% stylesheet %}
   .card-gallery {
+    position: relative;
     overflow: hidden;
     container-type: inline-size; /* Make card-gallery a container */
     container-name: card-gallery-container; /* Optional: name the container */
+  }
+
+  /* Desktop hover: swap to second product image without relying on slideshow.next() */
+  .card-gallery__hover-image {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+    transition: opacity 0.35s ease;
+  }
+
+  .card-gallery__hover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .card-gallery--hover-swap:hover .card-gallery__hover-image,
+    .card-gallery--hover-swap:focus-within .card-gallery__hover-image {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-gallery__hover-image {
+      transition: none;
+    }
   }
 
   .card-gallery__placeholder svg {
