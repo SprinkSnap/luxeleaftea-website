@@ -1,0 +1,65 @@
+{%- doc -%}
+  Renders stacked product images for desktop hover second-image reveal.
+
+  @param {object} product - Product with media
+  @param {string} [class_prefix] - BEM prefix for image classes (e.g. luxe-featured)
+  @param {number} [width] - Image width for srcset
+  @param {number} [display_width] - Width attribute
+  @param {number} [display_height] - Height attribute
+{%- enddoc -%}
+
+{%- liquid
+  assign hover_width = width | default: 600
+  assign img_w = display_width | default: hover_width
+  assign img_h = display_height | default: hover_width
+  assign prefix = class_prefix | default: 'luxe-product'
+  assign primary_class = prefix | append: '__image ' | append: prefix | append: '__image--primary'
+  assign secondary_class = prefix | append: '__image ' | append: prefix | append: '__image--secondary'
+  assign primary = product.featured_media | default: product.featured_image
+  assign secondary = blank
+
+  if product.media.size > 1
+    for media in product.media
+      if primary != blank and media.id == primary.id
+        continue
+      endif
+      if media.media_type == 'image'
+        assign secondary = media
+        break
+      endif
+    endfor
+  endif
+-%}
+
+{%- if primary != blank -%}
+  {{
+    primary
+    | image_url: width: hover_width
+    | image_tag:
+      loading: 'lazy',
+      alt: product.title,
+      class: primary_class,
+      widths: '240, 360, 480, 600, 800',
+      width: img_w,
+      height: img_h
+  }}
+  {%- if secondary != blank -%}
+    {%- liquid
+      assign secondary_alt = secondary.alt | strip
+      if secondary_alt == blank
+        assign secondary_alt = product.title | append: ' — detail view'
+      endif
+    -%}
+    {{
+      secondary
+      | image_url: width: hover_width
+      | image_tag:
+        loading: 'lazy',
+        alt: secondary_alt,
+        class: secondary_class,
+        widths: '240, 360, 480, 600, 800',
+        width: img_w,
+        height: img_h
+    }}
+  {%- endif -%}
+{%- endif -%}

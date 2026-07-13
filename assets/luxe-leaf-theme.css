@@ -2447,3 +2447,14 @@ body.luxe-leaf-theme .content-for-layout {
     font-size: 0.875rem;
   }
 }
+
+/* Collection / browse cards: desktop second-image hover affordance */
+@media (hover: hover) and (pointer: fine) {
+  .product-card .card-gallery slideshow-slide {
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card .card-gallery:hover {
+    cursor: pointer;
+  }
+}

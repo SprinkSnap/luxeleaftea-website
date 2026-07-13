@@ -28,13 +28,15 @@
     {%- assign variant = product.selected_or_first_available_variant -%}
     <article class="luxe-keep-exploring__card" role="listitem">
       <a href="{{ variant.url }}" class="luxe-keep-exploring__media-link">
-        <div class="luxe-keep-exploring__media">
+        <div class="luxe-keep-exploring__media{% if product.media.size > 1 %} luxe-keep-exploring__media--has-hover{% endif %}">
           {%- if product.featured_image -%}
-            {{
-              product.featured_image
-              | image_url: width: 480
-              | image_tag: loading: 'lazy', alt: product.title, class: 'luxe-keep-exploring__image', width: 240, height: 240
-            }}
+            {% render 'luxe-leaf-product-hover-images',
+              product: product,
+              class_prefix: 'luxe-keep-exploring',
+              width: 480,
+              display_width: 240,
+              display_height: 240
+            %}
           {%- else -%}
             <img
               src="{{ 'luxe-leaf-tea-assortment-hero.png' | asset_url }}"
@@ -74,13 +76,15 @@
     {%- assign variant = product.selected_or_first_available_variant -%}
     <article class="luxe-keep-exploring__card" role="listitem">
       <a href="{{ variant.url }}" class="luxe-keep-exploring__media-link">
-        <div class="luxe-keep-exploring__media">
+        <div class="luxe-keep-exploring__media{% if product.media.size > 1 %} luxe-keep-exploring__media--has-hover{% endif %}">
           {%- if product.featured_image -%}
-            {{
-              product.featured_image
-              | image_url: width: 480
-              | image_tag: loading: 'lazy', alt: product.title, class: 'luxe-keep-exploring__image', width: 240, height: 240
-            }}
+            {% render 'luxe-leaf-product-hover-images',
+              product: product,
+              class_prefix: 'luxe-keep-exploring',
+              width: 480,
+              display_width: 240,
+              display_height: 240
+            %}
           {%- else -%}
             <img
               src="{{ 'luxe-leaf-tea-assortment-hero.png' | asset_url }}"
