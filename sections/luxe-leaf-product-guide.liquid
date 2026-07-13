@@ -88,20 +88,37 @@
 
   if origin == blank
     assign origin_html = default_origin
+    assign origin_is_default = true
   else
     assign origin_html = origin | metafield_tag
+    assign origin_is_default = false
   endif
 
   if tasting == blank
     assign tasting_html = default_tasting
+    assign tasting_is_default = true
   else
     assign tasting_html = tasting | metafield_tag
+    assign tasting_is_default = false
   endif
 
   if brewing == blank
     assign brewing_html = default_brewing
   else
     assign brewing_html = brewing | metafield_tag
+  endif
+
+  # When the PDP already shows a full product description below the buy box,
+  # skip default origin/tasting copy so the page does not duplicate the story.
+  assign show_origin = true
+  assign show_tasting = true
+  if product.description != blank
+    if origin_is_default
+      assign show_origin = false
+    endif
+    if tasting_is_default
+      assign show_tasting = false
+    endif
   endif
 
   assign tea_collection_handle = ''
@@ -154,19 +171,23 @@
       <div class="luxe-product-guide__content rte">{{ brewing_html }}</div>
     </details>
 
-    <details class="luxe-product-guide__row">
-      <summary class="luxe-product-guide__summary">
-        <span>Origin & harvest</span>
-      </summary>
-      <div class="luxe-product-guide__content rte">{{ origin_html }}</div>
-    </details>
+    {%- if show_origin -%}
+      <details class="luxe-product-guide__row">
+        <summary class="luxe-product-guide__summary">
+          <span>Origin & harvest</span>
+        </summary>
+        <div class="luxe-product-guide__content rte">{{ origin_html }}</div>
+      </details>
+    {%- endif -%}
 
-    <details class="luxe-product-guide__row">
-      <summary class="luxe-product-guide__summary">
-        <span>Tasting notes</span>
-      </summary>
-      <div class="luxe-product-guide__content rte">{{ tasting_html }}</div>
-    </details>
+    {%- if show_tasting -%}
+      <details class="luxe-product-guide__row">
+        <summary class="luxe-product-guide__summary">
+          <span>Tasting notes</span>
+        </summary>
+        <div class="luxe-product-guide__content rte">{{ tasting_html }}</div>
+      </details>
+    {%- endif -%}
   </div>
 
   <div class="luxe-product-guide__links">

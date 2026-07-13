@@ -118,11 +118,15 @@
         {{ product_details }}
       {% endif %}
     {% endfor %}
-
-    {%- if request.page_type == 'product' -%}
-      {% render 'luxe-leaf-product-description', product: product %}
-    {%- endif -%}
   </product-component>
+
+  {%- comment -%}
+    Description must sit OUTSIDE the media/checkout grid so the sticky buy box
+    cannot overlap it, and so it spans the full content width below both columns.
+  {%- endcomment -%}
+  {%- if request.page_type == 'product' -%}
+    {% render 'luxe-leaf-product-description', product: product %}
+  {%- endif -%}
 
   {{ additional_blocks }}
 </div>
@@ -330,15 +334,21 @@
     --sticky-header-offset: var(--header-height);
   }
 
-  /* Full-width description row below media + checkout */
-  .product-information__description {
-    grid-column: 1 / -1;
+  /*
+    Full-width description BELOW media + checkout (sibling of the product grid).
+    Kept outside product-component so sticky buy-box cannot overlap this content.
+  */
+  .product-information > .product-information__description,
+  .product-information > .luxe-pdp-description {
+    grid-column: 2 / 3;
     width: 100%;
     min-width: 0;
-    order: 2;
-    margin-block-start: clamp(1.25rem, 3vw, 2.5rem);
-    padding-block-start: clamp(1.25rem, 3vw, 2rem);
+    position: relative;
+    z-index: 1;
+    margin-block-start: clamp(1.5rem, 3vw, 2.75rem);
+    padding-block: clamp(1.5rem, 3vw, 2.25rem) 0.5rem;
     border-block-start: 1px solid rgb(27 67 50 / 0.12);
+    background: var(--color-background, #fff);
   }
 
   .luxe-pdp-description__inner {
@@ -369,38 +379,11 @@
     margin-bottom: 0;
   }
 
-  @media screen and (min-width: 750px) {
-    .product-information__grid:not(.product-information--media-none) .product-information__description {
-      grid-column: 1 / -1;
-    }
-
-    .product-information__grid--half.product-information--media-left .product-information__description {
-      grid-column: 2 / 4;
-    }
-
-    .product-information__grid--half.product-information--media-right .product-information__description {
-      grid-column: 2 / 4;
-    }
-
-    .section--full-width .product-information__grid--half .product-information__description {
-      grid-column: 1 / -1;
-      padding-inline: var(--page-margin);
-    }
-  }
-
   @media screen and (max-width: 749px) {
-    .product-information__description {
-      order: 2;
+    .product-information > .product-information__description,
+    .product-information > .luxe-pdp-description {
       margin-block-start: 1rem;
       padding-block-start: 1.25rem;
-    }
-
-    .product-information__media {
-      order: 0;
-    }
-
-    .product-details {
-      order: 1;
     }
   }
 {% endstylesheet %}
