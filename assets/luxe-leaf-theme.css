@@ -2248,6 +2248,15 @@ body.luxe-leaf-theme .content-for-layout {
   border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.08);
 }
 
+/* Buy column: conversion-only — never show the long product description here */
+@media screen and (min-width: 750px) {
+  .luxe-pdp-buy-column .product-description,
+  .luxe-pdp-buy-column [data-block-type='product-description'],
+  .product-details.luxe-pdp-buy-column > .group-block > .product-description {
+    display: none !important;
+  }
+}
+
 /* Cart page — You may also like (conversion + responsive product cards) */
 .luxe-cart-recommendations {
   border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
