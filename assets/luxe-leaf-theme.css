@@ -2230,10 +2230,29 @@ body.luxe-leaf-theme .content-for-layout {
     slideshow-controls[thumbnails][pagination-position='left']
     .slideshow-controls__thumbnail {
     width: var(--thumbnail-width, 72px);
+    height: auto !important;
+    aspect-ratio: var(--aspect-ratio, 1);
+    padding: 0;
     border: 1px solid rgb(27 67 50 / 0.12);
     border-radius: 0.35rem;
     overflow: hidden;
     flex-shrink: 0;
+    background: #ebe6dc;
+  }
+
+  .product-information__media
+    slideshow-controls[thumbnails][pagination-position='left']
+    .slideshow-controls__thumbnail
+    img,
+  .product-information__media
+    slideshow-controls[thumbnails][pagination-position='left']
+    .slideshow-controls__thumbnail-img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .product-information__media
@@ -2263,6 +2282,30 @@ body.luxe-leaf-theme .content-for-layout {
     flex-direction: row;
     justify-content: flex-start;
     gap: 0.45rem;
+  }
+
+  .product-information__media
+    .media-gallery__mobile-controls[thumbnails]
+    .slideshow-controls__thumbnail {
+    width: 52px;
+    height: auto !important;
+    aspect-ratio: var(--aspect-ratio, 1);
+    padding: 0;
+    overflow: hidden;
+    background: #ebe6dc;
+  }
+
+  .product-information__media
+    .media-gallery__mobile-controls[thumbnails]
+    .slideshow-controls__thumbnail
+    img,
+  .product-information__media
+    .media-gallery__mobile-controls[thumbnails]
+    .slideshow-controls__thumbnail-img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
   }
 
   .product-information__media slideshow-slide {
@@ -2454,6 +2497,19 @@ zoom-dialog.luxe-zoom-dialog dialog {
 
 .luxe-zoom-dialog .dialog-thumbnails-list__thumbnail {
   width: 44px !important;
+  height: auto !important;
+  aspect-ratio: var(--aspect-ratio, 1);
+  padding: 0 !important;
+  overflow: hidden;
+  background: #ebe6dc;
+}
+
+.luxe-zoom-dialog .dialog-thumbnails-list__thumbnail img,
+.luxe-zoom-dialog .dialog-thumbnails-list__thumbnail-img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 
 @media screen and (max-width: 749px) {
