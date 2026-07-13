@@ -291,32 +291,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "text_aEtTtq": {
-              "type": "text",
-              "name": "Product description",
-              "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-primary--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
             }
           },
           "block_order": [
@@ -324,8 +298,7 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
-            "trust_line_product",
-            "text_aEtTtq"
+            "trust_line_product"
           ]
         }
       },
@@ -333,13 +306,13 @@
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": false,
-        "limit_details_width": false,
+        "equal_columns": true,
+        "limit_details_width": true,
         "gap": 48,
         "enable_sticky_add_to_cart": true,
         "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-start": 8,
+        "padding-block-end": 16
       }
     },
     "luxe_product_guide": {
@@ -348,8 +321,8 @@
         "product": "{{ product }}",
         "trust_line": "Packed fresh to order · Premium loose leaf tea · Free shipping over $50",
         "open_brewing": true,
-        "padding-block-start": 0,
-        "padding-block-end": 32
+        "padding-block-start": 24,
+        "padding-block-end": 40
       }
     },
     "keep_exploring": {
@@ -521,6 +494,7 @@
     "breadcrumbs",
     "trust_bar",
     "main",
+    "luxe_product_guide",
     "keep_exploring",
     "product_recommendations_qggXJq"
   ]
