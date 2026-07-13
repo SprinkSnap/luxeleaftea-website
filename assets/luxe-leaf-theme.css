@@ -2183,6 +2183,29 @@ body.luxe-leaf-theme .content-for-layout {
   touch-action: pan-x pinch-zoom;
 }
 
+/* PDP conversion layout: images left, checkout right, description below */
+@media screen and (min-width: 750px) {
+  .product-information__grid.product-information__grid--half.product-information--media-left {
+    align-items: start;
+  }
+
+  .product-information__grid.product-information__grid--half .product-information__media {
+    min-width: 0;
+  }
+
+  .product-information__grid.product-information__grid--half .product-details.sticky-content--desktop {
+    align-self: start;
+  }
+
+  .product-information .product-details > .group-block {
+    gap: 1.15rem;
+  }
+
+  .product-information .product-form-buttons {
+    max-width: 100%;
+  }
+}
+
 @media screen and (max-width: 749px) {
   .product-information__media {
     margin-block-end: 1rem;
@@ -2202,6 +2225,14 @@ body.luxe-leaf-theme .content-for-layout {
   .product-availability-line-wrap--buy-box .product-availability-line {
     font-size: 0.8125rem;
   }
+
+  .luxe-product-guide {
+    margin-block-start: 0.5rem;
+  }
+}
+
+.luxe-product-guide-section {
+  border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.08);
 }
 
 /* Cart page — You may also like (conversion + responsive product cards) */
