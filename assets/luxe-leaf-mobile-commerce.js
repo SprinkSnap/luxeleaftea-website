@@ -95,17 +95,17 @@ import { StandardEvents } from '@shopify/events';
     return `$${(cents / 100).toFixed(2)}`;
   };
 
-  const getShippingEstimate = (cartTotal, itemsSubtotal = null) => {
+  const getShippingEstimate = (merchandiseTotal) => {
     const { threshold, standardRate } = getShippingConfig();
-    const subtotal = itemsSubtotal ?? cartTotal;
-    const qualifiesFree = cartTotal >= threshold;
+    const subtotal = merchandiseTotal;
+    const qualifiesFree = merchandiseTotal >= threshold;
     const shippingCost = qualifiesFree ? 0 : standardRate;
     const taxableBase = subtotal + shippingCost;
     const taxRateBps = getCanadaTaxRateBps();
     const taxAmount = taxRateBps > 0 ? Math.round((taxableBase * taxRateBps) / 10000) : 0;
     const grandTotal = taxableBase + taxAmount;
-    const remaining = Math.max(0, threshold - cartTotal);
-    const progress = Math.min(100, Math.round((cartTotal * 100) / threshold));
+    const remaining = Math.max(0, threshold - merchandiseTotal);
+    const progress = Math.min(100, Math.round((merchandiseTotal * 100) / threshold));
 
     return {
       qualifiesFree,
@@ -127,7 +127,7 @@ import { StandardEvents } from '@shopify/events';
     if (!(conversion instanceof HTMLElement) || cart.item_count === 0) return;
 
     const { qualifiesFree, shippingCost, grandTotal, taxAmount, subtotal, remaining, progress, taxReady } =
-      getShippingEstimate(cart.total_price, cart.items_subtotal_price);
+      getShippingEstimate(cart.total_price);
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const progressText = conversion.querySelector('[data-shipping-progress-text]');
@@ -173,10 +173,7 @@ import { StandardEvents } from '@shopify/events';
     const totals = document.querySelector('[data-shipping-totals]');
     if (!(totals instanceof HTMLElement) || cart.item_count === 0) return;
 
-    const { qualifiesFree, grandTotal, taxAmount, subtotal, remaining } = getShippingEstimate(
-      cart.total_price,
-      cart.items_subtotal_price
-    );
+    const { qualifiesFree, grandTotal, taxAmount, subtotal, remaining } = getShippingEstimate(cart.total_price);
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const subtotalValue = totals.querySelector('[data-cart-subtotal-value]');
@@ -229,10 +226,7 @@ import { StandardEvents } from '@shopify/events';
       return;
     }
 
-    const { qualifiesFree, estimatedTotal, remaining, progress, taxReady } = getShippingEstimate(
-      cart.total_price,
-      cart.items_subtotal_price
-    );
+    const { qualifiesFree, estimatedTotal, remaining, progress, taxReady } = getShippingEstimate(cart.total_price);
     const { thresholdLabel, standardRateLabel } = getShippingConfig();
 
     const textEl = nudge.querySelector('[data-shipping-nudge-text]');
@@ -296,7 +290,7 @@ import { StandardEvents } from '@shopify/events';
       syncCartConversion(cart);
       syncShippingTotals(cart);
 
-      const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price, cart.items_subtotal_price);
+      const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price);
 
       if (bar) {
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');

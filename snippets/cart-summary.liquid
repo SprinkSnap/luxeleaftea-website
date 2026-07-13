@@ -244,7 +244,7 @@
       else
         assign shipping_cost = standard_rate
       endif
-      assign grand_total = cart.items_subtotal_price | plus: shipping_cost
+      assign grand_total = cart.total_price | plus: shipping_cost
       if settings.currency_code_enabled_cart_total
         assign grand_total_money = grand_total | money_with_currency
       else
