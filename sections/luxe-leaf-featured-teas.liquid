@@ -37,13 +37,15 @@
       {%- assign variant = product.selected_or_first_available_variant -%}
       <article class="luxe-featured__card" role="listitem">
         <a href="{{ variant.url }}" class="luxe-featured__media-link">
-          <div class="luxe-featured__media">
+          <div class="luxe-featured__media{% if product.media.size > 1 %} luxe-featured__media--has-hover{% endif %}">
             {%- if product.featured_image -%}
-              {{
-                product.featured_image
-                | image_url: width: 600
-                | image_tag: loading: 'lazy', alt: product.title, class: 'luxe-featured__image'
-              }}
+              {% render 'luxe-leaf-product-hover-images',
+                product: product,
+                class_prefix: 'luxe-featured',
+                width: 600,
+                display_width: 600,
+                display_height: 600
+              %}
             {%- else -%}
               <img
                 src="{{ 'luxe-leaf-tea-assortment-hero.png' | asset_url }}"
@@ -184,11 +186,26 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: opacity 0.35s ease, transform 0.4s ease;
   }
 
-  .luxe-featured__card:hover .luxe-featured__image {
-    transform: scale(1.04);
+  .luxe-featured__image--secondary {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .luxe-featured__media--has-hover:hover .luxe-featured__image--primary,
+    .luxe-featured__media--has-hover:focus-within .luxe-featured__image--primary {
+      opacity: 0;
+    }
+
+    .luxe-featured__media--has-hover:hover .luxe-featured__image--secondary,
+    .luxe-featured__media--has-hover:focus-within .luxe-featured__image--secondary {
+      opacity: 1;
+      transform: scale(1.02);
+    }
   }
 
   .luxe-featured__media-link {
