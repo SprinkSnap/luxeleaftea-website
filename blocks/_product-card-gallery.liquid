@@ -26,13 +26,15 @@
         </div>
       {%- endif -%}
     </div>
-    {%- unless settings.brand_navigation == false -%}
-      {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
-    {%- endunless -%}
     {% liquid
       assign show_quick_add = false
       if settings.quick_add or settings.mobile_quick_add
         assign show_quick_add = true
+      endif
+
+      # Cart upsell cards use inline Add to Bag below the image — overlay quick-add blocks small photos.
+      if request.page_type == 'cart'
+        assign show_quick_add = false
       endif
 
       unless settings.brand_navigation == false

@@ -2,10 +2,21 @@
 
 {% liquid
   assign section_settings = section.settings
+  assign use_brand_logo = false
+  if settings.brand_navigation != false
+    assign use_brand_logo = true
+  endif
+
   assign image = settings.logo
 
   if section_settings.inverse and settings.logo_inverse
     assign image = settings.logo_inverse
+  endif
+
+  if use_brand_logo
+    assign brand_logo_height = section_settings.pixel_height | default: 48
+    assign brand_logo_height_mobile = section_settings.pixel_height_mobile | default: brand_logo_height
+    assign brand_logo_width = brand_logo_height | times: 4.52 | round
   endif
 
   if section_settings.background_color != blank
@@ -13,21 +24,23 @@
   endif
 %}
 
-{%- if image -%}
-  {% capture logo_image %}
-    {{-
-      image
-      | image_url: width: 3840
-      | image_tag:
-        width: image.width,
-        widths: '240, 352, 832, 1200, 1600, 1920, 2560, 3840',
-        height: image.height,
-        class: 'logo-section__image',
-        alt: shop.name,
-        sizes: '(min-width: 750px) calc(var(--logo-width)), 100vw'
-    -}}
-  {% endcapture %}
-{%- endif -%}
+{%- unless use_brand_logo -%}
+  {%- if image -%}
+    {% capture logo_image %}
+      {{-
+        image
+        | image_url: width: 3840
+        | image_tag:
+          width: image.width,
+          widths: '240, 352, 832, 1200, 1600, 1920, 2560, 3840',
+          height: image.height,
+          class: 'logo-section__image',
+          alt: shop.name,
+          sizes: '(min-width: 750px) calc(var(--logo-width)), 100vw'
+      -}}
+    {% endcapture %}
+  {%- endif -%}
+{%- endunless -%}
 
 <div
   class="section-background{% if section_settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
@@ -45,7 +58,10 @@
       {% if section_settings.unit == 'percent' %}
         --logo-width: {{ section_settings.percent_width }}%;
       {% else %}
-        {% if image %}
+        {% if use_brand_logo %}
+          --logo-width: {{ brand_logo_width }}px;
+          --logo-height: {{ brand_logo_height }}px;
+        {% elsif image %}
           --logo-width: {{ image.width | times: 1.00 | divided_by: image.height | times: section_settings.pixel_height }}px;
         {% else %}
           --logo-width: {{ shop.name.size | times: 0.65 }}em;
@@ -70,7 +86,16 @@
     "
     {{ section.shopify_attributes }}
   >
-    {% if logo_image %}
+    {% if use_brand_logo %}
+      <div class="logo-section__image-wrapper">
+        {% render 'luxe-leaf-tea-logo',
+          class: 'logo-section__image',
+          alt: shop.name,
+          logo_height: brand_logo_height,
+          logo_height_mobile: brand_logo_height_mobile
+        %}
+      </div>
+    {% elsif logo_image %}
       <div class="logo-section__image-wrapper">
         {{ logo_image }}
       </div>

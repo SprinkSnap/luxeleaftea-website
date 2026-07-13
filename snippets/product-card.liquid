@@ -32,6 +32,11 @@
     assign has_mobile_quick_add = true
   endif
 
+  if request.page_type == 'cart'
+    assign has_quick_add = false
+    assign has_mobile_quick_add = false
+  endif
+
   assign product_card_id = 'product-card-link-' | append: block.id | append: '-' | append: product.id
   assign product_card_gap_value = product_card_gap | default: block_settings.product_card_gap
 

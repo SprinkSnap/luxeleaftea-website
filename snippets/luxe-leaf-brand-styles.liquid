@@ -205,9 +205,45 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  #header-component cart-icon.header-actions__cart-icon .svg-wrapper {
     width: 1.75rem;
     height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #header-component cart-icon.header-actions__cart-icon .cart-bubble {
+    --cart-bubble-size: 17px;
+    position: absolute;
+    top: 0.2rem;
+    right: 0;
+    width: var(--cart-bubble-size);
+    min-width: var(--cart-bubble-size);
+    height: var(--cart-bubble-size);
     pointer-events: none;
+  }
+
+  #header-component cart-icon.header-actions__cart-icon .cart-bubble__background {
+    background-color: var(--luxe-nav-gold, #c9a227);
+  }
+
+  #header-component cart-icon.header-actions__cart-icon .cart-bubble__text {
+    color: var(--luxe-nav-ink, #1a1a1a);
+    font-size: 0.5625rem;
+    font-weight: 700;
+  }
+
+  #header-component cart-icon.header-actions__cart-icon--has-cart .svg-wrapper svg {
+    mask: none;
+    -webkit-mask: none;
   }
 
   #header-component .luxe-tea-cart-icon__tea,
@@ -548,6 +584,11 @@
 
     .menu-drawer {
       background: var(--luxe-nav-ivory) !important;
+      max-height: 100dvh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
 
     .menu-drawer__navigation {
@@ -703,10 +744,35 @@
     width: min(20rem, 88vw);
     max-width: 100%;
     height: 100%;
-    padding: calc(var(--header-height, 3.75rem) + 0.75rem) 1rem 1.5rem;
+    max-height: 100dvh;
+    overflow: hidden;
+    padding: calc(var(--header-height, 3.75rem) + 0.75rem) 1rem 0;
     background: var(--luxe-nav-ivory);
     box-shadow: -8px 0 32px rgb(26 26 26 / 0.18);
     animation: luxe-brand-menu-in 0.28s ease;
+  }
+
+  .luxe-brand-menu__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(26 26 26 / 0.22) transparent;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    margin-inline: -0.15rem;
+    padding-inline: 0.15rem;
+  }
+
+  .luxe-brand-menu__scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .luxe-brand-menu__scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgb(26 26 26 / 0.2);
   }
 
   @keyframes luxe-brand-menu-in {
@@ -723,6 +789,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
     margin-bottom: 0.75rem;
   }
 

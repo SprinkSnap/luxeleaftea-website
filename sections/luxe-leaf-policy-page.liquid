@@ -65,7 +65,6 @@
   assign cta_secondary_label = section.settings.cta_secondary_label
   assign cta_secondary_link = section.settings.cta_secondary_link | default: faq_url
   assign show_toc = section.settings.show_toc
-  assign mobile_shop_label = section.settings.mobile_shop_label
 
   case policy_kind
     when 'terms'
@@ -284,14 +283,6 @@
       <p class="luxe-policy-page__cta-note">{{ section.settings.cta_note }}</p>
     </div>
   {%- endif -%}
-
-  <a
-    href="{{ shop_tea_url }}"
-    class="luxe-policy-page__mobile-shop button"
-    title="Shop premium loose leaf tea"
-  >
-    {{ mobile_shop_label }}
-  </a>
 </section>
 
 {% render 'luxe-leaf-policy-schema', policy_kind: policy_kind, policy_title: policy_heading, policy_url: policy_path %}
@@ -655,34 +646,6 @@
     letter-spacing: 0.04em;
     color: rgb(248 246 240 / 0.85) !important;
   }
-
-  .luxe-policy-page__mobile-shop {
-    display: none;
-    position: fixed;
-    left: 1rem;
-    right: 1rem;
-    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-    z-index: 20;
-    min-height: 3rem;
-    border-radius: 999px;
-    background: #1b4332;
-    border-color: #1b4332;
-    color: #f8f6f0 !important;
-    text-align: center;
-    box-shadow: 0 8px 24px rgb(27 67 50 / 0.25);
-  }
-
-  @media screen and (max-width: 749px) {
-    .luxe-policy-page__mobile-shop {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .luxe-policy-page {
-      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
-    }
-  }
 {% endstylesheet %}
 
 {% schema %}
@@ -790,12 +753,6 @@
       "id": "cta_note",
       "label": "CTA note",
       "default": "Secure checkout · Free shipping over $50 · Packed fresh to order"
-    },
-    {
-      "type": "text",
-      "id": "mobile_shop_label",
-      "label": "Mobile sticky shop button",
-      "default": "Shop tea"
     },
     {
       "type": "range",

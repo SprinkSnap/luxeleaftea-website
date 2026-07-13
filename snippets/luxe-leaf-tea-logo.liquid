@@ -13,23 +13,46 @@
     assign logo_alt = shop.name | append: ' — premium loose leaf tea'
   endif
   assign logo_class = class | default: 'header-logo__image'
+  assign use_large_mobile_asset = false
+  if logo_height_mobile >= 48
+    assign use_large_mobile_asset = true
+  endif
 -%}
 
 <picture class="luxe-brand-logo__picture">
+  {%- if use_large_mobile_asset -%}
+    <source
+      type="image/webp"
+      media="(max-width: 749px)"
+      srcset="{{ 'luxe-leaf-tea-logo-header.webp' | asset_url }} 217w, {{ 'luxe-leaf-tea-logo-header-2x.webp' | asset_url }} 434w"
+      sizes="{{ logo_width_mobile }}px"
+    >
+  {%- else -%}
+    <source
+      type="image/webp"
+      media="(max-width: 749px)"
+      srcset="{{ 'luxe-leaf-tea-logo-header-sm.webp' | asset_url }} 162w, {{ 'luxe-leaf-tea-logo-header-sm-2x.webp' | asset_url }} 325w"
+      sizes="{{ logo_width_mobile }}px"
+    >
+  {%- endif -%}
   <source
     type="image/webp"
-    media="(max-width: 749px)"
-    srcset="{{ 'luxe-leaf-tea-logo-header-2x.webp' | asset_url }} 434w"
-    sizes="{{ logo_width_mobile }}px"
-  >
-  <source
-    type="image/webp"
-    srcset="{{ 'luxe-leaf-tea-logo-header-2x.webp' | asset_url }} 434w"
+    srcset="{{ 'luxe-leaf-tea-logo-header.webp' | asset_url }} 217w, {{ 'luxe-leaf-tea-logo-header-2x.webp' | asset_url }} 434w"
     sizes="{{ logo_width }}px"
   >
   <img
-    src="{{ 'luxe-leaf-tea-logo-header-2x.png' | asset_url }}"
-    srcset="{{ 'luxe-leaf-tea-logo-header-2x.png' | asset_url }} 434w"
+    src="{{ 'luxe-leaf-tea-logo-header.png' | asset_url }}"
+    srcset="
+      {%- if use_large_mobile_asset -%}
+        {{ 'luxe-leaf-tea-logo-header.png' | asset_url }} 217w,
+        {{ 'luxe-leaf-tea-logo-header-2x.png' | asset_url }} 434w
+      {%- else -%}
+        {{ 'luxe-leaf-tea-logo-header-sm.png' | asset_url }} 162w,
+        {{ 'luxe-leaf-tea-logo-header-sm-2x.png' | asset_url }} 325w,
+        {{ 'luxe-leaf-tea-logo-header.png' | asset_url }} 217w,
+        {{ 'luxe-leaf-tea-logo-header-2x.png' | asset_url }} 434w
+      {%- endif -%}
+    "
     sizes="(max-width: 749px) {{ logo_width_mobile }}px, {{ logo_width }}px"
     width="{{ logo_width }}"
     height="{{ logo_height }}"

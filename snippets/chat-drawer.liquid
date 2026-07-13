@@ -136,25 +136,26 @@
           type="button"
           class="luxe-mobile-bar__checkout button"
           data-mobile-checkout
+          aria-label="Go to secure checkout"
           {% if cart.item_count == 0 %}hidden{% endif %}
         >
-          Pay · {{ mobile_estimated_total | money }}
+          Checkout
         </button>
       </form>
       {%- if settings.cart_type == 'drawer' -%}
-        <a
-          href="{{ routes.cart_url }}"
+        <button
+          type="button"
           class="luxe-mobile-bar__cart button button-secondary"
           data-mobile-cart-toggle
           data-luxe-open-cart
-          role="button"
-          aria-label="Open cart — premium loose leaf tea"
-          {% if cart.item_count > 0 %}hidden{% endif %}
+          aria-label="View bag — {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}"
         >
-          {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
-          <span>{{ 'content.cart_title' | t }}</span>
-          <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
-        </a>
+          <span class="luxe-mobile-bar__cart-icon" aria-hidden="true">
+            {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
+            <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+          </span>
+          <span class="luxe-mobile-bar__cart-label" data-mobile-cart-label>Bag</span>
+        </button>
       {%- else -%}
         <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View cart">
           {{- 'icon-cart.svg' | inline_asset_content -}}

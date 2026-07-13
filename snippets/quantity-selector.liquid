@@ -5,9 +5,11 @@
   @param {object} product - the product to render the quantity selector for
   @param {object} [variant] - the specific variant to use (for cart items), if not provided uses selected_or_first_available_variant
   @param {number} [in_cart_quantity] - the quantity in the cart to set the input value
-  @param {number} [line_index] - the index of the forloop representing the line on which the quantity selector is rendered
+  @param {number} [line_index] - 0-based cart line index (legacy; prefer cart_line)
+  @param {number} [cart_line] - 1-based cart line number for cart/change.js (use forloop.index in cart)
   @param {string} [class] - custom class for the quantity selector, optional
   @param {boolean} [can_update_quantity] - whether the quantity can be updated, defaults to true
+  @param {boolean} [luxe_cart_controls] - use data attributes for Luxe Leaf cart control script
   @param {number} [min] - override the minimum quantity (e.g., 0 for quick order list)
   @param {block} [block] - The block object, used for Shopify editor attributes.
   @param {string} [wrapper_class] - Extra class for the wrapper, used to scope block-level CSS variable overrides so surface-level styles (e.g. quick-add modal) can override them.
@@ -20,7 +22,18 @@
     assign variant = product.selected_or_first_available_variant
   endif
   assign component_name = 'quantity-selector-component'
-  if line_index != null
+  assign is_cart_context = false
+  assign resolved_cart_line = null
+
+  if cart_line != blank
+    assign is_cart_context = true
+    assign resolved_cart_line = cart_line
+  elsif line_index != null
+    assign is_cart_context = true
+    assign resolved_cart_line = line_index | plus: 1
+  endif
+
+  if is_cart_context
     assign component_name = 'cart-quantity-selector-component'
   endif
 
@@ -38,18 +51,22 @@
   <{{ component_name }}
     class="quantity-selector{% if class %} {{ class }}{% endif %}"
     data-variant-id="{{ variant.id }}"
-    {% if line_index == null %}
+    {% if is_cart_context %}
+      ref="quantitySelectors[]"
+    {% else %}
       {{- block.shopify_attributes -}}
       ref="quantitySelector"
-    {% else %}
-      ref="quantitySelectors[]"
     {% endif %}
   >
     <button
       class="button quantity-minus button-unstyled"
       type="button"
       name="minus"
-      on:click="/decreaseQuantity"
+      {% if luxe_cart_controls %}
+        data-luxe-cart-qty="decrease"
+      {% else %}
+        on:click="/decreaseQuantity"
+      {% endif %}
       ref="minusButton"
       {% if can_update_quantity == false %}
         disabled
@@ -62,7 +79,7 @@
     </button>
     <input
       type="number"
-      name="{% if line_index %}updates[]{% else %}quantity{% endif %}"
+      name="{% if is_cart_context %}updates[]{% else %}quantity{% endif %}"
       value="{{ in_cart_quantity | default: variant.quantity_rule.min | default: 1 }}"
       data-cart-quantity="{{ cart | item_count_for_variant: variant.id }}"
       min="{{ min_quantity }}"
@@ -72,8 +89,8 @@
       ref="quantityInput"
       aria-live="polite"
       aria-label="{{ 'accessibility.quantity' | t }}"
-      {% if line_index %}
-        data-cart-line="{{ line_index | plus: 1 }}"
+      {% if is_cart_context %}
+        data-cart-line="{{ resolved_cart_line }}"
       {% endif %}
       {% if variant.quantity_rule.max %}
         max="{{ variant.quantity_rule.max }}"
@@ -87,7 +104,11 @@
       class="button quantity-plus button-unstyled"
       type="button"
       name="plus"
-      on:click="/increaseQuantity"
+      {% if luxe_cart_controls %}
+        data-luxe-cart-qty="increase"
+      {% else %}
+        on:click="/increaseQuantity"
+      {% endif %}
       ref="plusButton"
       {% if can_update_quantity == false %}
         disabled
@@ -100,7 +121,7 @@
     </button>
   </{{ component_name }}>
 
-  {%- if line_index == null -%}
+  {%- unless is_cart_context -%}
     {%- liquid
       # Check if variant has volume pricing
       assign has_volume_pricing = false
@@ -161,7 +182,7 @@
         </span>
       </price-per-item>
     {%- endif -%}
-  {%- endif -%}
+  {%- endunless -%}
 </div>
 
 {% stylesheet %}

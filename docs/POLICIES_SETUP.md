@@ -69,7 +69,6 @@ Each policy page includes:
 | **Highlight cards** | Key facts (free shipping, 14-day guarantee, etc.) |
 | **On-this-page nav** | Jump links to sections on mobile |
 | **Bottom CTA** | Policy-specific shop or contact buttons |
-| **Mobile sticky Shop button** | One-tap path to collections |
 | **JSON-LD** | WebPage schema; MerchantReturnPolicy; OfferShippingDetails |
 
 ## Theme files

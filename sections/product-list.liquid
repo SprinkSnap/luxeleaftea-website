@@ -5,6 +5,13 @@
   if section.settings.background_color != blank
     render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
   endif
+
+  assign luxe_section_modifier = ''
+  assign luxe_product_view_context = 'collection'
+  if request.page_type == 'cart'
+    assign luxe_section_modifier = 'luxe-cart-recommendations'
+    assign luxe_product_view_context = 'cart'
+  endif
 %}
 
 <div
@@ -19,7 +26,12 @@
     section-resource-list
     spacing-style
     gap-style
+    {{ luxe_section_modifier }}
   "
+  {% if luxe_section_modifier != blank %}
+    role="region"
+    aria-labelledby="cart-recommendations-heading"
+  {% endif %}
   style="
     {% render 'spacing-style', settings: section.settings %}
     {% render 'gap-style', value: section.settings.gap %}
@@ -40,7 +52,7 @@
               type: '_product-card',
               id: 'static-product-card',
               closest.product: product,
-              product_view_context: 'collection'
+              product_view_context: luxe_product_view_context
             %}
           </div>
 

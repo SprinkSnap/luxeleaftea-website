@@ -64,6 +64,7 @@ function initBrandMobileMenu() {
     panel.setAttribute('aria-hidden', open ? 'false' : 'true');
     toggles.forEach((toggle) => toggle.setAttribute('aria-expanded', open ? 'true' : 'false'));
     document.documentElement.style.overflow = open ? 'hidden' : '';
+    document.documentElement.classList.toggle('luxe-menu-open', open);
   };
 
   toggles.forEach((toggle) => {

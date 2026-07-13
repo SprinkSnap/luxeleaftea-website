@@ -16,7 +16,6 @@
       "settings": {
         "policy_kind": "privacy",
         "show_toc": true,
-        "mobile_shop_label": "Shop tea",
         "padding-block-start": 24,
         "padding-block-end": 56
       }
