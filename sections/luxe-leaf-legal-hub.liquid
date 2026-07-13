@@ -1,0 +1,253 @@
+{%- doc -%}
+  All-in-one legal hub — Privacy, Terms, Refund, and Shipping on one page with anchor links.
+  Create a page with handle "legal" and assign this template for a quick fallback when Shopify policies are not configured.
+{%- enddoc -%}
+
+{%- liquid
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
+  assign faq_url = pages['faq'].url | default: '/pages/faq'
+  assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+-%}
+
+<section class="luxe-legal-hub section section--page-width spacing-style" id="legal-hub">
+  <header class="luxe-legal-hub__hero">
+    <p class="luxe-legal-hub__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      Legal · {{ shop.name }}
+    </p>
+    <h1 class="luxe-legal-hub__heading">{{ section.settings.heading }}</h1>
+    {%- if section.settings.intro != blank -%}
+      <p class="luxe-legal-hub__intro">{{ section.settings.intro }}</p>
+    {%- endif -%}
+  </header>
+
+  <nav class="luxe-legal-hub__jump" aria-label="Jump to policy">
+    <a href="#privacy-policy" class="luxe-legal-hub__jump-link">Privacy</a>
+    <a href="#terms-of-service" class="luxe-legal-hub__jump-link">Terms</a>
+    <a href="#refund-policy" class="luxe-legal-hub__jump-link">Refunds</a>
+    <a href="#shipping-policy" class="luxe-legal-hub__jump-link">Shipping</a>
+  </nav>
+
+  <article id="privacy-policy" class="luxe-legal-hub__policy rte">
+    <h2 class="luxe-legal-hub__policy-heading">Privacy Policy</h2>
+    {% render 'luxe-leaf-policy-default-content', policy_kind: 'privacy' %}
+  </article>
+
+  <article id="terms-of-service" class="luxe-legal-hub__policy rte">
+    <h2 class="luxe-legal-hub__policy-heading">Terms of Service</h2>
+    {% render 'luxe-leaf-policy-default-content', policy_kind: 'terms' %}
+  </article>
+
+  <article id="refund-policy" class="luxe-legal-hub__policy rte">
+    <h2 class="luxe-legal-hub__policy-heading">Refund Policy</h2>
+    {% render 'luxe-leaf-policy-default-content', policy_kind: 'refund' %}
+  </article>
+
+  <article id="shipping-policy" class="luxe-legal-hub__policy rte">
+    <h2 class="luxe-legal-hub__policy-heading">Shipping Policy</h2>
+    {% render 'luxe-leaf-policy-default-content', policy_kind: 'shipping' %}
+  </article>
+
+  <div class="luxe-legal-hub__cta">
+    <p class="luxe-legal-hub__cta-text">{{ section.settings.cta_text }}</p>
+    <div class="luxe-legal-hub__cta-actions">
+      <a href="{{ shop_tea_url }}" class="button luxe-legal-hub__cta-primary">{{ section.settings.shop_label }}</a>
+      <a href="{{ faq_url }}" class="button button-secondary luxe-legal-hub__cta-secondary">{{ section.settings.faq_label }}</a>
+    </div>
+    <p class="luxe-legal-hub__cta-note">Questions? <a href="{{ contact_url }}">Contact us</a> · Free shipping over {{ free_ship_label }}</p>
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxe-legal-hub {
+    padding-block: 1.5rem 4rem;
+    background: linear-gradient(180deg, var(--luxe-cream, #f8f6f0) 0%, #fff 100%);
+  }
+
+  .luxe-legal-hub__hero {
+    max-width: 42rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .luxe-legal-hub__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 0.65rem;
+    color: #c9a227;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-legal-hub__heading {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    line-height: 1.15;
+    color: #1b4332 !important;
+  }
+
+  .luxe-legal-hub__intro {
+    margin: 0;
+    color: rgb(27 67 50 / 0.88);
+    line-height: 1.6;
+  }
+
+  .luxe-legal-hub__jump {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .luxe-legal-hub__jump::-webkit-scrollbar {
+    display: none;
+  }
+
+  .luxe-legal-hub__jump-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgb(27 67 50 / 0.14);
+    border-radius: 999px;
+    background: #fff;
+    color: #1b4332 !important;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .luxe-legal-hub__policy {
+    margin-bottom: 1.25rem;
+    padding: 1.35rem 1.15rem;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #1b4332;
+    scroll-margin-top: 5rem;
+  }
+
+  .luxe-legal-hub__policy-heading {
+    margin: 0 0 1rem;
+    font-size: 1.35rem;
+    color: #1b4332 !important;
+  }
+
+  .luxe-legal-hub__policy h2 {
+    margin: 1.5rem 0 0.65rem;
+    font-size: 1.0625rem;
+    color: #1b4332 !important;
+  }
+
+  .luxe-legal-hub__policy p,
+  .luxe-legal-hub__policy li {
+    color: rgb(27 67 50 / 0.92);
+    line-height: 1.65;
+  }
+
+  .luxe-legal-hub__cta {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
+    color: #f8f6f0;
+    text-align: center;
+  }
+
+  .luxe-legal-hub__cta-text {
+    margin: 0 0 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-legal-hub__cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .luxe-legal-hub__cta-primary {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    background: #c9a227;
+    border-color: #c9a227;
+    color: #1a1a1a !important;
+  }
+
+  .luxe-legal-hub__cta-secondary {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    border: 1.5px solid rgb(248 246 240 / 0.85) !important;
+    background: transparent !important;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-legal-hub__cta-note {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: rgb(248 246 240 / 0.85) !important;
+  }
+
+  .luxe-legal-hub__cta-note a {
+    color: #f8f6f0 !important;
+    font-weight: 600;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf legal hub",
+  "tag": "section",
+  "class": "luxe-legal-hub-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Legal policies"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Privacy, terms, refunds, and shipping — everything you need to shop premium loose leaf tea with confidence."
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Ready to order? Whole leaves, packed fresh after you checkout."
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop button",
+      "default": "Shop all tea"
+    },
+    {
+      "type": "text",
+      "id": "faq_label",
+      "label": "FAQ button",
+      "default": "Read FAQ"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf legal hub"
+    }
+  ]
+}
+{% endschema %}

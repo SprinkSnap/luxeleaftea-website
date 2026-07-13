@@ -1,0 +1,186 @@
+{%- doc -%}
+  Shared shipping math and conversion UI for cart drawer, cart page, and sticky nudge.
+
+  @param {string} [variant] - drawer-banner | cart-totals | nudge-meta
+{%- enddoc -%}
+
+{%- liquid
+  assign variant = variant | default: 'drawer-banner'
+  assign threshold = settings.free_shipping_threshold | default: 5000
+  assign standard_rate = settings.standard_shipping_rate | default: 595
+  assign threshold_money = threshold | money
+  assign standard_rate_money = standard_rate | money
+  # cart.total_price (after discounts, before tax/shipping) drives threshold,
+  # remaining, progress, and subtotal so "Add $X" matches the subtotal shown.
+  assign free_shipping_base = cart.total_price
+  assign subtotal_before_tax = free_shipping_base
+  assign remaining = threshold | minus: free_shipping_base
+  if remaining < 0
+    assign remaining = 0
+  endif
+
+  if free_shipping_base >= threshold
+    assign qualifies_free = true
+    assign shipping_cost = 0
+  else
+    assign qualifies_free = false
+    assign shipping_cost = standard_rate
+  endif
+
+  assign taxable_base = subtotal_before_tax | plus: shipping_cost
+  assign tax_amount = 0
+
+  if cart.tax_lines.size > 0
+    for tax_line in cart.tax_lines
+      assign tax_amount = tax_amount | plus: tax_line.price
+    endfor
+  endif
+
+  assign grand_total = taxable_base | plus: tax_amount
+  assign progress = free_shipping_base | times: 100 | divided_by: threshold
+  if progress > 100
+    assign progress = 100
+  endif
+
+  if settings.currency_code_enabled_cart_total
+    assign subtotal_money = subtotal_before_tax | money_with_currency
+    assign grand_total_money = grand_total | money_with_currency
+  else
+    assign subtotal_money = subtotal_before_tax | money
+    assign grand_total_money = grand_total | money
+  endif
+-%}
+
+{%- case variant -%}
+  {%- when 'nudge-meta' -%}
+    data-threshold="{{ threshold }}"
+    data-threshold-label="{{ threshold_money | escape }}"
+    data-standard-rate="{{ standard_rate }}"
+    data-standard-rate-label="{{ standard_rate_money | escape }}"
+
+  {%- when 'cart-totals' -%}
+    {%- unless cart.empty? -%}
+      {%- assign ca_selector_id = 'luxe-ca-cities-cart' -%}
+      <div
+        class="luxe-shipping-totals"
+        data-shipping-totals
+        data-grand-total="{{ grand_total }}"
+      >
+        {% render 'luxe-leaf-canada-tax-selector', city_list_id: ca_selector_id %}
+        <div class="luxe-shipping-totals__row">
+          <span class="luxe-shipping-totals__label">Subtotal (before tax)</span>
+          <span class="luxe-shipping-totals__value" data-cart-subtotal-value>{{ subtotal_money }}</span>
+        </div>
+        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--shipping">
+          <span class="luxe-shipping-totals__label">
+            {%- if qualifies_free -%}
+              Shipping (lowest rate)
+            {%- else -%}
+              Standard shipping
+            {%- endif -%}
+          </span>
+          <span class="luxe-shipping-totals__value" data-shipping-cost-value>
+            {%- if qualifies_free -%}
+              <span class="luxe-shipping-totals__free">Free</span>
+            {%- else -%}
+              {{ standard_rate_money }}
+            {%- endif -%}
+          </span>
+        </div>
+        {%- unless qualifies_free -%}
+          <p class="luxe-shipping-totals__hint" data-shipping-hint>
+            Add <strong>{{ remaining | money }}</strong> for free shipping over {{ threshold_money }}
+          </p>
+        {%- else -%}
+          <p class="luxe-shipping-totals__hint luxe-shipping-totals__hint--success" data-shipping-hint>
+            {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+            Free shipping unlocked on this order
+          </p>
+        {%- endunless -%}
+        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--tax">
+          <span class="luxe-shipping-totals__label" data-ca-tax-label>Tax</span>
+          <span class="luxe-shipping-totals__value" data-tax-value>
+            <span class="luxe-shipping-totals__at-checkout" data-ca-tax-prompt>Select province &amp; city</span>
+          </span>
+        </div>
+        <div class="luxe-shipping-totals__row luxe-shipping-totals__row--total">
+          <span class="luxe-shipping-totals__label luxe-shipping-totals__label--total">Total</span>
+          <span class="luxe-shipping-totals__value luxe-shipping-totals__value--total" data-estimated-total-value>
+            {{- grand_total_money -}}
+          </span>
+        </div>
+        <p class="luxe-shipping-totals__footnote">Canada-wide delivery · Tax by province · Guest checkout</p>
+      </div>
+    {%- endunless -%}
+
+  {%- when 'drawer-banner' -%}
+    {%- unless cart.empty? -%}
+      {%- assign ca_selector_id = 'luxe-ca-cities-drawer' -%}
+      <div class="luxe-cart-conversion" data-cart-conversion>
+        {% render 'luxe-leaf-canada-tax-selector', city_list_id: ca_selector_id %}
+        {%- if qualifies_free -%}
+          <p class="luxe-cart-conversion__message luxe-cart-conversion__message--success">
+            {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+            You've unlocked <strong>free shipping</strong> — lowest cost delivery on this order!
+          </p>
+          <div
+            class="luxe-cart-conversion__progress luxe-cart-conversion__progress--complete"
+            role="progressbar"
+            aria-valuenow="100"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Free shipping unlocked"
+          >
+            <span class="luxe-cart-conversion__progress-bar" style="width: 100%;"></span>
+          </div>
+        {%- else -%}
+          <p class="luxe-cart-conversion__message" data-shipping-progress-text>
+            Add <strong>{{ remaining | money }}</strong> for free shipping over {{ threshold_money }}
+          </p>
+          <div
+            class="luxe-cart-conversion__progress"
+            role="progressbar"
+            aria-valuenow="{{ progress }}"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Free shipping progress"
+            data-shipping-progress
+          >
+            <span class="luxe-cart-conversion__progress-bar" data-shipping-progress-bar style="width: {{ progress }}%;"></span>
+          </div>
+        {%- endif -%}
+
+        <div class="luxe-cart-conversion__shipping" data-shipping-estimate>
+          <span class="luxe-cart-conversion__shipping-label">Subtotal</span>
+          <span class="luxe-cart-conversion__shipping-value" data-cart-subtotal-inline>{{ subtotal_money }}</span>
+          <span class="luxe-cart-conversion__shipping-label">
+            {%- if qualifies_free -%}
+              Shipping
+            {%- else -%}
+              Shipping (best rate)
+            {%- endif -%}
+          </span>
+          <span class="luxe-cart-conversion__shipping-value" data-shipping-rate-value>
+            {%- if qualifies_free -%}
+              <strong>Free</strong>
+            {%- else -%}
+              <strong>{{ standard_rate_money }}</strong>
+            {%- endif -%}
+          </span>
+          <span class="luxe-cart-conversion__shipping-label" data-ca-tax-label>Tax</span>
+          <span class="luxe-cart-conversion__shipping-value" data-tax-value-inline>
+            <span data-ca-tax-prompt>Select province &amp; city</span>
+          </span>
+          <span class="luxe-cart-conversion__shipping-total" data-estimated-total-inline>
+            Total <strong>{{ grand_total_money }}</strong> — tap Pay below
+          </span>
+        </div>
+
+        <ul class="luxe-cart-conversion__trust list-unstyled" role="list">
+          <li>{%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%} Guest checkout — no sign-in</li>
+          <li>{%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%} Secure SSL payment</li>
+          <li>{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%} Packed fresh to order</li>
+        </ul>
+      </div>
+    {%- endunless -%}
+{%- endcase -%}

@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "luxe-leaf-breadcrumbs",
+      "settings": {
+        "padding-block-start": 12,
+        "padding-block-end": 0
+      }
+    },
+    "trust_bar": {
+      "type": "luxe-leaf-trust-bar",
+      "settings": {}
+    },
+    "main": {
+      "type": "luxe-leaf-policy-page",
+      "settings": {
+        "policy_kind": "shipping",
+        "show_toc": true,
+        "cta_text": "Order premium loose leaf tea — free standard shipping on orders over $50.",
+        "cta_note": "Packed fresh in 1–2 business days · Tracking included",
+        "padding-block-start": 24,
+        "padding-block-end": 56
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "trust_bar",
+    "main"
+  ]
+}

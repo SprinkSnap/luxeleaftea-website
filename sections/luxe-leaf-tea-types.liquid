@@ -1,6 +1,8 @@
-{%- doc -%}
-  Tea type collection cards for homepage and collection browsing.
-{%- enddoc -%}
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
 
 <section
   class="luxe-tea-types section section--page-width spacing-style"
@@ -19,6 +21,9 @@
     {%- for entry in types -%}
       {%- assign parts = entry | split: '|' -%}
       {%- assign handle = parts[0] -%}
+      {%- if section.settings.hide_current_collection and collection != blank and collection.handle == handle -%}
+        {%- continue -%}
+      {%- endif -%}
       {%- assign title = parts[1] -%}
       {%- assign blurb = parts[2] -%}
       {%- assign image_file = parts[3] -%}
@@ -61,6 +66,7 @@
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-tea-types {
@@ -173,6 +179,20 @@
   "class": "luxe-tea-types-section",
   "settings": [
     {
+      "type": "select",
+      "id": "page_scope",
+      "label": "Show on",
+      "options": [
+        { "value": "any", "label": "Any page (homepage, etc.)" },
+        { "value": "about", "label": "About page only" },
+        { "value": "contact", "label": "Contact page only" },
+        { "value": "faq", "label": "FAQ page only" },
+        { "value": "about_or_contact", "label": "About or Contact page" },
+        { "value": "general", "label": "Other pages only (not About/Contact/FAQ)" }
+      ],
+      "default": "any"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
@@ -189,6 +209,13 @@
       "id": "intro",
       "label": "Intro",
       "default": "Find your next favorite cup — from bright green teas to deep, re-steepable pu-erh."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_current_collection",
+      "label": "Hide current collection on collection pages",
+      "default": true,
+      "info": "When browsing a tea type, show the other three types instead of repeating the current one."
     },
     {
       "type": "range",

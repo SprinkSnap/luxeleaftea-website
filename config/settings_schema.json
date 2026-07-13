@@ -63,7 +63,7 @@
           "id": "brand_navigation",
           "label": "Use Luxe Leaf Tea brand navigation",
           "default": true,
-          "info": "Desktop: Home, Shop Tea, About, Contact. Mobile: hamburger menu with Home, About, Contact, FAQ, plus phone and email. Shop uses the bottom bar on mobile."
+          "info": "Desktop: Home, Shop Tea, About, Contact. Mobile: hamburger menu with Home, About, Contact, FAQ, plus phone and email. Shop uses the bottom bar on mobile. Also forces the Luxe Leaf footer snippet (with policy links) instead of Horizon's default footer. When enabled, the bundled Luxe Leaf horizontal logo is used in the header and footer instead of Theme settings → Logo uploads."
         },
         {
           "type": "text",
@@ -77,6 +77,31 @@
           "id": "brand_email",
           "label": "Customer service email",
           "info": "Shown in the mobile menu. Leave blank to use your Shopify store email."
+        },
+        {
+          "type": "header",
+          "content": "Checkout & shipping"
+        },
+        {
+          "type": "number",
+          "id": "free_shipping_threshold",
+          "label": "Free shipping threshold (cents)",
+          "default": 5000,
+          "info": "Cart subtotal in cents before shipping is free. Example: 5000 = $50.00."
+        },
+        {
+          "type": "number",
+          "id": "standard_shipping_rate",
+          "label": "Standard shipping rate (cents)",
+          "default": 595,
+          "info": "Estimated flat rate shown in cart and checkout nudge before free shipping unlocks. Example: 595 = $5.95."
+        },
+        {
+          "type": "number",
+          "id": "estimated_tax_rate_bps",
+          "label": "Fallback tax rate (basis points)",
+          "default": 0,
+          "info": "Deprecated — cart tax uses Canadian province rates. Leave at 0."
         },
         {
           "type": "header",

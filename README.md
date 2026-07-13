@@ -50,11 +50,20 @@ The homepage includes:
 
 ## About page
 
-Create a page in Shopify admin:
+1. **Online Store → Pages → About**
+2. Confirm handle is **`about`** (URL must be `/pages/about`)
+3. **Theme template:** **`about`** recommended — **Default page also works** after latest theme update
+4. **Themes → Pull from GitHub** (`main`) → **Publish**
+5. Hard refresh the page (close tab on mobile Safari, reopen)
 
-1. **Online Store → Pages → Add page**
-2. Title: `About` (handle will be `about`)
-3. Template suffix: `about` (uses `templates/page.about.json`)
+If content still looks old: in the theme editor, open the About page preview → **Customize** → check the template shows **about** or **Default page** with the Luxe sections visible.
+
+## Contact page
+
+1. **Online Store → Pages → Contact**
+2. Confirm handle is **`contact`**
+3. **Theme template:** **`contact`** recommended — **Default page also works** after latest theme update
+4. Save, pull from GitHub, **Publish**
 
 ## Navigation
 
@@ -69,11 +78,13 @@ Footer also links to **Tea Guides** → `/blogs/tea-guides` and **FAQ** → `/pa
 
 ## FAQ page
 
-Create a page in Shopify admin:
+1. **Online Store → Pages → FAQ** (or Add page)
+2. Confirm handle is **`faq`** (URL `/pages/faq`)
+3. **Theme template:** **`faq`** recommended — **Default page also works** after latest theme update
+4. **Themes → Pull from GitHub** → **Publish**
+5. Hard refresh `/pages/faq`
 
-1. **Online Store → Pages → Add page**
-2. Title: `FAQ` (handle will be `faq`)
-3. Template suffix: `faq` (uses `templates/page.faq.json`)
+The FAQ page includes categorized answers (choosing, brewing, orders, shipping, quality), secure checkout reassurance, Tea Guide chat, AJAX add-to-cart bestsellers, and FAQPage schema for Google rich results.
 
 ## Analytics & Search Console
 

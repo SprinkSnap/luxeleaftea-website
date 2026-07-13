@@ -1,0 +1,779 @@
+{%- doc -%}
+  Premium legal policy page — mobile-first conversion, navigation, and SEO.
+{%- enddoc -%}
+
+{%- liquid
+  assign policy_kind = section.settings.policy_kind | default: 'generic'
+  assign policy_heading = section.settings.policy_title | default: 'Legal Policy'
+  assign policy_path = page.url | default: request.path
+  assign use_admin_body = false
+  assign use_page_body = false
+
+  if request.page_type == 'policy' and policy != blank
+    assign policy_heading = policy.title
+    assign policy_path = policy.url
+
+    if policy == shop.privacy_policy
+      assign policy_kind = 'privacy'
+    elsif policy == shop.terms_of_service
+      assign policy_kind = 'terms'
+    elsif policy == shop.refund_policy
+      assign policy_kind = 'refund'
+    elsif policy == shop.shipping_policy
+      assign policy_kind = 'shipping'
+    endif
+
+    if policy.body != blank
+      assign use_admin_body = true
+    endif
+  elsif request.page_type == 'page' and page != blank
+    assign policy_path = page.url
+
+    case page.handle
+      when 'privacy-policy'
+        assign policy_kind = 'privacy'
+        assign policy_heading = 'Privacy Policy'
+      when 'terms-of-service'
+        assign policy_kind = 'terms'
+        assign policy_heading = 'Terms of Service'
+      when 'refund-policy'
+        assign policy_kind = 'refund'
+        assign policy_heading = 'Refund Policy'
+      when 'shipping-policy'
+        assign policy_kind = 'shipping'
+        assign policy_heading = 'Shipping Policy'
+    endcase
+
+    if page.content != blank
+      assign use_page_body = true
+    endif
+  endif
+
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
+  assign faq_url = pages['faq'].url | default: '/pages/faq'
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
+
+  assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+  assign standard_ship_label = settings.standard_shipping_rate | default: 595 | money
+
+  assign page_intro = section.settings.intro
+  assign cta_primary_label = section.settings.cta_primary_label
+  assign cta_primary_link = section.settings.cta_primary_link | default: shop_tea_url
+  assign cta_secondary_label = section.settings.cta_secondary_label
+  assign cta_secondary_link = section.settings.cta_secondary_link | default: faq_url
+  assign show_toc = section.settings.show_toc
+
+  case policy_kind
+    when 'terms'
+      if page_intro == section.settings.intro or page_intro == blank
+        assign page_intro = 'Clear terms for shopping premium loose leaf tea — orders, payment, fresh packing, and how we serve you.'
+      endif
+      if cta_primary_label == section.settings.cta_primary_label or cta_primary_label == blank
+        assign cta_primary_label = 'Shop premium tea'
+      endif
+      if cta_secondary_label == section.settings.cta_secondary_label or cta_secondary_label == blank
+        assign cta_secondary_label = 'Read FAQ'
+        assign cta_secondary_link = faq_url
+      endif
+    when 'refund'
+      if page_intro == section.settings.intro or page_intro == blank
+        assign page_intro = 'Our freshness guarantee and fair return process — contact us within 14 days if something is not right.'
+      endif
+      if cta_primary_label == section.settings.cta_primary_label or cta_primary_label == blank
+        assign cta_primary_label = 'Contact support'
+        assign cta_primary_link = contact_url
+      endif
+      if cta_secondary_label == section.settings.cta_secondary_label or cta_secondary_label == blank
+        assign cta_secondary_label = 'Shop all tea'
+        assign cta_secondary_link = shop_tea_url
+      endif
+    when 'shipping'
+      if page_intro == section.settings.intro or page_intro == blank
+        assign page_intro = 'Free standard shipping on orders over ' | append: free_ship_label | append: '. Packed fresh within 1–2 business days — tracking included.'
+      endif
+      if cta_primary_label == section.settings.cta_primary_label or cta_primary_label == blank
+        assign cta_primary_label = 'Shop for free shipping'
+        assign cta_primary_link = shop_tea_url
+      endif
+      if cta_secondary_label == section.settings.cta_secondary_label or cta_secondary_label == blank
+        assign cta_secondary_label = 'Shipping FAQ'
+        assign cta_secondary_link = faq_url
+      endif
+    when 'privacy'
+      if page_intro == section.settings.intro or page_intro == blank
+        assign page_intro = 'How we collect, use, and protect your information when you shop premium loose leaf tea with us.'
+      endif
+  endcase
+-%}
+
+<section
+  class="luxe-policy-page section section--page-width spacing-style"
+  id="policy-page"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <nav class="luxe-policy-page__switcher" aria-label="Legal policies">
+    {% render 'luxe-leaf-policy-links', variant: 'pills', current_policy: policy_kind %}
+  </nav>
+
+  <header class="luxe-policy-page__hero">
+    <p class="luxe-policy-page__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      Legal · {{ shop.name }}
+    </p>
+    <h1 class="luxe-policy-page__heading">{{ policy_heading | escape }}</h1>
+    {%- if page_intro != blank -%}
+      <p class="luxe-policy-page__intro">{{ page_intro }}</p>
+    {%- endif -%}
+    <p class="luxe-policy-page__updated">
+      <time datetime="{{ 'now' | date: '%Y-%m-%d' }}">Last updated {{ 'now' | date: '%B %d, %Y' }}</time>
+    </p>
+  </header>
+
+  <div class="luxe-policy-page__highlights" aria-label="Policy highlights">
+    {%- case policy_kind -%}
+      {%- when 'terms' -%}
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
+          <span>Secure Shopify checkout</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+          <span>Packed fresh after you order</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+          <span>Premium whole-leaf tea</span>
+        </div>
+      {%- when 'refund' -%}
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+          <span>14-day freshness guarantee</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+          <span>Reply within 1 business day</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
+          <span>Refunds to original payment</span>
+        </div>
+      {%- when 'shipping' -%}
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+          <span>Free shipping {{ free_ship_label }}+</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+          <span>Ships in 1–2 business days</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+          <span>Tracking emailed at shipment</span>
+        </div>
+      {%- else -%}
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
+          <span>Secure checkout</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+          <span>Free shipping {{ free_ship_label }}+</span>
+        </div>
+        <div class="luxe-policy-page__highlight">
+          {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+          <span>Packed fresh to order</span>
+        </div>
+    {%- endcase -%}
+  </div>
+
+  {%- if show_toc and use_admin_body == false and use_page_body == false -%}
+    <nav class="luxe-policy-page__toc" aria-label="On this page">
+      <p class="luxe-policy-page__toc-label">On this page</p>
+      <ul class="luxe-policy-page__toc-list list-unstyled" role="list">
+        {%- case policy_kind -%}
+          {%- when 'terms' -%}
+            <li><a href="#policy-overview">Overview</a></li>
+            <li><a href="#policy-eligibility">Eligibility</a></li>
+            <li><a href="#policy-products">Products &amp; pricing</a></li>
+            <li><a href="#policy-orders">Orders &amp; payment</a></li>
+            <li><a href="#policy-fulfillment">Fresh packing</a></li>
+            <li><a href="#policy-related">Related policies</a></li>
+            <li><a href="#policy-contact">Contact</a></li>
+          {%- when 'refund' -%}
+            <li><a href="#policy-guarantee">Freshness guarantee</a></li>
+            <li><a href="#policy-eligible">Eligible returns</a></li>
+            <li><a href="#policy-how">How to request help</a></li>
+            <li><a href="#policy-timing">Refund timing</a></li>
+            <li><a href="#policy-exchanges">Exchanges</a></li>
+            <li><a href="#policy-contact">Contact</a></li>
+          {%- when 'shipping' -%}
+            <li><a href="#policy-processing">Processing time</a></li>
+            <li><a href="#policy-rates">Shipping rates</a></li>
+            <li><a href="#policy-delivery">Delivery estimates</a></li>
+            <li><a href="#policy-tracking">Tracking</a></li>
+            <li><a href="#policy-lost">Lost or damaged</a></li>
+            <li><a href="#policy-contact">Questions</a></li>
+          {%- when 'privacy' -%}
+            <li><a href="#policy-information">Information we collect</a></li>
+            <li><a href="#policy-use">How we use it</a></li>
+            <li><a href="#policy-sharing">Sharing</a></li>
+            <li><a href="#policy-choices">Your choices</a></li>
+            <li><a href="#policy-contact">Contact</a></li>
+        {%- endcase -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+
+  <div class="luxe-policy-page__layout">
+    <article class="luxe-policy-page__content rte" itemscope itemtype="https://schema.org/WebPageElement">
+      {%- if use_admin_body -%}
+        {{ policy.body }}
+      {%- elsif use_page_body -%}
+        {{ page.content }}
+      {%- else -%}
+        {%- if section.settings.fallback_note != blank -%}
+          <p class="luxe-policy-page__fallback-note">
+            {{ section.settings.fallback_note }}
+          </p>
+        {%- endif -%}
+        {% render 'luxe-leaf-policy-default-content', policy_kind: policy_kind %}
+      {%- endif -%}
+    </article>
+
+    {%- if section.settings.show_sidebar -%}
+      <aside class="luxe-policy-page__sidebar" aria-label="Shop with confidence">
+        <div class="luxe-policy-page__sidebar-card">
+          <h2 class="luxe-policy-page__sidebar-heading">{{ section.settings.sidebar_heading }}</h2>
+          <nav class="luxe-policy-page__nav" aria-label="Legal policies">
+            {% render 'luxe-leaf-policy-links', variant: 'list', current_policy: policy_kind %}
+          </nav>
+          <div class="luxe-policy-page__sidebar-links">
+            <a href="{{ faq_url }}" class="luxe-policy-page__sidebar-link">FAQ</a>
+            <a href="{{ contact_url }}" class="luxe-policy-page__sidebar-link">Contact us</a>
+            <a href="{{ shop_tea_url }}" class="luxe-policy-page__sidebar-link">Shop all tea</a>
+          </div>
+        </div>
+
+        <div class="luxe-policy-page__sidebar-cta">
+          <p class="luxe-policy-page__sidebar-cta-text">{{ section.settings.sidebar_cta_text }}</p>
+          <a href="{{ shop_tea_url }}" class="button luxe-policy-page__sidebar-shop">
+            {{ section.settings.sidebar_shop_label }}
+          </a>
+        </div>
+      </aside>
+    {%- endif -%}
+  </div>
+
+  {%- if cta_primary_label != blank -%}
+    <div class="luxe-policy-page__cta">
+      <p class="luxe-policy-page__cta-text">{{ section.settings.cta_text }}</p>
+      <div class="luxe-policy-page__cta-actions">
+        <a href="{{ cta_primary_link }}" class="button luxe-policy-page__cta-primary">
+          {{ cta_primary_label }}
+        </a>
+        {%- if cta_secondary_label != blank -%}
+          <a href="{{ cta_secondary_link }}" class="button button-secondary luxe-policy-page__cta-secondary">
+            {{ cta_secondary_label }}
+          </a>
+        {%- endif -%}
+      </div>
+      <p class="luxe-policy-page__cta-note">{{ section.settings.cta_note }}</p>
+    </div>
+  {%- endif -%}
+</section>
+
+{% render 'luxe-leaf-policy-schema', policy_kind: policy_kind, policy_title: policy_heading, policy_url: policy_path %}
+
+{% stylesheet %}
+  .luxe-policy-page {
+    padding-block: 1.5rem 5rem;
+    background: linear-gradient(180deg, var(--luxe-cream, #f8f6f0) 0%, #fff 100%);
+  }
+
+  .luxe-policy-page__switcher {
+    margin-bottom: 1.25rem;
+    margin-inline: -0.25rem;
+    padding-inline: 0.25rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .luxe-policy-page__switcher::-webkit-scrollbar {
+    display: none;
+  }
+
+  .luxe-policy-page__pills {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.15rem 0;
+    min-width: min-content;
+  }
+
+  .luxe-policy-page__pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgb(27 67 50 / 0.14);
+    border-radius: 999px;
+    background: #fff;
+    color: #1b4332 !important;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+
+  .luxe-policy-page__pill:hover {
+    border-color: rgb(27 67 50 / 0.35);
+    background: rgb(27 67 50 / 0.04);
+  }
+
+  .luxe-policy-page__pill.luxe-policy-link--active {
+    border-color: #1b4332;
+    background: #1b4332;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__hero {
+    max-width: 42rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .luxe-policy-page__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 0.65rem;
+    color: #c9a227;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-policy-page__heading {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    line-height: 1.15;
+    color: #1b4332 !important;
+  }
+
+  .luxe-policy-page__intro {
+    margin: 0 0 0.65rem;
+    color: rgb(27 67 50 / 0.88);
+    line-height: 1.6;
+    font-size: 1.0625rem;
+  }
+
+  .luxe-policy-page__updated {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: rgb(27 67 50 / 0.62);
+  }
+
+  .luxe-policy-page__highlights {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @media screen and (min-width: 550px) {
+    .luxe-policy-page__highlights {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .luxe-policy-page__highlight {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 0.625rem;
+    background: #fff;
+    color: #1b4332;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .luxe-policy-page__toc {
+    margin-bottom: 1.25rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 0.75rem;
+    background: #fff;
+  }
+
+  .luxe-policy-page__toc-label {
+    margin: 0 0 0.65rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c9a227;
+  }
+
+  .luxe-policy-page__toc-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.65rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .luxe-policy-page__toc-list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: rgb(27 67 50 / 0.06);
+    color: #1b4332;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .luxe-policy-page__toc-list a:hover {
+    background: rgb(27 67 50 / 0.12);
+  }
+
+  .luxe-policy-page__layout {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    .luxe-policy-page__layout {
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      align-items: start;
+      gap: 2rem;
+    }
+
+    .luxe-policy-page__toc {
+      display: none;
+    }
+  }
+
+  .luxe-policy-page__content {
+    padding: 1.35rem 1.15rem;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #1b4332;
+    scroll-margin-top: 5rem;
+  }
+
+  .luxe-policy-page__content h2 {
+    margin: 1.75rem 0 0.65rem;
+    font-size: 1.125rem;
+    color: #1b4332 !important;
+    scroll-margin-top: 5.5rem;
+  }
+
+  .luxe-policy-page__content h2:first-child {
+    margin-top: 0;
+  }
+
+  .luxe-policy-page__content p,
+  .luxe-policy-page__content li {
+    color: rgb(27 67 50 / 0.92);
+    line-height: 1.65;
+  }
+
+  .luxe-policy-page__content a {
+    color: #1b4332;
+    font-weight: 600;
+    text-underline-offset: 0.15em;
+  }
+
+  .luxe-policy-page__content a:hover {
+    color: #c9a227;
+  }
+
+  .luxe-policy-page__content ul,
+  .luxe-policy-page__content ol {
+    padding-left: 1.25rem;
+  }
+
+  .luxe-policy-page__fallback-note {
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: rgb(201 162 39 / 0.12);
+    color: #1b4332;
+    font-size: 0.875rem;
+  }
+
+  .luxe-policy-page__sidebar-card {
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, #1b4332 0%, #0d2818 100%);
+    color: #f8f6f0;
+  }
+
+  .luxe-policy-page__sidebar-heading {
+    margin: 0 0 0.85rem;
+    font-size: 1rem;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__sidebar .luxe-brand-footer__list a {
+    display: block;
+    min-height: 2.25rem;
+    padding: 0.35rem 0;
+    color: #f8f6f0 !important;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .luxe-policy-page__sidebar .luxe-brand-footer__list a.luxe-policy-link--active {
+    color: #c9a227 !important;
+  }
+
+  .luxe-policy-page__sidebar .luxe-brand-footer__list a:hover {
+    color: #c9a227 !important;
+  }
+
+  .luxe-policy-page__sidebar-links {
+    display: grid;
+    gap: 0.35rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgb(248 246 240 / 0.12);
+  }
+
+  .luxe-policy-page__sidebar-link {
+    color: rgb(248 246 240 / 0.82);
+    font-size: 0.8125rem;
+    text-decoration: none;
+  }
+
+  .luxe-policy-page__sidebar-link:hover {
+    color: #c9a227;
+  }
+
+  .luxe-policy-page__sidebar-cta {
+    display: none;
+    margin-top: 1rem;
+    padding: 1.1rem;
+    border: 1px solid rgb(27 67 50 / 0.1);
+    border-radius: 0.75rem;
+    background: #fff;
+  }
+
+  @media screen and (min-width: 990px) {
+    .luxe-policy-page__sidebar-cta {
+      display: block;
+    }
+  }
+
+  .luxe-policy-page__sidebar-cta-text {
+    margin: 0 0 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: rgb(27 67 50 / 0.85);
+  }
+
+  .luxe-policy-page__sidebar-shop {
+    width: 100%;
+    min-height: 2.75rem;
+    border-radius: 999px;
+    background: #1b4332;
+    border-color: #1b4332;
+  }
+
+  .luxe-policy-page__cta {
+    margin-top: 1.75rem;
+    padding: 1.5rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
+    color: #f8f6f0;
+    text-align: center;
+  }
+
+  .luxe-policy-page__cta-text {
+    margin: 0 0 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .luxe-policy-page__cta-primary {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    background: #c9a227;
+    border-color: #c9a227;
+    color: #1a1a1a !important;
+  }
+
+  .luxe-policy-page__cta-secondary {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    border: 1.5px solid rgb(248 246 240 / 0.85) !important;
+    background: transparent !important;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__cta-secondary:hover {
+    background: rgb(248 246 240 / 0.12) !important;
+    border-color: #f8f6f0 !important;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__cta-note {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: rgb(248 246 240 / 0.85) !important;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf policy page",
+  "tag": "section",
+  "class": "luxe-policy-page-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "policy_kind",
+      "label": "Policy type (page template fallback)",
+      "info": "Used when this section is on a page template instead of Shopify's native policy route.",
+      "options": [
+        { "value": "generic", "label": "Generic" },
+        { "value": "privacy", "label": "Privacy" },
+        { "value": "terms", "label": "Terms of Service" },
+        { "value": "refund", "label": "Refund Policy" },
+        { "value": "shipping", "label": "Shipping Policy" }
+      ],
+      "default": "generic"
+    },
+    {
+      "type": "text",
+      "id": "policy_title",
+      "label": "Policy title override (optional)"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro (optional override)",
+      "default": "Clear, honest policies for shopping premium loose leaf tea with confidence.",
+      "info": "Leave default to use policy-specific intro for Terms, Refund, and Shipping."
+    },
+    {
+      "type": "text",
+      "id": "fallback_note",
+      "label": "Fallback notice",
+      "default": "Default policy text is shown below. Customize anytime in Shopify admin → Settings → Policies."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_toc",
+      "label": "Show on-this-page navigation (mobile)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sidebar",
+      "label": "Show policy sidebar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sidebar_heading",
+      "label": "Sidebar heading",
+      "default": "All policies"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_cta_text",
+      "label": "Sidebar shop text",
+      "default": "Ready to order? Whole leaves, packed fresh after you checkout."
+    },
+    {
+      "type": "text",
+      "id": "sidebar_shop_label",
+      "label": "Sidebar shop button",
+      "default": "Shop all tea"
+    },
+    {
+      "type": "header",
+      "content": "Bottom conversion CTA"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Shop premium loose leaf tea with clear policies and secure checkout."
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_label",
+      "label": "Primary button",
+      "default": "Shop all tea"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "Secondary button",
+      "default": "Read FAQ"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "CTA note",
+      "default": "Secure checkout · Free shipping over $50 · Packed fresh to order"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ]
+}
+{% endschema %}

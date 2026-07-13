@@ -2,6 +2,12 @@
   Boutique featured teas grid — fully custom, no Horizon product-list blocks.
 {%- enddoc -%}
 
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
 {%- liquid
   assign collection = collections[section.settings.collection]
   if collection == blank
@@ -48,7 +54,6 @@
                 class="luxe-featured__image"
               >
             {%- endif -%}
-            {% render 'luxe-leaf-inventory-badge', product: product, class: 'luxe-stock-badge--overlay' %}
           </div>
         </a>
         <div class="luxe-featured__body">
@@ -85,6 +90,7 @@
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-featured {
@@ -248,6 +254,20 @@
   "tag": "section",
   "class": "luxe-featured-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "page_scope",
+      "label": "Show on",
+      "options": [
+        { "value": "any", "label": "Any page (homepage, etc.)" },
+        { "value": "about", "label": "About page only" },
+        { "value": "contact", "label": "Contact page only" },
+        { "value": "faq", "label": "FAQ page only" },
+        { "value": "about_or_contact", "label": "About or Contact page" },
+        { "value": "general", "label": "Other pages only (not About/Contact/FAQ)" }
+      ],
+      "default": "any"
+    },
     {
       "type": "text",
       "id": "eyebrow",

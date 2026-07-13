@@ -1,6 +1,13 @@
 
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
 <section
   class="luxe-proof section section--page-width spacing-style"
+  id="{{ section.settings.section_id | default: 'reviews' | escape }}"
   style="{% render 'spacing-style', settings: section.settings %}"
   aria-label="Customer reviews"
 >
@@ -25,6 +32,7 @@
     {%- endfor -%}
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-proof {
@@ -95,6 +103,20 @@
   "class": "luxe-proof-section",
   "settings": [
     {
+      "type": "select",
+      "id": "page_scope",
+      "label": "Show on",
+      "options": [
+        { "value": "any", "label": "Any page (homepage, etc.)" },
+        { "value": "about", "label": "About page only" },
+        { "value": "contact", "label": "Contact page only" },
+        { "value": "faq", "label": "FAQ page only" },
+        { "value": "about_or_contact", "label": "About or Contact page" },
+        { "value": "general", "label": "Other pages only (not About/Contact/FAQ)" }
+      ],
+      "default": "any"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
@@ -105,6 +127,12 @@
       "id": "heading",
       "label": "Heading",
       "default": "Premium loose leaf, beautifully brewed"
+    },
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section HTML id",
+      "default": "reviews"
     },
     {
       "type": "range",

@@ -102,11 +102,43 @@
       "settings": {
         "button_link": "shopify://collections/all"
       }
+    },
+    "keep_reading": {
+      "type": "luxe-leaf-keep-reading",
+      "settings": {
+        "blog": "tea-guides",
+        "eyebrow": "Keep reading",
+        "heading": "More tea guides to explore",
+        "intro": "Brewing tips and buying guides \u2014 stay in the story, then shop when you're ready.",
+        "view_all_label": "All tea guides",
+        "article_limit": 4,
+        "padding-block-start": 32,
+        "padding-block-end": 32
+      }
+    },
+    "keep_exploring_article": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "eyebrow": "Shop while you read",
+        "heading": "Teas worth trying next",
+        "intro": "Swipe premium loose leaf picks \u2014 one tap to add without leaving this guide.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Teas you recently viewed \u2014 add to bag and keep reading.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 24,
+        "padding-block-end": 32
+      }
     }
   },
   "order": [
     "breadcrumbs",
     "section",
+    "keep_reading",
+    "keep_exploring_article",
     "article_cta"
   ]
 }

@@ -1,5 +1,5 @@
 {%- doc -%}
-  Lightweight brand mobile menu — hamburger overlay with Shop Tea CTA.
+  Lightweight brand mobile menu — tea leaf menu icon and full-screen overlay with Shop Tea CTA.
 {%- enddoc -%}
 
 {%- liquid
@@ -13,13 +13,13 @@
   <button
     type="button"
     class="header__icon header__icon--menu luxe-brand-menu__toggle"
-    aria-label="Open menu — Shop Tea, phone support, About, Contact, and FAQ"
+    aria-label="Open tea shop menu — Shop Tea, phone support, policies, About, Contact, and FAQ"
     aria-expanded="false"
     aria-controls="LuxeBrandMenuPanel"
     data-luxe-nav-toggle
   >
-    <span class="svg-wrapper luxe-brand-menu__icon" aria-hidden="true">
-      {{- 'icon-hamburger.svg' | inline_asset_content -}}
+    <span class="svg-wrapper luxe-brand-menu__icon luxe-brand-menu__icon--tea" aria-hidden="true">
+      {% render 'luxe-leaf-tea-menu-icon' %}
     </span>
   </button>
 
@@ -55,23 +55,38 @@
         </button>
       </div>
 
-      <a
-        href="{{ shop_tea_url }}"
-        class="button luxe-brand-menu__shop-cta"
-        title="Shop premium loose leaf tea — green, oolong, pu-erh, and black"
-      >
-        Shop Tea
-      </a>
+      <div class="luxe-brand-menu__scroll">
+        <a
+          href="{{ shop_tea_url }}"
+          class="button luxe-brand-menu__shop-cta"
+          title="Shop premium loose leaf tea — green, oolong, pu-erh, and black"
+        >
+          Shop Tea
+        </a>
 
-      <div class="luxe-brand-menu__help">
-        {% render 'luxe-leaf-brand-nav-contact' %}
+        <a
+          href="{{ routes.search_url }}"
+          class="luxe-brand-menu__search"
+          title="Search premium loose leaf tea"
+        >
+          Search teas
+        </a>
+
+        <div class="luxe-brand-menu__help">
+          {% render 'luxe-leaf-brand-nav-contact' %}
+        </div>
+
+        <nav class="luxe-brand-menu__nav" aria-label="Company pages">
+          <ul class="luxe-brand-menu__list list-unstyled" role="list">
+            {% render 'luxe-leaf-brand-nav-links', variant: 'panel' %}
+          </ul>
+        </nav>
+
+        <nav class="luxe-brand-menu__legal" aria-label="Legal policies">
+          <p class="luxe-brand-menu__legal-label">Policies</p>
+          {% render 'luxe-leaf-policy-links', variant: 'list' %}
+        </nav>
       </div>
-
-      <nav class="luxe-brand-menu__nav" aria-label="Company pages">
-        <ul class="luxe-brand-menu__list list-unstyled" role="list">
-          {% render 'luxe-leaf-brand-nav-links', variant: 'panel' %}
-        </ul>
-      </nav>
     </div>
   </div>
 </div>

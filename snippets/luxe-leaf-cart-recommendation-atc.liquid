@@ -1,0 +1,45 @@
+{%- doc -%}
+  Cart page "You may also like" — always-on Add to Cart (AJAX via luxe-leaf-browse-atc.js).
+{%- enddoc -%}
+
+{%- liquid
+  assign card_product = product | default: closest.product
+  if card_product == blank or card_product.available == false
+    assign render_atc = false
+  else
+    assign render_atc = true
+    assign variant = card_product.selected_or_first_available_variant
+    assign is_single_variant = false
+    if card_product.has_only_default_variant or card_product.variants_count == 1
+      assign is_single_variant = true
+    endif
+  endif
+-%}
+
+{%- if render_atc -%}
+  <div class="luxe-cart-recommendation-atc">
+    {%- if is_single_variant -%}
+      {%- form 'product', card_product, class: 'luxe-cart-recommendation__form' -%}
+        <input type="hidden" name="id" value="{{ variant.id }}">
+        <button
+          type="submit"
+          name="add"
+          class="button luxe-cart-recommendation-atc__button"
+          aria-label="Add {{ card_product.title | escape }} to cart"
+        >
+          Add to Cart
+        </button>
+      {%- endform -%}
+    {%- else -%}
+      <a
+        href="{{ card_product.url }}"
+        class="button button-secondary luxe-cart-recommendation-atc__button luxe-cart-recommendation-atc__button--options"
+        aria-label="View {{ card_product.title | escape }} options"
+      >
+        View options
+      </a>
+    {%- endif -%}
+  </div>
+{%- elsif card_product != blank and card_product.available == false -%}
+  <p class="luxe-cart-recommendation-atc__sold-out">Sold out</p>
+{%- endif -%}

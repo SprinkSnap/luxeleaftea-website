@@ -100,6 +100,12 @@
               heading_id: 'cart-drawer-heading',
               title_append: cart_badge_html
             %}
+            {%- if settings.brand_navigation != false -%}
+              <p class="luxe-cart-drawer__subtitle">
+                <strong>{{ cart.item_count }} {% if cart.item_count == 1 %}tea{% else %}teas{% endif %}</strong>
+                in your bag · Tap <strong>+ / −</strong> to adjust · Guest checkout, no account needed
+              </p>
+            {%- endif -%}
           {%- endif -%}
 
           {% capture cart_items_children %}
@@ -117,9 +123,27 @@
 
                 {% render 'luxe-leaf-cart-upsell' %}
 
-                <div class="cart-drawer__summary">
+                <div class="cart-drawer__summary{% if settings.brand_navigation != false %} cart-drawer__summary--luxe{% endif %}">
                   {% render 'luxe-leaf-cart-conversion' %}
-                  {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+                  {% render 'cart-summary',
+                    section_id: 'cart-drawer-section',
+                    brand_totals_in_summary: false,
+                    luxe_drawer_checkout: true
+                  %}
+                  {%- if settings.brand_navigation != false -%}
+                    <ul class="luxe-cart-drawer__trust-inline list-unstyled" role="list">
+                      <li>{%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%} Secure payment</li>
+                      <li>{%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%} Packed fresh</li>
+                      <li>{%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%} Canada-wide ship</li>
+                    </ul>
+                    <button
+                      type="button"
+                      class="luxe-cart-drawer__continue button-unstyled"
+                      on:click="#cart-drawer/close"
+                    >
+                      Continue shopping
+                    </button>
+                  {%- endif -%}
                 </div>
               </scroll-hint>
             {%- endif -%}
@@ -167,13 +191,16 @@
     background-color: var(--color-background);
     flex-grow: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .cart-drawer__items {
     display: flex;
     flex-direction: column;
     padding-inline: var(--cart-drawer-padding);
-    overflow-y: auto;
+    padding-block: 0.25rem 0.5rem;
+    overflow-y: visible;
   }
 
   .cart-drawer__items .cart-items__table-row {

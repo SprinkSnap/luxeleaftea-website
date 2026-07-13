@@ -64,13 +64,18 @@ Then **Publish** the pushed theme in admin.
 
 **Products → Import**
 
-1. Import [`SAMPLE_PRODUCTS_IMPORT.csv`](SAMPLE_PRODUCTS_IMPORT.csv)
-2. After import, upload product images from theme assets:
-   - Dragon Well → `luxe-leaf-green-tea-product.png`
-   - Tieguanyin → `luxe-leaf-oolong-tea-product.png`
-   - Pu-erh → `luxe-leaf-puerh-tea-product.png`
-   - Keemun → `luxe-leaf-black-tea-product.png`
-3. Add second image (`luxe-leaf-tea-liquor-product.png`) where helpful
+1. Import [`SAMPLE_PRODUCTS_IMPORT.csv`](SAMPLE_PRODUCTS_IMPORT.csv) — descriptions include brew steps and nutrition facts
+2. Upload **one image per product** — brewed tea **and** dry loose leaf (`*-product-2.png` from theme assets):
+
+   | Product | Image |
+   |---------|-------|
+   | Dragon Well | `luxe-leaf-green-tea-product-2.png` |
+   | Tieguanyin | `luxe-leaf-oolong-tea-product-2.png` |
+   | Pu-erh | `luxe-leaf-puerh-tea-product-2.png` |
+   | Keemun | `luxe-leaf-black-tea-product-2.png` |
+   | Premium Assam | `premium-assam-black-tea-product-2.png` |
+   | Yunnan CTC | `yunnan-ctc-black-tea-product-2.png` |
+   | Fujian Black | `fujian-black-tea-product-2.png` |
 
 See [`PRODUCTS_AND_COLLECTIONS.md`](PRODUCTS_AND_COLLECTIONS.md) for collection setup.
 
@@ -82,9 +87,9 @@ Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-
 
 | Page | Handle | Template |
 |------|--------|----------|
-| About | `about` | `about` |
+| About | `about` | `about` (or default — auto-detects by handle) |
 | FAQ | `faq` | `faq` |
-| Contact | `contact` | default |
+| Contact | `contact` | `contact` (or default — auto-detects by handle) |
 
 ## 5. Create Tea Guides blog
 
@@ -111,7 +116,7 @@ Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-
 ## 8. Verify live
 
 - [ ] Homepage sections render (hero, tea types, FAQ, guides, CTA)
-- [ ] Product pages show brewing accordions and internal links
+- [ ] Product pages show full description with brew steps and nutrition facts
 - [ ] Collection pages show hero + bottom CTA
 - [ ] Cart shows trust line
 - [ ] FAQ page at `/pages/faq`

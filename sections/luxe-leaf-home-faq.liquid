@@ -1,3 +1,8 @@
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
 
 <section
   class="luxe-home-faq section section--page-width spacing-style"
@@ -48,6 +53,7 @@
       ]
     }
   </script>
+{%- endif -%}
 {%- endif -%}
 
 {% stylesheet %}
@@ -136,6 +142,20 @@
   "tag": "section",
   "class": "luxe-home-faq-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "page_scope",
+      "label": "Show on",
+      "options": [
+        { "value": "any", "label": "Any page (homepage, etc.)" },
+        { "value": "about", "label": "About page only" },
+        { "value": "contact", "label": "Contact page only" },
+        { "value": "faq", "label": "FAQ page only" },
+        { "value": "about_or_contact", "label": "About or Contact page" },
+        { "value": "general", "label": "Other pages only (not About/Contact/FAQ)" }
+      ],
+      "default": "any"
+    },
     {
       "type": "text",
       "id": "eyebrow",

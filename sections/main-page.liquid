@@ -1,11 +1,23 @@
 
 
 {% liquid
+  assign luxe_custom_page = false
+  if template.suffix == 'about' or template.suffix == 'contact' or template.suffix == 'faq'
+    assign luxe_custom_page = true
+  elsif page.handle == 'about' or page.handle == 'about-us' or page.handle == 'our-story'
+    assign luxe_custom_page = true
+  elsif page.handle == 'contact' or page.handle == 'contact-us' or page.handle == 'get-in-touch'
+    assign luxe_custom_page = true
+  elsif page.handle == 'faq'
+    assign luxe_custom_page = true
+  endif
+
   if section.settings.background_color != blank
     render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
   endif
 %}
 
+{%- unless luxe_custom_page -%}
 <div
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
 ></div>
@@ -26,6 +38,13 @@
     {% content_for 'blocks' %}
   </div>
 </div>
+{%- else -%}
+  {%- if page.content != blank -%}
+    <div class="section section--page-width spacing-style luxe-page-fallback">
+      <div class="rte">{{ page.content }}</div>
+    </div>
+  {%- endif -%}
+{%- endunless -%}
 
 {% schema %}
 {

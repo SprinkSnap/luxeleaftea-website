@@ -1,4 +1,21 @@
 
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
+{%- liquid
+  assign story_image = section.settings.image
+  if story_image == blank
+    assign story_image_url = 'luxe-leaf-green-tea-product.png' | asset_url
+    assign story_alt = 'Premium loose leaf green tea — Luxe Leaf Tea'
+  else
+    assign story_image_url = story_image | image_url: width: 800
+    assign story_alt = story_image.alt | default: section.settings.heading
+  endif
+-%}
+
 <section
   class="luxe-about section section--page-width spacing-style"
   id="our-story"
@@ -16,6 +33,28 @@
       {% endif %}
     </div>
 
+    <div class="luxe-about__media">
+      {%- if story_image != blank -%}
+        {{
+          story_image
+          | image_url: width: 800
+          | image_tag: loading: 'lazy', alt: story_alt, class: 'luxe-about__image', widths: '400, 600, 800'
+        }}
+      {%- else -%}
+        <img
+          src="{{ story_image_url }}"
+          alt="{{ story_alt | escape }}"
+          width="800"
+          height="800"
+          loading="lazy"
+          class="luxe-about__image"
+        >
+      {%- endif -%}
+      {%- if section.settings.image_caption != blank -%}
+        <p class="luxe-about__caption">{{ section.settings.image_caption }}</p>
+      {%- endif -%}
+    </div>
+
     <div class="luxe-about__cards" role="list">
       {% for block in section.blocks %}
         <article class="luxe-about__card" role="listitem" {{ block.shopify_attributes }}>
@@ -26,6 +65,7 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-about {
@@ -39,9 +79,9 @@
 
   @media screen and (min-width: 990px) {
     .luxe-about__grid {
-      grid-template-columns: 1.1fr 1fr;
+      grid-template-columns: 1.05fr 0.85fr 1fr;
       align-items: start;
-      gap: 56px;
+      gap: 40px;
     }
   }
 
@@ -73,6 +113,32 @@
     margin-top: 24px;
     background: #1b4332;
     border-color: #1b4332;
+    border-radius: 999px;
+  }
+
+  .luxe-about__media {
+    position: relative;
+    border-radius: 0.85rem;
+    overflow: hidden;
+    box-shadow: var(--luxe-shadow-soft, 0 4px 16px rgb(27 67 50 / 0.08));
+  }
+
+  .luxe-about__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .luxe-about__caption {
+    margin: 0;
+    padding: 0.75rem 0.9rem;
+    background: var(--luxe-cream, #f8f6f0);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: rgb(27 67 50 / 0.72);
+    text-align: center;
   }
 
   .luxe-about__cards {
@@ -119,6 +185,20 @@
   "class": "luxe-about-section",
   "settings": [
     {
+      "type": "select",
+      "id": "page_scope",
+      "label": "Show on",
+      "options": [
+        { "value": "any", "label": "Any page (homepage, etc.)" },
+        { "value": "about", "label": "About page only" },
+        { "value": "contact", "label": "Contact page only" },
+        { "value": "faq", "label": "FAQ page only" },
+        { "value": "about_or_contact", "label": "About or Contact page" },
+        { "value": "general", "label": "Other pages only (not About/Contact/FAQ)" }
+      ],
+      "default": "any"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
@@ -146,6 +226,17 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Story image"
+    },
+    {
+      "type": "text",
+      "id": "image_caption",
+      "label": "Image caption",
+      "default": "Whole leaves that unfurl in the cup — richer flavor, better re-steeps."
     },
     {
       "type": "range",

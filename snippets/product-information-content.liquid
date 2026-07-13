@@ -120,6 +120,14 @@
     {% endfor %}
   </product-component>
 
+  {%- comment -%}
+    Description must sit OUTSIDE the media/checkout grid so the sticky buy box
+    cannot overlap it, and so it spans the full content width below both columns.
+  {%- endcomment -%}
+  {%- if request.page_type == 'product' -%}
+    {% render 'luxe-leaf-product-description', product: product %}
+  {%- endif -%}
+
   {{ additional_blocks }}
 </div>
 
@@ -158,7 +166,7 @@
     }
 
     .product-details {
-      grid-column: 2 / 3;
+      grid-column: 1 / -1;
     }
   }
 
@@ -324,5 +332,58 @@
   /* If the header is sticky, make product details content stick underneath the header */
   body:has(#header-group #header-component[data-sticky-state='active']) .product-details.sticky-content--desktop {
     --sticky-header-offset: var(--header-height);
+  }
+
+  /*
+    Full-width description BELOW media + checkout (sibling of the product grid).
+    Kept outside product-component so sticky buy-box cannot overlap this content.
+  */
+  .product-information > .product-information__description,
+  .product-information > .luxe-pdp-description {
+    grid-column: 2 / 3;
+    width: 100%;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+    margin-block-start: clamp(1.5rem, 3vw, 2.75rem);
+    padding-block: clamp(1.5rem, 3vw, 2.25rem) 0.5rem;
+    border-block-start: 1px solid rgb(27 67 50 / 0.12);
+    background: var(--color-background, #fff);
+  }
+
+  .luxe-pdp-description__inner {
+    width: 100%;
+    max-width: none;
+  }
+
+  .luxe-pdp-description__heading {
+    margin: 0 0 0.85rem;
+    color: #1b4332;
+    font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .luxe-pdp-description__body {
+    color: rgb(27 67 50 / 0.9);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .luxe-pdp-description__body p {
+    margin: 0 0 0.85rem;
+  }
+
+  .luxe-pdp-description__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-information > .product-information__description,
+    .product-information > .luxe-pdp-description {
+      margin-block-start: 1rem;
+      padding-block-start: 1.25rem;
+    }
   }
 {% endstylesheet %}

@@ -1,0 +1,18 @@
+{%- doc -%}
+  Product card block — inline browse add-to-cart (collection/search grids).
+{%- enddoc -%}
+
+<div {{ block.shopify_attributes }}>
+  {%- comment -%} Cart page ATC is injected in blocks/_product-card.liquid (product_view_context: cart) {%- endcomment -%}
+  {%- unless request.page_type == 'cart' -%}
+    {% render 'luxe-leaf-browse-atc-inline', product: closest.product %}
+  {%- endunless -%}
+</div>
+
+{% schema %}
+{
+  "name": "Luxe Leaf browse add to bag",
+  "tag": null,
+  "settings": []
+}
+{% endschema %}

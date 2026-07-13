@@ -1,0 +1,86 @@
+{%- doc -%}
+  Legal policy links — Privacy, Terms, Refund, Shipping.
+  variant: list | bar | grid | pills
+  current_policy: privacy | terms | refund | shipping
+{%- enddoc -%}
+
+{%- liquid
+  capture privacy_url_raw
+    render 'luxe-leaf-policy-url', which: 'privacy'
+  endcapture
+  capture terms_url_raw
+    render 'luxe-leaf-policy-url', which: 'terms'
+  endcapture
+  capture refund_url_raw
+    render 'luxe-leaf-policy-url', which: 'refund'
+  endcapture
+  capture shipping_url_raw
+    render 'luxe-leaf-policy-url', which: 'shipping'
+  endcapture
+
+  assign privacy_url = privacy_url_raw | strip
+  assign terms_url = terms_url_raw | strip
+  assign refund_url = refund_url_raw | strip
+  assign shipping_url = shipping_url_raw | strip
+
+  assign link_variant = variant | default: 'bar'
+  if link_variant == 'list'
+    assign list_class = 'luxe-brand-footer__list list-unstyled'
+    assign link_class = 'luxe-brand-footer__policy-link'
+  elsif link_variant == 'grid'
+    assign list_class = 'luxe-brand-footer__policy-grid list-unstyled'
+    assign link_class = 'luxe-brand-footer__policy-grid-link'
+  elsif link_variant == 'pills'
+    assign list_class = 'luxe-policy-page__pills list-unstyled'
+    assign link_class = 'luxe-policy-page__pill'
+    assign privacy_label = 'Privacy'
+    assign terms_label = 'Terms'
+    assign refund_label = 'Refunds'
+    assign shipping_label = 'Shipping'
+  else
+    assign list_class = list_class | default: 'luxe-brand-footer__policy-list list-unstyled'
+    assign link_class = 'luxe-brand-footer__policy-link'
+  endif
+
+  unless link_variant == 'pills'
+    assign privacy_label = 'Privacy Policy'
+    assign terms_label = 'Terms of Service'
+    assign refund_label = 'Refund Policy'
+    assign shipping_label = 'Shipping Policy'
+  endunless
+-%}
+
+<ul class="{{ list_class }}" role="list">
+  <li>
+    <a
+      href="{{ privacy_url }}"
+      class="{{ link_class }}{% if current_policy == 'privacy' %} luxe-policy-link--active{% endif %}"
+      title="Luxe Leaf Tea Privacy Policy"
+      {% if current_policy == 'privacy' %}aria-current="page"{% endif %}
+    >{{ privacy_label }}</a>
+  </li>
+  <li>
+    <a
+      href="{{ terms_url }}"
+      class="{{ link_class }}{% if current_policy == 'terms' %} luxe-policy-link--active{% endif %}"
+      title="Luxe Leaf Tea Terms of Service"
+      {% if current_policy == 'terms' %}aria-current="page"{% endif %}
+    >{{ terms_label }}</a>
+  </li>
+  <li>
+    <a
+      href="{{ refund_url }}"
+      class="{{ link_class }}{% if current_policy == 'refund' %} luxe-policy-link--active{% endif %}"
+      title="Luxe Leaf Tea Refund Policy"
+      {% if current_policy == 'refund' %}aria-current="page"{% endif %}
+    >{{ refund_label }}</a>
+  </li>
+  <li>
+    <a
+      href="{{ shipping_url }}"
+      class="{{ link_class }}{% if current_policy == 'shipping' %} luxe-policy-link--active{% endif %}"
+      title="Luxe Leaf Tea Shipping Policy"
+      {% if current_policy == 'shipping' %}aria-current="page"{% endif %}
+    >{{ shipping_label }}</a>
+  </li>
+</ul>

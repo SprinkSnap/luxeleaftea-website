@@ -1,3 +1,7 @@
+{%- unless settings.brand_navigation == false -%}
+  {%- render 'luxe-leaf-header-actions-fix' -%}
+{%- endunless -%}
+
 {% doc %}
   Header Actions Component
 
@@ -44,9 +48,7 @@
 
 {% capture account_icon %}
   {%- unless settings.brand_navigation == false -%}
-    <span class="account-button__icon svg-wrapper">
-      {%- render 'luxe-leaf-header-icon', name: 'account' -%}
-    </span>
+    {%- render 'luxe-leaf-header-icon', name: 'account' -%}
   {%- else -%}
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -94,6 +96,9 @@
     %}
     <div
       class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-custom-popover"
+      {% if settings.brand_navigation != false %}
+        aria-label="Account — sign in or view orders"
+      {% endif %}
     >
       <shopify-account
         menu="{{ customer_account_menu }}"
@@ -103,6 +108,14 @@
       >
         {% if customer %}
           <div class="account-button__fallback"></div>
+        {% elsif settings.brand_navigation != false %}
+          <span
+            slot="signed-out-avatar"
+            class="account-button__icon svg-wrapper luxe-brand-account__icon"
+            aria-hidden="true"
+          >
+            {{ account_icon }}
+          </span>
         {% else %}
           <span
             slot="signed-out-avatar"
@@ -124,9 +137,11 @@
   {% endif %}
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
-    <button
+    <a
+      href="{{ routes.cart_url }}"
       class="header-actions__action button-unstyled{% if display_style == 'text' %} header-actions__text-style{% endif %}"
-      on:click="#cart-drawer/toggle"
+      role="button"
+      data-luxe-open-cart
       aria-haspopup="dialog"
       aria-expanded="false"
       aria-controls="cart-drawer"
@@ -135,7 +150,7 @@
       data-testid="cart-drawer-trigger"
     >
       {{ cart_icon }}
-    </button>
+    </a>
   {% else %}
     <a
       href="{{ routes.cart_url }}"
@@ -200,8 +215,8 @@
     --shopify-account-dialog-position-top: var(--account-offset-top);
 
     &:not(:defined) {
-      min-width: 44px;
-      height: 44px;
+      min-width: 3rem;
+      min-height: 3rem;
       display: flex;
       justify-content: center;
       align-items: center;

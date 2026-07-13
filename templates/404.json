@@ -39,7 +39,7 @@
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<p>That page may have moved — but our premium loose leaf teas are still here.</p>",
+            "text": "<p>That page may have moved. <a href=\"/\">Browse our teas</a>, read <a href=\"/#our-story\">our story on the homepage</a>, or <a href=\"/pages/contact\">contact us</a>.</p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -100,6 +100,23 @@
         "intro": "Browse green, oolong, pu-erh, and black teas — packed fresh to order.",
         "padding-block-start": 24,
         "padding-block-end": 24
+      }
+    },
+    "keep_exploring_404": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "eyebrow": "Keep exploring",
+        "heading": "Popular teas to try",
+        "intro": "Swipe through premium loose leaf \u2014 one tap to add and keep shopping.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Teas you recently viewed \u2014 add to bag without leaving this page.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 24,
+        "padding-block-end": 32
       }
     },
     "product_list_iA96Tq": {
@@ -276,6 +293,6 @@
   "order": [
     "main",
     "tea_types_404",
-    "product_list_iA96Tq"
+    "keep_exploring_404"
   ]
 }

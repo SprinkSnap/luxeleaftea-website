@@ -225,6 +225,15 @@
               </div>
             </volume-pricing>
           {%- endif -%}
+          {%- if settings.brand_navigation != false -%}
+            <product-inventory
+              class="product-availability-line-wrap product-availability-line-wrap--buy-box"
+              data-product-id="{{ product.id }}"
+              id="Inventory-buy-{{ section.id }}-{{ block.id }}"
+            >
+              {% render 'luxe-leaf-product-availability', product: product, variant: variant, context: 'pdp' %}
+            </product-inventory>
+          {%- endif -%}
           {% content_for 'block',
             type: 'add-to-cart',
             id: 'add-to-cart',

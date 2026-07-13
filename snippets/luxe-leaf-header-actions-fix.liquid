@@ -1,0 +1,172 @@
+{%- doc -%}
+  Header bag + login tap targets, cart icon alignment, and reliable cart drawer opener.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  <style>
+    #header-component header-actions {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0 !important;
+    }
+
+    #header-component .header-actions__action,
+    #header-component .account-button.header-actions__action,
+    #header-component .search-action .header-actions__action {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      align-self: center !important;
+      width: 3.5rem !important;
+      height: 3.5rem !important;
+      min-width: 3.5rem !important;
+      min-height: 3.5rem !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+      vertical-align: middle;
+    }
+
+    #header-component .header-actions__action .svg-wrapper,
+    #header-component .header-actions__action svg,
+    #header-component .account-button__icon,
+    #header-component .account-button__icon svg,
+    #header-component .search-action svg {
+      width: 1.75rem !important;
+      height: 1.75rem !important;
+      display: block;
+    }
+
+    #header-component .account-button__icon.svg-wrapper,
+    #header-component .luxe-brand-account__icon,
+    #header-component shopify-account [slot='signed-out-avatar'] {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 1.75rem !important;
+      height: 1.75rem !important;
+      line-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    #header-component .account-button__text {
+      display: none !important;
+    }
+
+    #header-component shopify-account {
+      width: 3.5rem !important;
+      height: 3.5rem !important;
+      min-width: 3.5rem !important;
+      min-height: 3.5rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      align-self: center !important;
+      line-height: 0 !important;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon,
+    #header-component .header-actions__cart-icon {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      position: relative !important;
+      overflow: visible !important;
+      pointer-events: none;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .svg-wrapper {
+      width: 1.75rem !important;
+      height: 1.75rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble {
+      --cart-bubble-size: 17px;
+      position: absolute !important;
+      top: 0.2rem !important;
+      right: 0 !important;
+      width: var(--cart-bubble-size) !important;
+      min-width: var(--cart-bubble-size) !important;
+      height: var(--cart-bubble-size) !important;
+      pointer-events: none;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble__background {
+      background-color: var(--luxe-nav-gold, #c9a227) !important;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble__text {
+      color: var(--luxe-nav-ink, #1a1a1a) !important;
+      font-size: 0.5625rem !important;
+      font-weight: 700 !important;
+    }
+
+    #header-component cart-icon.header-actions__cart-icon--has-cart .svg-wrapper svg {
+      mask: none !important;
+      -webkit-mask: none !important;
+    }
+
+    #header-component [data-testid="cart-drawer-trigger"] .svg-wrapper,
+    #header-component a[aria-controls="cart-drawer"] .svg-wrapper,
+    #header-component button[aria-controls="cart-drawer"] .svg-wrapper {
+      width: 1.75rem !important;
+      height: 1.75rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #header-component a[aria-controls="cart-drawer"],
+    #header-component button[aria-controls="cart-drawer"],
+    #header-component [data-testid="cart-drawer-trigger"],
+    #header-component [data-luxe-open-cart] {
+      position: relative;
+      z-index: 6;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgb(201 162 39 / 0.3);
+      text-decoration: none;
+      pointer-events: auto !important;
+    }
+
+    @media screen and (max-width: 749px) {
+      #header-component .header__columns {
+        --header-mobile-bookend: 2.75rem;
+      }
+
+      #header-component header-actions {
+        grid-column: 4 / 6;
+        z-index: 6;
+        width: 5.5rem;
+        min-width: 5.5rem;
+      }
+
+      #header-component .header-actions__action,
+      #header-component .account-button.header-actions__action {
+        width: 2.75rem !important;
+        height: 2.75rem !important;
+        min-width: 2.75rem !important;
+        min-height: 2.75rem !important;
+      }
+
+      #header-component shopify-account {
+        width: 2.75rem !important;
+        height: 2.75rem !important;
+        min-width: 2.75rem !important;
+        min-height: 2.75rem !important;
+      }
+      #header-component cart-icon.header-actions__cart-icon .cart-bubble {
+        --cart-bubble-size: 16px;
+        top: 0.05rem !important;
+        right: -0.05rem !important;
+      }
+    }
+  </style>
+{%- endunless -%}

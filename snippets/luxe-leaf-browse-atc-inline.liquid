@@ -1,0 +1,44 @@
+{%- doc -%}
+  Inline browse add-to-cart for product grid cards — AJAX via luxe-leaf-browse-atc.js.
+
+  @param {object} product - Product to render
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    assign card_product = product | default: closest.product
+    if card_product == blank or card_product.available == false
+      assign render_atc = false
+    else
+      assign render_atc = true
+      assign variant = card_product.selected_or_first_available_variant
+      assign is_single_variant = false
+      if card_product.has_only_default_variant or card_product.variants_count == 1
+        assign is_single_variant = true
+      endif
+    endif
+  -%}
+
+  {%- if render_atc -%}
+    <div class="luxe-browse-atc-inline">
+      {%- if is_single_variant -%}
+        {%- form 'product', card_product, class: 'luxe-browse-atc-inline__form' -%}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <button type="submit" name="add" class="button luxe-browse-atc-inline__button">
+            Add to Bag
+          </button>
+        {%- endform -%}
+      {%- else -%}
+        <button
+          type="button"
+          class="button button-secondary luxe-browse-atc-inline__button luxe-browse-atc-inline__button--choose"
+          data-browse-atc-choose
+        >
+          Choose options
+        </button>
+      {%- endif -%}
+    </div>
+  {%- elsif card_product != blank and card_product.available == false -%}
+    <p class="luxe-browse-atc-inline__sold-out">Sold out</p>
+  {%- endif -%}
+{%- endunless -%}

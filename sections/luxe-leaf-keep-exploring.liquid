@@ -2,6 +2,12 @@
   Keep exploring — recently viewed browse rail with collection fallback and ItemList schema.
 {%- enddoc -%}
 
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
 {%- liquid
   assign fallback_collection = collections[section.settings.collection]
   if fallback_collection == blank
@@ -138,6 +144,7 @@
 {%- endif -%}
 
 <script type="module" src="{{ 'luxe-leaf-keep-exploring.js' | asset_url }}"></script>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-keep-exploring {
@@ -306,6 +313,20 @@
   "tag": "section",
   "class": "luxe-keep-exploring-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "page_scope",
+      "label": "Show on",
+      "options": [
+        { "value": "any", "label": "Any page (homepage, etc.)" },
+        { "value": "about", "label": "About page only" },
+        { "value": "contact", "label": "Contact page only" },
+        { "value": "faq", "label": "FAQ page only" },
+        { "value": "about_or_contact", "label": "About or Contact page" },
+        { "value": "general", "label": "Other pages only (not About/Contact/FAQ)" }
+      ],
+      "default": "any"
+    },
     {
       "type": "text",
       "id": "eyebrow",

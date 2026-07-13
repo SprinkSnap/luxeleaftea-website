@@ -1,0 +1,37 @@
+{%- doc -%}
+  ItemList JSON-LD for the cart page (SEO).
+{%- enddoc -%}
+
+{%- unless cart.empty? -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Shopping bag — {{ shop.name | escape }}",
+      "numberOfItems": {{ cart.item_count }},
+      "itemListElement": [
+        {%- for item in cart.items -%}
+          {
+            "@type": "ListItem",
+            "position": {{ forloop.index }},
+            "item": {
+              "@type": "Product",
+              "name": {{ item.product.title | json }},
+              "url": {{ shop.url | append: item.url | json }},
+              {%- if item.image -%}
+              "image": {{ item.image | image_url: width: 600 | prepend: 'https:' | json }},
+              {%- endif -%}
+              "sku": {{ item.sku | json }},
+              "offers": {
+                "@type": "Offer",
+                "price": {{ item.final_price | divided_by: 100.0 }},
+                "priceCurrency": {{ cart.currency.iso_code | json }},
+                "availability": "https://schema.org/{% if item.variant.available %}InStock{% else %}OutOfStock{% endif %}"
+              }
+            }
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endunless -%}

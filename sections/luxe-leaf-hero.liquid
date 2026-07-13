@@ -139,7 +139,8 @@
 
   @media screen and (max-width: 749px) {
     .luxe-hero {
-      min-height: clamp(22rem, 88svh, 36rem);
+      min-height: clamp(17rem, 58svh, 26rem);
+      align-items: flex-start;
     }
 
     .luxe-hero__overlay {
@@ -153,7 +154,27 @@
 
     .luxe-hero__content {
       max-width: none;
-      padding-block: clamp(3rem, 12vw, 4rem) clamp(2.5rem, 10vw, 3rem);
+      padding-block: 1.25rem 1.5rem;
+      padding-top: max(1.25rem, env(safe-area-inset-top));
+    }
+
+    .luxe-hero__eyebrow {
+      margin-bottom: 0.65rem;
+    }
+
+    .luxe-hero__subhead {
+      margin-bottom: 1.25rem;
+    }
+
+    .luxe-hero__actions {
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+
+    .luxe-hero__actions .button {
+      width: 100%;
+      min-height: 3rem;
+      justify-content: center;
     }
 
     .luxe-hero__copy {
@@ -162,16 +183,7 @@
 
     .luxe-hero__heading {
       font-size: clamp(2rem, 9vw, 2.75rem);
-    }
-
-    .luxe-hero__actions {
-      flex-direction: column;
-    }
-
-    .luxe-hero__actions .button {
-      width: 100%;
-      min-height: 3rem;
-      justify-content: center;
+      margin-bottom: 0.75rem;
     }
 
     .luxe-hero__highlights {

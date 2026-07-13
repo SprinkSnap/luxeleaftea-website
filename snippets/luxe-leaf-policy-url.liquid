@@ -1,0 +1,41 @@
+{%- doc -%}
+  Resolves a policy URL — native Shopify policy when configured, else theme page fallback.
+  @param {string} which - privacy | terms | refund | shipping
+{%- enddoc -%}
+
+{%- liquid
+  assign which = which | default: 'terms'
+
+  case which
+    when 'privacy'
+      assign native = shop.privacy_policy
+      assign page_handle = 'privacy-policy'
+      assign anchor = 'privacy-policy'
+    when 'terms'
+      assign native = shop.terms_of_service
+      assign page_handle = 'terms-of-service'
+      assign anchor = 'terms-of-service'
+    when 'refund'
+      assign native = shop.refund_policy
+      assign page_handle = 'refund-policy'
+      assign anchor = 'refund-policy'
+    when 'shipping'
+      assign native = shop.shipping_policy
+      assign page_handle = 'shipping-policy'
+      assign anchor = 'shipping-policy'
+  endcase
+
+  assign resolved_url = '/pages/' | append: page_handle
+
+  if pages['legal'] != blank and pages['legal'].url != blank
+    assign resolved_url = pages['legal'].url | append: '#' | append: anchor
+  endif
+
+  if pages[page_handle] != blank and pages[page_handle].url != blank
+    assign resolved_url = pages[page_handle].url
+  endif
+
+  if native != blank and native.id != blank and native.url != blank
+    assign resolved_url = native.url
+  endif
+-%}{{ resolved_url }}

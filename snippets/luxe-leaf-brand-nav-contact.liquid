@@ -12,7 +12,7 @@
     render 'luxe-leaf-brand-phone-href'
   endcapture
   assign brand_phone_href = brand_phone_href | strip
-  assign contact_url = '/pages/contact'
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
 
   assign brand_email = settings.brand_email
   if brand_email == blank

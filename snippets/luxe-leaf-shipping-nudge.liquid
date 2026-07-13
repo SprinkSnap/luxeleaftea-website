@@ -1,0 +1,86 @@
+{%- doc -%}
+  Sticky free-shipping progress nudge — encourages keep browsing and adding without leaving.
+{%- enddoc -%}
+
+{%- unless settings.brand_navigation == false -%}
+  {%- liquid
+    assign threshold = settings.free_shipping_threshold | default: 5000
+    assign standard_rate = settings.standard_shipping_rate | default: 595
+    assign threshold_money = threshold | money
+    assign standard_rate_money = standard_rate | money
+    assign cart_total = cart.total_price
+    assign remaining = threshold | minus: cart_total
+    if remaining < 0
+      assign remaining = 0
+    endif
+    if cart_total >= threshold
+      assign shipping_cost = 0
+    else
+      assign shipping_cost = standard_rate
+    endif
+    assign estimated_total = cart_total | plus: shipping_cost
+  -%}
+
+  <aside
+    class="luxe-shipping-nudge"
+    data-shipping-nudge
+    {% render 'luxe-leaf-shipping-estimate', variant: 'nudge-meta' %}
+    data-shop-url="{{ routes.all_products_collection_url | escape }}"
+    hidden
+    aria-live="polite"
+  >
+    <div class="luxe-shipping-nudge__inner page-width">
+      <div class="luxe-shipping-nudge__copy">
+        <p class="luxe-shipping-nudge__text" data-shipping-nudge-text>
+          {%- if cart_total >= threshold -%}
+            <strong>Free shipping unlocked!</strong> Secure your tea before you go.
+          {%- else -%}
+            Add <strong>{{ remaining | money }}</strong> for free shipping over {{ threshold_money }}
+          {%- endif -%}
+        </p>
+        <p class="luxe-shipping-nudge__rate" data-shipping-nudge-rate>
+          {%- if cart_total >= threshold -%}
+            Pay {{ estimated_total | money }} total · Checkout in seconds
+          {%- else -%}
+            Standard shipping {{ standard_rate_money }} · Pay {{ estimated_total | money }} total
+          {%- endif -%}
+        </p>
+        <div
+          class="luxe-shipping-nudge__progress"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          data-shipping-nudge-progress
+        >
+          <span class="luxe-shipping-nudge__bar" data-shipping-nudge-bar style="width: 0%;"></span>
+        </div>
+      </div>
+      <div class="luxe-shipping-nudge__actions">
+        <button type="button" class="luxe-shipping-nudge__explore button button-secondary" data-shipping-nudge-explore>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">Keep Exploring</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Keep Exploring</span>
+        </button>
+        <button
+          type="button"
+          class="luxe-shipping-nudge__cart button button-secondary"
+          data-shipping-nudge-cart
+          data-luxe-open-cart
+          aria-label="View bag — review items before checkout"
+        >
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">View Bag</span>
+          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">View Bag</span>
+        </button>
+        <button
+          type="button"
+          class="luxe-shipping-nudge__checkout button"
+          data-shipping-nudge-checkout
+          aria-label="Go to secure checkout"
+          {% unless cart.item_count > 0 %}hidden{% endunless %}
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+  </aside>
+{%- endunless -%}

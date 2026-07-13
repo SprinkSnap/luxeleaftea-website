@@ -24,6 +24,9 @@
   assign brand_default_description = 'Shop premium loose leaf tea from Luxe Leaf Tea. Hand-selected green, oolong, pu-erh, and black teas — packed fresh to order.'
   assign meta_description = page_description | default: shop.description | default: brand_default_description
   assign og_description = meta_description
+  assign free_ship_threshold = settings.free_shipping_threshold | default: 5000
+  assign free_ship_label = free_ship_threshold | money
+  assign standard_ship_label = settings.standard_shipping_rate | default: 595 | money
 
   if request.page_type == 'index'
     assign og_title = 'Premium Loose Leaf Tea | ' | append: shop.name
@@ -32,7 +35,7 @@
   elsif request.page_type == 'collection' and collection
     case collection.handle
       when 'green-tea'
-        assign meta_description = 'Shop premium loose leaf green tea — bright, sweet whole-leaf selections packed fresh to order. Free shipping over $50.'
+        assign meta_description = 'Shop premium loose leaf green tea — bright, sweet whole-leaf selections packed fresh to order. Free shipping over ' | append: free_ship_label | append: '.'
       when 'oolong'
         assign meta_description = 'Explore premium loose leaf oolong tea — floral, layered, and perfect for multiple steeps. Packed fresh to order.'
       when 'pu-erh'
@@ -57,7 +60,53 @@
     assign meta_description = 'Tea guides and brewing tips for premium loose leaf tea — learn, brew, and shop with confidence.'
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'faq'
-    assign meta_description = 'FAQ about premium loose leaf tea — brewing tips, shipping, freshness, and how to choose green, oolong, pu-erh, and black teas.'
+    assign og_title = 'FAQ | Premium Loose Leaf Tea — Brewing, Shipping & Checkout | ' | append: shop.name
+    assign meta_description = 'Premium loose leaf tea FAQ — brewing tips, secure checkout, standard shipping ' | append: standard_ship_label | append: ', free shipping over ' | append: free_ship_label | append: ', freshness guarantee, and how to choose green, oolong, pu-erh, and black teas. Shop without leaving the page.'
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'about'
+    assign og_title = 'About Luxe Leaf Tea | Premium Loose Leaf Tea Boutique'
+    assign meta_description = "Discover Luxe Leaf Tea — a boutique for premium Chinese loose leaf tea. Whole leaves, honest origins, packed fresh to order. Shop green, oolong, pu-erh, and black teas without leaving the page."
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'contact'
+    assign og_title = 'Contact Luxe Leaf Tea | Call, Email, or Chat With Our Tea Team'
+    assign meta_description = 'Contact Luxe Leaf Tea — call, email, or chat with our Tea Guide for help choosing premium loose leaf tea, orders, brewing tips, and shipping questions. We reply within one business day.'
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'terms-of-service'
+    assign og_title = 'Terms of Service | ' | append: shop.name
+    assign meta_description = 'Terms of Service for shopping premium loose leaf tea at ' | append: shop.name | append: ' — orders, secure payment, fresh packing, pricing, and acceptable use.'
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'refund-policy'
+    assign og_title = 'Refund Policy | ' | append: shop.name
+    assign meta_description = 'Refund Policy for ' | append: shop.name | append: ' — 14-day freshness guarantee, eligible returns, refund timing, and how to contact support.'
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'shipping-policy'
+    assign og_title = 'Shipping Policy | ' | append: shop.name
+    assign meta_description = 'Shipping Policy for ' | append: shop.name | append: ' — free shipping over ' | append: free_ship_label | append: ', standard shipping from ' | append: standard_ship_label | append: ', processing in 1–2 business days, and tracking.'
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'privacy-policy'
+    assign og_title = 'Privacy Policy | ' | append: shop.name
+    assign meta_description = 'Privacy Policy for ' | append: shop.name | append: ' — how we collect, use, and protect your information when you shop premium loose leaf tea online.'
+    assign og_description = meta_description
+  elsif request.page_type == 'page' and page.handle == 'legal'
+    assign og_title = 'Legal Policies | ' | append: shop.name
+    assign meta_description = 'Privacy, Terms of Service, Refund Policy, and Shipping Policy for ' | append: shop.name | append: ' — shop premium loose leaf tea with confidence.'
+    assign og_description = meta_description
+  elsif request.page_type == 'policy' and policy
+    if policy == shop.terms_of_service
+      assign og_title = 'Terms of Service | ' | append: shop.name
+      assign meta_description = 'Terms of Service for shopping premium loose leaf tea at ' | append: shop.name | append: ' — orders, secure payment, fresh packing, pricing, and acceptable use.'
+    elsif policy == shop.refund_policy
+      assign og_title = 'Refund Policy | ' | append: shop.name
+      assign meta_description = 'Refund Policy for ' | append: shop.name | append: ' — 14-day freshness guarantee, eligible returns, refund timing, and how to contact support.'
+    elsif policy == shop.shipping_policy
+      assign og_title = 'Shipping Policy | ' | append: shop.name
+      assign meta_description = 'Shipping Policy for ' | append: shop.name | append: ' — free shipping over ' | append: free_ship_label | append: ', standard shipping from ' | append: standard_ship_label | append: ', processing in 1–2 business days, and tracking.'
+    elsif policy == shop.privacy_policy
+      assign og_title = 'Privacy Policy | ' | append: shop.name
+      assign meta_description = 'Privacy Policy for ' | append: shop.name | append: ' — how we collect, use, and protect your information when you shop premium loose leaf tea online.'
+    else
+      assign meta_description = policy.title | append: ' — ' | append: shop.name
+    endif
     assign og_description = meta_description
   endif
 

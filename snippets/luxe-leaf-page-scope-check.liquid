@@ -1,0 +1,46 @@
+{%- doc -%}
+  Outputs "show" when the section should render for the current page scope.
+  @param {string} page_scope - any, about, contact, or about_or_contact
+{%- enddoc -%}
+
+{%- liquid
+  assign luxe_scope_ok = true
+  assign luxe_page_scope = page_scope | default: 'any'
+
+  assign luxe_is_about = false
+  if template.suffix == 'about'
+    assign luxe_is_about = true
+  elsif page.handle == 'about' or page.handle == 'about-us' or page.handle == 'our-story'
+    assign luxe_is_about = true
+  endif
+
+  assign luxe_is_contact = false
+  if template.suffix == 'contact'
+    assign luxe_is_contact = true
+  elsif page.handle == 'contact' or page.handle == 'contact-us' or page.handle == 'get-in-touch'
+    assign luxe_is_contact = true
+  endif
+
+  assign luxe_is_faq = false
+  if template.suffix == 'faq'
+    assign luxe_is_faq = true
+  elsif page.handle == 'faq'
+    assign luxe_is_faq = true
+  endif
+
+  if luxe_page_scope == 'about' and luxe_is_about == false
+    assign luxe_scope_ok = false
+  elsif luxe_page_scope == 'contact' and luxe_is_contact == false
+    assign luxe_scope_ok = false
+  elsif luxe_page_scope == 'faq' and luxe_is_faq == false
+    assign luxe_scope_ok = false
+  elsif luxe_page_scope == 'about_or_contact' and luxe_is_about == false and luxe_is_contact == false
+    assign luxe_scope_ok = false
+  elsif luxe_page_scope == 'general'
+    if luxe_is_about or luxe_is_contact or luxe_is_faq
+      assign luxe_scope_ok = false
+    elsif template.name != 'page'
+      assign luxe_scope_ok = false
+    endif
+  endif
+-%}{%- if luxe_scope_ok -%}show{%- endif -%}

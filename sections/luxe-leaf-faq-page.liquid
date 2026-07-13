@@ -1,138 +1,466 @@
 {%- doc -%}
-  FAQ page with visible accordions and FAQPage JSON-LD for rich results.
+  Premium FAQ page — categorized accordions, conversion sidebar, FAQPage JSON-LD.
 {%- enddoc -%}
 
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div
-  class="section section--page-width color-{{ section.settings.color_scheme }} spacing-style luxe-faq-page"
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: 'faq' -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
+
+{%- liquid
+  assign shop_tea_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_tea_url = collections.all.url
+  endif
+
+  assign contact_url = pages['contact'].url | default: '/pages/contact'
+  assign page_url = shop.url | append: page.url
+  assign page_desc = section.settings.intro | strip_html | truncate: 300
+
+  assign category_order = 'choosing|brewing|orders|shipping|quality' | split: '|'
+  assign category_labels = 'choosing|Choosing your tea,brewing|Brewing at home,orders|Orders & checkout,shipping|Shipping & delivery,quality|Freshness & quality' | split: ','
+-%}
+
+<section
+  class="luxe-faq-page section section--page-width spacing-style"
+  id="faq-page"
   style="{% render 'spacing-style', settings: section.settings %}"
 >
-  <div class="luxe-faq-page__header">
-    <p class="luxe-faq-page__eyebrow">{{ section.settings.eyebrow }}</p>
+  <header class="luxe-faq-page__hero">
+    <p class="luxe-faq-page__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      {{ section.settings.eyebrow }}
+    </p>
     <h1 class="luxe-faq-page__heading">{{ section.settings.heading }}</h1>
     <div class="luxe-faq-page__intro rte">{{ section.settings.intro }}</div>
-  </div>
 
-  <div class="luxe-faq-page__list">
-    {%- for block in section.blocks -%}
-      <details class="luxe-faq-page__item" {{ block.shopify_attributes }}>
-        <summary class="luxe-faq-page__question">{{ block.settings.question }}</summary>
-        <div class="luxe-faq-page__answer rte">{{ block.settings.answer }}</div>
-      </details>
-    {%- endfor -%}
-  </div>
+    {%- if section.settings.show_jump_nav -%}
+      <nav class="luxe-faq-page__jump" aria-label="FAQ categories">
+        {%- for cat_key in category_order -%}
+          {%- for cat_entry in category_labels -%}
+            {%- assign cat_parts = cat_entry | split: '|' -%}
+            {%- if cat_parts[0] == cat_key -%}
+              <a href="#faq-{{ cat_key }}" class="luxe-faq-page__jump-link">{{ cat_parts[1] }}</a>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+  </header>
 
-  {%- if section.settings.cta_label != blank -%}
-    <div class="luxe-faq-page__cta">
-      <p class="luxe-faq-page__cta-text">{{ section.settings.cta_text }}</p>
-      <a href="{{ section.settings.cta_link }}" class="button luxe-faq-page__cta-button">
-        {{ section.settings.cta_label }}
-      </a>
+  <div class="luxe-faq-page__layout">
+    <aside class="luxe-faq-page__sidebar" aria-label="Quick help">
+      <div class="luxe-faq-page__help-card">
+        <p class="luxe-faq-page__help-eyebrow">{{ section.settings.sidebar_eyebrow }}</p>
+        <h2 class="luxe-faq-page__help-heading">{{ section.settings.sidebar_heading }}</h2>
+        <p class="luxe-faq-page__help-text">{{ section.settings.sidebar_text }}</p>
+        <div class="luxe-faq-page__help-actions">
+          <a href="{{ shop_tea_url }}" class="button luxe-faq-page__help-shop">
+            {{ section.settings.shop_label }}
+          </a>
+          <button type="button" class="button button-secondary luxe-faq-page__help-chat button-unstyled" data-open-tea-guide>
+            {{ section.settings.chat_label }}
+          </button>
+          <a href="{{ contact_url }}" class="luxe-faq-page__help-link">
+            {{ section.settings.contact_label }}
+          </a>
+        </div>
+      </div>
+
+      <ul class="luxe-faq-page__trust list-unstyled" role="list">
+        <li>
+          {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
+          <span>Secure checkout</span>
+        </li>
+        <li>
+          {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
+          <span>Packed fresh to order</span>
+        </li>
+        <li>
+          {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+          <span>Free shipping $50+</span>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="luxe-faq-page__main">
+      {%- for cat_key in category_order -%}
+        {%- assign cat_label = cat_key -%}
+        {%- for cat_entry in category_labels -%}
+          {%- assign cat_parts = cat_entry | split: '|' -%}
+          {%- if cat_parts[0] == cat_key -%}
+            {%- assign cat_label = cat_parts[1] -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- assign cat_has_blocks = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.category == cat_key -%}
+            {%- assign cat_has_blocks = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if cat_has_blocks -%}
+          <section class="luxe-faq-page__group" id="faq-{{ cat_key }}" aria-labelledby="faq-heading-{{ cat_key }}">
+            <h2 class="luxe-faq-page__group-heading" id="faq-heading-{{ cat_key }}">{{ cat_label }}</h2>
+            <div class="luxe-faq-page__list">
+              {%- for block in section.blocks -%}
+                {%- if block.settings.category == cat_key -%}
+                  <details class="luxe-faq-page__item" {{ block.shopify_attributes }}>
+                    <summary class="luxe-faq-page__question">
+                      <span>{{ block.settings.question }}</span>
+                      {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm luxe-faq-page__chevron' -%}
+                    </summary>
+                    <div class="luxe-faq-page__answer rte">{{ block.settings.answer }}</div>
+                  </details>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </section>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if section.settings.cta_label != blank -%}
+        <div class="luxe-faq-page__cta">
+          <p class="luxe-faq-page__cta-text">{{ section.settings.cta_text }}</p>
+          <div class="luxe-faq-page__cta-actions">
+            <a href="{{ section.settings.cta_link | default: shop_tea_url }}" class="button luxe-faq-page__cta-primary">
+              {{ section.settings.cta_label }}
+            </a>
+            {%- if section.settings.cta_secondary_label != blank -%}
+              <a href="{{ section.settings.cta_secondary_link | default: shop_tea_url }}#featured-teas" class="button button-secondary luxe-faq-page__cta-secondary">
+                {{ section.settings.cta_secondary_label }}
+              </a>
+            {%- endif -%}
+          </div>
+          <p class="luxe-faq-page__cta-note">{{ section.settings.cta_note }}</p>
+        </div>
+      {%- endif -%}
     </div>
-  {%- endif -%}
-</div>
+  </div>
+</section>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {%- for block in section.blocks -%}
-      {
-        "@type": "Question",
-        "name": {{ block.settings.question | json }},
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": {{ block.settings.answer | strip_html | json }}
-        }
-      }{%- unless forloop.last -%},{%- endunless -%}
-    {%- endfor -%}
-  ]
-}
+{%- if section.blocks.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "name": {{ section.settings.heading | json }},
+      "description": {{ page_desc | json }},
+      "url": {{ page_url | json }},
+      "mainEntity": [
+        {%- for block in section.blocks -%}
+          {
+            "@type": "Question",
+            "name": {{ block.settings.question | json }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ block.settings.answer | strip_html | json }}
+            }
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+<script>
+  document.querySelectorAll('.luxe-faq-page [data-open-tea-guide]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelector('[data-chat-launcher]')?.click();
+    });
+  });
 </script>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-faq-page {
-    padding-block: 48px 64px;
+    padding-block: 2rem 4rem;
+    background: linear-gradient(180deg, var(--luxe-cream, #f8f6f0) 0%, #fff 100%);
   }
 
-  .luxe-faq-page__header {
+  .luxe-faq-page__hero {
     max-width: 42rem;
-    margin-bottom: 32px;
+    margin-bottom: 2rem;
   }
 
   .luxe-faq-page__eyebrow {
-    margin: 0 0 10px;
-    color: #c9a227;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.75rem;
+    color: var(--luxe-gold, #c9a227);
     font-size: 0.75rem;
-    letter-spacing: 0.12em;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   .luxe-faq-page__heading {
-    margin: 0 0 12px;
-    font-family: var(--font-heading--family);
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.15;
+    margin: 0 0 0.85rem;
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--luxe-jade, #1b4332);
   }
 
   .luxe-faq-page__intro {
-    color: rgb(var(--color-foreground-rgb) / 0.8);
+    margin: 0;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.88);
     line-height: 1.65;
+    font-size: 1.0625rem;
+  }
+
+  .luxe-faq-page__intro p {
+    margin: 0;
+  }
+
+  .luxe-faq-page__jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.15rem;
+  }
+
+  .luxe-faq-page__jump-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.15);
+    background: #fff;
+    color: var(--luxe-jade, #1b4332);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .luxe-faq-page__jump-link:hover {
+    border-color: var(--luxe-gold, #c9a227);
+    color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-faq-page__layout {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media screen and (min-width: 900px) {
+    .luxe-faq-page__layout {
+      grid-template-columns: minmax(240px, 0.85fr) minmax(0, 1.15fr);
+      gap: 2rem;
+    }
+  }
+
+  .luxe-faq-page__sidebar {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media screen and (min-width: 900px) {
+    .luxe-faq-page__sidebar {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+
+  .luxe-faq-page__help-card {
+    padding: 1.25rem;
+    border-radius: 0.85rem;
+    background: #fff;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
+    box-shadow: var(--luxe-shadow-soft, 0 4px 16px rgb(27 67 50 / 0.06));
+  }
+
+  .luxe-faq-page__help-eyebrow {
+    margin: 0 0 0.45rem;
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-faq-page__help-heading {
+    margin: 0 0 0.55rem;
+    font-size: 1.125rem;
+    line-height: 1.25;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-faq-page__help-text {
+    margin: 0 0 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.78);
+  }
+
+  .luxe-faq-page__help-actions {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .luxe-faq-page__help-shop,
+  .luxe-faq-page__help-chat {
+    min-height: 2.5rem;
+    border-radius: 999px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .luxe-faq-page__help-shop {
+    background: var(--luxe-jade, #1b4332);
+    border-color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-faq-page__help-link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--luxe-jade, #1b4332);
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .luxe-faq-page__help-link:hover {
+    color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-faq-page__trust {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border-radius: 0.65rem;
+    background: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.04);
+    font-size: 0.8125rem;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.75);
+  }
+
+  .luxe-faq-page__trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .luxe-faq-page__main {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .luxe-faq-page__group-heading {
+    margin: 0 0 0.85rem;
+    font-size: 1.125rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--luxe-jade, #1b4332);
   }
 
   .luxe-faq-page__list {
     display: grid;
-    gap: 12px;
-    max-width: 48rem;
+    gap: 0.65rem;
   }
 
   .luxe-faq-page__item {
-    border: 1px solid rgb(27 67 50 / 0.12);
-    border-radius: 10px;
-    background: #f8f6f0;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.12);
+    border-radius: 0.65rem;
+    background: #fff;
     overflow: hidden;
+    box-shadow: var(--luxe-shadow-soft, 0 2px 8px rgb(27 67 50 / 0.04));
   }
 
   .luxe-faq-page__question {
-    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
     font-weight: 600;
     cursor: pointer;
     list-style: none;
+    color: var(--luxe-jade, #1b4332);
   }
 
   .luxe-faq-page__question::-webkit-details-marker {
     display: none;
   }
 
+  .luxe-faq-page__chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .luxe-faq-page__item[open] .luxe-faq-page__chevron {
+    transform: rotate(90deg);
+  }
+
   .luxe-faq-page__answer {
-    padding: 0 20px 18px;
-    color: rgb(var(--color-foreground-rgb) / 0.82);
+    padding: 0 1.1rem 1rem;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.85);
     line-height: 1.65;
+    font-size: 0.9375rem;
   }
 
   .luxe-faq-page__answer p {
-    margin: 0;
+    margin: 0 0 0.65rem;
+  }
+
+  .luxe-faq-page__answer p:last-child {
+    margin-bottom: 0;
   }
 
   .luxe-faq-page__cta {
-    margin-top: 40px;
-    padding: 28px;
-    border-radius: 12px;
-    background: #1b4332;
+    padding: 1.5rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
     color: #f8f6f0;
     text-align: center;
   }
 
   .luxe-faq-page__cta-text {
-    margin: 0 0 16px;
-    line-height: 1.6;
+    margin: 0 0 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.55;
   }
 
-  .luxe-faq-page__cta-button {
+  .luxe-faq-page__cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .luxe-faq-page__cta-primary {
     background: #c9a227;
     border-color: #c9a227;
     color: #1a1a1a;
+    min-height: 2.75rem;
+    border-radius: 999px;
+  }
+
+  .luxe-faq-page__cta-secondary {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    border: 1.5px solid rgb(248 246 240 / 0.85) !important;
+    background: transparent !important;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-faq-page__cta-secondary:hover {
+    background: rgb(248 246 240 / 0.12) !important;
+    border-color: #f8f6f0 !important;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-faq-page__cta-note {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
   }
 {% endstylesheet %}
 
@@ -140,7 +468,7 @@
 {
   "name": "Luxe Leaf FAQ page",
   "tag": "section",
-  "class": "section-wrapper",
+  "class": "luxe-faq-page-section",
   "settings": [
     {
       "type": "text",
@@ -158,30 +486,91 @@
       "type": "richtext",
       "id": "intro",
       "label": "Intro",
-      "default": "<p>Answers to common questions about brewing, shipping, and choosing premium loose leaf tea.</p>"
+      "default": "<p>Everything you need to brew with confidence, checkout securely, and find your next favorite cup — without leaving the site.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_jump_nav",
+      "label": "Show category jump links",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_eyebrow",
+      "label": "Sidebar eyebrow",
+      "default": "Still deciding?"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_heading",
+      "label": "Sidebar heading",
+      "default": "Shop without hesitation"
+    },
+    {
+      "type": "textarea",
+      "id": "sidebar_text",
+      "label": "Sidebar text",
+      "default": "Add to bag in one tap, checkout securely, and pay in seconds — packed fresh after you order."
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop button",
+      "default": "Shop all teas"
+    },
+    {
+      "type": "text",
+      "id": "chat_label",
+      "label": "Chat button",
+      "default": "Ask our Tea Guide"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Contact link",
+      "default": "Contact our team"
+    },
+    {
+      "type": "header",
+      "content": "Bottom CTA"
     },
     {
       "type": "text",
       "id": "cta_text",
       "label": "CTA text",
-      "default": "Ready to find your next favorite tea?"
+      "default": "Ready to steep? Browse premium loose leaf tea — add to bag without leaving the page."
     },
     {
       "type": "text",
       "id": "cta_label",
-      "label": "CTA button",
-      "default": "Shop the collection"
+      "label": "Primary CTA button",
+      "default": "Shop Premium Loose Leaf Tea"
     },
     {
       "type": "url",
       "id": "cta_link",
-      "label": "CTA link"
+      "label": "Primary CTA link"
     },
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "Secondary CTA button",
+      "default": "See bestsellers below"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Secondary CTA link"
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "CTA note",
+      "default": "Secure checkout · Apple Pay & cards accepted · Free shipping over $50"
     },
     {
       "type": "range",
@@ -191,7 +580,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "default": 48
+      "default": 32
     },
     {
       "type": "range",
@@ -201,7 +590,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "default": 64
+      "default": 48
     }
   ],
   "blocks": [
@@ -209,6 +598,19 @@
       "type": "faq",
       "name": "Question",
       "settings": [
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category",
+          "options": [
+            { "value": "choosing", "label": "Choosing your tea" },
+            { "value": "brewing", "label": "Brewing at home" },
+            { "value": "orders", "label": "Orders & checkout" },
+            { "value": "shipping", "label": "Shipping & delivery" },
+            { "value": "quality", "label": "Freshness & quality" }
+          ],
+          "default": "brewing"
+        },
         {
           "type": "text",
           "id": "question",
@@ -229,51 +631,7 @@
       "name": "Luxe Leaf FAQ page",
       "settings": {
         "cta_link": "shopify://collections/all"
-      },
-      "blocks": [
-        {
-          "type": "faq",
-          "settings": {
-            "question": "How much loose leaf tea should I use per cup?",
-            "answer": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup.</p>"
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "What water temperature is best for loose leaf green tea?",
-            "answer": "<p>Premium loose leaf green tea brews best at 175–185°F (80–85°C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "Can you re-steep premium loose leaf tea?",
-            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3–4 infusions; oolongs and pu-erh can offer 4–8.</p>"
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "Why choose loose leaf tea over tea bags?",
-            "answer": "<p>Loose leaf tea uses whole or large leaves that unfurl in water, releasing more aroma and flavor. Premium loose leaf also re-steeps better and offers clearer origin and quality.</p>"
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "How fresh is the tea when it arrives?",
-            "answer": "<p>Every order is packed fresh after you purchase — not pulled from a long-term shelf. Sealed packaging protects aroma until you open your tin or pouch.</p>"
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "Do you offer free shipping?",
-            "answer": "<p>Yes — free shipping on orders over $50 within the contiguous United States. See checkout for current rates on other destinations.</p>"
-          }
-        }
-      ]
+      }
     }
   ]
 }

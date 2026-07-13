@@ -1,0 +1,104 @@
+{%- doc -%}
+  Policy page SEO — WebPage JSON-LD plus MerchantReturnPolicy / OfferShippingDetails where applicable.
+{%- enddoc -%}
+
+{%- liquid
+  assign schema_title = policy_title | default: policy.title | default: 'Legal Policy'
+  assign schema_path = policy_url | default: policy.url | default: request.path
+  assign page_url = shop.url | append: schema_path
+  assign page_desc = page_description
+  if page_desc == blank
+    case policy_kind
+      when 'terms'
+        assign page_desc = 'Terms of Service for shopping premium loose leaf tea at ' | append: shop.name | append: ' — orders, payment, fresh packing, and acceptable use.'
+      when 'refund'
+        assign page_desc = 'Refund and return policy for ' | append: shop.name | append: ' — 14-day freshness guarantee, eligible returns, and how to request help.'
+      when 'shipping'
+        assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+        assign page_desc = 'Shipping policy for ' | append: shop.name | append: ' — free shipping over ' | append: free_ship_label | append: ', processing times, tracking, and delivery estimates.'
+      when 'privacy'
+        assign page_desc = 'Privacy Policy for ' | append: shop.name | append: ' — how we collect, use, and protect your information when you shop premium loose leaf tea.'
+      else
+        assign page_desc = schema_title | append: ' for ' | append: shop.name
+    endcase
+  endif
+
+  assign free_ship_cents = settings.free_shipping_threshold | default: 5000
+  assign standard_ship_cents = settings.standard_shipping_rate | default: 595
+  assign free_ship_schema = free_ship_cents | divided_by: 100.0
+  assign standard_ship_schema = standard_ship_cents | divided_by: 100.0
+  assign currency_code = cart.currency.iso_code | default: shop.currency
+-%}
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": {{ schema_title | json }},
+    "description": {{ page_desc | json }},
+    "url": {{ page_url | json }},
+    "inLanguage": {{ request.locale.iso_code | json }},
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }}
+    },
+    "dateModified": {{ 'now' | date: '%Y-%m-%d' | json }}
+  }
+</script>
+
+{%- if policy_kind == 'refund' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MerchantReturnPolicy",
+      "name": {{ schema_title | json }},
+      "url": {{ page_url | json }},
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 14,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+      "applicableCountry": "US",
+      "merchantReturnLink": {{ page_url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{%- if policy_kind == 'shipping' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "OfferShippingDetails",
+      "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": {{ standard_ship_schema | json }},
+        "currency": {{ currency_code | json }}
+      },
+      "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "US"
+      },
+      "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 1,
+          "maxValue": 2,
+          "unitCode": "d"
+        },
+        "transitTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 3,
+          "maxValue": 7,
+          "unitCode": "d"
+        }
+      },
+      "doesNotShip": false
+    }
+  </script>
+{%- endif -%}

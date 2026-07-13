@@ -6,140 +6,134 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
-    "main": {
-      "type": "main-page",
-      "blocks": {
-        "title": {
-          "type": "text",
-          "name": "t:names.title",
-          "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "content": {
-          "type": "text",
-          "name": "t:names.content",
-          "settings": {
-            "text": "{{ closest.page.content }}",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-primary--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "title",
-        "content"
-      ],
+    "breadcrumbs": {
+      "type": "luxe-leaf-breadcrumbs",
       "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 40,
+        "padding-block-start": 12,
         "padding-block-end": 0
       }
     },
-    "form": {
-      "type": "section",
+    "trust_bar": {
+      "type": "luxe-leaf-trust-bar",
+      "settings": {}
+    },
+    "contact": {
+      "type": "luxe-leaf-contact-page",
+      "settings": {
+        "eyebrow": "We're here for you",
+        "heading": "Reach our tea team — like you're at the counter",
+        "intro": "<p>Questions about a tea, your order, or how to brew? Call, email, chat with our Tea Guide, or send a note below. Real people who love tea — ready to help you feel at home.</p>",
+        "welcome_eyebrow": "Pull up a chair",
+        "welcome_heading": "You're always welcome here",
+        "welcome_text": "Whether it's your first loose leaf tea or your hundredth gaiwan session, our team is here — warm, clear guidance and zero pressure.",
+        "tea_guide_label": "Chat with Tea Guide",
+        "shop_while_label": "Browse teas while you wait",
+        "channels_heading": "Reach us directly",
+        "phone_note": "Fastest for orders and shipping — we're happy to hear from you.",
+        "email_note": "We reply within one business day, usually sooner.",
+        "hours": "Mon–Fri, 9am–5pm ET",
+        "response_time": "Typical reply within 24 hours.",
+        "form_heading": "Send us a message",
+        "form_intro": "Tell us what you're looking for — we'll point you to the right loose leaf tea or help with your order.",
+        "submit_label": "Send message",
+        "success_message": "Thanks — your message is on its way. We'll get back to you shortly. Browse teas below while you wait.",
+        "privacy_note": "We use your details only to respond to your message.",
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
+    },
+    "featured_teas": {
+      "type": "luxe-leaf-featured-teas",
+      "settings": {
+        "eyebrow": "While you wait",
+        "heading": "Shop premium loose leaf tea",
+        "intro": "Add to bag in one tap — no page reload. Keep browsing and checkout when you're ready.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4
+      }
+    },
+    "social_proof": {
+      "type": "luxe-leaf-social-proof",
       "blocks": {
-        "contact_form_UwiCkQ": {
-          "type": "contact-form",
+        "review_1": {
+          "type": "review",
           "settings": {
-            "width": "custom",
-            "custom_width": 50,
-            "width_mobile": "custom",
-            "custom_width_mobile": 100,
-            "input_style": "default",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "submit-button": {
-              "type": "contact-form-submit-button",
-              "static": true,
-              "settings": {
-                "label": "Submit",
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
+            "quote": "Called with a brewing question — they answered in minutes and pointed me to the perfect oolong.",
+            "author": "Michael T."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "Email reply was warm and helpful. Felt like talking to someone at a tea shop, not a call center.",
+            "author": "Priya S."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "The Tea Guide helped me build my first order without leaving the site. So easy.",
+            "author": "David R."
+          }
         }
       },
       "block_order": [
-        "contact_form_UwiCkQ"
+        "review_1",
+        "review_2",
+        "review_3"
       ],
-      "name": "t:names.contact_form",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "page-width",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "{{ settings.color_palette.background }}",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 32,
-        "padding-block-end": 84
+        "eyebrow": "Real support, real tea lovers",
+        "heading": "Customers feel at home here",
+        "section_id": "contact-reviews",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "keep_exploring": {
+      "type": "luxe-leaf-keep-exploring",
+      "settings": {
+        "eyebrow": "Keep browsing",
+        "heading": "More teas to explore",
+        "intro": "Swipe through premium loose leaf picks — one tap to add and keep shopping.",
+        "recent_eyebrow": "Welcome back",
+        "recent_heading": "Pick up where you left off",
+        "recent_intro": "Your recently viewed teas — one tap to add.",
+        "view_all_label": "Shop all teas",
+        "collection": "all",
+        "product_limit": 4,
+        "exclude_current_on_product": true,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "shop_cta": {
+      "type": "luxe-leaf-shop-cta",
+      "settings": {
+        "eyebrow": "Ready to steep?",
+        "heading": "Find your next favorite cup",
+        "text": "Browse premium loose leaf tea, add to bag without leaving the site, and checkout when you're ready.",
+        "primary_label": "Shop Premium Loose Leaf Tea",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Browse FAQ",
+        "secondary_link": "/pages/faq",
+        "note": "Free shipping over $50 · Packed fresh to order · Secure checkout",
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     }
   },
   "order": [
-    "main",
-    "form"
+    "breadcrumbs",
+    "trust_bar",
+    "contact",
+    "featured_teas",
+    "social_proof",
+    "keep_exploring",
+    "shop_cta"
   ]
 }

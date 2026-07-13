@@ -1,6 +1,13 @@
 
 
 {% liquid
+  # On product pages, the description lives full-width below the buy box
+  # (luxe-leaf-product-description) for conversion + SEO. Never duplicate it
+  # in the right-hand details column.
+  if request.page_type == 'product'
+    assign skip_sidebar_description = true
+  endif
+
   assign product = block.settings.product
   if request.visual_preview_mode and product == blank
     assign product = collections.all.products.first
@@ -8,7 +15,9 @@
   endif
 %}
 
-{% render 'text', fallback_text: text, block: block %}
+{%- unless skip_sidebar_description -%}
+  {% render 'text', fallback_text: text, block: block %}
+{%- endunless -%}
 
 {% schema %}
 {

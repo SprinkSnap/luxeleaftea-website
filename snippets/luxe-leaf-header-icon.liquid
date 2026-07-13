@@ -1,11 +1,12 @@
 {%- doc -%}
   Premium tea shop header icons for navigation, search, account, and cart.
+  menu — single SVG: hamburger lines + tea leaf (mobile nav)
   @param {string} name - menu, search, account, cart
 {%- enddoc -%}
 
 {%- case name -%}
   {%- when 'menu' -%}
-    {{- 'icon-tea-menu.svg' | inline_asset_content -}}
+    {% render 'luxe-leaf-tea-menu-icon' %}
   {%- when 'search' -%}
     {{- 'icon-tea-search.svg' | inline_asset_content -}}
   {%- when 'account' -%}

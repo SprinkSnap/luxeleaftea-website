@@ -2,47 +2,7 @@
   Cart drawer conversion layer: free-shipping progress, trust, and checkout urgency.
 {%- enddoc -%}
 
-{%- liquid
-  assign threshold = settings.free_shipping_threshold | default: 5000
-  assign threshold_money = threshold | money
-  assign cart_total = cart.total_price
-  assign remaining = threshold | minus: cart_total
-  assign progress = cart_total | times: 100 | divided_by: threshold
-  if progress > 100
-    assign progress = 100
-  endif
--%}
-
-{%- unless cart.empty? -%}
-  <div class="luxe-cart-conversion" data-cart-conversion>
-    {%- if cart_total >= threshold -%}
-      <p class="luxe-cart-conversion__message luxe-cart-conversion__message--success">
-        {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-        You've unlocked <strong>free shipping</strong> on premium loose leaf tea!
-      </p>
-    {%- else -%}
-      <p class="luxe-cart-conversion__message">
-        Add <strong>{{ remaining | money }}</strong> more for free shipping over {{ threshold_money }}
-      </p>
-      <div
-        class="luxe-cart-conversion__progress"
-        role="progressbar"
-        aria-valuenow="{{ progress }}"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        aria-label="Free shipping progress"
-      >
-        <span class="luxe-cart-conversion__progress-bar" style="width: {{ progress }}%;"></span>
-      </div>
-    {%- endif -%}
-
-    <ul class="luxe-cart-conversion__trust list-unstyled" role="list">
-      <li>{%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%} Packed fresh to order</li>
-      <li>{%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%} Secure checkout</li>
-      <li>{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%} Whole-leaf quality</li>
-    </ul>
-  </div>
-{%- endunless -%}
+{% render 'luxe-leaf-shipping-estimate', variant: 'drawer-banner' %}
 
 {% stylesheet %}
   .luxe-cart-conversion {
@@ -71,7 +31,11 @@
     border-radius: 999px;
     background: rgb(var(--luxe-jade-rgb) / 0.12);
     overflow: hidden;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .luxe-cart-conversion__progress--complete {
+    margin-bottom: 0.65rem;
   }
 
   .luxe-cart-conversion__progress-bar {
@@ -80,6 +44,47 @@
     border-radius: inherit;
     background: linear-gradient(90deg, var(--luxe-jade), var(--luxe-gold));
     transition: width 0.35s ease;
+  }
+
+  .luxe-cart-conversion__shipping {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem 0.65rem;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+    padding: 0.55rem 0.65rem;
+    border-radius: 0.5rem;
+    background: rgb(var(--luxe-jade-rgb) / 0.06);
+    border: 1px solid rgb(var(--luxe-jade-rgb) / 0.1);
+  }
+
+  .luxe-cart-conversion__shipping-total {
+    grid-column: 1 / -1;
+    margin-top: 0.35rem;
+    padding-top: 0.45rem;
+    border-top: 1px dashed rgb(var(--luxe-jade-rgb) / 0.12);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--luxe-jade);
+  }
+
+  .luxe-cart-conversion__shipping-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgb(var(--luxe-jade-rgb) / 0.72);
+  }
+
+  .luxe-cart-conversion__shipping-value {
+    font-size: 0.8125rem;
+    text-align: right;
+    color: var(--luxe-jade);
+  }
+
+  .luxe-cart-conversion__shipping-total {
+    grid-column: 1 / -1;
+    font-size: 0.8125rem;
+    color: rgb(var(--luxe-jade-rgb) / 0.88);
   }
 
   .luxe-cart-conversion__trust {

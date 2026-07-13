@@ -1,12 +1,17 @@
+{%- capture luxe_scope_check -%}
+  {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
+{%- endcapture -%}
+{%- assign luxe_scope_check = luxe_scope_check | strip -%}
+{%- if luxe_scope_check == 'show' -%}
 
 <section
   class="luxe-shop-cta section section--full-width spacing-style"
-  style="{% render 'spacing-style', settings: section.settings %}"
+  style="background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%); color: #f8f6f0; {% render 'spacing-style', settings: section.settings %}"
 >
   <div class="luxe-shop-cta__inner page-width">
     <p class="luxe-shop-cta__eyebrow">{{ section.settings.eyebrow }}</p>
     <h2 class="luxe-shop-cta__heading">{{ section.settings.heading }}</h2>
-    <p class="luxe-shop-cta__text">{{ section.settings.text }}</p>
+    <div class="luxe-shop-cta__text" style="color: #f8f6f0 !important;">{{ section.settings.text }}</div>
     <div class="luxe-shop-cta__actions">
       <a href="{{ section.settings.primary_link }}" class="button luxe-shop-cta__button">
         {{ section.settings.primary_label }}
@@ -20,13 +25,24 @@
     <p class="luxe-shop-cta__note">{{ section.settings.note }}</p>
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
   .luxe-shop-cta {
     padding-block: 64px;
-    background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
-    color: #f8f6f0;
+    background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
+    color: #f8f6f0 !important;
     text-align: center;
+  }
+
+  .luxe-shop-cta__heading,
+  .luxe-shop-cta__note {
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-shop-cta__text,
+  .luxe-shop-cta__text * {
+    color: #f8f6f0 !important;
   }
 
   .luxe-shop-cta__inner {
@@ -46,11 +62,12 @@
     margin: 0 0 16px;
     font-size: clamp(1.75rem, 3vw, 2.5rem);
     line-height: 1.15;
+    color: #f8f6f0 !important;
   }
 
   .luxe-shop-cta__text {
     margin: 0 0 28px;
-    color: rgb(248 246 240 / 0.85);
+    color: #f8f6f0 !important;
     line-height: 1.6;
   }
 
@@ -69,15 +86,16 @@
   }
 
   .luxe-shop-cta__button-secondary {
-    border-color: #f8f6f0;
-    color: #f8f6f0;
+    border-color: #f8f6f0 !important;
+    color: #f8f6f0 !important;
+    background: transparent !important;
   }
 
   .luxe-shop-cta__note {
     margin: 0;
     font-size: 0.8125rem;
     letter-spacing: 0.04em;
-    opacity: 0.8;
+    color: rgb(248 246 240 / 0.92);
   }
 {% endstylesheet %}
 
@@ -87,6 +105,20 @@
   "tag": "section",
   "class": "luxe-shop-cta-section",
   "settings": [
+    {
+      "type": "select",
+      "id": "page_scope",
+      "label": "Show on",
+      "options": [
+        { "value": "any", "label": "Any page (homepage, etc.)" },
+        { "value": "about", "label": "About page only" },
+        { "value": "contact", "label": "Contact page only" },
+        { "value": "faq", "label": "FAQ page only" },
+        { "value": "about_or_contact", "label": "About or Contact page" },
+        { "value": "general", "label": "Other pages only (not About/Contact/FAQ)" }
+      ],
+      "default": "any"
+    },
     {
       "type": "text",
       "id": "eyebrow",

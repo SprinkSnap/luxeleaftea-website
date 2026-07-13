@@ -50,6 +50,10 @@
       if page
         assign crumbs = 'Home|' | append: shop_url | append: '||' | append: page.title | append: '|' | append: page.url
       endif
+    when 'policy'
+      if policy
+        assign crumbs = 'Home|' | append: shop_url | append: '||' | append: policy.title | append: '|' | append: policy.url
+      endif
   endcase
 
   assign crumb_list = crumbs | split: '||'

@@ -1,0 +1,67 @@
+{%- doc -%}
+  CollectionPage + BreadcrumbList + ItemList JSON-LD for collection SEO.
+  @param {object} collection - The collection object
+{%- enddoc -%}
+
+{%- if collection != blank -%}
+  {%- liquid
+    assign collection_url = shop.url | append: collection.url
+    assign collection_desc = collection.description | strip_html | truncate: 300
+    if collection_desc == blank
+      assign collection_desc = 'Shop premium loose leaf ' | append: collection.title | append: ' — packed fresh to order.'
+    endif
+    assign schema_product_limit = 20
+  -%}
+
+  {%- capture item_list_elements -%}
+    {%- assign schema_count = 0 -%}
+    {%- for schema_product in collection.products limit: schema_product_limit -%}
+      {%- assign schema_variant = schema_product.selected_or_first_available_variant -%}
+      {%- if schema_count > 0 -%},{%- endif -%}
+      {
+        "@type": "ListItem",
+        "position": {{ schema_count | plus: 1 }},
+        "url": {{ shop.url | append: schema_variant.url | json }},
+        "name": {{ schema_product.title | json }}
+      }
+      {%- assign schema_count = schema_count | plus: 1 -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": {{ collection.title | json }},
+      "description": {{ collection_desc | json }},
+      "url": {{ collection_url | json }},
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": {{ shop.name | json }},
+        "url": {{ shop.url | json }}
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": {{ shop.url | append: routes.root_url | json }}
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ collection.title | json }},
+            "item": {{ collection_url | json }}
+          }
+        ]
+      }{%- if item_list_elements != blank -%},
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": {{ collection.title | json }},
+        "itemListElement": [{{ item_list_elements }}]
+      }{%- endif -%}
+    }
+  </script>
+{%- endif -%}

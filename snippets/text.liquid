@@ -12,6 +12,26 @@
   assign plain_text = block_settings.text | strip_newlines | strip
   assign visible_text = plain_text | strip_html
   assign text_width = width | default: block_settings.width
+  assign suppress_pdp_sidebar_description = false
+
+  # Hide buy-column text blocks that are just the product description —
+  # description is rendered once, full-width below images + checkout.
+  if request.page_type == 'product' and product != blank and product.description != blank and visible_text != blank
+    assign product_desc_plain = product.description | strip_html | strip
+    if visible_text == product_desc_plain
+      assign suppress_pdp_sidebar_description = true
+    elsif product_desc_plain.size > 60
+      assign desc_start = product_desc_plain | truncate: 100, ''
+      if visible_text.size > 80 and visible_text contains desc_start
+        assign suppress_pdp_sidebar_description = true
+      endif
+    endif
+  endif
+  if request.page_type == 'product'
+    if plain_text contains 'closest.product.description' or plain_text contains 'product.description'
+      assign suppress_pdp_sidebar_description = true
+    endif
+  endif
 
   if block_settings.font_size contains 'heading-lg' or block_settings.font_size contains 'heading-xl'
     assign type = 'display'
@@ -88,15 +108,17 @@
   endif
 %}
 
-{% if fallback_text != blank and visible_text == blank %}
-  <div {{ attributes | strip_newlines | strip }}>
-    {{ fallback_text }}
-  </div>
-{% elsif plain_text != blank %}
-  <{{ element }} {{ attributes | strip_newlines | strip }}>
-    {{ block.settings.text }}
-  </{{ element }}>
-{% endif %}
+{% unless suppress_pdp_sidebar_description %}
+  {% if fallback_text != blank and visible_text == blank %}
+    <div {{ attributes | strip_newlines | strip }}>
+      {{ fallback_text }}
+    </div>
+  {% elsif plain_text != blank %}
+    <{{ element }} {{ attributes | strip_newlines | strip }}>
+      {{ block.settings.text }}
+    </{{ element }}>
+  {% endif %}
+{% endunless %}
 
 {% stylesheet %}
   :root {

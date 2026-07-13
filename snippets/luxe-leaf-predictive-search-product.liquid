@@ -1,0 +1,23 @@
+{%- doc -%}
+  Renders a predictive search product row with shoppable add-to-bag.
+
+  @param {object} product - Product object
+  @param {string} [list_item_ref] - Component ref attribute for keyboard nav
+{%- enddoc -%}
+
+<li
+  class="predictive-search-results__card predictive-search-results__card--product luxe-predictive-search__card"
+  {% if list_item_ref != blank %}
+    ref="{{ list_item_ref }}"
+  {% endif %}
+>
+  {% render 'resource-card',
+    resource_type: 'product',
+    resource: product,
+    image_width: 500,
+    image_hover: true,
+    image_aspect_ratio: '4 / 5',
+    product_view_context: 'search'
+  %}
+  {% render 'luxe-leaf-predictive-search-atc', product: product %}
+</li>

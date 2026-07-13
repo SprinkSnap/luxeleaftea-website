@@ -1,0 +1,27 @@
+{%- doc -%}
+  Full-width product description row for the PDP — sits below media + buy box.
+{%- enddoc -%}
+
+{%- liquid
+  assign desc_product = product
+  if desc_product == blank
+    assign desc_product = closest.product
+  endif
+-%}
+
+{%- if desc_product != blank and desc_product.description != blank -%}
+  <div
+    class="product-information__description luxe-pdp-description"
+    data-product-description
+    aria-labelledby="luxe-pdp-description-heading"
+  >
+    <div class="luxe-pdp-description__inner">
+      <h2 id="luxe-pdp-description-heading" class="luxe-pdp-description__heading">
+        About {{ desc_product.title | escape }}
+      </h2>
+      <div class="luxe-pdp-description__body rte">
+        {{ desc_product.description }}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

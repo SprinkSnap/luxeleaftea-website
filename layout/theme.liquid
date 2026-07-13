@@ -6,7 +6,25 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
-    {%- if settings.favicon != blank -%}
+    {%- if settings.brand_navigation != false -%}
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{{ 'luxe-leaf-tea-favicon-32.png' | asset_url }}"
+      >
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="{{ 'luxe-leaf-tea-favicon-16.png' | asset_url }}"
+      >
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{{ 'luxe-leaf-tea-apple-touch-icon.png' | asset_url }}"
+      >
+    {%- elsif settings.favicon != blank -%}
       <link
         rel="icon"
         type="image/png"
@@ -60,9 +78,12 @@
     {{ 'luxe-leaf-theme.css' | asset_url | stylesheet_tag }}
     <script type="module" src="{{ 'luxe-leaf-brand-nav.js' | asset_url }}"></script>
     {%- unless settings.brand_navigation == false -%}
+      <script src="{{ 'luxe-leaf-canada-tax.js' | asset_url }}" defer></script>
       <script type="module" src="{{ 'luxe-leaf-mobile-commerce.js' | asset_url }}"></script>
+      <script type="module" src="{{ 'luxe-leaf-browse-atc.js' | asset_url }}"></script>
     {%- endunless -%}
     {%- render 'luxe-leaf-nav-schema' -%}
+    {%- render 'luxe-leaf-site-schema' -%}
 
     {% style %}
       body {
@@ -88,6 +109,41 @@
         text-shadow: 0 1px 8px rgb(0 0 0 / 0.45);
       }
 
+      /* Dark CTA surfaces — cream text (loads after luxe-leaf-theme.css; must live here) */
+      .luxe-shop-cta,
+      .luxe-shop-cta h2,
+      .luxe-shop-cta p,
+      .luxe-faq-page__cta,
+      .luxe-faq-page__cta p,
+      .luxe-policy-page__cta,
+      .luxe-policy-page__cta p,
+      .luxe-brand-footer,
+      .luxe-brand-footer h2,
+      .luxe-brand-footer h3,
+      .luxe-brand-footer p,
+      .luxe-brand-footer__subhead,
+      .luxe-brand-footer__newsletter,
+      .luxe-brand-footer__newsletter-heading,
+      .luxe-brand-footer__newsletter-copy,
+      .luxe-shop-cta__text,
+      .luxe-shop-cta__text * {
+        color: #f8f6f0 !important;
+      }
+
+      .luxe-shop-cta.section,
+      .luxe-brand-footer__cta.section {
+        background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
+      }
+
+      .luxe-shop-cta__button-secondary,
+      .luxe-brand-footer__secondary-btn,
+      .luxe-faq-page__cta-secondary,
+      .luxe-policy-page__cta-secondary {
+        color: #f8f6f0 !important;
+        border-color: rgb(248 246 240 / 0.85) !important;
+        background: transparent !important;
+      }
+
       #header-group .header-announcements,
       .announcement-bar {
         background: #1a1a1a !important;
@@ -100,6 +156,54 @@
         background: #0d2818 !important;
         color: #f8f6f0 !important;
       }
+
+      body.luxe-leaf-theme #header-component .header-logo__image,
+      body.luxe-leaf-theme #header-component .luxe-brand-logo__image {
+        height: 48px !important;
+        max-height: none !important;
+        width: auto !important;
+        object-position: center;
+      }
+
+      body.luxe-leaf-theme #header-component .header-logo--brand .header-logo__image,
+      body.luxe-leaf-theme #header-component .header-logo--brand .luxe-brand-logo__image {
+        max-width: min(11.25rem, calc(100vw - 11rem));
+      }
+
+      body.luxe-leaf-theme #header-component .header-logo--brand {
+        max-width: min(11.25rem, calc(100vw - 11rem));
+      }
+
+      body.luxe-leaf-theme #header-component header-actions {
+        grid-column: 4 / 6;
+        width: 5.5rem;
+        min-width: 5.5rem;
+        z-index: 6;
+      }
+
+      @media screen and (min-width: 750px) {
+        body.luxe-leaf-theme #header-component .header-logo__image,
+        body.luxe-leaf-theme #header-component .luxe-brand-logo__image {
+          height: 56px !important;
+          object-position: center;
+        }
+      }
+
+      body.luxe-leaf-theme #header-component .header__row--top {
+        min-height: 3.75rem;
+      }
+
+      /* Footer newsletter signup copy — must beat global jade body/heading rules */
+      body.luxe-leaf-theme .luxe-brand-footer-section p.luxe-brand-footer__newsletter-copy,
+      body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy.luxe-text-cream {
+        color: #f8f6f0 !important;
+      }
+
+      .luxe-brand-footer__policy-link,
+      .luxe-brand-footer__policy-grid-link,
+      .luxe-brand-footer__policy-list a {
+        color: #f8f6f0 !important;
+      }
     {% endstyle %}
 
     {% if request.design_mode %}
@@ -109,7 +213,13 @@
     {{ content_for_header }}
   </head>
 
-  <body class="page-width-wide card-hover-effect-lift luxe-leaf-theme">
+  <body
+    class="page-width-wide card-hover-effect-lift luxe-leaf-theme"
+    data-free-shipping-threshold="{{ settings.free_shipping_threshold | default: 5000 }}"
+    data-standard-shipping-rate="{{ settings.standard_shipping_rate | default: 595 }}"
+    data-free-shipping-threshold-label="{{ settings.free_shipping_threshold | default: 5000 | money | escape }}"
+    data-standard-shipping-rate-label="{{ settings.standard_shipping_rate | default: 595 | money | escape }}"
+  >
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
 
     {% render 'chat-drawer' %}
@@ -207,12 +317,24 @@
       </main>
 
       <footer>
-        {% sections 'footer-group' %}
+        {%- comment -%}
+          Force Luxe Leaf footer when brand navigation is on — bypasses footer-group.json
+          so Shopify theme-editor syncs cannot revert to Horizon's default footer.
+          Uses a snippet (not {% section %}) because Horizon footer sections must load via section groups.
+        {%- endcomment -%}
+        {%- if settings.brand_navigation != false -%}
+          <div class="luxe-brand-footer-section">
+            {% render 'luxe-leaf-brand-footer-content' %}
+          </div>
+        {%- else -%}
+          {% sections 'footer-group' %}
+        {%- endif -%}
       </footer>
     </div>
 
     {% render 'cart-drawer', render_wrapper: true %}
     {% render 'theme-drawer' %}
+    {% render 'luxe-leaf-cart-opener' %}
 
     {% render 'search-modal' %}
 
