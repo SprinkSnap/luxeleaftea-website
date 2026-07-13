@@ -25,6 +25,7 @@ export class ZoomDialog extends Component {
   requiredRefs = ['dialog', 'media', 'thumbnails'];
 
   #highResImagesLoaded = /** @type {Set<string>} */ (new Set());
+  #currentIndex = 0;
 
   connectedCallback() {
     super.connectedCallback();
@@ -44,6 +45,7 @@ export class ZoomDialog extends Component {
    */
   async open(index, event) {
     event.preventDefault();
+    this.#currentIndex = index;
 
     const { dialog, media, thumbnails } = this.refs;
     const targetImage = media[index];
@@ -186,15 +188,57 @@ export class ZoomDialog extends Component {
   }
 
   /**
-   * Closes the dialog when the user presses the escape key.
+   * Closes the dialog when the user presses Escape, or navigates with arrows.
    *
    * @param {KeyboardEvent} event - The keyboard event.
    */
   handleKeyDown(event) {
-    if (event.key !== 'Escape') return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.close();
+      return;
+    }
 
-    event.preventDefault();
-    this.close();
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.navigatePrevious(event);
+      return;
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.navigateNext(event);
+    }
+  }
+
+  /**
+   * @param {Event} [event]
+   */
+  navigatePrevious(event) {
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    this.#navigateBy(-1);
+  }
+
+  /**
+   * @param {Event} [event]
+   */
+  navigateNext(event) {
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    this.#navigateBy(1);
+  }
+
+  /**
+   * @param {number} delta
+   */
+  #navigateBy(delta) {
+    const count = this.refs.media?.length || 0;
+    if (count < 2) return;
+
+    const nextIndex = (this.#currentIndex + delta + count) % count;
+    const behavior = prefersReducedMotion() ? 'instant' : 'smooth';
+    this.selectThumbnail(nextIndex, { behavior });
   }
 
   /**
@@ -224,26 +268,28 @@ export class ZoomDialog extends Component {
    * @param {ScrollBehavior} options.behavior - The behavior of the scroll.
    */
   async selectThumbnail(index, options = { behavior: 'smooth' }) {
-    if (!this.refs.thumbnails || !this.refs.thumbnails.children.length) return;
-
-    // Guard if invalid
-    if (isNaN(index) || index < 0 || index >= this.refs.thumbnails.children.length) return;
-
     const { media, thumbnails } = this.refs;
-    const targetThumbnail = thumbnails.children[index];
+    if (!media?.[index]) return;
+    if (isNaN(index) || index < 0 || index >= media.length) return;
 
-    if (!targetThumbnail || !(targetThumbnail instanceof HTMLElement)) return;
+    this.#currentIndex = index;
 
-    Array.from(thumbnails.querySelectorAll('button')).forEach((button, i) => {
-      button.setAttribute('aria-selected', `${i === index}`);
-    });
+    if (thumbnails?.children?.length) {
+      const targetThumbnail = thumbnails.children[index];
 
-    scrollIntoView(targetThumbnail, {
-      ancestor: thumbnails,
-      behavior: options.behavior,
-      block: 'center',
-      inline: 'center',
-    });
+      if (targetThumbnail instanceof HTMLElement) {
+        Array.from(thumbnails.querySelectorAll('button')).forEach((button, i) => {
+          button.setAttribute('aria-selected', `${i === index}`);
+        });
+
+        scrollIntoView(targetThumbnail, {
+          ancestor: thumbnails,
+          behavior: options.behavior,
+          block: 'center',
+          inline: 'center',
+        });
+      }
+    }
 
     const targetImage = media[index];
 
