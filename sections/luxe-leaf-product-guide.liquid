@@ -139,20 +139,8 @@
 <section
   class="luxe-product-guide section section--page-width spacing-style"
   style="{% render 'spacing-style', settings: section.settings %}"
-  aria-labelledby="luxe-product-description-heading"
-  data-product-description
+  aria-label="Brewing guide and tasting notes"
 >
-  {%- if product.description != blank -%}
-    <div class="luxe-product-guide__description">
-      <h2 id="luxe-product-description-heading" class="luxe-product-guide__heading">
-        About {{ product.title | escape }}
-      </h2>
-      <div class="luxe-product-guide__description-body rte">
-        {{ product.description }}
-      </div>
-    </div>
-  {%- endif -%}
-
   <div class="luxe-product-guide__trust">
     <span class="luxe-product-guide__trust-icon" aria-hidden="true">{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}</span>
     {{ section.settings.trust_line }}
@@ -200,36 +188,6 @@
 {% stylesheet %}
   .luxe-product-guide {
     padding-block: 8px 32px;
-  }
-
-  .luxe-product-guide__description {
-    margin-bottom: 1.75rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgb(27 67 50 / 0.12);
-  }
-
-  .luxe-product-guide__heading {
-    margin: 0 0 0.85rem;
-    color: #1b4332;
-    font-size: clamp(1.25rem, 2.2vw, 1.5rem);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
-  }
-
-  .luxe-product-guide__description-body {
-    max-width: 46rem;
-    color: rgb(27 67 50 / 0.9);
-    font-size: 1rem;
-    line-height: 1.7;
-  }
-
-  .luxe-product-guide__description-body p {
-    margin: 0 0 0.85rem;
-  }
-
-  .luxe-product-guide__description-body p:last-child {
-    margin-bottom: 0;
   }
 
   .luxe-product-guide__trust {
@@ -308,16 +266,12 @@
 
   @media screen and (min-width: 750px) {
     .luxe-product-guide {
-      padding-block-start: 1.25rem;
-    }
-
-    .luxe-product-guide__description {
-      margin-bottom: 2rem;
-      padding-bottom: 1.75rem;
+      padding-block-start: 0.5rem;
     }
 
     .luxe-product-guide__accordion {
-      max-width: 48rem;
+      width: 100%;
+      max-width: none;
     }
   }
 {% endstylesheet %}

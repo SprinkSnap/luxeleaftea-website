@@ -2183,7 +2183,7 @@ body.luxe-leaf-theme .content-for-layout {
   touch-action: pan-x pinch-zoom;
 }
 
-/* PDP conversion layout: images left, checkout right, description below */
+/* PDP conversion layout: images left, checkout right, description full-width below */
 @media screen and (min-width: 750px) {
   .product-information__grid.product-information__grid--half.product-information--media-left {
     align-items: start;
@@ -2203,6 +2203,11 @@ body.luxe-leaf-theme .content-for-layout {
 
   .product-information .product-form-buttons {
     max-width: 100%;
+  }
+
+  .product-information__description,
+  .luxe-pdp-description {
+    width: 100%;
   }
 }
 
