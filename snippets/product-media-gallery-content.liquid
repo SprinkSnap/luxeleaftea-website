@@ -18,7 +18,23 @@
     block_shopify_attributes: block.shopify_attributes,
   %}
 {% enddoc %}
-{%- if block_settings.zoom -%}
+{%- liquid
+  # Conversion gallery (desktop + mobile): carousel, left thumbs, zoom lightbox.
+  # Force these so Theme Editor / schema defaults (grid + bottom) cannot strip UI.
+  assign media_presentation = 'carousel'
+  assign gallery_zoom = true
+  assign gallery_hide_variants = false
+  assign slideshow_controls_style = 'thumbnails'
+  assign slideshow_mobile_controls_style = 'thumbnails'
+  assign pagination_position = 'left'
+  assign controls_on_media = false
+  assign mobile_controls_on_media = false
+  assign thumbnail_width = block_settings.thumbnail_width | default: 72
+  if thumbnail_width > 72
+    assign thumbnail_width = 72
+  endif
+-%}
+{%- if gallery_zoom -%}
   <script
     src="{{ 'zoom-dialog.js' | asset_url }}"
     type="module"
@@ -29,43 +45,13 @@
   assign selected_variant_media = selected_product.selected_or_first_available_variant.featured_media
   assign first_3d_model = selected_product.media | where: 'media_type', 'model' | first
 
-  if block_settings.hide_variants
+  if gallery_hide_variants
     assign variant_images = selected_product.images | where: 'attached_to_variant?', true | map: 'src'
   endif
 
-  if block_settings.slideshow_controls_style == 'thumbnails'
-    assign controls_on_media = false
-  else
-    assign controls_on_media = true
-  endif
-
-  if block_settings.slideshow_mobile_controls_style == 'thumbnails'
-    assign mobile_controls_on_media = false
-  else
-    assign mobile_controls_on_media = true
-  endif
-
-  assign render_slideshow_controls = false
-
-  if media_presentation == 'carousel' or block_settings.slideshow_controls_style == block_settings.slideshow_mobile_controls_style
-    assign render_slideshow_controls = true
-  endif
-
-  assign render_mobile_slideshow_controls = false
-
-  if block_settings.slideshow_controls_style != block_settings.slideshow_mobile_controls_style
-    assign slideshow_controls_class = 'mobile:hidden'
-
-    if block_settings.slideshow_mobile_controls_style != 'hint'
-      assign render_mobile_slideshow_controls = true
-    endif
-  endif
-
-  assign slideshow_controls_style = block_settings.slideshow_controls_style
-  # Use a counter instead of dots when there are many images to avoid cropping/overflow.
-  if slideshow_controls_style == 'dots' and selected_product.media.size > 15
-    assign slideshow_controls_style = 'counter'
-  endif
+  assign render_slideshow_controls = true
+  assign slideshow_controls_class = 'mobile:hidden'
+  assign render_mobile_slideshow_controls = true
 
   assign render_slideshow_arrows = false
 
@@ -73,40 +59,17 @@
     assign slideshow_class = 'product-media-gallery__slideshow--single-media slideshow--single-media'
   else
     assign slideshow_class = ''
-
-    if media_presentation == 'carousel'
-      assign render_slideshow_arrows = true
-    endif
+    assign render_slideshow_arrows = true
   endif
 
-  if slideshow_controls_style == 'thumbnails'
-    assign pagination_position = block_settings.thumbnail_position
-  else
-    assign pagination_position = 'center'
-  endif
-
-  # correct discrepancy between position settings for thumbnails and other controls
-  if pagination_position == 'bottom'
-    assign pagination_position = 'center'
-  endif
-
-  assign icons_position = 'center'
-
-  # Put the icons on the opposite side of the pagination controls
-  if block_settings.slideshow_controls_position == 'on_media'
-    if pagination_position == 'left'
-      assign icons_position = 'right'
-    elsif pagination_position == 'right'
-      assign icons_position = 'left'
-    endif
-  endif
+  assign icons_position = 'right'
 
   assign sorted_media = '' | split: ','
   if selected_variant_media
     assign sorted_media = sorted_media | concat: selected_product.media | where: 'id', selected_variant_media.id
 
     for media in selected_product.media
-      if block_settings.hide_variants and variant_images contains media.src and sorted_media.size > 0
+      if gallery_hide_variants and variant_images contains media.src and sorted_media.size > 0
         continue
       endif
 
@@ -338,20 +301,14 @@
     class="
       spacing-style
       sticky-content
-      {% if media_presentation == 'grid' %}
-        media-gallery--{{ block_settings.media_columns }}-column
-        {% if block_settings.media_columns == "two" and block_settings.large_first_image%}media-gallery--large-first-image{% endif %}
-      {% endif %}
-      media-gallery--{{ media_presentation }}
-      {% if block_settings.slideshow_mobile_controls_style == 'hint' %}
-        media-gallery--hint
-      {% endif %}
+      media-gallery--carousel
+      luxe-pdp-gallery
       {% if block_settings.extend_media %}
         media-gallery--extend
       {% endif %}
     "
-    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ block_settings.thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px;{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}"
-    data-presentation="{{ media_presentation }}"
+    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px;{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}"
+    data-presentation="carousel"
     {{ block_shopify_attributes }}
   >
     {% capture slides %}
@@ -374,16 +331,16 @@
           {% endif %}
         {% endcapture %}
         {% capture class %}
-          {{ product_media_container_class }} product-media-container--{{ media.media_type }}{% if block_settings.zoom %} product-media-container--zoomable{% endif %}{% if forloop.index0 == lowest_aspect_ratio_index and block_settings.aspect_ratio == 'adapt' %} product-media-container--tallest{% endif %}
+          {{ product_media_container_class }} product-media-container--{{ media.media_type }}{% if gallery_zoom %} product-media-container--zoomable{% endif %}{% if forloop.index0 == lowest_aspect_ratio_index and block_settings.aspect_ratio == 'adapt' %} product-media-container--tallest{% endif %}
         {% endcapture %}
         {% if block_settings.aspect_ratio == 'adapt' %}
           {% capture style %}
             --media-preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};
           {% endcapture %}
         {% endif %}
-        {% if block_settings.zoom and media.media_type == 'model' %}
+        {% if gallery_zoom and media.media_type == 'model' %}
           {%- capture attributes -%}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
-        {% elsif block_settings.zoom %}
+        {% elsif gallery_zoom %}
           {%- capture attributes -%}on:click="#zoom-dialog-{{ block_id }}/open/{{ forloop.index0 }}"{% if settings.transition_to_main_product and forloop.first %} data-view-transition-type="product-image-transition"{% endif %}{% endcapture -%}
         {% endif %}
 
@@ -416,7 +373,7 @@
         {% if render_mobile_slideshow_controls %}
           {%- render 'slideshow-controls',
             class: 'desktop:hidden media-gallery__mobile-controls',
-            style: block_settings.slideshow_mobile_controls_style,
+            style: slideshow_mobile_controls_style,
             item_count: sorted_media.size,
             thumbnails: sorted_media,
             controls_on_media: mobile_controls_on_media,
@@ -461,15 +418,13 @@
               data-focal-point="{{ media.presentation.focal_point }}"
             {% endif %}
           >
-            {%- if block_settings.zoom and media.media_type == 'image' -%}
+            {%- if gallery_zoom and media.media_type == 'image' -%}
               <button
                 type="button"
                 class="button button-unstyled product-media-container__zoom-button"
                 aria-label="{{ 'actions.zoom_media' | t: index: forloop.index }}"
                 on:click="/zoom/{{ forloop.index0 }}"
-                {% if block_settings.zoom %}
-                  on:pointerenter="/preloadImage/{{ forloop.index0 }}"
-                {% endif %}
+                on:pointerenter="/preloadImage/{{ forloop.index0 }}"
               ></button>
             {%- endif -%}
             {%- liquid
@@ -491,10 +446,11 @@
       </ul>
     {% endif %}
 
-    {%- if block_settings.zoom -%}
+    {%- if gallery_zoom -%}
       <zoom-dialog
         ref="zoomDialogComponent"
         id="zoom-dialog-{{ block_id }}"
+        class="luxe-zoom-dialog"
       >
         <dialog
           class="dialog-zoomed-gallery__dialog"
