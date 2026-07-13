@@ -2183,18 +2183,20 @@ body.luxe-leaf-theme .content-for-layout {
   touch-action: pan-x pinch-zoom;
 }
 
-/* PDP conversion layout: images left, checkout right, description full-width below */
+/* PDP: images left, sticky checkout right, description full-width below (no overlap) */
 @media screen and (min-width: 750px) {
-  .product-information__grid.product-information__grid--half.product-information--media-left {
+  .product-information__grid.product-information--media-left {
     align-items: start;
   }
 
-  .product-information__grid.product-information__grid--half .product-information__media {
+  .product-information__media {
     min-width: 0;
   }
 
-  .product-information__grid.product-information__grid--half .product-details.sticky-content--desktop {
+  .product-information .product-details.sticky-content--desktop {
     align-self: start;
+    z-index: 2;
+    background: var(--color-background, #fff);
   }
 
   .product-information .product-details > .group-block {
@@ -2205,8 +2207,14 @@ body.luxe-leaf-theme .content-for-layout {
     max-width: 100%;
   }
 
-  .product-information__description,
-  .luxe-pdp-description {
+  /* Isolate sticky buy box so it never paints over the description sibling */
+  .product-information > .product-information__grid {
+    isolation: isolate;
+  }
+
+  .product-information > .luxe-pdp-description,
+  .product-information > .product-information__description {
+    clear: both;
     width: 100%;
   }
 }
