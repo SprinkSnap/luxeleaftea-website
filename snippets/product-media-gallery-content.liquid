@@ -646,18 +646,17 @@
 
   @media screen and (min-width: 750px) {
     .dialog-thumbnails-list {
-      position: fixed;
-      flex-direction: column;
-      inset: 50% var(--margin-lg) auto auto;
-      right: 0;
-      max-height: calc(100vh - 200px);
-      overflow-y: auto;
-      animation: thumbnailsSlideInTop var(--spring-d220-b0-duration) var(--spring-d220-b0-easing) forwards;
-      animation-delay: calc(var(--spring-d220-b0-duration) * 0.5);
+      position: relative;
+      flex-direction: row;
+      inset: auto;
+      right: auto;
+      max-height: none;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
 
     .dialog--closed .dialog-thumbnails-list {
-      animation: thumbnailsSlideOutTop var(--animation-speed) var(--animation-easing) forwards;
+      animation: thumbnailsSlideOutBottom var(--animation-speed) var(--animation-easing) forwards;
     }
   }
 
@@ -758,12 +757,14 @@
 
   @media screen and (max-width: 749px) {
     .dialog-zoomed-gallery {
-      /* Prevent scroll wheel or swipe scrolling */
+      /* Horizontal swipe only — never vertical scroll */
       overscroll-behavior: none;
       scrollbar-width: none;
       display: flex;
+      flex-direction: row;
       scroll-snap-type: x mandatory;
-      overflow-x: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       scroll-behavior: smooth;
       height: 100%;
 
@@ -805,9 +806,11 @@
     .product-media__drag-zoom-wrapper {
       display: flex;
       aspect-ratio: auto;
-      height: 100%;
-      width: 100%;
-      overflow: scroll;
+      height: auto;
+      max-height: min(54vh, 420px);
+      width: auto;
+      max-width: min(420px, 86vw);
+      overflow: hidden;
       scrollbar-width: none;
       justify-content: center;
 
@@ -871,8 +874,9 @@
 
   button.dialog-zoomed-gallery__nav {
     position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
+    top: auto;
+    bottom: max(1.15rem, env(safe-area-inset-bottom, 0px));
+    transform: none;
     z-index: calc(var(--layer-overlay) + 2);
     width: 3rem;
     height: 3rem;
@@ -897,11 +901,13 @@
   }
 
   .dialog-zoomed-gallery__nav--prev {
-    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    left: calc(50% - 4.1rem);
+    right: auto;
   }
 
   .dialog-zoomed-gallery__nav--next {
-    right: max(0.75rem, env(safe-area-inset-right, 0px));
+    left: calc(50% + 1rem);
+    right: auto;
   }
 
   @media screen and (min-width: 750px) {
@@ -911,11 +917,11 @@
     }
 
     .dialog-zoomed-gallery__nav--prev {
-      left: max(1.25rem, env(safe-area-inset-left, 0px));
+      left: calc(50% - 4.35rem);
     }
 
     .dialog-zoomed-gallery__nav--next {
-      right: max(1.25rem, env(safe-area-inset-right, 0px));
+      left: calc(50% + 1.1rem);
     }
   }
 
@@ -947,8 +953,9 @@
   }
 
   .dialog-zoomed-gallery .product-media-container--model .product-media__image {
-    /* Make the height match the height of the model-viewer */
-    height: 100vh;
+    /* Match lightbox image budget — avoid full-viewport vertical stacking */
+    height: auto;
+    max-height: min(62vh, 560px);
   }
 
   :root:active-view-transition .dialog-zoomed-gallery__dialog {
