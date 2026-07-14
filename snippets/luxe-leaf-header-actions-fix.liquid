@@ -88,24 +88,37 @@
     }
 
     #header-component cart-icon.header-actions__cart-icon .cart-bubble {
-      --cart-bubble-size: 17px;
+      --cart-bubble-size: 1.125rem;
       position: absolute !important;
-      top: 0.2rem !important;
-      right: 0 !important;
+      top: 0.05rem !important;
+      right: -0.1rem !important;
       width: var(--cart-bubble-size) !important;
       min-width: var(--cart-bubble-size) !important;
       height: var(--cart-bubble-size) !important;
+      z-index: 3 !important;
+      isolation: isolate;
+      overflow: visible !important;
       pointer-events: none;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
     #header-component cart-icon.header-actions__cart-icon .cart-bubble__background {
+      z-index: 0 !important;
       background-color: var(--luxe-nav-gold, #c9a227) !important;
+      border-radius: 999px !important;
     }
 
-    #header-component cart-icon.header-actions__cart-icon .cart-bubble__text {
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble__text,
+    #header-component cart-icon.header-actions__cart-icon .cart-bubble__text-count {
+      position: relative !important;
+      z-index: 2 !important;
       color: var(--luxe-nav-ink, #1a1a1a) !important;
-      font-size: 0.5625rem !important;
+      font-size: 0.625rem !important;
       font-weight: 700 !important;
+      line-height: 1 !important;
+      opacity: 1 !important;
     }
 
     #header-component cart-icon.header-actions__cart-icon--has-cart .svg-wrapper svg {
@@ -163,9 +176,14 @@
         min-height: 2.75rem !important;
       }
       #header-component cart-icon.header-actions__cart-icon .cart-bubble {
-        --cart-bubble-size: 16px;
-        top: 0.05rem !important;
-        right: -0.05rem !important;
+        --cart-bubble-size: 1.05rem;
+        top: 0 !important;
+        right: -0.15rem !important;
+      }
+
+      #header-component cart-icon.header-actions__cart-icon .cart-bubble__text,
+      #header-component cart-icon.header-actions__cart-icon .cart-bubble__text-count {
+        font-size: 0.5625rem !important;
       }
     }
   </style>
