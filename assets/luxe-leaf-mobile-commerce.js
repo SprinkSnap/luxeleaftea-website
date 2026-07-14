@@ -279,18 +279,42 @@ import { StandardEvents } from '@shopify/events';
     });
   };
 
-  const syncBar = async () => {
+  /** Drop stale syncs when quantity changes fire back-to-back. */
+  let syncBarGeneration = 0;
+
+  /**
+   * Refresh shipping nudge / drawer totals / mobile bar from the live cart.
+   * Cart line events are dispatched before /cart/change.js finishes, so we
+   * must await event.promise before reading /cart.js — otherwise "Add $X for
+   * free shipping" stays on the previous amount until a full page refresh.
+   * @param {Event & { promise?: Promise<unknown> }} [event]
+   */
+  const syncBar = async (event) => {
+    const generation = ++syncBarGeneration;
     const bar = document.querySelector('[data-mobile-shop-bar]');
 
     try {
-      const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
-      if (!res.ok) return;
+      if (event?.promise) {
+        try {
+          await event.promise;
+        } catch {
+          /* mutation failed — still re-read cart so UI matches server */
+        }
+      }
+
+      if (generation !== syncBarGeneration) return;
+
+      const res = await fetch('/cart.js', {
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok || generation !== syncBarGeneration) return;
       const cart = await res.json();
+      if (generation !== syncBarGeneration) return;
+
       syncShippingNudge(cart);
       syncCartConversion(cart);
       syncShippingTotals(cart);
-
-      const { estimatedTotal, taxReady } = getShippingEstimate(cart.total_price);
 
       if (bar) {
         const checkoutButton = bar.querySelector('[data-mobile-checkout]');
@@ -329,10 +353,6 @@ import { StandardEvents } from '@shopify/events';
           countEl.hidden = cart.item_count === 0;
         }
       }
-
-      syncShippingNudge(cart);
-      syncCartConversion(cart);
-      syncShippingTotals(cart);
     } catch {
       /* cart fetch failed — keep server-rendered state */
     }
