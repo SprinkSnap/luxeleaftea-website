@@ -730,18 +730,20 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     transition: width 0.35s ease;
   }
 
-  /* Single commerce row: Menu · Shop Tea · Bag · Checkout */
+  /* Single commerce row: Menu · Shop Tea · Bag · Checkout
+     Fixed Menu/Bag columns so Shop Tea cannot expand over the bag. */
   .luxe-mobile-bar {
+    --luxe-bar-icon-col: 3.15rem;
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: calc(var(--layer-menu-drawer) + 1);
     display: grid;
-    grid-template-columns: minmax(2.75rem, auto) minmax(0, 1fr) minmax(2.75rem, auto);
-    grid-auto-flow: column;
+    grid-template-columns: var(--luxe-bar-icon-col) minmax(0, 1fr) var(--luxe-bar-icon-col);
     align-items: stretch;
-    gap: 0.35rem;
+    column-gap: 0.4rem;
+    row-gap: 0;
     width: 100%;
     max-width: 100vw;
     margin: 0;
@@ -750,44 +752,58 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     border-top: 1px solid rgb(27 67 50 / 0.12);
     backdrop-filter: blur(8px);
     box-sizing: border-box;
-    flex-wrap: nowrap;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .luxe-mobile-bar--has-cart {
     grid-template-columns:
-      minmax(2.6rem, auto)
+      var(--luxe-bar-icon-col)
       minmax(0, 1fr)
-      minmax(2.6rem, auto)
-      minmax(0, 1.25fr);
+      var(--luxe-bar-icon-col)
+      minmax(0, 1.15fr);
+  }
+
+  .luxe-mobile-bar > * {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 1;
   }
 
   .luxe-mobile-bar__menu,
   .luxe-mobile-bar__shop,
   .luxe-mobile-bar__cart,
   .luxe-mobile-bar__checkout,
-  .luxe-mobile-bar__checkout-form {
+  .luxe-mobile-bar__checkout-form,
+  .luxe-mobile-bar .button,
+  .luxe-mobile-bar a.button,
+  .luxe-mobile-bar button.button {
     min-height: 2.75rem;
-    min-width: 0;
-    display: inline-flex;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
+    gap: 0.2rem;
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 0.625rem;
     text-decoration: none;
-    padding-inline: 0.4rem;
+    padding-block: 0.35rem !important;
+    padding-inline: 0.35rem !important;
     text-align: center;
     line-height: 1.1;
-    white-space: nowrap;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .luxe-mobile-bar__checkout-form {
-    display: flex;
+    display: flex !important;
     margin: 0;
     width: 100%;
+    overflow: visible;
   }
 
   .luxe-mobile-bar:not(.luxe-mobile-bar--has-cart) .luxe-mobile-bar__checkout-form {
@@ -795,7 +811,7 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-mobile-bar__checkout-form .luxe-mobile-bar__checkout {
-    width: 100%;
+    width: 100% !important;
     flex: 1 1 auto;
   }
 
@@ -809,6 +825,7 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: 100%;
   }
 
   .luxe-mobile-bar__menu {
@@ -817,7 +834,7 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     background: #fff;
     border: 1px solid rgb(27 67 50 / 0.18);
     color: #1a1a1a;
-    padding-inline: 0.3rem;
+    padding-inline: 0.2rem !important;
   }
 
   .luxe-mobile-bar__menu-label {
@@ -834,6 +851,7 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     justify-content: center;
     width: 1.25rem;
     height: 1.25rem;
+    flex-shrink: 0;
   }
 
   .luxe-mobile-bar__menu-icon .luxe-tea-menu-icon {
@@ -847,9 +865,11 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-mobile-bar__shop {
-    background: #fff;
-    border: 1px solid rgb(27 67 50 / 0.15);
-    color: #1b4332;
+    background: #fff !important;
+    border: 1px solid rgb(27 67 50 / 0.15) !important;
+    color: #1b4332 !important;
+    /* Contain label so it never paints over Bag */
+    overflow: hidden !important;
   }
 
   .luxe-mobile-bar__shop-label--short {
@@ -860,12 +880,14 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     flex-direction: column;
     gap: 0.1rem;
     position: relative;
+    z-index: 2;
     background: #fff;
     border: 1.5px solid rgb(27 67 50 / 0.2);
     color: #1b4332;
     cursor: pointer;
     touch-action: manipulation;
-    padding-inline: 0.3rem;
+    padding-inline: 0.2rem !important;
+    overflow: visible !important;
   }
 
   .luxe-mobile-bar--has-cart .luxe-mobile-bar__cart {
@@ -903,18 +925,18 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 
   .luxe-mobile-bar__count {
     position: absolute;
-    top: -0.2rem;
-    right: -0.3rem;
+    top: -0.15rem;
+    right: -0.1rem;
     z-index: 2;
-    min-width: 1.05rem;
-    height: 1.05rem;
-    padding: 0 0.2rem;
+    min-width: 1rem;
+    height: 1rem;
+    padding: 0 0.15rem;
     border-radius: 999px;
     background: #c9a227;
     color: #1a1a1a;
-    font-size: 0.625rem;
+    font-size: 0.5625rem;
     font-weight: 700;
-    line-height: 1.05rem;
+    line-height: 1rem;
     text-align: center;
     border: 1.5px solid #f8f6f0;
     box-sizing: border-box;
@@ -925,13 +947,13 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     background: #c9a227;
     border-color: #c9a227;
     color: #1a1a1a;
-    box-shadow: 0 4px 14px rgb(201 162 39 / 0.3);
+    box-shadow: none;
     font-weight: 700;
     font-size: 0.8125rem;
   }
 
   .luxe-mobile-bar--has-cart .luxe-mobile-bar__shop {
-    background: #fff;
+    background: #fff !important;
   }
 
   .luxe-tea-chat {
@@ -1252,13 +1274,20 @@ html.luxe-menu-open .luxe-tea-chat {
   pointer-events: none;
 }
 
-@media screen and (max-width: 380px) {
+/* Shorten Shop Tea earlier so the label never crowds the bag column */
+@media screen and (max-width: 430px) {
   .luxe-mobile-bar__shop-label--long {
     display: none;
   }
 
   .luxe-mobile-bar__shop-label--short {
     display: inline;
+  }
+
+  .luxe-mobile-bar {
+    --luxe-bar-icon-col: 2.9rem;
+    column-gap: 0.3rem;
+    padding-inline: 0.45rem;
   }
 
   .luxe-mobile-bar__menu-label,
@@ -1268,12 +1297,7 @@ html.luxe-menu-open .luxe-tea-chat {
 
   .luxe-mobile-bar__checkout {
     font-size: 0.75rem;
-    padding-inline: 0.35rem;
-  }
-
-  .luxe-mobile-bar--has-cart {
-    gap: 0.25rem;
-    padding-inline: 0.4rem;
+    padding-inline: 0.3rem !important;
   }
 }
 
