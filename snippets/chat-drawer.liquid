@@ -114,55 +114,65 @@
     aria-label="Quick shop navigation"
     data-mobile-shop-bar
   >
+    <button
+      type="button"
+      class="luxe-mobile-bar__menu button button-secondary"
+      data-luxe-nav-toggle
+      aria-label="Open menu — About, Contact, FAQ, and customer support"
+      aria-controls="LuxeBrandMenuPanel"
+      aria-expanded="false"
+      data-mobile-menu-toggle
+    >
+      <span class="svg-wrapper luxe-mobile-bar__menu-icon" aria-hidden="true">
+        {% render 'luxe-leaf-tea-menu-icon' %}
+      </span>
+      <span class="luxe-mobile-bar__menu-label">Menu</span>
+    </button>
+
+    <a
+      href="{{ routes.all_products_collection_url }}"
+      class="luxe-mobile-bar__shop button"
+      aria-label="Shop tea — browse all premium loose leaf teas"
+    >
+      <span class="luxe-mobile-bar__shop-label luxe-mobile-bar__shop-label--long">Shop Tea</span>
+      <span class="luxe-mobile-bar__shop-label luxe-mobile-bar__shop-label--short" aria-hidden="true">Shop</span>
+    </a>
+
+    {%- if settings.cart_type == 'drawer' -%}
       <button
         type="button"
-        class="luxe-mobile-bar__menu button button-secondary"
-        data-luxe-nav-toggle
-        aria-label="Open menu — About, Contact, FAQ, and customer support"
-        aria-controls="LuxeBrandMenuPanel"
-        aria-expanded="false"
-        data-mobile-menu-toggle
+        class="luxe-mobile-bar__cart button button-secondary"
+        data-mobile-cart-toggle
+        data-luxe-open-cart
+        aria-label="View bag — {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}"
       >
-        <span class="svg-wrapper luxe-mobile-bar__menu-icon" aria-hidden="true">
-          {% render 'luxe-leaf-tea-menu-icon' %}
-        </span>
-        <span class="visually-hidden">Menu</span>
-      </button>
-      <a href="{{ routes.all_products_collection_url }}" class="luxe-mobile-bar__shop button">
-        Shop Tea
-      </a>
-      <form action="{{ routes.cart_url }}" method="post" class="luxe-mobile-bar__checkout-form">
-        <button
-          type="button"
-          class="luxe-mobile-bar__checkout button"
-          data-mobile-checkout
-          aria-label="Go to secure checkout"
-          {% if cart.item_count == 0 %}hidden{% endif %}
-        >
-          Checkout
-        </button>
-      </form>
-      {%- if settings.cart_type == 'drawer' -%}
-        <button
-          type="button"
-          class="luxe-mobile-bar__cart button button-secondary"
-          data-mobile-cart-toggle
-          data-luxe-open-cart
-          aria-label="View bag — {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}"
-        >
-          <span class="luxe-mobile-bar__cart-icon" aria-hidden="true">
-            {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
-            <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+        <span class="luxe-mobile-bar__cart-icon" aria-hidden="true">
+          {%- render 'luxe-leaf-header-icon', name: 'cart' -%}
+          <span class="luxe-mobile-bar__count" data-mobile-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>
+            {{- cart.item_count -}}
           </span>
-          <span class="luxe-mobile-bar__cart-label" data-mobile-cart-label>Bag</span>
-        </button>
-      {%- else -%}
-        <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View cart">
-          {{- 'icon-cart.svg' | inline_asset_content -}}
-          <span>{{ 'content.cart_title' | t }}</span>
-        </a>
-      {%- endif -%}
-    </nav>
+        </span>
+        <span class="luxe-mobile-bar__cart-label" data-mobile-cart-label>Bag</span>
+      </button>
+    {%- else -%}
+      <a href="{{ routes.cart_url }}" class="luxe-mobile-bar__cart button button-secondary" aria-label="View bag">
+        {{- 'icon-cart.svg' | inline_asset_content -}}
+        <span class="luxe-mobile-bar__cart-label">Bag</span>
+      </a>
+    {%- endif -%}
+
+    <form action="{{ routes.cart_url }}" method="post" class="luxe-mobile-bar__checkout-form">
+      <button
+        type="button"
+        class="luxe-mobile-bar__checkout button"
+        data-mobile-checkout
+        aria-label="Go to secure checkout"
+        {% if cart.item_count == 0 %}hidden{% endif %}
+      >
+        Checkout
+      </button>
+    </form>
+  </nav>
 
   {%- unless settings.tea_chat_enabled == false -%}
     <script src="{{ 'luxe-leaf-tea-chat.js' | asset_url }}" defer></script>

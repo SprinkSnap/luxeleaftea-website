@@ -56,31 +56,10 @@
           <span class="luxe-shipping-nudge__bar" data-shipping-nudge-bar style="width: 0%;"></span>
         </div>
       </div>
-      <div class="luxe-shipping-nudge__actions">
-        <button type="button" class="luxe-shipping-nudge__explore button button-secondary" data-shipping-nudge-explore>
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">Keep Exploring</span>
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">Keep Exploring</span>
-        </button>
-        <button
-          type="button"
-          class="luxe-shipping-nudge__cart button button-secondary"
-          data-shipping-nudge-cart
-          data-luxe-open-cart
-          aria-label="View bag — review items before checkout"
-        >
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--long">View Bag</span>
-          <span class="luxe-shipping-nudge__label luxe-shipping-nudge__label--short">View Bag</span>
-        </button>
-        <button
-          type="button"
-          class="luxe-shipping-nudge__checkout button"
-          data-shipping-nudge-checkout
-          aria-label="Go to secure checkout"
-          {% unless cart.item_count > 0 %}hidden{% endunless %}
-        >
-          Checkout
-        </button>
-      </div>
+      {%- comment -%}
+        Actions live in the single mobile shop bar (Menu · Shop · Bag · Checkout)
+        to avoid a second CTA row competing for conversion taps.
+      {%- endcomment -%}
     </div>
   </aside>
 {%- endunless -%}
