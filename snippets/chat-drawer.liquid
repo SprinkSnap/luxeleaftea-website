@@ -175,12 +175,28 @@
   </nav>
 
   {%- unless settings.tea_chat_enabled == false -%}
+    {%- liquid
+      assign chat_ship_cents = settings.free_shipping_threshold | default: 5000
+      assign chat_ship_dollars = chat_ship_cents | divided_by: 100
+    -%}
     <script src="{{ 'luxe-leaf-tea-chat.js' | asset_url }}" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "availableLanguage": ["English"],
+        "areaServed": "US",
+        "url": {{ shop.url | append: '/pages/contact' | json }},
+        "name": {{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | json }},
+        "description": "Free AI tea guide chat for premium loose leaf tea recommendations, brewing tips, gifts, and shipping questions at Luxe Leaf Tea."
+      }
+    </script>
     <luxe-tea-chat
       class="luxe-tea-chat"
       data-agent-name="{{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | escape }}"
       data-api-url="{{ settings.tea_chat_api_url | escape }}"
-      data-free-shipping="{{ settings.free_shipping_threshold | default: 5000 }}"
+      data-free-shipping="{{ chat_ship_cents }}"
       data-shop-url="{{ routes.all_products_collection_url }}"
       data-faq-url="/pages/faq"
       data-about-url="/pages/about"
@@ -190,7 +206,7 @@
       <button
         type="button"
         class="luxe-tea-chat__launcher"
-        aria-label="Chat with our tea guide — ask about premium loose leaf tea, brewing, or shipping"
+        aria-label="Chat with our free tea guide — premium loose leaf tea recommendations, brewing tips, and free shipping help"
         aria-expanded="false"
         aria-controls="luxe-tea-chat-panel"
         data-chat-launcher
@@ -198,7 +214,7 @@
         <span class="luxe-tea-chat__launcher-icon" aria-hidden="true">
           {{- 'icon-chat-bubble.svg' | inline_asset_content -}}
         </span>
-        <span class="luxe-tea-chat__launcher-text">Chat</span>
+        <span class="luxe-tea-chat__launcher-text">Ask Mei</span>
         <span class="luxe-tea-chat__launcher-badge" data-chat-badge hidden aria-hidden="true">1</span>
       </button>
 
@@ -228,21 +244,23 @@
           <div class="luxe-tea-chat__header-copy">
             <p class="luxe-tea-chat__eyebrow">
               <span class="luxe-tea-chat__status-dot" aria-hidden="true"></span>
-              Online · Tea guidance
+              Online · Free tea guidance
             </p>
             <h2 class="luxe-tea-chat__title" id="luxe-tea-chat-title">
               {{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' }}
             </h2>
-            <p class="luxe-tea-chat__subtitle">Ask about teas, brewing, gifts, or free shipping</p>
+            <p class="luxe-tea-chat__subtitle">
+              Premium loose leaf picks, brewing tips &amp; free shipping over ${{ chat_ship_dollars }}
+            </p>
           </div>
           <div class="luxe-tea-chat__header-actions">
             <button
               type="button"
               class="luxe-tea-chat__header-shop button button-unstyled"
               data-chat-shop
-              aria-label="Shop premium loose leaf tea"
+              aria-label="Shop premium loose leaf tea collection"
             >
-              Shop
+              Shop Tea
             </button>
             <button
               type="button"
@@ -278,23 +296,40 @@
           <span class="luxe-tea-chat__toolbar-hint">Swipe down or tap outside to minimize</span>
         </div>
 
+        <p class="luxe-tea-chat__seo-copy">
+          Chat with Luxe Leaf Tea’s free AI tea guide for premium loose leaf tea recommendations, brewing advice,
+          gift ideas, order help, and free shipping details. Ask which green, oolong, black, or pu-erh tea to try first.
+        </p>
+
         <div class="luxe-tea-chat__messages" data-chat-messages role="log" aria-live="polite" aria-relevant="additions"></div>
-        <div class="luxe-tea-chat__quick-replies" data-chat-quick-replies role="group" aria-label="Suggested questions"></div>
+        <div class="luxe-tea-chat__quick-replies" data-chat-quick-replies role="group" aria-label="Popular tea questions"></div>
+
+        <div class="luxe-tea-chat__conversion" aria-label="Quick shopping actions">
+          <button type="button" class="luxe-tea-chat__conversion-shop" data-chat-shop>
+            Shop loose leaf tea
+          </button>
+          <button type="button" class="luxe-tea-chat__conversion-ship" data-chat-shipping-prompt>
+            Free shipping info
+          </button>
+        </div>
 
         <form class="luxe-tea-chat__form" data-chat-form>
-          <label class="visually-hidden" for="luxe-tea-chat-input">Type your tea question</label>
+          <label class="visually-hidden" for="luxe-tea-chat-input">
+            Type your question about premium loose leaf tea, brewing, or shipping
+          </label>
           <input
             id="luxe-tea-chat-input"
             class="luxe-tea-chat__input"
             type="text"
             name="message"
-            placeholder="Ask anything — or just say hi…"
+            placeholder="Ask about tea, brewing, or shipping…"
             autocomplete="off"
             enterkeyhint="send"
             maxlength="500"
             data-chat-input
+            style="background:#ffffff;color:#14261d;-webkit-text-fill-color:#14261d;"
           >
-          <button type="submit" class="luxe-tea-chat__send button" aria-label="Send message">
+          <button type="submit" class="luxe-tea-chat__send button" aria-label="Send tea question">
             <span class="luxe-tea-chat__send-label">Send</span>
             <svg class="luxe-tea-chat__send-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
               <path d="M3.4 11.2 20.2 3.6c.7-.3 1.4.4 1.1 1.1L13.7 21.5c-.3.7-1.3.6-1.5-.2l-1.9-6.4-6.4-1.9c-.8-.2-.9-1.2-.5-1.8Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
@@ -303,10 +338,10 @@
         </form>
 
         <p class="luxe-tea-chat__footer-note">
-          Live tea guidance ·
+          Free tea guide ·
           <button type="button" class="luxe-tea-chat__inbox-link button-unstyled" data-open-inbox>Talk to our team</button>
           ·
-          <a href="{{ routes.all_products_collection_url }}" class="luxe-tea-chat__footer-shop">Shop tea</a>
+          <a href="{{ routes.all_products_collection_url }}" class="luxe-tea-chat__footer-shop">Shop premium loose leaf</a>
         </p>
       </div>
     </luxe-tea-chat>
