@@ -66,6 +66,17 @@
       line-height: 0 !important;
     }
 
+    #header-component header-actions,
+    #header-component .header__columns,
+    #header-component .header__column--right,
+    #header-component .header__row,
+    #header-component .header-actions__action,
+    #header-component [data-testid="cart-drawer-trigger"],
+    #header-component a[aria-controls="cart-drawer"],
+    #header-component button[aria-controls="cart-drawer"] {
+      overflow: visible !important;
+    }
+
     #header-component cart-icon.header-actions__cart-icon,
     #header-component .header-actions__cart-icon {
       display: inline-flex !important;
@@ -85,23 +96,27 @@
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
+      position: relative;
+      z-index: 0;
     }
 
     #header-component cart-icon.header-actions__cart-icon .cart-bubble {
       --cart-bubble-size: 1.125rem;
       position: absolute !important;
-      top: 0.05rem !important;
-      right: -0.1rem !important;
+      top: 0.3rem !important;
+      right: 0.25rem !important;
       width: var(--cart-bubble-size) !important;
       min-width: var(--cart-bubble-size) !important;
       height: var(--cart-bubble-size) !important;
-      z-index: 3 !important;
+      z-index: 4 !important;
       isolation: isolate;
       overflow: visible !important;
       pointer-events: none;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
+      box-shadow: 0 0 0 1.5px #f8f6f0;
+      border-radius: 999px;
     }
 
     #header-component cart-icon.header-actions__cart-icon .cart-bubble__background {
@@ -177,8 +192,8 @@
       }
       #header-component cart-icon.header-actions__cart-icon .cart-bubble {
         --cart-bubble-size: 1.05rem;
-        top: 0 !important;
-        right: -0.15rem !important;
+        top: 0.2rem !important;
+        right: 0.15rem !important;
       }
 
       #header-component cart-icon.header-actions__cart-icon .cart-bubble__text,

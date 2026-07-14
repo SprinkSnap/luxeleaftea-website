@@ -857,8 +857,8 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 
   .luxe-mobile-bar__count {
     position: absolute;
-    top: -0.35rem;
-    right: -0.55rem;
+    top: -0.2rem;
+    right: -0.25rem;
     z-index: 2;
     min-width: 1.05rem;
     height: 1.05rem;
@@ -1379,6 +1379,18 @@ body.luxe-leaf-theme #header-component shopify-account {
   line-height: 0 !important;
 }
 
+body.luxe-leaf-theme #header-component header-actions,
+body.luxe-leaf-theme #header-component .header__columns,
+body.luxe-leaf-theme #header-component .header__column--right,
+body.luxe-leaf-theme #header-component .header__row,
+body.luxe-leaf-theme #header-component .header__row--top,
+body.luxe-leaf-theme #header-component .header-actions__action,
+body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"],
+body.luxe-leaf-theme #header-component a[aria-controls="cart-drawer"],
+body.luxe-leaf-theme #header-component button[aria-controls="cart-drawer"] {
+  overflow: visible !important;
+}
+
 body.luxe-leaf-theme #header-component .header-actions__cart-icon {
   display: inline-flex;
   align-items: center;
@@ -1395,23 +1407,26 @@ body.luxe-leaf-theme #header-component cart-icon.header-actions__cart-icon .svg-
   z-index: 0;
 }
 
+/* Keep count INSIDE the bag button so header/viewport edges cannot clip it */
 body.luxe-leaf-theme #header-component cart-icon.header-actions__cart-icon .cart-bubble {
   --cart-bubble-size: 1.125rem;
   position: absolute !important;
-  top: 0.05rem !important;
-  right: -0.1rem !important;
+  top: 0.3rem !important;
+  right: 0.25rem !important;
   left: auto !important;
   bottom: auto !important;
   width: var(--cart-bubble-size) !important;
   min-width: var(--cart-bubble-size) !important;
   height: var(--cart-bubble-size) !important;
-  z-index: 3 !important;
+  z-index: 4 !important;
   isolation: isolate;
   overflow: visible !important;
   pointer-events: none;
   display: flex !important;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 0 0 1.5px #f8f6f0;
+  border-radius: 999px;
 }
 
 body.luxe-leaf-theme #header-component cart-icon.header-actions__cart-icon .cart-bubble__background {
@@ -1440,8 +1455,8 @@ body.luxe-leaf-theme #header-component cart-icon.header-actions__cart-icon--has-
 @media screen and (max-width: 749px) {
   body.luxe-leaf-theme #header-component cart-icon.header-actions__cart-icon .cart-bubble {
     --cart-bubble-size: 1.05rem;
-    top: 0 !important;
-    right: -0.15rem !important;
+    top: 0.2rem !important;
+    right: 0.15rem !important;
   }
 
   body.luxe-leaf-theme #header-component cart-icon.header-actions__cart-icon .cart-bubble__text,
