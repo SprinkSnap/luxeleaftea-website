@@ -66,7 +66,7 @@
         "primary_link": "shopify://collections/all",
         "secondary_label": "Talk to our team",
         "secondary_link": "shopify://pages/contact",
-        "trust_line": "Whole leaves \u00b7 Packed fresh to order \u00b7 Free shipping over $50",
+        "trust_line": "Whole leaves \u00b7 Packed fresh to order \u00b7 Free Canada-wide shipping over $50",
         "badge_text": "Shop like you're at the counter",
         "show_jump_nav": true,
         "jump_shop_label": "Shop bestsellers",
@@ -259,7 +259,7 @@
           "type": "faq",
           "settings": {
             "question": "Do you ship nationwide?",
-            "answer": "<p>Yes \u2014 we ship across the United States. Orders over $50 qualify for free shipping.</p>"
+            "answer": "<p>Yes \u2014 we ship Canada-wide. Orders over $50 qualify for free shipping.</p>"
           }
         }
       },
@@ -308,7 +308,7 @@
         "primary_link": "shopify://collections/all",
         "secondary_label": "Talk to our team",
         "secondary_link": "/pages/contact",
-        "note": "Free shipping over $50 \u00b7 Packed fresh to order \u00b7 Secure checkout",
+        "note": "Free Canada-wide shipping over $50 \u00b7 Packed fresh to order \u00b7 Secure checkout",
         "padding-block-start": 64,
         "padding-block-end": 64
       }
@@ -418,7 +418,7 @@
         "primary_link": "shopify://collections/all",
         "secondary_label": "Browse FAQ",
         "secondary_link": "/pages/faq",
-        "note": "Free shipping over $50 \u00b7 Packed fresh to order \u00b7 Secure checkout",
+        "note": "Free Canada-wide shipping over $50 \u00b7 Packed fresh to order \u00b7 Secure checkout",
         "padding-block-start": 64,
         "padding-block-end": 64
       }
@@ -511,7 +511,7 @@
           "settings": {
             "category": "shipping",
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes \u2014 <strong>free shipping on orders over $50</strong> within the contiguous United States. Orders below $50 show exact shipping at checkout before you pay \u2014 no surprises.</p>"
+            "answer": "<p>Yes — <strong>free Canada-wide shipping on orders over $50</strong>. Orders under $50 ship Canada-wide from <strong>$9.95</strong> with tracking — confirmed at checkout before you pay. Typical delivery is 3–8 business days after packing.</p>"
           }
         },
         "ship_2": {
@@ -519,7 +519,7 @@
           "settings": {
             "category": "shipping",
             "question": "How long does shipping take?",
-            "answer": "<p>Most orders ship within 1\u20132 business days after packing fresh. Standard delivery is typically 3\u20137 business days depending on your location. You'll receive tracking as soon as your tea leaves our tea room.</p>"
+            "answer": "<p>Most orders are packed within 1\u20132 business days. Canada-wide delivery is typically <strong>3\u20138 business days</strong> after shipment depending on your province or territory. You'll receive tracking as soon as your tea leaves our tea room.</p>"
           }
         },
         "ship_3": {
@@ -588,7 +588,7 @@
         "cta_label": "Shop Premium Loose Leaf Tea",
         "cta_link": "shopify://collections/all",
         "cta_secondary_label": "See bestsellers below",
-        "cta_note": "Secure checkout \u00b7 Apple Pay & cards accepted \u00b7 Free shipping over $50",
+        "cta_note": "Secure checkout \u00b7 Apple Pay & cards accepted \u00b7 Free Canada-wide shipping over $50",
         "padding-block-start": 32,
         "padding-block-end": 48
       }
@@ -645,7 +645,7 @@
         "primary_link": "shopify://collections/all",
         "secondary_label": "Talk to our team",
         "secondary_link": "/pages/contact",
-        "note": "Free shipping over $50 \u00b7 Secure checkout \u00b7 Packed fresh to order",
+        "note": "Free Canada-wide shipping over $50 \u00b7 Secure checkout \u00b7 Packed fresh to order",
         "padding-block-start": 64,
         "padding-block-end": 64
       }

@@ -120,7 +120,7 @@
     "tea_chat_enabled": true,
     "tea_chat_agent_name": "Mei — Tea Guide",
     "free_shipping_threshold": 5000,
-    "standard_shipping_rate": 595,
+    "standard_shipping_rate": 995,
     "estimated_tax_rate_bps": 0,
     "low_stock_threshold": 10
   },

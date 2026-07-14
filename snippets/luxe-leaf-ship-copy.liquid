@@ -1,0 +1,18 @@
+{%- doc -%}
+  Shared Canada-wide shipping labels from theme settings.
+  Outputs nothing by itself — sets free_ship_cents, free_ship_label,
+  free_ship_dollars, standard_ship_cents, standard_ship_label, standard_ship_dollars.
+
+  @example
+  {% render 'luxe-leaf-ship-copy' %}
+  Free Canada-wide shipping over {{ free_ship_label }}
+{%- enddoc -%}
+
+{%- liquid
+  assign free_ship_cents = settings.free_shipping_threshold | default: 5000
+  assign standard_ship_cents = settings.standard_shipping_rate | default: 995
+  assign free_ship_label = free_ship_cents | money
+  assign standard_ship_label = standard_ship_cents | money
+  assign free_ship_dollars = free_ship_cents | divided_by: 100
+  assign standard_ship_dollars = standard_ship_cents | divided_by: 100
+-%}

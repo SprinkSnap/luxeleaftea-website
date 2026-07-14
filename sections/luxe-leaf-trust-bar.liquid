@@ -20,7 +20,7 @@
       </li>
       <li class="luxe-trust-bar__item luxe-trust-bar__item--hide-mobile">
         {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-        <span>Free shipping over $50</span>
+        <span>Free Canada-wide shipping over {{ settings.free_shipping_threshold | default: 5000 | money }}</span>
       </li>
     </ul>
   </div>

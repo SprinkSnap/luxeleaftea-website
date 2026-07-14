@@ -4,7 +4,7 @@
 
 {%- liquid
   assign free_ship_cents = settings.free_shipping_threshold | default: 5000
-  assign standard_ship_cents = settings.standard_shipping_rate | default: 595
+  assign standard_ship_cents = settings.standard_shipping_rate | default: 995
   assign free_ship_label = free_ship_cents | money
   assign standard_ship_label = standard_ship_cents | money
 
@@ -156,33 +156,33 @@
 
   {%- when 'shipping' -%}
     <p><strong>Last updated:</strong> {{ 'now' | date: '%B %d, %Y' }}</p>
-    <p>We pack premium loose leaf tea fresh after you order and ship to addresses within our service areas. Rates and delivery estimates are shown at checkout before you pay.</p>
+    <p>We pack premium loose leaf tea fresh after you order and ship <strong>Canada-wide</strong> to all provinces and territories. Rates and delivery estimates are confirmed at checkout before you pay.</p>
 
     <h2 id="policy-processing">Processing time</h2>
     <p>Orders are typically packed within <strong>1–2 business days</strong> (Monday–Friday, excluding holidays). You'll receive a shipping confirmation email with tracking when your tea leaves our tea room.</p>
     <p>Orders placed on weekends or holidays begin processing on the next business day.</p>
 
-    <h2 id="policy-rates">Shipping rates</h2>
+    <h2 id="policy-rates">Canada-wide shipping rates</h2>
     <ul>
-      <li><strong>Free standard shipping</strong> on orders of {{ free_ship_label }} or more (before tax, after discounts, where applicable).</li>
-      <li>Orders below {{ free_ship_label }}: standard shipping from {{ standard_ship_label }} — exact rates shown at checkout.</li>
+      <li><strong>Free Canada-wide standard shipping</strong> on orders of {{ free_ship_label }} or more (before tax, after discounts, where applicable).</li>
+      <li>Orders below {{ free_ship_label }}: Canada-wide standard shipping from {{ standard_ship_label }} — exact rates confirmed at checkout.</li>
       <li>Expedited options, when available, appear at checkout with live pricing.</li>
     </ul>
 
     <h2 id="policy-delivery">Delivery estimates</h2>
-    <p>After shipment, standard delivery is typically <strong>3–7 business days</strong> within the contiguous United States. Remote areas, weather, and carrier delays may extend transit time — tracking is the best guide once your package is in the carrier network.</p>
+    <p>After shipment, standard Canada-wide delivery is typically <strong>3–8 business days</strong> depending on your province or territory. Remote communities, weather, and carrier delays may extend transit time — tracking is the best guide once your package is in the carrier network.</p>
 
     <h2 id="policy-tracking">Order tracking</h2>
     <p>Tracking is emailed when your order ships. Allow up to 24 hours for the carrier to scan your package. If tracking hasn't updated after 48 hours, contact us with your order number.</p>
 
     <h2 id="policy-address">Shipping addresses</h2>
-    <p>Verify your shipping address at checkout. We cannot redirect packages once shipped and are not responsible for delays or lost packages caused by incorrect or incomplete addresses. Address changes before shipment may be possible — contact us immediately after ordering.</p>
+    <p>Verify your Canadian shipping address at checkout. We cannot redirect packages once shipped and are not responsible for delays or lost packages caused by incorrect or incomplete addresses. Address changes before shipment may be possible — contact us immediately after ordering.</p>
 
     <h2 id="policy-lost">Lost or damaged packages</h2>
     <p>If tracking shows delivered but you didn't receive your tea, or if your order arrives damaged, contact us within <strong>7 days</strong> at <a href="mailto:{{ support_email | escape }}">{{ support_email }}</a>. We'll work with the carrier and arrange a replacement or refund when appropriate.</p>
 
-    <h2 id="policy-international">International &amp; remote areas</h2>
-    <p>International availability, duties, and taxes (if any) are shown at checkout. Customers are responsible for import fees where applicable. Delivery to PO boxes and APO/FPO addresses depends on carrier service — contact us if you need help before ordering.</p>
+    <h2 id="policy-international">Outside Canada &amp; remote areas</h2>
+    <p>We currently focus on <strong>Canada-wide delivery</strong>. Remote postal codes may take longer. International availability (if offered), duties, and taxes are shown at checkout when applicable — customers are responsible for import fees outside Canada.</p>
 
     <h2 id="policy-holidays">Peak seasons &amp; holidays</h2>
     <p>During high-volume periods, processing may take an extra business day. We'll note any extended timelines on the site or in your order confirmation when possible.</p>

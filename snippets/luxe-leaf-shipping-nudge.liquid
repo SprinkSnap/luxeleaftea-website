@@ -5,7 +5,7 @@
 {%- unless settings.brand_navigation == false -%}
   {%- liquid
     assign threshold = settings.free_shipping_threshold | default: 5000
-    assign standard_rate = settings.standard_shipping_rate | default: 595
+    assign standard_rate = settings.standard_shipping_rate | default: 995
     assign threshold_money = threshold | money
     assign standard_rate_money = standard_rate | money
     assign cart_total = cart.total_price
@@ -33,16 +33,16 @@
       <div class="luxe-shipping-nudge__copy">
         <p class="luxe-shipping-nudge__text" data-shipping-nudge-text>
           {%- if cart_total >= threshold -%}
-            <strong>Free shipping unlocked!</strong> Secure your tea before you go.
+            <strong>Free Canada-wide shipping unlocked!</strong> Secure your tea before you go.
           {%- else -%}
-            Add <strong>{{ remaining | money }}</strong> for free shipping over {{ threshold_money }}
+            Add <strong>{{ remaining | money }}</strong> for free Canada-wide shipping over {{ threshold_money }}
           {%- endif -%}
         </p>
         <p class="luxe-shipping-nudge__rate" data-shipping-nudge-rate>
           {%- if cart_total >= threshold -%}
             Pay {{ estimated_total | money }} total · Checkout in seconds
           {%- else -%}
-            Standard shipping {{ standard_rate_money }} · Pay {{ estimated_total | money }} total
+            Canada-wide shipping {{ standard_rate_money }} · Pay {{ estimated_total | money }} total
           {%- endif -%}
         </p>
         <div

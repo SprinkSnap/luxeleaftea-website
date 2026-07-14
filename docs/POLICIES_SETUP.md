@@ -93,7 +93,7 @@ Each policy page includes:
 Default policy text uses theme settings:
 
 - **Free shipping threshold:** Theme settings → Luxe Leaf → Checkout & shipping (`free_shipping_threshold`, default $50.00)
-- **Standard shipping rate:** `standard_shipping_rate` (default $5.95)
+- **Standard shipping rate:** `standard_shipping_rate` (default $9.95 Canada-wide)
 
 ## Legal note
 

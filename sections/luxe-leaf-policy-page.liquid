@@ -57,7 +57,7 @@
   endif
 
   assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
-  assign standard_ship_label = settings.standard_shipping_rate | default: 595 | money
+  assign standard_ship_label = settings.standard_shipping_rate | default: 995 | money
 
   assign page_intro = section.settings.intro
   assign cta_primary_label = section.settings.cta_primary_label
@@ -92,7 +92,7 @@
       endif
     when 'shipping'
       if page_intro == section.settings.intro or page_intro == blank
-        assign page_intro = 'Free standard shipping on orders over ' | append: free_ship_label | append: '. Packed fresh within 1–2 business days — tracking included.'
+        assign page_intro = 'Free Canada-wide shipping on orders over ' | append: free_ship_label | append: '. Standard Canada-wide shipping from ' | append: standard_ship_label | append: '. Packed fresh within 1–2 business days — tracking included.'
       endif
       if cta_primary_label == section.settings.cta_primary_label or cta_primary_label == blank
         assign cta_primary_label = 'Shop for free shipping'
@@ -163,7 +163,7 @@
       {%- when 'shipping' -%}
         <div class="luxe-policy-page__highlight">
           {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-          <span>Free shipping {{ free_ship_label }}+</span>
+          <span>Free Canada-wide shipping {{ free_ship_label }}+</span>
         </div>
         <div class="luxe-policy-page__highlight">
           {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
@@ -171,7 +171,7 @@
         </div>
         <div class="luxe-policy-page__highlight">
           {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
-          <span>Tracking emailed at shipment</span>
+          <span>Canada-wide from {{ standard_ship_label }}</span>
         </div>
       {%- else -%}
         <div class="luxe-policy-page__highlight">
@@ -180,7 +180,7 @@
         </div>
         <div class="luxe-policy-page__highlight">
           {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-          <span>Free shipping {{ free_ship_label }}+</span>
+          <span>Free Canada-wide shipping {{ free_ship_label }}+</span>
         </div>
         <div class="luxe-policy-page__highlight">
           {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
@@ -752,7 +752,7 @@
       "type": "text",
       "id": "cta_note",
       "label": "CTA note",
-      "default": "Secure checkout · Free shipping over $50 · Packed fresh to order"
+      "default": "Secure checkout · Free Canada-wide shipping over $50 · Packed fresh to order"
     },
     {
       "type": "range",

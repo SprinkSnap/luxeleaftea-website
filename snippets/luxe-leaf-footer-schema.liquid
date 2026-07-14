@@ -44,7 +44,7 @@
     assign refund_abs = shop.url | append: refund_url_resolved | strip
     assign shipping_abs = shop.url | append: shipping_url_resolved | strip
     assign free_ship_threshold = settings.free_shipping_threshold | default: 5000
-    assign standard_shipping_rate = settings.standard_shipping_rate | default: 595
+    assign standard_shipping_rate = settings.standard_shipping_rate | default: 995
     assign free_ship_money = free_ship_threshold | money
     assign standard_ship_money = standard_shipping_rate | money
     assign free_ship_schema = free_ship_threshold | divided_by: 100.0

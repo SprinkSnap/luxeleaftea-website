@@ -270,7 +270,7 @@
               "type": "text",
               "name": "Trust line",
               "settings": {
-                "text": "<p><strong>Packed fresh to order</strong> · Premium loose leaf tea · Free shipping over $50</p>",
+                "text": "<p><strong>Packed fresh to order</strong> · Premium loose leaf tea · Free Canada-wide shipping over $50</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -319,7 +319,7 @@
       "type": "luxe-leaf-product-guide",
       "settings": {
         "product": "{{ product }}",
-        "trust_line": "Packed fresh to order · Premium loose leaf tea · Free shipping over $50",
+        "trust_line": "Packed fresh to order · Premium loose leaf tea · Free Canada-wide shipping over $50",
         "open_brewing": true,
         "padding-block-start": 24,
         "padding-block-end": 40

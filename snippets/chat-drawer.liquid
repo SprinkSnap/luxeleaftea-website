@@ -101,7 +101,7 @@
   {%- render 'luxe-leaf-shipping-nudge' -%}
   {%- liquid
     assign threshold = settings.free_shipping_threshold | default: 5000
-    assign standard_rate = settings.standard_shipping_rate | default: 595
+    assign standard_rate = settings.standard_shipping_rate | default: 995
     if cart.total_price >= threshold
       assign mobile_shipping_cost = 0
     else
@@ -188,7 +188,7 @@
             "@type": "ContactPoint",
             "contactType": "customer support",
             "availableLanguage": ["English"],
-            "areaServed": "US",
+            "areaServed": "CA",
             "url": {{ shop.url | append: '/pages/contact' | json }},
             "name": {{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | json }},
             "description": "Free AI tea guide chat for premium loose leaf tea recommendations, brewing tips, gifts, and free shipping over ${{ chat_ship_dollars }} at Luxe Leaf Tea."
@@ -230,7 +230,7 @@
                 "name": "Does Luxe Leaf Tea offer free shipping?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. Luxe Leaf Tea offers free shipping on orders over ${{ chat_ship_dollars }}. Ask the tea guide chat for current shipping help while you shop."
+                  "text": "Yes. Luxe Leaf Tea offers free Canada-wide shipping on orders over ${{ chat_ship_dollars }}. Orders under that ship Canada-wide from {{ settings.standard_shipping_rate | default: 995 | money }} with tracking. Ask the tea guide chat for help while you shop."
                 }
               }
             ]
@@ -243,6 +243,7 @@
       data-agent-name="{{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | escape }}"
       data-api-url="{{ settings.tea_chat_api_url | escape }}"
       data-free-shipping="{{ chat_ship_cents }}"
+      data-standard-shipping="{{ settings.standard_shipping_rate | default: 995 }}"
       data-shop-url="{{ routes.all_products_collection_url }}"
       data-faq-url="/pages/faq"
       data-about-url="/pages/about"
@@ -296,7 +297,7 @@
               {{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' }}
             </h2>
             <p class="luxe-tea-chat__subtitle">
-              Premium loose leaf recommendations, brewing tips, and free shipping over ${{ chat_ship_dollars }}
+              Premium loose leaf recommendations, brewing tips, and free Canada-wide shipping over ${{ chat_ship_dollars }}
             </p>
           </div>
           <div class="luxe-tea-chat__header-actions">
@@ -365,7 +366,7 @@
               Shop loose leaf tea
             </button>
             <button type="button" class="luxe-tea-chat__conversion-ship" data-chat-shipping-prompt>
-              Free shipping over ${{ chat_ship_dollars }}
+              Free Canada-wide shipping ${{ chat_ship_dollars }}+
             </button>
           </div>
 
@@ -397,7 +398,7 @@
             <button type="button" class="luxe-tea-chat__inbox-link button-unstyled" data-open-inbox>Talk to our team</button>
             <span aria-hidden="true"> · </span>
             <a href="{{ routes.all_products_collection_url }}" class="luxe-tea-chat__footer-shop">Shop premium loose leaf</a>
-            <span class="luxe-tea-chat__footer-ship"> · Free shipping over ${{ chat_ship_dollars }}</span>
+            <span class="luxe-tea-chat__footer-ship"> · Free Canada-wide shipping ${{ chat_ship_dollars }}+</span>
           </p>
         </div>
       </div>

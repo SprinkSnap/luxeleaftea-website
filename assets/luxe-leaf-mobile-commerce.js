@@ -139,7 +139,7 @@ import { StandardEvents } from '@shopify/events';
     const totalInline = conversion.querySelector('[data-estimated-total-inline]');
 
     if (progressText) {
-      progressText.innerHTML = `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+      progressText.innerHTML = `Add <strong>${formatMoney(remaining)}</strong> for free Canada-wide shipping over ${thresholdLabel}`;
       progressText.hidden = qualifiesFree;
     }
     if (progressEl instanceof HTMLElement) {
@@ -198,8 +198,8 @@ import { StandardEvents } from '@shopify/events';
     if (hint) {
       hint.classList.toggle('luxe-shipping-totals__hint--success', qualifiesFree);
       hint.innerHTML = qualifiesFree
-        ? 'Free shipping unlocked on this order'
-        : `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+        ? 'Free Canada-wide shipping unlocked on this order'
+        : `Add <strong>${formatMoney(remaining)}</strong> for free Canada-wide shipping over ${thresholdLabel}`;
     }
     if (estimatedTotalEl) {
       estimatedTotalEl.textContent = formatMoney(grandTotal);
@@ -238,13 +238,13 @@ import { StandardEvents } from '@shopify/events';
 
     if (textEl) {
       textEl.innerHTML = qualifiesFree
-        ? '<strong>Free shipping unlocked!</strong> Secure your tea before you go.'
-        : `Add <strong>${formatMoney(remaining)}</strong> for free shipping over ${thresholdLabel}`;
+        ? '<strong>Free Canada-wide shipping unlocked!</strong> Secure your tea before you go.'
+        : `Add <strong>${formatMoney(remaining)}</strong> for free Canada-wide shipping over ${thresholdLabel}`;
     }
     if (rateEl) {
       rateEl.textContent = qualifiesFree
         ? `Pay ${formatMoney(estimatedTotal)} total · Checkout in seconds`
-        : `Standard shipping ${standardRateLabel} · Pay ${formatMoney(estimatedTotal)} total`;
+        : `Canada-wide shipping ${standardRateLabel} · Pay ${formatMoney(estimatedTotal)} total`;
     }
     if (barEl instanceof HTMLElement) {
       barEl.style.width = `${qualifiesFree ? 100 : progress}%`;
