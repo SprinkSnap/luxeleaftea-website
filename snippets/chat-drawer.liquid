@@ -205,6 +205,35 @@
             },
             "description": "Free conversational tea guide that helps shoppers choose premium loose leaf tea, learn brewing methods, and check free shipping.",
             "url": {{ shop.url | json }}
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Which premium loose leaf tea should I try first?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "For a first cup, try a bright green tea for clarity, a floral oolong for aroma, or a malty black tea for everyday sipping. Ask our free tea guide chat for a personalized recommendation."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I brew loose leaf tea?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Use about 2–3g whole leaves per 200ml. Greens around 175°F for 2–3 minutes, oolongs around 195°F with short steeps, and blacks around 205°F for 3–4 minutes. Whole leaves re-steep beautifully."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does Luxe Leaf Tea offer free shipping?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Luxe Leaf Tea offers free shipping on orders over ${{ chat_ship_dollars }}. Ask the tea guide chat for current shipping help while you shop."
+                }
+              }
+            ]
           }
         ]
       }
@@ -281,33 +310,33 @@
             </button>
             <button
               type="button"
-              class="luxe-tea-chat__icon-btn luxe-tea-chat__clear button-unstyled"
-              aria-label="Start a new chat"
-              title="New chat"
+              class="luxe-tea-chat__clear-btn button-unstyled"
+              aria-label="Clear conversation and start a new tea chat"
+              title="Clears this conversation and starts fresh"
               data-chat-clear
             >
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
-                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none">
+                <path d="M4 7h16M9 7V5h6v2M8 7l1 12h6l1-12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span class="luxe-tea-chat__icon-btn-label">New</span>
+              <span class="luxe-tea-chat__clear-btn-label">New chat</span>
             </button>
             <button
               type="button"
               class="luxe-tea-chat__icon-btn luxe-tea-chat__minimize button-unstyled"
-              aria-label="Minimize chat"
-              title="Minimize"
+              aria-label="Minimize chat to the bubble"
+              title="Minimize to chat bubble"
               data-chat-minimize
             >
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
-                <path d="M6 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M6 10l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span class="luxe-tea-chat__icon-btn-label">Min</span>
+              <span class="luxe-tea-chat__icon-btn-label">Hide</span>
             </button>
             <button
               type="button"
               class="luxe-tea-chat__icon-btn luxe-tea-chat__close button-unstyled"
               aria-label="Close chat"
-              title="Close"
+              title="Close chat"
               data-chat-close
             >
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
@@ -319,10 +348,12 @@
         </header>
 
         <p class="luxe-tea-chat__seo-copy">
-          Chat with Luxe Leaf Tea’s free AI tea guide for premium loose leaf tea recommendations, brewing advice,
-          gift ideas, order help, and free shipping over ${{ chat_ship_dollars }}. Ask which green, oolong, black,
-          or pu-erh tea to try first — or shop our full collection of whole-leaf teas.
+          Use Luxe Leaf Tea’s free AI tea guide chat to get premium loose leaf tea recommendations, brewing tips,
+          gift ideas, and free shipping details over ${{ chat_ship_dollars }}. Ask which green, oolong, black, or
+          pu-erh tea to try first. Start a new chat anytime to reset the conversation, or minimize to keep shopping.
         </p>
+
+        <div class="luxe-tea-chat__toast" data-chat-toast hidden role="status" aria-live="polite"></div>
 
         <div class="luxe-tea-chat__messages" data-chat-messages role="log" aria-live="polite" aria-relevant="additions"></div>
 
