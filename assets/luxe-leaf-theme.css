@@ -864,12 +864,21 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     height: 100%;
   }
 
+  /* Primary browse CTA — jade fills, white label (original conversion style) */
   .luxe-mobile-bar__shop {
-    background: #fff !important;
-    border: 1px solid rgb(27 67 50 / 0.15) !important;
-    color: #1b4332 !important;
+    background: var(--luxe-jade, #1b4332) !important;
+    border: 1.5px solid var(--luxe-jade, #1b4332) !important;
+    color: #fff !important;
+    font-weight: 700;
     /* Contain label so it never paints over Bag */
     overflow: hidden !important;
+  }
+
+  .luxe-mobile-bar__shop:hover,
+  .luxe-mobile-bar__shop:focus-visible {
+    background: #163728 !important;
+    border-color: #163728 !important;
+    color: #fff !important;
   }
 
   .luxe-mobile-bar__shop-label--short {
@@ -953,7 +962,8 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-mobile-bar--has-cart .luxe-mobile-bar__shop {
-    background: #fff !important;
+    background: var(--luxe-jade, #1b4332) !important;
+    color: #fff !important;
   }
 
   .luxe-tea-chat {
@@ -1274,20 +1284,17 @@ html.luxe-menu-open .luxe-tea-chat {
   pointer-events: none;
 }
 
-/* Shorten Shop Tea earlier so the label never crowds the bag column */
+/* Keep “Shop Tea” copy for SEO/conversion; only tighten spacing on small phones */
 @media screen and (max-width: 430px) {
-  .luxe-mobile-bar__shop-label--long {
-    display: none;
-  }
-
-  .luxe-mobile-bar__shop-label--short {
-    display: inline;
-  }
-
   .luxe-mobile-bar {
     --luxe-bar-icon-col: 2.9rem;
     column-gap: 0.3rem;
     padding-inline: 0.45rem;
+  }
+
+  .luxe-mobile-bar__shop {
+    font-size: 0.6875rem;
+    letter-spacing: 0.01em;
   }
 
   .luxe-mobile-bar__menu-label,
@@ -1298,6 +1305,17 @@ html.luxe-menu-open .luxe-tea-chat {
   .luxe-mobile-bar__checkout {
     font-size: 0.75rem;
     padding-inline: 0.3rem !important;
+  }
+}
+
+/* Ultra-narrow: shorter visual label only; aria-label still says Shop Tea */
+@media screen and (max-width: 340px) {
+  .luxe-mobile-bar__shop-label--long {
+    display: none;
+  }
+
+  .luxe-mobile-bar__shop-label--short {
+    display: inline;
   }
 }
 
