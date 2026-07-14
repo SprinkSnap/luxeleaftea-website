@@ -35,19 +35,30 @@ class LuxeTeaChat extends HTMLElement {
     this.shopBtns = this.querySelectorAll('[data-chat-shop]');
     this.shippingPromptBtn = this.querySelector('[data-chat-shipping-prompt]');
     this.badge = this.querySelector('[data-chat-badge]');
+    this.toast = this.querySelector('[data-chat-toast]');
     this.sendBtn = this.form?.querySelector('[type="submit"]');
 
-    this.defaultPrompts = [
-      'Which tea should I try first?',
-      'How do I brew loose leaf?',
-      'Do you have free shipping?',
-      'Best gift tea?',
-    ];
+    this.defaultPrompts = this.buildDefaultPrompts();
 
     this.removeAttribute('hidden');
     this.restoreSession();
     this.bindEvents();
     this.renderQuickReplies(this.defaultPrompts);
+  }
+
+  buildDefaultPrompts() {
+    if (this.productContext) {
+      return [
+        `Is ${this.productContext} a good starter tea?`,
+        'How should I brew this?',
+        'Do you have free shipping?',
+      ];
+    }
+    return [
+      'Which tea should I try first?',
+      'How do I brew loose leaf?',
+      'Do you have free shipping?',
+    ];
   }
 
   readProductContext() {
@@ -83,7 +94,8 @@ class LuxeTeaChat extends HTMLElement {
     });
     this.clearBtn?.addEventListener('click', (e) => {
       e.preventDefault();
-      this.clearConversation();
+      e.stopPropagation();
+      this.requestClearConversation();
     });
     this.shopBtns?.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -196,6 +208,16 @@ class LuxeTeaChat extends HTMLElement {
     }
   }
 
+  requestClearConversation() {
+    if (this.#pending) return;
+    const hasHistory = this.#history.length > 0 || (this.messages?.children?.length || 0) > 1;
+    if (hasHistory) {
+      const ok = window.confirm('Start a new chat? This clears the current conversation.');
+      if (!ok) return;
+    }
+    this.clearConversation();
+  }
+
   clearConversation() {
     this.#history = [];
     this.persistSession();
@@ -204,7 +226,18 @@ class LuxeTeaChat extends HTMLElement {
       delete this.messages.dataset.initialized;
     }
     this.bootstrapConversation();
+    this.showToast('New chat started');
     this.track('tea_chat_clear');
+  }
+
+  showToast(message) {
+    if (!this.toast) return;
+    this.toast.textContent = message;
+    this.toast.hidden = false;
+    window.clearTimeout(this._toastTimer);
+    this._toastTimer = window.setTimeout(() => {
+      if (this.toast) this.toast.hidden = true;
+    }, 2200);
   }
 
   bootstrapConversation() {
@@ -212,10 +245,11 @@ class LuxeTeaChat extends HTMLElement {
     if (restored) {
       this.renderHistory();
       this.addAgentMessage(
-        `Welcome back — I'm still here if you want to keep exploring. Ask me anything, or tap a suggestion below.`
+        `Welcome back — I'm still here if you want to keep exploring. Ask me anything, or tap a suggestion below.`,
+        { actions: true }
       );
     } else {
-      this.addAgentMessage(this.welcomeMessage());
+      this.addAgentMessage(this.welcomeMessage(), { actions: true });
     }
     this.messages.dataset.initialized = 'true';
     this.renderQuickReplies(this.defaultPrompts);
@@ -316,7 +350,7 @@ class LuxeTeaChat extends HTMLElement {
 
     this.hideTyping();
     if (!reply) reply = this.generateReply(text);
-    this.addAgentMessage(reply);
+    this.addAgentMessage(reply, { actions: this.shouldShowActions(reply, text) });
     this.#history.push({ role: 'assistant', content: this.stripHtml(reply) });
     this.trimHistory();
     this.persistSession();
@@ -327,6 +361,21 @@ class LuxeTeaChat extends HTMLElement {
     if (!this.isOpen() && this.badge) {
       this.badge.hidden = false;
     }
+  }
+
+  shouldShowActions(reply, userText) {
+    const hay = `${this.normalize(reply)} ${this.normalize(userText)}`;
+    return this.includesAny(hay, [
+      'shop',
+      'tea',
+      'brew',
+      'shipping',
+      'gift',
+      'recommend',
+      'try first',
+      'collection',
+      'loose leaf',
+    ]);
   }
 
   trimHistory() {
@@ -399,12 +448,38 @@ class LuxeTeaChat extends HTMLElement {
     this.scrollMessages();
   }
 
-  addAgentMessage(html) {
+  addAgentMessage(html, options = {}) {
     const bubble = document.createElement('div');
     bubble.className = 'luxe-tea-chat__bubble luxe-tea-chat__bubble--agent';
     bubble.innerHTML = html;
     this.messages.appendChild(bubble);
+    if (options.actions) this.appendConversionActions();
     this.scrollMessages();
+  }
+
+  appendConversionActions() {
+    if (!this.messages) return;
+    const row = document.createElement('div');
+    row.className = 'luxe-tea-chat__actions';
+    row.setAttribute('aria-label', 'Shop tea actions');
+
+    const shop = document.createElement('a');
+    shop.className = 'luxe-tea-chat__actions-shop';
+    shop.href = this.shopUrl;
+    shop.textContent = 'Shop loose leaf tea';
+    shop.addEventListener('click', () => this.track('tea_chat_shop_click', { source: 'message_action' }));
+
+    const ship = document.createElement('button');
+    ship.type = 'button';
+    ship.className = 'luxe-tea-chat__actions-secondary';
+    ship.textContent = 'Free shipping?';
+    ship.addEventListener('click', () => {
+      if (this.#pending) return;
+      this.handleUserMessage('Do you have free shipping?');
+    });
+
+    row.append(shop, ship);
+    this.messages.appendChild(row);
   }
 
   scrollMessages() {

@@ -720,6 +720,39 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   touch-action: manipulation;
 }
 
+.luxe-tea-chat__clear-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 2.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgb(248 246 240 / 0.14);
+  border: 1px solid rgb(232 226 214 / 0.28);
+  color: #fff !important;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.luxe-tea-chat__clear-btn svg {
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.luxe-tea-chat__clear-btn:hover,
+.luxe-tea-chat__clear-btn:focus-visible {
+  background: rgb(201 162 39 / 0.22);
+  border-color: rgb(201 162 39 / 0.45);
+  outline: none;
+}
+
 .luxe-tea-chat__icon-btn {
   display: inline-flex;
   flex-direction: column;
@@ -857,6 +890,64 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 
 .luxe-tea-chat__bubble--user a {
   color: #f3d56a;
+}
+
+.luxe-tea-chat__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+  margin-bottom: 0.15rem;
+  align-self: flex-start;
+  max-width: 94%;
+}
+
+.luxe-tea-chat__actions a,
+.luxe-tea-chat__actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  border: none;
+}
+
+.luxe-tea-chat__actions-shop {
+  background: #1b4332 !important;
+  color: #fff !important;
+}
+
+.luxe-tea-chat__actions-secondary {
+  background: #fff;
+  color: #1b4332 !important;
+  border: 1px solid rgb(27 67 50 / 0.18) !important;
+}
+
+.luxe-tea-chat__toast {
+  position: absolute;
+  left: 50%;
+  top: 4.5rem;
+  transform: translateX(-50%);
+  z-index: 4;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgb(20 38 29 / 0.92);
+  color: #f3eee4;
+  font-size: 0.75rem;
+  font-weight: 650;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
+}
+
+.luxe-tea-chat__toast[hidden] {
+  display: none !important;
 }
 
 .luxe-tea-chat__quick-replies {
@@ -1409,20 +1500,36 @@ html.luxe-chat-open body {
 
   .luxe-tea-chat__header-shop {
     display: inline-flex;
-    min-height: 2.5rem;
-    padding: 0.3rem 0.65rem;
+    min-height: 2.4rem;
+    padding: 0.3rem 0.6rem;
     font-size: 0.6875rem;
   }
 
+  .luxe-tea-chat__clear-btn {
+    min-height: 2.4rem;
+    padding: 0.3rem 0.55rem;
+    font-size: 0.625rem;
+  }
+
+  .luxe-tea-chat__clear-btn-label {
+    display: inline;
+  }
+
   .luxe-tea-chat__icon-btn {
-    min-width: 2.5rem;
-    min-height: 2.5rem;
+    min-width: 2.4rem;
+    min-height: 2.4rem;
     background: rgb(8 14 11 / 0.45);
     border-color: rgb(232 226 214 / 0.28);
   }
 
   .luxe-tea-chat__icon-btn-label {
     display: none;
+  }
+
+  .luxe-tea-chat__actions a,
+  .luxe-tea-chat__actions button {
+    min-height: 2.35rem;
+    font-size: 0.8125rem;
   }
 
   .luxe-tea-chat__messages {
