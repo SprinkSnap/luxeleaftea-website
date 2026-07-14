@@ -49,7 +49,7 @@
     assign standard_ship_money = standard_shipping_rate | money
     assign free_ship_schema = free_ship_threshold | divided_by: 100.0
     assign standard_ship_schema = standard_shipping_rate | divided_by: 100.0
-    assign org_logo_url = 'luxe-leaf-tea-logo-header-2x.png' | asset_url
+    assign org_logo_url = 'luxe-leaf-tea-logo-header-2x.png' | asset_url | prepend: 'https:'
   -%}
 
   <script type="application/ld+json">
@@ -57,14 +57,21 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": {{ shop.name | json }},
+      "alternateName": "Luxe Leaf Tea",
       "url": {{ shop.url | json }},
       "logo": {
         "@type": "ImageObject",
         "url": {{ org_logo_url | json }},
         "width": 434,
-        "height": 96
+        "height": 96,
+        "caption": {{ shop.name | append: ' premium loose leaf tea logo' | json }}
       },
-      "description": {{ brand_blurb | default: 'Premium loose leaf tea — whole leaves packed fresh to order.' | json }}{%- if instagram_url != blank or facebook_url != blank -%},
+      "image": {{ org_logo_url | json }},
+      "areaServed": {
+        "@type": "Country",
+        "name": "Canada"
+      },
+      "description": {{ brand_blurb | default: 'Premium loose leaf tea — whole leaves packed fresh to order. Free Canada-wide shipping available.' | json }}{%- if instagram_url != blank or facebook_url != blank -%},
       "sameAs": [
         {%- if instagram_url != blank -%}
           {{ instagram_url | json }}{%- if facebook_url != blank -%},{%- endif -%}
@@ -82,10 +89,10 @@
       }{%- endif -%},
       "makesOffer": {
         "@type": "Offer",
-        "name": "Standard shipping",
+        "name": "Canada-wide shipping",
         "price": {{ standard_ship_schema | json }},
         "priceCurrency": {{ cart.currency.iso_code | default: shop.currency | json }},
-        "description": {{ 'Standard shipping ' | append: standard_ship_money | append: '. Free shipping on orders over ' | append: free_ship_money | append: '.' | json }},
+        "description": {{ 'Canada-wide standard shipping from ' | append: standard_ship_money | append: '. Free Canada-wide shipping on orders over ' | append: free_ship_money | append: '.' | json }},
         "eligibleTransactionVolume": {
           "@type": "PriceSpecification",
           "minPrice": {{ free_ship_schema | json }},
