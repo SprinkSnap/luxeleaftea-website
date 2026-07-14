@@ -32,15 +32,16 @@ class LuxeTeaChat extends HTMLElement {
     this.clearBtn = this.querySelector('[data-chat-clear]');
     this.handle = this.querySelector('[data-chat-handle]');
     this.inboxBtn = this.querySelector('[data-open-inbox]');
-    this.shopBtn = this.querySelector('[data-chat-shop]');
+    this.shopBtns = this.querySelectorAll('[data-chat-shop]');
+    this.shippingPromptBtn = this.querySelector('[data-chat-shipping-prompt]');
     this.badge = this.querySelector('[data-chat-badge]');
     this.sendBtn = this.form?.querySelector('[type="submit"]');
 
     this.defaultPrompts = [
-      'How are you?',
       'Which tea should I try first?',
       'How do I brew loose leaf?',
-      'Free shipping?',
+      'Do you have free shipping?',
+      'Best gift tea?',
     ];
 
     this.removeAttribute('hidden');
@@ -84,8 +85,16 @@ class LuxeTeaChat extends HTMLElement {
       e.preventDefault();
       this.clearConversation();
     });
-    this.shopBtn?.addEventListener('click', () => {
-      window.location.href = this.shopUrl;
+    this.shopBtns?.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        this.track('tea_chat_shop_click');
+        window.location.href = this.shopUrl;
+      });
+    });
+    this.shippingPromptBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (this.#pending) return;
+      this.handleUserMessage('Do you have free shipping?');
     });
     this.form?.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -225,7 +234,8 @@ class LuxeTeaChat extends HTMLElement {
     const productBit = this.productContext
       ? ` I see you're looking at <strong>${this.escapeHtml(this.productContext)}</strong> — happy to help with that tea or other options.`
       : '';
-    return `${greet} — I'm <strong>${name}</strong>, your tea guide at Luxe Leaf Tea.${productBit} Ask me anything: tea picks, brewing, shipping, gifts — or just say hi. What can I help with?`;
+    const shipping = (this.freeShippingCents / 100).toFixed(0);
+    return `${greet} — I'm <strong>${name}</strong>, your tea guide at Luxe Leaf Tea.${productBit} I can help you choose premium loose leaf tea, share brewing tips, or check free shipping over $${shipping}. What would you like to explore?`;
   }
 
   renderQuickReplies(prompts) {
