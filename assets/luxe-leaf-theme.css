@@ -2285,9 +2285,16 @@ body.luxe-leaf-theme .content-for-layout {
   top: auto;
 }
 
+/*
+ * Gallery must accept vertical pan too. `pan-x` alone blocks page scroll when
+ * the finger starts on the product image (most of the mobile viewport).
+ * Keep pan-x for image swipe; pan-y restores scroll to buy box / SEO content.
+ */
 .product-information__media slideshow-component,
-.product-information__media slideshow-slides {
-  touch-action: pan-x pinch-zoom;
+.product-information__media slideshow-slides,
+.product-information__media .product-media-container__zoom-button,
+.product-information__media .product-media {
+  touch-action: pan-x pan-y pinch-zoom;
 }
 
 /* Force carousel grid: left thumbs + large image (never collapse thumbs to height:0) */
@@ -2713,6 +2720,23 @@ zoom-dialog.luxe-zoom-dialog dialog {
 @media screen and (max-width: 749px) {
   .product-information__media {
     margin-block-end: 1rem;
+    /* Image is content, not a scroll trap */
+    max-height: none;
+    overflow: visible;
+  }
+
+  .product-information__media media-gallery.sticky-content,
+  .product-information__media media-gallery,
+  .product-information__media slideshow-component {
+    position: relative !important;
+    top: auto !important;
+    height: auto;
+    max-height: none;
+    overscroll-behavior-y: auto;
+  }
+
+  .product-information__media slideshow-slides {
+    overscroll-behavior-y: auto;
   }
 
   .product-information .product-details {
