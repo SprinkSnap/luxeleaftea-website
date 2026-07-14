@@ -241,12 +241,18 @@ class LuxeTeaChat extends HTMLElement {
   renderQuickReplies(prompts) {
     if (!this.quickReplies) return;
     this.quickReplies.innerHTML = '';
-    prompts.forEach((prompt) => {
+    (prompts || []).slice(0, 3).forEach((prompt) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.textContent = prompt;
       btn.addEventListener('click', () => {
         if (this.#pending) return;
+        const normalized = this.normalize(prompt);
+        if (this.includesAny(normalized, ['shop all', 'shop teas', 'shop tea', 'browse'])) {
+          this.track('tea_chat_shop_click', { source: 'quick_reply' });
+          window.location.href = this.shopUrl;
+          return;
+        }
         this.handleUserMessage(prompt);
       });
       this.quickReplies.appendChild(btn);
