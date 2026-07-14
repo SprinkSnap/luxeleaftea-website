@@ -7,6 +7,8 @@ class LuxeTeaChat extends HTMLElement {
   #pending = false;
   #storageKey = 'luxe-tea-chat-v1';
   #focusBeforeOpen = null;
+  #dragStartY = null;
+  #dragDelta = 0;
 
   connectedCallback() {
     this.agentName = this.dataset.agentName || 'Mei — Tea Guide';
@@ -20,11 +22,15 @@ class LuxeTeaChat extends HTMLElement {
 
     this.launcher = this.querySelector('[data-chat-launcher]');
     this.panel = this.querySelector('[data-chat-panel]');
+    this.backdrop = this.querySelector('[data-chat-backdrop]');
     this.messages = this.querySelector('[data-chat-messages]');
     this.quickReplies = this.querySelector('[data-chat-quick-replies]');
     this.form = this.querySelector('[data-chat-form]');
     this.input = this.querySelector('[data-chat-input]');
     this.closeBtn = this.querySelector('[data-chat-close]');
+    this.minimizeBtn = this.querySelector('[data-chat-minimize]');
+    this.clearBtn = this.querySelector('[data-chat-clear]');
+    this.handle = this.querySelector('[data-chat-handle]');
     this.inboxBtn = this.querySelector('[data-open-inbox]');
     this.shopBtn = this.querySelector('[data-chat-shop]');
     this.badge = this.querySelector('[data-chat-badge]');
@@ -52,8 +58,32 @@ class LuxeTeaChat extends HTMLElement {
   }
 
   bindEvents() {
-    this.launcher?.addEventListener('click', () => this.toggle());
-    this.closeBtn?.addEventListener('click', () => this.toggle(false));
+    this.launcher?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggle();
+    });
+    this.closeBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggle(false);
+      this.track('tea_chat_close');
+    });
+    this.minimizeBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggle(false);
+      this.track('tea_chat_minimize');
+    });
+    this.backdrop?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.toggle(false);
+      this.track('tea_chat_minimize');
+    });
+    this.clearBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.clearConversation();
+    });
     this.shopBtn?.addEventListener('click', () => {
       window.location.href = this.shopUrl;
     });
@@ -74,6 +104,50 @@ class LuxeTeaChat extends HTMLElement {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.isOpen()) this.toggle(false);
     });
+    this.bindSheetGestures();
+  }
+
+  bindSheetGestures() {
+    const targets = [this.handle, this.panel?.querySelector('.luxe-tea-chat__header')].filter(Boolean);
+    targets.forEach((target) => {
+      target.addEventListener(
+        'touchstart',
+        (e) => {
+          if (!this.isOpen() || !e.touches?.[0]) return;
+          this.#dragStartY = e.touches[0].clientY;
+          this.#dragDelta = 0;
+        },
+        { passive: true }
+      );
+      target.addEventListener(
+        'touchmove',
+        (e) => {
+          if (this.#dragStartY == null || !e.touches?.[0] || !this.panel) return;
+          this.#dragDelta = Math.max(0, e.touches[0].clientY - this.#dragStartY);
+          if (this.#dragDelta > 8) {
+            this.panel.style.transform = `translateY(${this.#dragDelta}px)`;
+            this.panel.style.transition = 'none';
+          }
+        },
+        { passive: true }
+      );
+      target.addEventListener(
+        'touchend',
+        () => {
+          if (this.#dragStartY == null || !this.panel) return;
+          const shouldMinimize = this.#dragDelta > 90;
+          this.panel.style.transition = '';
+          this.panel.style.transform = '';
+          this.#dragStartY = null;
+          this.#dragDelta = 0;
+          if (shouldMinimize) {
+            this.toggle(false);
+            this.track('tea_chat_minimize');
+          }
+        },
+        { passive: true }
+      );
+    });
   }
 
   isOpen() {
@@ -83,6 +157,7 @@ class LuxeTeaChat extends HTMLElement {
   toggle(open) {
     const shouldOpen = open ?? !this.isOpen();
     this.panel.hidden = !shouldOpen;
+    if (this.backdrop) this.backdrop.hidden = !shouldOpen;
     this.launcher?.setAttribute('aria-expanded', String(shouldOpen));
     this.classList.toggle('luxe-tea-chat--open', shouldOpen);
     document.documentElement.classList.toggle('luxe-chat-open', shouldOpen);
@@ -94,11 +169,33 @@ class LuxeTeaChat extends HTMLElement {
         this.bootstrapConversation();
       }
       this.track('tea_chat_open');
-      requestAnimationFrame(() => this.input?.focus({ preventScroll: true }));
-    } else if (this.#focusBeforeOpen instanceof HTMLElement) {
-      this.#focusBeforeOpen.focus({ preventScroll: true });
+      requestAnimationFrame(() => {
+        if (window.matchMedia('(min-width: 750px)').matches) {
+          this.input?.focus({ preventScroll: true });
+        }
+      });
+    } else {
+      if (this.panel) {
+        this.panel.style.transform = '';
+        this.panel.style.transition = '';
+      }
+      if (this.#focusBeforeOpen instanceof HTMLElement) {
+        this.#focusBeforeOpen.focus({ preventScroll: true });
+      }
       this.#focusBeforeOpen = null;
+      this.launcher?.focus?.({ preventScroll: true });
     }
+  }
+
+  clearConversation() {
+    this.#history = [];
+    this.persistSession();
+    if (this.messages) {
+      this.messages.innerHTML = '';
+      delete this.messages.dataset.initialized;
+    }
+    this.bootstrapConversation();
+    this.track('tea_chat_clear');
   }
 
   bootstrapConversation() {
@@ -115,12 +212,20 @@ class LuxeTeaChat extends HTMLElement {
     this.renderQuickReplies(this.defaultPrompts);
   }
 
+  timeGreeting() {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+
   welcomeMessage() {
     const name = this.agentName.split('—')[0].trim();
+    const greet = this.timeGreeting();
     const productBit = this.productContext
       ? ` I see you're looking at <strong>${this.escapeHtml(this.productContext)}</strong> — happy to help with that tea or other options.`
       : '';
-    return `Hello — I'm <strong>${name}</strong>, your tea guide at Luxe Leaf Tea.${productBit} I can help you choose premium loose leaf tea, brew the perfect cup, or answer shipping questions. What would you like to know?`;
+    return `${greet} — I'm <strong>${name}</strong>, your tea guide at Luxe Leaf Tea.${productBit} Ask me anything: tea picks, brewing, shipping, gifts — or just say hi. What can I help with?`;
   }
 
   renderQuickReplies(prompts) {
@@ -141,19 +246,22 @@ class LuxeTeaChat extends HTMLElement {
   followUpsFor(text) {
     const q = this.normalize(text);
     if (this.isSmallTalk(q)) {
-      return ['Which tea should I try first?', 'How do I brew loose leaf?', 'Tell me about free shipping'];
+      return ['Which tea should I try first?', 'Something calming for evening', 'Tell me about free shipping'];
     }
     if (this.includesAny(q, ['ship', 'deliver', 'shipping', 'tracking']) || /\bfree shipping\b/.test(q)) {
       return ['Shop all teas', 'Which tea should I try first?', 'How do I brew loose leaf?'];
     }
-    if (this.includesAny(q, ['brew', 'steep', 'temperature'])) {
+    if (this.includesAny(q, ['brew', 'steep', 'temperature', 'iced', 'cold brew'])) {
       return ['Which tea should I try first?', 'Shop all teas', 'Free shipping?'];
     }
-    if (this.includesAny(q, ['green', 'oolong', 'black', 'pu', 'recommend', 'try first'])) {
+    if (this.includesAny(q, ['green', 'oolong', 'black', 'pu', 'recommend', 'try first', 'calming', 'evening'])) {
       return ['How do I brew loose leaf?', 'Shop all teas', 'Is this a good gift?'];
     }
     if (this.includesAny(q, ['gift', 'present'])) {
       return ['Shop all teas', 'Free shipping?', 'How do I brew loose leaf?'];
+    }
+    if (this.includesAny(q, ['caffeine', 'sleep', 'decaf'])) {
+      return ['Something calming for evening', 'How do I brew loose leaf?', 'Shop all teas'];
     }
     return this.defaultPrompts;
   }
@@ -523,15 +631,23 @@ class LuxeTeaChat extends HTMLElement {
         q
       )
     ) {
-      return `I'm doing great — thank you for asking. Always glad to chat. How are <em>you</em> doing today? If you want, I can also help pick a tea or answer anything on your mind.`;
+      return `I'm doing wonderfully — thank you for asking. Always glad to chat over (imaginary) tea. How are <em>you</em> feeling today? I can keep chatting, or help you pick something bright, floral, or cozy.`;
     }
 
     if (/\b(how's your day|how is your day|having a good day)\b/.test(q)) {
-      return `It's a good day on my end — lots of tea talk and happy customers. How's your day going? I'm here if you want a brewing tip, a recommendation, or just to talk.`;
+      return `It's a lovely day on my end — lots of tea talk and happy customers. How's your day going? I'm here for a brewing tip, a recommendation, or just a friendly chat.`;
     }
 
     if (/^(hi|hello|hey|howdy|greetings)\b/.test(q) || /\bgood (morning|afternoon|evening)\b/.test(q)) {
-      return `Hey there — nice to meet you. I'm <strong>${name}</strong>, your tea guide. How can I help today? Ask me anything — from "how are you?" to which tea to try next.`;
+      return `${this.timeGreeting()} — nice to meet you. I'm <strong>${name}</strong>, your tea guide. How can I help today? Ask me anything — from "how are you?" to which tea to try next.`;
+    }
+
+    if (/\b(calming|relax|stress|anxious|unwind|evening tea|before bed)\b/.test(q)) {
+      return `For a calming evening cup, I’d lean toward a softer oolong or a gentle green — lower caffeine than a bold black, still full of aroma. Prefer floral or toasty? I can narrow it down. <a href="${this.shopUrl}">Browse teas →</a>`;
+    }
+
+    if (/\b(energ|morning|wake me|focus|productivity)\b/.test(q)) {
+      return `For mornings and focus, a bright green or a classic black usually hits the spot. Greens feel clean and alert; blacks feel cozy and steady. What time of day are you steeping? <a href="${this.shopUrl}">Shop tea →</a>`;
     }
 
     if (/\b(what's up|whats up|sup)\b/.test(q)) {
