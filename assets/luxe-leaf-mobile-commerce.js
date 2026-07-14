@@ -7,8 +7,8 @@ import { StandardEvents } from '@shopify/events';
   if (window.__luxeMobileCommerceInit) return;
   window.__luxeMobileCommerceInit = true;
 
-  const NUDGE_HEIGHT_FALLBACK = '5.5rem';
-  const NUDGE_HEIGHT_SUCCESS_FALLBACK = '4.5rem';
+  const NUDGE_HEIGHT_FALLBACK = '3.5rem';
+  const NUDGE_HEIGHT_SUCCESS_FALLBACK = '3rem';
 
   let nudgeResizeObserver = null;
 
@@ -233,9 +233,6 @@ import { StandardEvents } from '@shopify/events';
     const rateEl = nudge.querySelector('[data-shipping-nudge-rate]');
     const barEl = nudge.querySelector('[data-shipping-nudge-bar]');
     const progressEl = nudge.querySelector('[data-shipping-nudge-progress]');
-    const exploreBtn = nudge.querySelector('[data-shipping-nudge-explore]');
-    const cartBtn = nudge.querySelector('[data-shipping-nudge-cart]');
-    const checkoutBtn = nudge.querySelector('[data-shipping-nudge-checkout]');
 
     nudge.classList.toggle('luxe-shipping-nudge--success', qualifiesFree);
 
@@ -254,18 +251,6 @@ import { StandardEvents } from '@shopify/events';
     }
     if (progressEl instanceof HTMLElement) {
       progressEl.setAttribute('aria-valuenow', String(qualifiesFree ? 100 : progress));
-    }
-
-    if (exploreBtn instanceof HTMLElement) {
-      exploreBtn.hidden = qualifiesFree;
-    }
-    if (cartBtn instanceof HTMLElement) {
-      cartBtn.hidden = false;
-    }
-    if (checkoutBtn instanceof HTMLElement) {
-      checkoutBtn.hidden = false;
-      checkoutBtn.textContent = 'Checkout';
-      checkoutBtn.setAttribute('aria-label', 'Go to secure checkout');
     }
 
     nudge.hidden = false;
