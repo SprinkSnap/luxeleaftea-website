@@ -2318,12 +2318,62 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
 
 .luxe-brand-footer__logo-link {
   display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+  text-decoration: none;
+  max-width: 100%;
+  transition: transform 0.18s ease;
+}
+
+.luxe-brand-footer__logo-link:hover {
+  transform: translateY(-1px);
+}
+
+.luxe-brand-footer__logo-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0.85rem;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgb(201 162 39 / 0.18), transparent 55%),
+    linear-gradient(180deg, #faf7ef 0%, #f3eee4 100%);
+  border: 1px solid rgb(201 162 39 / 0.42);
+  box-shadow:
+    0 0 0 1px rgb(248 246 240 / 0.08),
+    0 10px 28px rgb(0 0 0 / 0.28),
+    inset 0 1px 0 rgb(255 255 255 / 0.7);
 }
 
 .luxe-brand-footer__logo {
-  max-height: 2rem;
-  width: auto;
-  filter: brightness(1.08);
+  display: block;
+  height: 2.85rem !important;
+  max-height: none !important;
+  width: auto !important;
+  max-width: min(15rem, calc(100vw - 4rem));
+  object-fit: contain;
+  filter: none;
+}
+
+.luxe-brand-footer__logo-wordmark {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.luxe-brand-footer__logo-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f8f6f0 !important;
+  line-height: 1.2;
+}
+
+.luxe-brand-footer__logo-tag {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: #e4c76b !important;
 }
 
 .luxe-brand-footer__blurb {
@@ -2332,6 +2382,26 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   font-size: 0.875rem;
   line-height: 1.65;
   color: rgb(248 246 240 / 0.78);
+}
+
+.luxe-brand-footer__brand-cta {
+  margin: 0;
+}
+
+.luxe-brand-footer__brand-shop {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  color: #c9a227 !important;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.luxe-brand-footer__brand-shop:hover,
+.luxe-brand-footer__brand-shop:focus-visible {
+  color: #f3d56a !important;
 }
 
 .luxe-brand-footer__columns {
@@ -2616,6 +2686,48 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   color: #c9a227 !important;
 }
 
+@media screen and (max-width: 749px) {
+  .luxe-brand-footer__logo-plate {
+    width: 100%;
+    max-width: 20rem;
+    padding: 0.8rem 1rem;
+    justify-content: flex-start;
+  }
+
+  .luxe-brand-footer__logo {
+    height: 2.75rem !important;
+    max-width: min(16rem, calc(100vw - 4.5rem));
+  }
+
+  .luxe-brand-footer__logo-link {
+    width: 100%;
+  }
+
+  .luxe-brand-footer__brand-shop {
+    min-height: 2.75rem;
+    font-size: 0.9375rem;
+  }
+}
+
+body.luxe-leaf-theme .luxe-brand-footer__logo-plate {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgb(201 162 39 / 0.18), transparent 55%),
+    linear-gradient(180deg, #faf7ef 0%, #f3eee4 100%) !important;
+}
+
+body.luxe-leaf-theme .luxe-brand-footer__logo-name {
+  color: #f8f6f0 !important;
+}
+
+body.luxe-leaf-theme .luxe-brand-footer__logo-tag,
+body.luxe-leaf-theme .luxe-brand-footer__brand-shop {
+  color: #e4c76b !important;
+}
+
+body.luxe-leaf-theme .luxe-brand-footer__logo {
+  filter: none !important;
+}
+
 @media screen and (min-width: 750px) {
   .luxe-brand-footer__cta {
     padding: 2.75rem 1.5rem 2rem;
@@ -2637,9 +2749,33 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
   }
 
   .luxe-brand-footer__layout {
-    grid-template-columns: minmax(14rem, 1.1fr) minmax(0, 2fr);
+    grid-template-columns: minmax(16rem, 1.15fr) minmax(0, 2fr);
     gap: 2.5rem;
     align-items: start;
+  }
+
+  .luxe-brand-footer__logo-link {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .luxe-brand-footer__logo-plate {
+    padding: 0.85rem 1.1rem;
+    border-radius: 1rem;
+  }
+
+  .luxe-brand-footer__logo {
+    height: 3.25rem !important;
+    max-width: 16.5rem;
+  }
+
+  .luxe-brand-footer__logo-name {
+    font-size: 1.15rem;
+  }
+
+  .luxe-brand-footer__logo-tag {
+    font-size: 0.8125rem;
   }
 
   .luxe-brand-footer__columns {

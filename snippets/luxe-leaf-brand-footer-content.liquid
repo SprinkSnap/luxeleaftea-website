@@ -99,12 +99,33 @@
   <div class="luxe-brand-footer__main section section--page-width">
     <div class="luxe-brand-footer__layout">
       <div class="luxe-brand-footer__brand">
-        <a href="{{ routes.root_url }}" class="luxe-brand-footer__logo-link" title="Luxe Leaf Tea home">
-          {% render 'luxe-leaf-tea-logo', class: 'luxe-brand-footer__logo', alt: shop.name | append: ' — premium loose leaf tea' %}
+        <a
+          href="{{ routes.root_url }}"
+          class="luxe-brand-footer__logo-link"
+          title="{{ shop.name | escape }} — premium loose leaf tea home"
+          aria-label="{{ shop.name | escape }} home — shop premium loose leaf tea"
+        >
+          <span class="luxe-brand-footer__logo-plate">
+            {% render 'luxe-leaf-tea-logo',
+              class: 'luxe-brand-footer__logo',
+              logo_height: 56,
+              logo_height_mobile: 48,
+              alt: shop.name | append: ' — premium Canada-wide loose leaf tea'
+            %}
+          </span>
+          <span class="luxe-brand-footer__logo-wordmark">
+            <span class="luxe-brand-footer__logo-name">{{ shop.name }}</span>
+            <span class="luxe-brand-footer__logo-tag">Premium loose leaf tea · Canada-wide shipping</span>
+          </span>
         </a>
         {%- if brand_blurb != blank -%}
           <p class="luxe-brand-footer__blurb">{{ brand_blurb }}</p>
         {%- endif -%}
+        <p class="luxe-brand-footer__brand-cta">
+          <a href="{{ shop_tea_url }}" class="luxe-brand-footer__brand-shop" title="Shop all premium loose leaf tea">
+            Shop Tea →
+          </a>
+        </p>
 
         {%- if instagram_url != blank or facebook_url != blank -%}
           <nav class="luxe-brand-footer__social-nav" aria-label="Follow Luxe Leaf Tea">
