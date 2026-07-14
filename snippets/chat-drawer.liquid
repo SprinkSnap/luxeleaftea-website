@@ -202,6 +202,15 @@
         <span class="luxe-tea-chat__launcher-badge" data-chat-badge hidden aria-hidden="true">1</span>
       </button>
 
+      <button
+        type="button"
+        class="luxe-tea-chat__backdrop"
+        aria-label="Minimize tea guide chat"
+        tabindex="-1"
+        hidden
+        data-chat-backdrop
+      ></button>
+
       <div
         id="luxe-tea-chat-panel"
         class="luxe-tea-chat__panel"
@@ -211,6 +220,10 @@
         hidden
         data-chat-panel
       >
+        <div class="luxe-tea-chat__sheet-handle" data-chat-handle aria-hidden="true">
+          <span class="luxe-tea-chat__sheet-handle-bar"></span>
+        </div>
+
         <header class="luxe-tea-chat__header">
           <div class="luxe-tea-chat__header-copy">
             <p class="luxe-tea-chat__eyebrow">
@@ -231,11 +244,39 @@
             >
               Shop
             </button>
-            <button type="button" class="luxe-tea-chat__close button-unstyled" aria-label="Close chat" data-chat-close>
-              {{- 'icon-close.svg' | inline_asset_content -}}
+            <button
+              type="button"
+              class="luxe-tea-chat__icon-btn luxe-tea-chat__minimize button-unstyled"
+              aria-label="Minimize chat"
+              title="Minimize"
+              data-chat-minimize
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
+                <path d="M6 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span class="luxe-tea-chat__icon-btn-label">Min</span>
+            </button>
+            <button
+              type="button"
+              class="luxe-tea-chat__icon-btn luxe-tea-chat__close button-unstyled"
+              aria-label="Close chat"
+              title="Close"
+              data-chat-close
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
+                <path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span class="luxe-tea-chat__icon-btn-label">Close</span>
             </button>
           </div>
         </header>
+
+        <div class="luxe-tea-chat__toolbar">
+          <button type="button" class="luxe-tea-chat__toolbar-btn button-unstyled" data-chat-clear>
+            New chat
+          </button>
+          <span class="luxe-tea-chat__toolbar-hint">Swipe down or tap outside to minimize</span>
+        </div>
 
         <div class="luxe-tea-chat__messages" data-chat-messages role="log" aria-live="polite" aria-relevant="additions"></div>
         <div class="luxe-tea-chat__quick-replies" data-chat-quick-replies role="group" aria-label="Suggested questions"></div>
@@ -247,7 +288,7 @@
             class="luxe-tea-chat__input"
             type="text"
             name="message"
-            placeholder="Ask anything about our teas…"
+            placeholder="Ask anything — or just say hi…"
             autocomplete="off"
             enterkeyhint="send"
             maxlength="500"
