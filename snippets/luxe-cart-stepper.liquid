@@ -30,7 +30,19 @@
       disabled
     {% endif %}
   >
-    <span class="luxe-cart-stepper__glyph" aria-hidden="true">−</span>
+    <svg
+      class="luxe-cart-stepper__icon"
+      aria-hidden="true"
+      width="16"
+      height="16"
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      focusable="false"
+    >
+      <path d="M2.75 7H11.25" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <span class="visually-hidden">−</span>
   </button>
 
   <output
@@ -43,20 +55,6 @@
     {{- item.quantity -}}
   </output>
 
-  <input
-    type="hidden"
-    id="luxe-cart-qty-{{ cart_line }}"
-    data-luxe-cart-qty-input
-    data-cart-line="{{ cart_line }}"
-    data-cart-key="{{ item.key }}"
-    value="{{ item.quantity }}"
-    data-min="{{ min_qty }}"
-    data-step="{{ step_qty }}"
-    {% if max_qty %}
-      data-max="{{ max_qty }}"
-    {% endif %}
-  >
-
   <button
     type="button"
     class="luxe-cart-stepper__btn luxe-cart-stepper__btn--plus"
@@ -66,6 +64,38 @@
       disabled
     {% endif %}
   >
-    <span class="luxe-cart-stepper__glyph" aria-hidden="true">+</span>
+    <svg
+      class="luxe-cart-stepper__icon"
+      aria-hidden="true"
+      width="16"
+      height="16"
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      focusable="false"
+    >
+      <path d="M2.75 7H11.25" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      <path d="M7 2.75V11.25" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <span class="visually-hidden">+</span>
   </button>
+
+  {%- comment -%}
+    Keep the qty input out of the 3-column grid so it cannot displace the + button.
+  {%- endcomment -%}
+  <input
+    type="hidden"
+    id="luxe-cart-qty-{{ cart_line }}"
+    class="luxe-cart-stepper__input"
+    data-luxe-cart-qty-input
+    data-cart-line="{{ cart_line }}"
+    data-cart-key="{{ item.key }}"
+    value="{{ item.quantity }}"
+    data-min="{{ min_qty }}"
+    data-step="{{ step_qty }}"
+    {% if max_qty %}
+      data-max="{{ max_qty }}"
+    {% endif %}
+    hidden
+  >
 </div>
