@@ -475,10 +475,10 @@ class LuxeTeaChat extends HTMLElement {
     const ship = document.createElement('button');
     ship.type = 'button';
     ship.className = 'luxe-tea-chat__actions-secondary';
-    ship.textContent = 'Free shipping?';
+    ship.textContent = 'Free Canada shipping?';
     ship.addEventListener('click', () => {
       if (this.#pending) return;
-      this.handleUserMessage('Do you have free shipping?');
+      this.handleUserMessage('Do you have free Canada-wide shipping?');
     });
 
     row.append(shop, ship);
@@ -654,7 +654,7 @@ class LuxeTeaChat extends HTMLElement {
             ? 14
             : 0,
         reply: () =>
-          `Our premium loose leaf teas are priced for whole-leaf quality — typically less per cup than café tea because leaves re-steep. <a href="${this.shopUrl}">See current prices →</a> Free shipping over $${shipping}.`,
+          `Our premium loose leaf teas are priced for whole-leaf quality — typically less per cup than café tea because leaves re-steep. <a href="${this.shopUrl}">See current prices →</a> Free Canada-wide shipping over $${shipping}.`,
       },
       {
         score: () =>
