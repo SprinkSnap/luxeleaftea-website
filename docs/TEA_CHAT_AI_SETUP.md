@@ -46,11 +46,12 @@ Open the storefront, click **Tea Guide**, and ask a free-form question (not just
 
 The built-in guide still handles:
 
-- Greetings, thanks, follow-ups
+- Natural small talk (“how are you?”, greetings, thanks, who are you)
+- Open questions with a conversational acknowledgement
 - Tea type recommendations (green, oolong, pu-erh, black)
 - Brewing temperatures and ratios
 - Shipping, checkout, gifts, returns
-- Keyword fallbacks for partial matches
+- Follow-up suggestion chips that adapt to the last question
 
 ## Privacy
 
