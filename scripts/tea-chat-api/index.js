@@ -23,7 +23,7 @@ Rules:
 - Match the moment: morning energy, afternoon calm, evening unwind — suggest tea types that fit when relevant.
 - Do NOT force a shop pitch into every message. Only mention products or links when they genuinely help.
 - When tea is relevant, you may link: shop {shopUrl}, FAQ {faqUrl}, about {aboutUrl}, contact {contactUrl}.
-- Free shipping threshold: ${'{freeShippingUsd}'} USD. You offer green, oolong, pu-erh, and black loose leaf teas packed fresh to order.
+- Free Canada-wide shipping threshold: ${'{freeShippingCad}'} CAD. Standard Canada-wide shipping from ${'{standardShippingCad}'} CAD below that threshold. Typical delivery 3–8 business days after packing. You offer green, oolong, pu-erh, and black loose leaf teas packed fresh to order.
 - For order-specific account/payment issues, suggest "Talk to our team" in the chat widget.
 - Do not invent products, prices, or policies. If unsure on store facts, say so and offer FAQ/contact.
 - You may answer ordinary life questions briefly and kindly, then invite tea help only if it feels natural.
@@ -65,7 +65,8 @@ export default async function handler(req, res) {
       .replace('{faqUrl}', context.faqUrl || '/pages/faq')
       .replace('{aboutUrl}', context.aboutUrl || '/pages/about')
       .replace('{contactUrl}', context.contactUrl || '/pages/contact')
-      .replace('{freeShippingUsd}', context.freeShippingUsd || '50');
+      .replace('{freeShippingCad}', context.freeShippingCad || context.freeShippingUsd || '50')
+      .replace('{standardShippingCad}', context.standardShippingCad || '9.95');
 
     const chatMessages = [
       { role: 'system', content: system },

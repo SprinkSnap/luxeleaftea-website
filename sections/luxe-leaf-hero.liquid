@@ -46,7 +46,7 @@
       <ul class="luxe-hero__highlights list-unstyled" role="list">
         <li>Whole leaves, brighter cups</li>
         <li>Packed fresh to order</li>
-        <li>Free shipping over $50</li>
+        <li>Free Canada-wide shipping over {{ settings.free_shipping_threshold | default: 5000 | money }}</li>
       </ul>
     </div>
   </div>

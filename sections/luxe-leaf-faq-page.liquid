@@ -79,7 +79,7 @@
         </li>
         <li>
           {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-          <span>Free shipping $50+</span>
+          <span>Free Canada-wide shipping {{ settings.free_shipping_threshold | default: 5000 | divided_by: 100 }}+</span>
         </li>
       </ul>
     </aside>
@@ -570,7 +570,7 @@
       "type": "text",
       "id": "cta_note",
       "label": "CTA note",
-      "default": "Secure checkout · Apple Pay & cards accepted · Free shipping over $50"
+      "default": "Secure checkout · Apple Pay & cards accepted · Free Canada-wide shipping over $50"
     },
     {
       "type": "range",

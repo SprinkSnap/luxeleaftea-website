@@ -22,7 +22,7 @@ Deploy to Cloudflare Workers, Vercel, Railway, or Fly.io. The endpoint must acce
 {
   "message": "What green tea do you recommend?",
   "messages": [{ "role": "user", "content": "..." }],
-  "context": { "shopUrl": "/collections/all", "freeShippingUsd": "50" }
+  "context": { "shopUrl": "/collections/all", "freeShippingCad": "50", "standardShippingCad": "9.95" }
 }
 ```
 

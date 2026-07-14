@@ -24,7 +24,7 @@
   endif
 
   assign free_ship_cents = settings.free_shipping_threshold | default: 5000
-  assign standard_ship_cents = settings.standard_shipping_rate | default: 595
+  assign standard_ship_cents = settings.standard_shipping_rate | default: 995
   assign free_ship_schema = free_ship_cents | divided_by: 100.0
   assign standard_ship_schema = standard_ship_cents | divided_by: 100.0
   assign currency_code = cart.currency.iso_code | default: shop.currency
@@ -63,7 +63,7 @@
       "merchantReturnDays": 14,
       "returnMethod": "https://schema.org/ReturnByMail",
       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
-      "applicableCountry": "US",
+      "applicableCountry": "CA",
       "merchantReturnLink": {{ page_url | json }}
     }
   </script>
@@ -81,7 +81,7 @@
       },
       "shippingDestination": {
         "@type": "DefinedRegion",
-        "addressCountry": "US"
+        "addressCountry": "CA"
       },
       "deliveryTime": {
         "@type": "ShippingDeliveryTime",
@@ -94,7 +94,7 @@
         "transitTime": {
           "@type": "QuantitativeValue",
           "minValue": 3,
-          "maxValue": 7,
+          "maxValue": 8,
           "unitCode": "d"
         }
       },

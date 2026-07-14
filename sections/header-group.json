@@ -17,7 +17,7 @@
         "announcement_shipping": {
           "type": "_announcement",
           "settings": {
-            "text": "Free shipping on orders $50+",
+            "text": "Canada-wide free shipping on orders $50+ · Standard from $9.95",
             "link": "shopify://collections/all",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",

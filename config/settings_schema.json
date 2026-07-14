@@ -87,14 +87,14 @@
           "id": "free_shipping_threshold",
           "label": "Free shipping threshold (cents)",
           "default": 5000,
-          "info": "Cart subtotal in cents before shipping is free. Example: 5000 = $50.00."
+          "info": "Canada-wide free shipping threshold in cents. Example: 5000 = $50.00 CAD."
         },
         {
           "type": "number",
           "id": "standard_shipping_rate",
           "label": "Standard shipping rate (cents)",
-          "default": 595,
-          "info": "Estimated flat rate shown in cart and checkout nudge before free shipping unlocks. Example: 595 = $5.95."
+          "default": 995,
+          "info": "Canada-wide estimated flat rate (cents) shown in cart before free shipping unlocks. Example: 995 = $9.95 CAD."
         },
         {
           "type": "number",

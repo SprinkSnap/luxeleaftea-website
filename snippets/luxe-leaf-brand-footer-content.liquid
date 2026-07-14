@@ -79,7 +79,7 @@
     <ul class="luxe-brand-footer__trust-list list-unstyled" role="list">
       <li class="luxe-brand-footer__trust-item">
         {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-        <span>Free shipping $50+</span>
+        <span>Free Canada-wide shipping {{ settings.free_shipping_threshold | default: 5000 | divided_by: 100 }}+</span>
       </li>
       <li class="luxe-brand-footer__trust-item">
         {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}

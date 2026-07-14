@@ -113,7 +113,7 @@
           "settings": {
             "category": "shipping",
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes — <strong>free shipping on orders over $50</strong> within the contiguous United States. Orders below $50 show exact shipping at checkout before you pay — no surprises.</p>"
+            "answer": "<p>Yes — <strong>free Canada-wide shipping on orders over $50</strong>. Orders under $50 ship Canada-wide from <strong>$9.95</strong> with tracking — confirmed at checkout before you pay. Typical delivery is 3–8 business days after packing.</p>"
           }
         },
         "ship_2": {
@@ -121,7 +121,7 @@
           "settings": {
             "category": "shipping",
             "question": "How long does shipping take?",
-            "answer": "<p>Most orders ship within 1–2 business days after packing fresh. Standard delivery is typically 3–7 business days depending on your location. You'll receive tracking as soon as your tea leaves our tea room.</p>"
+            "answer": "<p>Most orders are packed within 1–2 business days. Canada-wide delivery is typically <strong>3–8 business days</strong> after shipment depending on your province or territory. You'll receive tracking as soon as your tea leaves our tea room.</p>"
           }
         },
         "ship_3": {
@@ -190,7 +190,7 @@
         "cta_label": "Shop Premium Loose Leaf Tea",
         "cta_link": "shopify://collections/all",
         "cta_secondary_label": "See bestsellers below",
-        "cta_note": "Secure checkout · Apple Pay & cards accepted · Free shipping over $50",
+        "cta_note": "Secure checkout · Apple Pay & cards accepted · Free Canada-wide shipping over $50",
         "padding-block-start": 32,
         "padding-block-end": 48
       }
@@ -247,7 +247,7 @@
         "primary_link": "shopify://collections/all",
         "secondary_label": "Talk to our team",
         "secondary_link": "/pages/contact",
-        "note": "Free shipping over $50 · Secure checkout · Packed fresh to order",
+        "note": "Free Canada-wide shipping over $50 · Secure checkout · Packed fresh to order",
         "padding-block-start": 64,
         "padding-block-end": 64
       }

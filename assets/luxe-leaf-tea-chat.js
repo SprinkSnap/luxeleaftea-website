@@ -13,6 +13,7 @@ class LuxeTeaChat extends HTMLElement {
   connectedCallback() {
     this.agentName = this.dataset.agentName || 'Mei — Tea Guide';
     this.freeShippingCents = Number(this.dataset.freeShipping) || 5000;
+    this.standardShippingCents = Number(this.dataset.standardShipping) || 995;
     this.shopUrl = this.dataset.shopUrl || '/collections/all';
     this.faqUrl = this.dataset.faqUrl || '/pages/faq';
     this.aboutUrl = this.dataset.aboutUrl || '/pages/about';
@@ -269,7 +270,7 @@ class LuxeTeaChat extends HTMLElement {
       ? ` I see you're looking at <strong>${this.escapeHtml(this.productContext)}</strong> — happy to help with that tea or other options.`
       : '';
     const shipping = (this.freeShippingCents / 100).toFixed(0);
-    return `${greet} — I'm <strong>${name}</strong>, your tea guide at Luxe Leaf Tea.${productBit} I can help you choose premium loose leaf tea, share brewing tips, or check free shipping over $${shipping}. What would you like to explore?`;
+    return `${greet} — I'm <strong>${name}</strong>, your tea guide at Luxe Leaf Tea.${productBit} I can help you choose premium loose leaf tea, share brewing tips, or check <strong>free Canada-wide shipping</strong> over $${shipping}. What would you like to explore?`;
   }
 
   renderQuickReplies(prompts) {
@@ -420,7 +421,9 @@ class LuxeTeaChat extends HTMLElement {
           context: {
             shopName: 'Luxe Leaf Tea',
             agentName: this.agentName,
+            freeShippingCad: (this.freeShippingCents / 100).toFixed(0),
             freeShippingUsd: (this.freeShippingCents / 100).toFixed(0),
+            standardShippingCad: (this.standardShippingCents / 100).toFixed(2).replace(/\.00$/, ''),
             shopUrl: this.shopUrl,
             faqUrl: this.faqUrl,
             aboutUrl: this.aboutUrl,
@@ -472,10 +475,10 @@ class LuxeTeaChat extends HTMLElement {
     const ship = document.createElement('button');
     ship.type = 'button';
     ship.className = 'luxe-tea-chat__actions-secondary';
-    ship.textContent = 'Free shipping?';
+    ship.textContent = 'Free Canada shipping?';
     ship.addEventListener('click', () => {
       if (this.#pending) return;
-      this.handleUserMessage('Do you have free shipping?');
+      this.handleUserMessage('Do you have free Canada-wide shipping?');
     });
 
     row.append(shop, ship);
@@ -643,7 +646,7 @@ class LuxeTeaChat extends HTMLElement {
             ? 14
             : 0,
         reply: () =>
-          `We pack fresh to order and ship quickly. Enjoy <strong>free shipping on orders over $${shipping}</strong>. Most US orders arrive within a few business days. <a href="${this.shopUrl}">Shop teas →</a>`,
+          `We pack fresh to order and ship <strong>Canada-wide</strong>. Enjoy <strong>free shipping on orders over $${shipping}</strong>. Below that, Canada-wide standard shipping starts from $${(this.standardShippingCents / 100).toFixed(2).replace(/\.00$/, '')}. Most orders arrive in about <strong>3–8 business days</strong>. <a href="${this.shopUrl}">Shop teas →</a>`,
       },
       {
         score: () =>
@@ -651,7 +654,7 @@ class LuxeTeaChat extends HTMLElement {
             ? 14
             : 0,
         reply: () =>
-          `Our premium loose leaf teas are priced for whole-leaf quality — typically less per cup than café tea because leaves re-steep. <a href="${this.shopUrl}">See current prices →</a> Free shipping over $${shipping}.`,
+          `Our premium loose leaf teas are priced for whole-leaf quality — typically less per cup than café tea because leaves re-steep. <a href="${this.shopUrl}">See current prices →</a> Free Canada-wide shipping over $${shipping}.`,
       },
       {
         score: () =>

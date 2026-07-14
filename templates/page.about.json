@@ -61,7 +61,7 @@
         "primary_link": "shopify://collections/all",
         "secondary_label": "Talk to our team",
         "secondary_link": "shopify://pages/contact",
-        "trust_line": "Whole leaves · Packed fresh to order · Free shipping over $50",
+        "trust_line": "Whole leaves · Packed fresh to order · Free Canada-wide shipping over $50",
         "badge_text": "Shop like you're at the counter",
         "show_jump_nav": true,
         "jump_shop_label": "Shop bestsellers",
@@ -250,7 +250,7 @@
           "type": "faq",
           "settings": {
             "question": "Do you ship nationwide?",
-            "answer": "<p>Yes — we ship across the United States. Orders over $50 qualify for free shipping, and every package is packed fresh to order.</p>"
+            "answer": "<p>Yes — we ship <strong>Canada-wide</strong> to all provinces and territories. Orders over $50 qualify for free shipping; under $50, Canada-wide standard shipping starts from $9.95 with tracking. Every package is packed fresh to order.</p>"
           }
         }
       },
@@ -296,7 +296,7 @@
         "primary_link": "shopify://collections/all",
         "secondary_label": "Talk to our team",
         "secondary_link": "/pages/contact",
-        "note": "Free shipping over $50 · Packed fresh to order · Secure checkout",
+        "note": "Free Canada-wide shipping over $50 · Packed fresh to order · Secure checkout",
         "padding-block-start": 64,
         "padding-block-end": 64
       }
