@@ -1781,26 +1781,56 @@ html.luxe-chat-open body {
 }
 
 .luxe-ca-tax {
-  margin-bottom: 0.75rem;
-  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.65rem;
+  padding: 0;
   border-radius: 0.5rem;
-  background: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.05);
-  border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.12);
+  background: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.04);
+  border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
+  overflow: hidden;
 }
 
-.luxe-ca-tax__heading {
-  margin: 0 0 0.5rem;
-  font-size: 0.6875rem;
+.luxe-ca-tax__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+  list-style: none;
+  cursor: pointer;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.72);
+  color: var(--luxe-jade, #1b4332);
 }
 
-.luxe-ca-tax__fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
+.luxe-ca-tax__summary::-webkit-details-marker {
+  display: none;
+}
+
+.luxe-ca-tax__summary::after {
+  content: '+';
+  margin-left: auto;
+  font-weight: 700;
+  color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.55);
+}
+
+.luxe-ca-tax[open] .luxe-ca-tax__summary::after {
+  content: '−';
+}
+
+.luxe-ca-tax__summary-label {
+  letter-spacing: 0.02em;
+}
+
+.luxe-ca-tax__summary-hint {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
+}
+
+.luxe-ca-tax__body {
+  padding: 0 0.75rem 0.7rem;
+  border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.08);
 }
 
 .luxe-ca-tax__field {
@@ -1808,6 +1838,7 @@ html.luxe-chat-open body {
   flex-direction: column;
   gap: 0.25rem;
   min-width: 0;
+  margin-top: 0.55rem;
 }
 
 .luxe-ca-tax__label {
@@ -1815,8 +1846,7 @@ html.luxe-chat-open body {
   color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
 }
 
-.luxe-ca-tax__select,
-.luxe-ca-tax__input {
+.luxe-ca-tax__select {
   width: 100%;
   min-height: 2.5rem;
   padding: 0.4rem 0.55rem;
@@ -1839,12 +1869,6 @@ html.luxe-chat-open body {
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--luxe-jade, #1b4332);
-}
-
-@media screen and (max-width: 749px) {
-  .luxe-ca-tax__fields {
-    grid-template-columns: 1fr;
-  }
 }
 
 .luxe-guest-checkout-banner {

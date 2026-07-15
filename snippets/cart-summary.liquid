@@ -234,9 +234,7 @@
 
     assign checkout_label = 'content.checkout' | t
     assign grand_total = cart.total_price
-    if luxe_drawer_checkout and cart.empty? == false
-      assign checkout_label = 'Pay securely — guest checkout'
-    elsif settings.brand_navigation != false and cart.empty? == false
+    if settings.brand_navigation != false and cart.empty? == false
       assign threshold = settings.free_shipping_threshold | default: 5000
       assign standard_rate = settings.standard_shipping_rate | default: 995
       if cart.total_price >= threshold
@@ -250,7 +248,7 @@
       else
         assign grand_total_money = grand_total | money
       endif
-      assign checkout_label = 'Guest checkout — select province for total'
+      assign checkout_label = 'Pay ' | append: grand_total_money | append: ' — Guest checkout'
     elsif settings.brand_navigation != false
       assign checkout_label = 'Checkout Now — Secure Payment'
     endif
@@ -315,9 +313,9 @@
     {%- unless settings.brand_navigation == false -%}
       <p class="cart__checkout-note">
         {%- if luxe_drawer_checkout -%}
-          Apple Pay &amp; cards · No account required · Total updates when you change quantity
+          Tax finalized at checkout · Apple Pay &amp; cards · No account needed
         {%- else -%}
-          Guest checkout · Apple Pay &amp; cards accepted · No account required
+          Tax finalized at checkout · Guest checkout · Apple Pay &amp; cards
         {%- endif -%}
       </p>
     {%- endunless -%}

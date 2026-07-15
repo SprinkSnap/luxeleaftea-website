@@ -1,6 +1,6 @@
 /**
- * Canadian provincial tax rates for cart estimates (Canada-wide shipping only).
- * Rates are combined GST/HST/PST totals in basis points (1300 = 13%).
+ * Optional Canadian provincial tax estimate for cart UX.
+ * Never gates Pay — checkout collects address and final tax.
  */
 (function initCanadaTax() {
   if (window.__luxeCanadaTaxInit) return;
@@ -8,51 +8,21 @@
 
   const STORAGE_KEY = 'luxe-ca-location';
 
-  /** @type {Record<string, { name: string, rateBps: number, taxLabel: string, cities: string[] }>} */
+  /** @type {Record<string, { name: string, rateBps: number, taxLabel: string }>} */
   const CA_PROVINCES = {
-    AB: { name: 'Alberta', rateBps: 500, taxLabel: 'GST 5%', cities: ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'Medicine Hat'] },
-    BC: {
-      name: 'British Columbia',
-      rateBps: 1200,
-      taxLabel: 'GST + PST 12%',
-      cities: ['Vancouver', 'Victoria', 'Surrey', 'Kelowna', 'Nanaimo'],
-    },
-    MB: {
-      name: 'Manitoba',
-      rateBps: 1200,
-      taxLabel: 'GST + RST 12%',
-      cities: ['Winnipeg', 'Brandon', 'Steinbach', 'Thompson'],
-    },
-    NB: { name: 'New Brunswick', rateBps: 1500, taxLabel: 'HST 15%', cities: ['Moncton', 'Saint John', 'Fredericton', 'Dieppe'] },
-    NL: {
-      name: 'Newfoundland and Labrador',
-      rateBps: 1500,
-      taxLabel: 'HST 15%',
-      cities: ["St. John's", 'Mount Pearl', 'Corner Brook'],
-    },
-    NS: { name: 'Nova Scotia', rateBps: 1400, taxLabel: 'HST 14%', cities: ['Halifax', 'Dartmouth', 'Sydney', 'Truro'] },
-    NT: { name: 'Northwest Territories', rateBps: 500, taxLabel: 'GST 5%', cities: ['Yellowknife', 'Hay River', 'Inuvik'] },
-    NU: { name: 'Nunavut', rateBps: 500, taxLabel: 'GST 5%', cities: ['Iqaluit', 'Rankin Inlet', 'Arviat'] },
-    ON: { name: 'Ontario', rateBps: 1300, taxLabel: 'HST 13%', cities: ['Toronto', 'Ottawa', 'Mississauga', 'Hamilton', 'London', 'Kitchener'] },
-    PE: {
-      name: 'Prince Edward Island',
-      rateBps: 1500,
-      taxLabel: 'HST 15%',
-      cities: ['Charlottetown', 'Summerside', 'Stratford'],
-    },
-    QC: {
-      name: 'Quebec',
-      rateBps: 14975,
-      taxLabel: 'GST + QST 14.975%',
-      cities: ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Sherbrooke'],
-    },
-    SK: {
-      name: 'Saskatchewan',
-      rateBps: 1100,
-      taxLabel: 'GST + PST 11%',
-      cities: ['Saskatoon', 'Regina', 'Prince Albert', 'Moose Jaw'],
-    },
-    YT: { name: 'Yukon', rateBps: 500, taxLabel: 'GST 5%', cities: ['Whitehorse', 'Dawson City', 'Watson Lake'] },
+    AB: { name: 'Alberta', rateBps: 500, taxLabel: 'GST 5%' },
+    BC: { name: 'British Columbia', rateBps: 1200, taxLabel: 'GST + PST 12%' },
+    MB: { name: 'Manitoba', rateBps: 1200, taxLabel: 'GST + RST 12%' },
+    NB: { name: 'New Brunswick', rateBps: 1500, taxLabel: 'HST 15%' },
+    NL: { name: 'Newfoundland and Labrador', rateBps: 1500, taxLabel: 'HST 15%' },
+    NS: { name: 'Nova Scotia', rateBps: 1400, taxLabel: 'HST 14%' },
+    NT: { name: 'Northwest Territories', rateBps: 500, taxLabel: 'GST 5%' },
+    NU: { name: 'Nunavut', rateBps: 500, taxLabel: 'GST 5%' },
+    ON: { name: 'Ontario', rateBps: 1300, taxLabel: 'HST 13%' },
+    PE: { name: 'Prince Edward Island', rateBps: 1500, taxLabel: 'HST 15%' },
+    QC: { name: 'Quebec', rateBps: 14975, taxLabel: 'GST + QST 14.975%' },
+    SK: { name: 'Saskatchewan', rateBps: 1100, taxLabel: 'GST + PST 11%' },
+    YT: { name: 'Yukon', rateBps: 500, taxLabel: 'GST 5%' },
   };
 
   /** @returns {{ province?: string, city?: string }} */
@@ -65,8 +35,8 @@
     }
   }
 
-  /** @param {string} province @param {string} city */
-  function storeLocation(province, city) {
+  /** @param {string} province @param {string} [city] */
+  function storeLocation(province, city = '') {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ province, city }));
     document.dispatchEvent(new CustomEvent('luxe:ca-location-change', { detail: { province, city } }));
   }
@@ -85,51 +55,36 @@
     return CA_PROVINCES[code].taxLabel;
   }
 
-  /** @returns {boolean} */
+  /** Province selected for optional estimate (never required for Pay). */
   function isLocationComplete() {
-    const { province, city } = getStoredLocation();
-    return Boolean(province && CA_PROVINCES[province] && city && city.trim().length >= 2);
-  }
-
-  /** @param {HTMLSelectElement} select @param {string} province */
-  function updateCityDatalist(select, province) {
-    const root = select.closest('[data-ca-tax-selector]');
-    const list = root?.querySelector('[data-ca-city-list]');
-    if (!(list instanceof HTMLDataListElement)) return;
-
-    list.innerHTML = '';
-    const cities = CA_PROVINCES[province]?.cities || [];
-    cities.forEach((city) => {
-      const option = document.createElement('option');
-      option.value = city;
-      list.appendChild(option);
-    });
+    const { province } = getStoredLocation();
+    return Boolean(province && CA_PROVINCES[province]);
   }
 
   /** @param {HTMLElement} root */
   function syncSelectorUI(root) {
-    const { province, city } = getStoredLocation();
+    const { province } = getStoredLocation();
     const select = root.querySelector('[data-ca-province]');
-    const input = root.querySelector('[data-ca-city]');
     const note = root.querySelector('[data-ca-tax-note]');
     const rateEl = root.querySelector('[data-ca-tax-rate]');
 
     if (select instanceof HTMLSelectElement && province) {
       select.value = province;
-      updateCityDatalist(select, province);
-    }
-    if (input instanceof HTMLInputElement && city) {
-      input.value = city;
+      if (root instanceof HTMLDetailsElement) {
+        root.open = true;
+      }
     }
 
-    const complete = isLocationComplete();
+    const hasEstimate = isLocationComplete();
     if (note instanceof HTMLElement) {
-      note.hidden = complete;
+      note.textContent = hasEstimate
+        ? 'Estimate only — exact tax is confirmed with your address at checkout.'
+        : 'Skip this and tap Pay — Shopify checkout calculates exact tax from your address.';
     }
     if (rateEl instanceof HTMLElement) {
-      if (complete && province) {
+      if (hasEstimate && province) {
         rateEl.hidden = false;
-        rateEl.textContent = `${CA_PROVINCES[province].name} · ${getTaxLabel(province)} · Canada-wide delivery`;
+        rateEl.textContent = `${CA_PROVINCES[province].name} · ${getTaxLabel(province)} estimated`;
       } else {
         rateEl.hidden = true;
         rateEl.textContent = '';
@@ -143,35 +98,15 @@
     root.dataset.caTaxBound = 'true';
 
     const select = root.querySelector('[data-ca-province]');
-    const input = root.querySelector('[data-ca-city]');
-    if (!(select instanceof HTMLSelectElement) || !(input instanceof HTMLInputElement)) return;
+    if (!(select instanceof HTMLSelectElement)) return;
 
     syncSelectorUI(root);
 
     select.addEventListener('change', () => {
       const province = select.value;
-      updateCityDatalist(select, province);
-      const city = input.value.trim();
-      if (province && city.length >= 2) {
-        storeLocation(province, city);
-      } else {
-        storeLocation(province, '');
-        document.dispatchEvent(new CustomEvent('luxe:ca-location-change', { detail: { province, city: '' } }));
-      }
+      storeLocation(province, '');
       syncSelectorUI(root);
     });
-
-    const onCityChange = () => {
-      const province = select.value;
-      const city = input.value.trim();
-      if (province && city.length >= 2) {
-        storeLocation(province, city);
-      }
-      syncSelectorUI(root);
-    };
-
-    input.addEventListener('change', onCityChange);
-    input.addEventListener('blur', onCityChange);
   }
 
   function bindAllSelectors() {

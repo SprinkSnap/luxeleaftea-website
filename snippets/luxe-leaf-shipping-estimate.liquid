@@ -100,16 +100,16 @@
         <div class="luxe-shipping-totals__row luxe-shipping-totals__row--tax">
           <span class="luxe-shipping-totals__label" data-ca-tax-label>Tax</span>
           <span class="luxe-shipping-totals__value" data-tax-value>
-            <span class="luxe-shipping-totals__at-checkout" data-ca-tax-prompt>Select province &amp; city</span>
+            <span class="luxe-shipping-totals__at-checkout" data-ca-tax-prompt>Calculated at checkout</span>
           </span>
         </div>
         <div class="luxe-shipping-totals__row luxe-shipping-totals__row--total">
-          <span class="luxe-shipping-totals__label luxe-shipping-totals__label--total">Total</span>
+          <span class="luxe-shipping-totals__label luxe-shipping-totals__label--total">Total due now</span>
           <span class="luxe-shipping-totals__value luxe-shipping-totals__value--total" data-estimated-total-value>
             {{- grand_total_money -}}
           </span>
         </div>
-        <p class="luxe-shipping-totals__footnote">Canada-wide delivery · Tax by province · Guest checkout</p>
+        <p class="luxe-shipping-totals__footnote">Canada-wide delivery · Tax finalized at checkout · Guest checkout</p>
       </div>
     {%- endunless -%}
 
@@ -169,10 +169,10 @@
           </span>
           <span class="luxe-cart-conversion__shipping-label" data-ca-tax-label>Tax</span>
           <span class="luxe-cart-conversion__shipping-value" data-tax-value-inline>
-            <span data-ca-tax-prompt>Select province &amp; city</span>
+            <span data-ca-tax-prompt>Calculated at checkout</span>
           </span>
           <span class="luxe-cart-conversion__shipping-total" data-estimated-total-inline>
-            Total <strong>{{ grand_total_money }}</strong> — tap Pay below
+            Pay <strong>{{ grand_total_money }}</strong> below — tax finalized at checkout
           </span>
         </div>
 
