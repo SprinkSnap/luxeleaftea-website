@@ -50,7 +50,7 @@ Then **Publish** the pushed theme in admin.
 4. Click **Publish** on that theme (not Preview)
 5. Hard-refresh your storefront (Ctrl+Shift+R)
 
-**How to confirm you published the right theme:** After publish, the homepage should show **“Steep. Sip. Savor.”** (not a generic Horizon hero), a **dark jade** announcement bar, **serif** headlines, and a **Tea Guide** chat button bottom-right.
+**How to confirm you published the right theme:** After publish, the homepage H1 should read **“Premium Loose Leaf Tea, Packed Fresh”** (with **“Steep. Sip. Savor.”** as the eyebrow — not a generic Horizon hero), a **dark jade** announcement bar, **serif** headlines, and a **Tea Guide** chat button bottom-right.
 
 | Cause | Fix |
 |-------|-----|
