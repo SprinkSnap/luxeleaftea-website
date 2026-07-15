@@ -40,9 +40,9 @@
     "featured_teas": {
       "type": "luxe-leaf-featured-teas",
       "settings": {
-        "eyebrow": "Today's selection",
-        "heading": "Teas worth sipping today",
-        "intro": "Hand-picked premium loose leaf \u2014 whole leaves, vivid aroma, packed fresh to order.",
+        "eyebrow": "Shop now",
+        "heading": "Premium loose leaf tea — add to bag",
+        "intro": "Hand-picked whole leaves with one-tap Add to Bag — packed fresh to order, Canada-wide shipping.",
         "view_all_label": "Shop all teas",
         "collection": "all",
         "product_limit": 8
@@ -52,17 +52,17 @@
       "type": "luxe-leaf-keep-exploring",
       "settings": {
         "eyebrow": "Keep exploring",
-        "heading": "Teas worth another look",
-        "intro": "Swipe through premium loose leaf picks \u2014 one tap to add and keep browsing.",
+        "heading": "More teas to discover",
+        "intro": "Swipe premium loose leaf picks — add to bag and keep browsing without leaving home.",
         "recent_eyebrow": "Welcome back",
         "recent_heading": "Pick up where you left off",
-        "recent_intro": "Your recently viewed teas \u2014 add to bag without leaving the page.",
+        "recent_intro": "Your recently viewed teas — one tap to add without leaving the page.",
         "view_all_label": "Shop all teas",
         "collection": "all",
         "product_limit": 4,
         "exclude_current_on_product": true,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "padding-block-start": 24,
+        "padding-block-end": 32
       }
     },
     "tea_types": {
@@ -70,8 +70,8 @@
       "settings": {
         "eyebrow": "Shop by type",
         "heading": "Explore premium loose leaf tea",
-        "intro": "Find your next cup \u2014 bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
-        "padding-block-start": 56,
+        "intro": "Find your next cup — bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
+        "padding-block-start": 32,
         "padding-block-end": 24
       }
     },
@@ -262,10 +262,10 @@
   "order": [
     "trust_bar",
     "hero_home",
-    "store_experience",
-    "tea_types",
     "featured_teas",
     "keep_exploring",
+    "tea_types",
+    "store_experience",
     "about_story",
     "brewing_guide",
     "home_faq",

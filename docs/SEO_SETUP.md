@@ -115,14 +115,16 @@ After deploying, the homepage includes (in order):
 
 1. Trust bar
 2. Hero
-3. Tea types grid
-4. Featured teas
-5. About / trust story
-6. Brewing guide
-7. **Home FAQ** (visible accordions matching FAQ schema)
-8. **Social proof** (review quotes)
-9. **Tea guides hub** (links to blog + collections)
-10. **Shop CTA** (final conversion block)
+3. **Featured teas** (first shoppable grid with Add to Bag)
+4. **Keep exploring** (browse rail + ItemList schema)
+5. Tea types grid
+6. Store experience story
+7. About / trust story
+8. Brewing guide
+9. **Home FAQ** (visible accordions matching FAQ schema)
+10. **Social proof** (review quotes)
+11. **Tea guides hub** (links to blog + collections)
+12. **Shop CTA** (final conversion block)
 
 ## 8. Social profiles
 
