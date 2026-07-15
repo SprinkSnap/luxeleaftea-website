@@ -3,9 +3,30 @@
   // cross-document (MPA) View Transitions implementation that can freeze or
   // white-screen the storefront on navigation. June 2026 testing.
   // Remove check if every resolved.
-  if (isMetaInAppBrowser()) {
+  // Also disable when theme page transitions are off — base.css still opts into
+  // `@view-transition { navigation: auto }`, and swipe-back (`traverse`) freezes
+  // the page until a second gesture skips the transition (cart drawer leave).
+  if (
+    isMetaInAppBrowser() ||
+    window.__luxeDisableCrossDocumentViewTransitions === true ||
+    shouldDisableCrossDocumentViewTransitionsFromDom()
+  ) {
     disableCrossDocumentViewTransitions();
   }
+
+  // MainContent data attrs may not exist yet when this async head script runs.
+  document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+      if (
+        window.__luxeDisableCrossDocumentViewTransitions === true ||
+        shouldDisableCrossDocumentViewTransitionsFromDom()
+      ) {
+        disableCrossDocumentViewTransitions();
+      }
+    },
+    { once: true }
+  );
 
   const viewTransitionRenderBlocker = document.getElementById('view-transition-render-blocker');
   // Remove the view transition render blocker if the user has reduced motion enabled or is on a low power device.
@@ -24,7 +45,15 @@
   const idleCallback = typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout;
 
   window.addEventListener('pageswap', async (event) => {
-    const { viewTransition } = /** @type {PageSwapEvent} */ (event);
+    const pageSwapEvent = /** @type {PageSwapEvent} */ (event);
+    const { viewTransition } = pageSwapEvent;
+
+    // History swipe-back / forward must never enter a view transition — known freeze
+    // until the next pointerdown skips it (matches cart-drawer "swipe instead of X").
+    if (isTraverseNavigation(pageSwapEvent) || document.documentElement.classList.contains('luxe-cart-drawer-open')) {
+      /** @type {ViewTransition | null} */ (viewTransition)?.skipTransition();
+      return;
+    }
 
     if (shouldSkipViewTransition(viewTransition)) {
       /** @type {ViewTransition | null} */ (viewTransition)?.skipTransition();
@@ -64,9 +93,10 @@
   });
 
   window.addEventListener('pagereveal', async (event) => {
-    const { viewTransition } = /** @type {PageRevealEvent} */ (event);
+    const pageRevealEvent = /** @type {PageRevealEvent} */ (event);
+    const { viewTransition } = pageRevealEvent;
 
-    if (shouldSkipViewTransition(viewTransition)) {
+    if (isTraverseNavigation(pageRevealEvent) || shouldSkipViewTransition(viewTransition)) {
       /** @type {ViewTransition | null} */ (viewTransition)?.skipTransition();
       return;
     }
@@ -103,8 +133,32 @@
       !(viewTransition instanceof ViewTransition) ||
       isLowPowerDevice() ||
       prefersReducedMotion() ||
-      isMetaInAppBrowser()
+      isMetaInAppBrowser() ||
+      window.__luxeDisableCrossDocumentViewTransitions === true ||
+      shouldDisableCrossDocumentViewTransitionsFromDom()
     );
+  }
+
+  /**
+   * @param {PageSwapEvent | PageRevealEvent} event
+   * @returns {boolean}
+   */
+  function isTraverseNavigation(event) {
+    const activation = /** @type {{ activation?: { navigationType?: string } }} */ (event).activation;
+    return activation?.navigationType === 'traverse';
+  }
+
+  /**
+   * Mirror MainContent data attributes when the Liquid style gate did not run early enough.
+   * @returns {boolean}
+   */
+  function shouldDisableCrossDocumentViewTransitionsFromDom() {
+    const main = document.getElementById('MainContent');
+    if (!(main instanceof HTMLElement)) return false;
+
+    const pageEnabled = main.getAttribute('data-page-transition-enabled') === 'true';
+    const productEnabled = main.getAttribute('data-product-transition') === 'true';
+    return !pageEnabled && !productEnabled;
   }
 
   /**

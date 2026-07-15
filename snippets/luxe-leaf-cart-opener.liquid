@@ -212,6 +212,76 @@
         closeCartDrawer(evt);
       });
 
+      /* Swipe drawer to the right to close (same intent as the X) — avoid browser
+         swipe-back + view-transition freezes when shoppers dismiss without the X. */
+      (function initSwipeToClose() {
+        var startX = 0;
+        var startY = 0;
+        var tracking = false;
+        var decided = false;
+        var horizontal = false;
+
+        function onTouchStart(evt) {
+          var drawer = document.getElementById('cart-drawer');
+          if (!drawer || !isDrawerOpen(drawer) || !evt.touches || !evt.touches[0]) return;
+
+          var target = evt.target;
+          if (!(target instanceof Element)) return;
+          if (target.closest('input, textarea, select, [contenteditable="true"]')) return;
+
+          var dialog = drawer.querySelector('dialog');
+          if (!dialog || !dialog.contains(target)) return;
+
+          startX = evt.touches[0].clientX;
+          startY = evt.touches[0].clientY;
+          tracking = true;
+          decided = false;
+          horizontal = false;
+        }
+
+        function onTouchMove(evt) {
+          if (!tracking || !evt.touches || !evt.touches[0]) return;
+
+          var dx = evt.touches[0].clientX - startX;
+          var dy = evt.touches[0].clientY - startY;
+
+          if (!decided) {
+            if (Math.abs(dx) < 12 && Math.abs(dy) < 12) return;
+            decided = true;
+            horizontal = Math.abs(dx) > Math.abs(dy) * 1.15;
+          }
+
+          // Rightward horizontal swipe on the open cart drawer → close
+          if (horizontal && dx > 72) {
+            tracking = false;
+            forceCloseDrawer();
+          }
+        }
+
+        function onTouchEnd() {
+          tracking = false;
+          decided = false;
+          horizontal = false;
+        }
+
+        document.addEventListener('touchstart', onTouchStart, { passive: true, capture: true });
+        document.addEventListener('touchmove', onTouchMove, { passive: true, capture: true });
+        document.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
+        document.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
+      })();
+
+      // Never leave scroll-lock / drawer chrome stuck after swipe-back / bfcache restore
+      window.addEventListener('pagehide', function () {
+        var drawer = document.getElementById('cart-drawer');
+        if (drawer && isDrawerOpen(drawer)) {
+          try {
+            forceCloseDrawer();
+          } catch (e) {}
+        }
+        document.documentElement.classList.remove('luxe-cart-drawer-open');
+        document.documentElement.removeAttribute('scroll-lock');
+      });
+
       document.addEventListener('theme-drawer:open', function (evt) {
         if (/** @type {Element} */ (evt.target).id === 'cart-drawer') syncDrawerChrome(true);
       });

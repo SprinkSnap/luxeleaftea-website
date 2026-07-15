@@ -1,0 +1,17 @@
+{%- doc -%}
+  Disable cross-document View Transitions when theme page transitions are off.
+  Horizon's base.css opts in with `@view-transition { navigation: auto }`, which
+  includes history swipe-back (`traverse`) and can freeze the UI until a second
+  gesture calls skipTransition() — especially when leaving an open cart drawer.
+{%- enddoc -%}
+
+{%- unless settings.page_transition_enabled or settings.transition_to_main_product -%}
+  <style id="luxe-view-transition-gate">
+    @view-transition {
+      navigation: none;
+    }
+  </style>
+  <script>
+    window.__luxeDisableCrossDocumentViewTransitions = true;
+  </script>
+{%- endunless -%}
