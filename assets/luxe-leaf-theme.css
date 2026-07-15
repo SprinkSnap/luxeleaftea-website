@@ -3260,7 +3260,7 @@ body.luxe-leaf-theme {
   text-size-adjust: 100%;
 }
 
-/* Desktoplayout uses .page-wrapper as the scroll root; clip X so cart/sidebar
+/* Desktop layout uses .page-wrapper as the scroll root; clip X so cart/sidebar
    gutters cannot trap horizontal swipes into a frozen scrollport. */
 @media (min-width: 990px) {
   body.luxe-leaf-theme .page-wrapper {
