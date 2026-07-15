@@ -121,12 +121,17 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "browse_atc_grid": {
+              "type": "luxe-leaf-browse-atc",
+              "settings": {}
             }
           },
           "block_order": [
             "card-gallery",
             "product_title_4nY4eT",
-            "price_EzJzMm"
+            "price_EzJzMm",
+            "browse_atc_grid"
           ]
         }
       },
