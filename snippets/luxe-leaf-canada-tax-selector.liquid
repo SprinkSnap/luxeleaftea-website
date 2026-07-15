@@ -1,16 +1,23 @@
 {%- doc -%}
-  Canada-wide shipping: province + city picker for accurate provincial tax in cart.
+  Optional Canada tax estimate by province. Never blocks Pay — tax is finalized at checkout.
 {%- enddoc -%}
 
 {%- unless settings.brand_navigation == false or cart.empty? -%}
-  {%- assign ca_city_list_id = city_list_id | default: 'luxe-ca-cities' -%}
-  <div class="luxe-ca-tax" data-ca-tax-selector>
-    <p class="luxe-ca-tax__heading">Ship to (Canada only)</p>
-    <div class="luxe-ca-tax__fields">
+  <details class="luxe-ca-tax" data-ca-tax-selector>
+    <summary class="luxe-ca-tax__summary">
+      <span class="luxe-ca-tax__summary-label">Optional: estimate tax by province</span>
+      <span class="luxe-ca-tax__summary-hint">Tax finalized at checkout</span>
+    </summary>
+    <div class="luxe-ca-tax__body">
       <label class="luxe-ca-tax__field">
-        <span class="luxe-ca-tax__label">Province</span>
-        <select class="luxe-ca-tax__select" data-ca-province autocomplete="address-level1" required>
-          <option value="">Select province</option>
+        <span class="luxe-ca-tax__label">Province / territory</span>
+        <select
+          class="luxe-ca-tax__select"
+          data-ca-province
+          autocomplete="address-level1"
+          aria-describedby="luxe-ca-tax-help-{{ city_list_id | default: 'default' }}"
+        >
+          <option value="">Select for estimate</option>
           <option value="AB">Alberta</option>
           <option value="BC">British Columbia</option>
           <option value="MB">Manitoba</option>
@@ -26,21 +33,14 @@
           <option value="YT">Yukon</option>
         </select>
       </label>
-      <label class="luxe-ca-tax__field">
-        <span class="luxe-ca-tax__label">City</span>
-        <input
-          class="luxe-ca-tax__input"
-          type="text"
-          data-ca-city
-          autocomplete="address-level2"
-          placeholder="e.g. Toronto"
-          list="{{ ca_city_list_id }}"
-          required
-        >
-        <datalist id="{{ ca_city_list_id }}" data-ca-city-list></datalist>
-      </label>
+      <p
+        id="luxe-ca-tax-help-{{ city_list_id | default: 'default' }}"
+        class="luxe-ca-tax__note"
+        data-ca-tax-note
+      >
+        Skip this and tap Pay — Shopify checkout calculates exact tax from your address.
+      </p>
+      <p class="luxe-ca-tax__rate" data-ca-tax-rate hidden></p>
     </div>
-    <p class="luxe-ca-tax__note" data-ca-tax-note hidden>Select your province and city to see exact tax for your order.</p>
-    <p class="luxe-ca-tax__rate" data-ca-tax-rate hidden></p>
-  </div>
+  </details>
 {%- endunless -%}
