@@ -106,12 +106,14 @@
     {
       "@context": "https://schema.org",
       "@type": "SiteNavigationElement",
-      "name": ["Home", "Shop All Tea", "Green Tea", "Oolong Tea", "Tea Guides", "FAQ", "About", "Contact", "Privacy Policy", "Terms of Service", "Refund Policy", "Shipping Policy"],
+      "name": ["Home", "Shop All Tea", "Green Tea", "Oolong Tea", "Pu-erh Tea", "Black Tea", "Tea Guides", "FAQ", "About", "Contact", "Privacy Policy", "Terms of Service", "Refund Policy", "Shipping Policy"],
       "url": [
         {{ home_abs | json }},
         {{ shop_abs | json }},
         {{ shop.url | append: '/collections/green-tea' | json }},
         {{ shop.url | append: '/collections/oolong' | json }},
+        {{ shop.url | append: '/collections/pu-erh' | json }},
+        {{ shop.url | append: '/collections/black-tea' | json }},
         {{ guides_abs | json }},
         {{ faq_abs | json }},
         {{ about_abs | json }},

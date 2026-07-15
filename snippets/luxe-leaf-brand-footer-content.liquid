@@ -156,47 +156,72 @@
       </div>
 
       <div class="luxe-brand-footer__columns">
-        <details class="luxe-brand-footer__accordion">
-          <summary class="luxe-brand-footer__heading">
-            <span>Shop</span>
-          </summary>
-          <nav aria-label="Shop premium loose leaf tea">
-            <ul class="luxe-brand-footer__list list-unstyled" role="list">
-              <li><a href="{{ routes.root_url }}" title="Luxe Leaf Tea home">Home</a></li>
-              <li><a href="{{ shop_tea_url }}" title="Shop all premium loose leaf tea">Shop All Tea</a></li>
-              <li><a href="/collections/green-tea" title="Premium loose leaf green tea">Green Tea</a></li>
-              <li><a href="/collections/oolong" title="Premium loose leaf oolong tea">Oolong Tea</a></li>
-              <li><a href="/collections/pu-erh" title="Premium loose leaf pu-erh tea">Pu-erh Tea</a></li>
-              <li><a href="/collections/black-tea" title="Premium loose leaf black tea">Black Tea</a></li>
-            </ul>
-          </nav>
-        </details>
+        {%- comment -%}
+          open by default so crawlers (and desktop) always see sitemap links.
+          Mobile JS collapses accordions for a compact conversion layout.
+        {%- endcomment -%}
+        <nav class="luxe-brand-footer__nav-col" aria-labelledby="footer-shop-heading">
+          <details class="luxe-brand-footer__accordion" data-footer-accordion open>
+            <summary class="luxe-brand-footer__heading">
+              <h2 id="footer-shop-heading" class="luxe-brand-footer__heading-text">Shop</h2>
+            </summary>
+            <div class="luxe-brand-footer__nav-body">
+              <p class="luxe-brand-footer__col-intro">Premium whole-leaf teas, packed fresh to order.</p>
+              <ul class="luxe-brand-footer__list list-unstyled" role="list">
+                <li>
+                  <a
+                    href="{{ shop_tea_url }}"
+                    class="luxe-brand-footer__shop-cta"
+                    title="Shop all premium loose leaf tea"
+                  >
+                    Shop All Tea
+                  </a>
+                </li>
+                <li><a href="/collections/green-tea" title="Premium loose leaf green tea">Green Tea</a></li>
+                <li><a href="/collections/oolong" title="Premium loose leaf oolong tea">Oolong Tea</a></li>
+                <li><a href="/collections/pu-erh" title="Premium loose leaf pu-erh tea">Pu-erh Tea</a></li>
+                <li><a href="/collections/black-tea" title="Premium loose leaf black tea">Black Tea</a></li>
+                <li><a href="{{ routes.root_url }}" title="Luxe Leaf Tea home">Home</a></li>
+              </ul>
+            </div>
+          </details>
+        </nav>
 
-        <details class="luxe-brand-footer__accordion">
-          <summary class="luxe-brand-footer__heading">
-            <span>Learn</span>
-          </summary>
-          <nav aria-label="Tea guides and company information">
-            <ul class="luxe-brand-footer__list list-unstyled" role="list">
-              <li><a href="/blogs/tea-guides" title="Premium loose leaf tea brewing guides">Tea Guides</a></li>
-              <li><a href="{{ faq_url }}" title="Tea FAQ — shipping, brewing, and orders">FAQ</a></li>
-              <li><a href="{{ about_url }}" title="About Luxe Leaf Tea — our story">Our Story</a></li>
-              <li><a href="{{ contact_url }}" title="Contact Luxe Leaf Tea">Contact</a></li>
-            </ul>
-          </nav>
-        </details>
+        <nav class="luxe-brand-footer__nav-col" aria-labelledby="footer-learn-heading">
+          <details class="luxe-brand-footer__accordion" data-footer-accordion open>
+            <summary class="luxe-brand-footer__heading">
+              <h2 id="footer-learn-heading" class="luxe-brand-footer__heading-text">Learn</h2>
+            </summary>
+            <div class="luxe-brand-footer__nav-body">
+              <p class="luxe-brand-footer__col-intro">Brewing tips, shipping answers, and our story.</p>
+              <ul class="luxe-brand-footer__list list-unstyled" role="list">
+                <li><a href="/blogs/tea-guides" title="Premium loose leaf tea brewing guides">Tea Guides</a></li>
+                <li><a href="{{ faq_url }}" title="Tea FAQ — Canada-wide shipping, brewing, and orders">FAQ</a></li>
+                <li><a href="{{ about_url }}" title="About Luxe Leaf Tea — our story">Our Story</a></li>
+                <li><a href="{{ contact_url }}" title="Contact Luxe Leaf Tea">Contact</a></li>
+              </ul>
+            </div>
+          </details>
+        </nav>
 
-        <details class="luxe-brand-footer__accordion luxe-brand-footer__accordion--legal">
-          <summary class="luxe-brand-footer__heading">
-            <span>Legal</span>
-          </summary>
-          <nav aria-label="Legal policies">
-            {% render 'luxe-leaf-policy-links', variant: 'list' %}
-          </nav>
-        </details>
+        <nav class="luxe-brand-footer__nav-col" aria-labelledby="footer-legal-heading">
+          <details class="luxe-brand-footer__accordion luxe-brand-footer__accordion--legal" data-footer-accordion open>
+            <summary class="luxe-brand-footer__heading">
+              <h2 id="footer-legal-heading" class="luxe-brand-footer__heading-text">Legal</h2>
+            </summary>
+            <div class="luxe-brand-footer__nav-body">
+              <p class="luxe-brand-footer__col-intro">Policies for confident checkout and delivery.</p>
+              <div class="luxe-brand-footer__legal-links">
+                {% render 'luxe-leaf-policy-links', variant: 'list' %}
+              </div>
+            </div>
+          </details>
+        </nav>
 
         <div class="luxe-brand-footer__help">
-          <h2 class="luxe-brand-footer__heading luxe-brand-footer__heading--static">Get help</h2>
+          <h2 class="luxe-brand-footer__heading luxe-brand-footer__heading--static">
+            <span class="luxe-brand-footer__heading-text">Get help</span>
+          </h2>
 
           <ul class="luxe-brand-footer__contact list-unstyled" role="list">
             {%- if brand_phone != blank -%}

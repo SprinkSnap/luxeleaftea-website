@@ -93,16 +93,71 @@ function initBrandMobileMenu() {
   });
 }
 
+/**
+ * Footer Shop / Learn / Legal:
+ * Desktop = always-open link columns (no dead accordion chrome).
+ * Mobile = compact accordion for conversion.
+ */
+function syncFooterAccordions() {
+  const panels = document.querySelectorAll('[data-footer-accordion]');
+  if (!panels.length) return;
+
+  panels.forEach((panel) => {
+    if (!(panel instanceof HTMLDetailsElement)) return;
+
+    if (DESKTOP_MQ.matches) {
+      panel.open = true;
+      panel.dataset.footerDesktop = 'true';
+    } else {
+      delete panel.dataset.footerDesktop;
+      if (panel.dataset.footerUserToggled !== 'true') {
+        panel.open = false;
+      }
+    }
+  });
+}
+
+function initFooterAccordions() {
+  const panels = document.querySelectorAll('[data-footer-accordion]');
+  if (!panels.length) return;
+
+  panels.forEach((panel) => {
+    if (!(panel instanceof HTMLDetailsElement)) return;
+
+    panel.addEventListener('toggle', () => {
+      if (panel.dataset.footerDesktop === 'true') {
+        panel.open = true;
+        return;
+      }
+      panel.dataset.footerUserToggled = 'true';
+    });
+
+    const summary = panel.querySelector('summary');
+    summary?.addEventListener('click', (event) => {
+      if (panel.dataset.footerDesktop === 'true') {
+        event.preventDefault();
+      }
+    });
+  });
+
+  syncFooterAccordions();
+}
+
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(forceDesktopMenu, 120);
+  resizeTimer = setTimeout(() => {
+    forceDesktopMenu();
+    syncFooterAccordions();
+  }, 120);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
   forceDesktopMenu();
   initBrandMobileMenu();
+  initFooterAccordions();
 });
 
 forceDesktopMenu();
 requestAnimationFrame(forceDesktopMenu);
+syncFooterAccordions();
