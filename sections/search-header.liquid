@@ -17,11 +17,19 @@
       {% render 'spacing-style', settings: section.settings %}
     "
   >
-    {% assign heading_text = 'content.search' | t %}
+    {% liquid
+      assign heading_text = 'content.search' | t
 
-    {% if search.performed %}
-      {% assign heading_text = 'content.search_results' | t %}
-    {% endif %}
+      if search.performed
+        if search.results_count > 0
+          assign heading_text = 'content.search_results_for_query' | t: terms: search.terms, count: search.results_count
+        elsif search.terms != blank
+          assign heading_text = 'content.search_results_no_results_heading' | t: terms: search.terms
+        else
+          assign heading_text = 'content.search_results' | t
+        endif
+      endif
+    %}
 
     {% capture heading_text %}
       <h3>{{ heading_text }}</h3>

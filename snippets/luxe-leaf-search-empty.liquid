@@ -1,0 +1,174 @@
+{%- doc -%}
+  Shoppable empty state for search pages with zero product results.
+
+  @param {string} terms - The search query that returned no results
+{%- enddoc -%}
+
+{%- liquid
+  assign shop_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign shop_url = collections.all.url
+  endif
+
+  assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+-%}
+
+<div class="luxe-search-empty page-width" data-testid="search-empty-state">
+  <div class="luxe-search-empty__inner">
+    <p class="luxe-search-empty__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
+      {{ 'content.search_empty_eyebrow' | t }}
+    </p>
+    <p class="luxe-search-empty__message">
+      {{ 'content.search_empty_message' | t: terms: terms }}
+    </p>
+
+    <div class="luxe-search-empty__chips" role="list" aria-label="{{ 'content.search_empty_browse_label' | t }}">
+      {%- assign types = 'green-tea|Green Tea,oolong|Oolong,pu-erh|Pu-erh,black-tea|Black Tea' | split: ',' -%}
+      {%- for entry in types -%}
+        {%- assign parts = entry | split: '|' -%}
+        {%- assign handle = parts[0] -%}
+        {%- assign title = parts[1] -%}
+        {%- assign type_collection = collections[handle] -%}
+        {%- if type_collection.url != blank -%}
+          {%- assign url = type_collection.url -%}
+        {%- else -%}
+          {%- assign url = '/collections/' | append: handle -%}
+        {%- endif -%}
+        <a class="luxe-search-empty__chip" href="{{ url }}" role="listitem">
+          {{ title }}
+        </a>
+      {%- endfor -%}
+    </div>
+
+    <div class="luxe-search-empty__actions">
+      <a
+        href="{{ shop_url }}"
+        class="button luxe-search-empty__cta"
+        title="{{ 'content.search_empty_shop_cta' | t | escape }} — free Canada-wide shipping over {{ free_ship_label }}"
+      >
+        {{ 'content.search_empty_shop_cta' | t }}
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
+      <a href="/pages/faq" class="luxe-search-empty__link">
+        {{ 'content.search_empty_faq_link' | t }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .luxe-search-empty {
+    padding-block: 32px 48px;
+  }
+
+  .luxe-search-empty__inner {
+    max-width: 36rem;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .luxe-search-empty__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: #1b4332;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .luxe-search-empty__message {
+    margin: 0;
+    color: #2d4a3e;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    max-width: 32rem;
+  }
+
+  .luxe-search-empty__chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .luxe-search-empty__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border: 1px solid rgb(27 67 50 / 0.18);
+    border-radius: 999px;
+    background: #fff;
+    color: #1b4332;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .luxe-search-empty__chip:hover,
+  .luxe-search-empty__chip:focus-visible {
+    background: #f8f6f0;
+    border-color: #1b4332;
+    transform: translateY(-1px);
+  }
+
+  .luxe-search-empty__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .luxe-search-empty__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: min(100%, 18rem);
+    padding: 14px 28px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f3d56a 0%, #c9a227 100%);
+    color: #0d2818 !important;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgb(201 162 39 / 0.35);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .luxe-search-empty__cta:hover,
+  .luxe-search-empty__cta:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgb(201 162 39 / 0.45);
+    color: #0d2818 !important;
+  }
+
+  .luxe-search-empty__link {
+    color: #1b4332;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .luxe-search-empty__link:hover,
+  .luxe-search-empty__link:focus-visible {
+    color: #0d2818;
+  }
+{% endstylesheet %}
