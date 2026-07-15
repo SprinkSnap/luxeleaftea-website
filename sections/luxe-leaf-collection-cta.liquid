@@ -1,21 +1,46 @@
+{%- liquid
+  assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+  assign shop_tea_url = section.settings.primary_link
+  if shop_tea_url == blank
+    assign shop_tea_url = routes.all_products_collection_url
+    if collections.all != blank and collections.all.url != blank
+      assign shop_tea_url = collections.all.url
+    endif
+  endif
+  assign primary_label = section.settings.primary_label | default: 'Shop all teas'
+  assign secondary_link = section.settings.secondary_link | default: '/blogs/tea-guides'
+-%}
+
 <section
   class="luxe-collection-cta section section--page-width spacing-style"
   style="{% render 'spacing-style', settings: section.settings %}"
+  aria-label="Continue shopping premium loose leaf tea"
 >
   <div class="luxe-collection-cta__box">
     <p class="luxe-collection-cta__eyebrow">{{ section.settings.eyebrow }}</p>
     <h2 class="luxe-collection-cta__heading">{{ section.settings.heading }}</h2>
     <p class="luxe-collection-cta__text">{{ section.settings.text }}</p>
     <div class="luxe-collection-cta__actions">
-      <a href="{{ section.settings.primary_link }}" class="button luxe-collection-cta__button">
-        {{ section.settings.primary_label }}
+      <a
+        href="{{ shop_tea_url }}"
+        class="button luxe-collection-cta__button"
+        title="Shop all premium loose leaf teas — free Canada-wide shipping over {{ free_ship_label }}"
+      >
+        {{ primary_label }}
       </a>
       {%- if section.settings.secondary_label != blank -%}
-        <a href="{{ section.settings.secondary_link }}" class="button button-secondary luxe-collection-cta__button-secondary">
+        <a
+          href="{{ secondary_link }}"
+          class="button button-secondary luxe-collection-cta__button-secondary"
+          title="{{ section.settings.secondary_label | escape }}"
+        >
           {{ section.settings.secondary_label }}
         </a>
       {%- endif -%}
     </div>
+    <p class="luxe-collection-cta__note">
+      Free Canada-wide shipping over {{ free_ship_label }} · Packed fresh to order · Secure checkout
+    </p>
   </div>
 </section>
 
@@ -25,52 +50,139 @@
   }
 
   .luxe-collection-cta__box {
-    padding: 36px 28px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
+    padding: 1.5rem 1.25rem 1.65rem;
+    border-radius: 1rem;
+    border: 1px solid rgb(201 162 39 / 0.4);
+    background:
+      radial-gradient(100% 120% at 50% 0%, rgb(201 162 39 / 0.2), transparent 55%),
+      linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
     color: #f8f6f0;
     text-align: center;
+    box-shadow: 0 0.85rem 2rem rgb(13 40 24 / 0.18);
   }
 
   .luxe-collection-cta__eyebrow {
-    margin: 0 0 10px;
-    color: #c9a227;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
+    margin: 0 0 0.5rem;
+    color: #f3d56a;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   .luxe-collection-cta__heading {
-    margin: 0 0 12px;
+    margin: 0 0 0.65rem;
     font-size: clamp(1.35rem, 2.5vw, 1.85rem);
     line-height: 1.2;
+    color: #f8f6f0 !important;
   }
 
   .luxe-collection-cta__text {
-    margin: 0 0 24px;
-    color: rgb(248 246 240 / 0.85);
+    margin: 0 auto 1.25rem;
+    color: rgb(248 246 240 / 0.9) !important;
     line-height: 1.6;
     max-width: 36rem;
-    margin-inline: auto;
   }
 
   .luxe-collection-cta__actions {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 0.65rem;
     justify-content: center;
+    margin-bottom: 0.85rem;
   }
 
   .luxe-collection-cta__button {
-    background: #c9a227;
-    border-color: #c9a227;
-    color: #1a1a1a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 3.15rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+    border: 2px solid #f3d56a !important;
+    color: #141414 !important;
+    -webkit-text-fill-color: #141414 !important;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.18) inset,
+      0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .luxe-collection-cta__button:hover,
+  .luxe-collection-cta__button:focus-visible {
+    filter: brightness(1.06);
+    transform: translateY(-2px);
+    color: #141414 !important;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.22) inset,
+      0 0.65rem 1.5rem rgb(201 162 39 / 0.55);
   }
 
   .luxe-collection-cta__button-secondary {
+    width: 100%;
+    min-height: 2.85rem;
+    border-radius: 999px;
     border-color: #f8f6f0 !important;
     color: #f8f6f0 !important;
     background: transparent !important;
+  }
+
+  .luxe-collection-cta__note {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: rgb(248 246 240 / 0.85) !important;
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-collection-cta__box {
+      padding: 2rem 2.25rem 2.1rem;
+    }
+
+    .luxe-collection-cta__actions {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .luxe-collection-cta__button,
+    .luxe-collection-cta__button-secondary {
+      width: auto;
+      min-width: 14rem;
+    }
+
+    .luxe-collection-cta__button {
+      min-width: 16.5rem;
+      min-height: 3.25rem;
+      font-size: 1.05rem;
+      animation: luxe-shop-cta-pulse 2.4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes luxe-shop-cta-pulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.18) inset,
+        0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.22) inset,
+        0 0.55rem 1.6rem rgb(201 162 39 / 0.62),
+        0 0 0 0.35rem rgb(201 162 39 / 0.12);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .luxe-collection-cta__button {
+      animation: none;
+    }
   }
 {% endstylesheet %}
 
@@ -87,19 +199,19 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "default": "Need help choosing?"
+      "default": "Keep shopping"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "New to premium loose leaf tea?"
+      "default": "Browse more premium loose leaf tea"
     },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
-      "default": "Read our brewing guides or explore the full collection — every tea ships with guidance and is packed fresh to order."
+      "default": "Add more tea to your bag — free Canada-wide shipping unlocks on orders over $50. Every tea ships with brewing guidance and is packed fresh to order."
     },
     {
       "type": "text",

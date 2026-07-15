@@ -181,7 +181,12 @@
     "collection_cta": {
       "type": "luxe-leaf-collection-cta",
       "settings": {
+        "eyebrow": "Keep shopping",
+        "heading": "Browse more premium loose leaf tea",
+        "text": "Add more tea to your bag — free Canada-wide shipping unlocks on orders over $50. Every tea ships with brewing guidance and is packed fresh to order.",
+        "primary_label": "Shop all teas",
         "primary_link": "shopify://collections/all",
+        "secondary_label": "Tea guides",
         "secondary_link": "/blogs/tea-guides",
         "padding-block-start": 32,
         "padding-block-end": 48
