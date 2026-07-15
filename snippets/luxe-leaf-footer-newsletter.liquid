@@ -1,13 +1,13 @@
 {%- doc -%}
-  Footer newsletter signup — Shopify customer form, conversion-focused.
+  Footer newsletter signup — high-contrast field, conversion + SEO.
 {%- enddoc -%}
 
 {%- form 'customer', id: 'LuxeFooterNewsletter', class: 'luxe-brand-footer__newsletter-form' -%}
-  <input type="hidden" name="contact[tags]" value="newsletter, footer">
+  <input type="hidden" name="contact[tags]" value="newsletter, footer, luxe-leaf-list">
 
   <div class="luxe-brand-footer__newsletter-field">
-    <label class="visually-hidden" for="LuxeFooterNewsletterEmail">
-      Email address for tea tips and harvest alerts
+    <label class="luxe-brand-footer__newsletter-label" for="LuxeFooterNewsletterEmail">
+      Email
     </label>
     <input
       id="LuxeFooterNewsletterEmail"
@@ -16,21 +16,35 @@
       name="contact[email]"
       value="{{ form.email }}"
       autocomplete="email"
+      inputmode="email"
+      enterkeyhint="send"
       autocapitalize="off"
       autocorrect="off"
-      placeholder="{{ placeholder | default: 'Your email for tea tips' }}"
+      spellcheck="false"
+      placeholder="{{ placeholder | default: 'you@email.com' }}"
       required
+      aria-required="true"
       {% if form.errors %}
         aria-invalid="true"
-        aria-describedby="LuxeFooterNewsletterError"
+        aria-describedby="LuxeFooterNewsletterHint LuxeFooterNewsletterError"
       {% elsif form.posted_successfully? %}
         aria-describedby="LuxeFooterNewsletterSuccess"
+      {% else %}
+        aria-describedby="LuxeFooterNewsletterHint"
       {% endif %}
     >
-    <button type="submit" class="button luxe-brand-footer__newsletter-btn">
+    <button
+      type="submit"
+      class="button luxe-brand-footer__newsletter-btn"
+      title="Subscribe for harvest alerts and brewing tips"
+    >
       {{ button_label | default: 'Subscribe' }}
     </button>
   </div>
+
+  <p id="LuxeFooterNewsletterHint" class="luxe-brand-footer__newsletter-hint">
+    Brewing tips, new harvests, and exclusive offers — unsubscribe anytime.
+  </p>
 
   {%- if form.errors -%}
     <p id="LuxeFooterNewsletterError" class="luxe-brand-footer__newsletter-message luxe-brand-footer__newsletter-message--error" role="alert">
