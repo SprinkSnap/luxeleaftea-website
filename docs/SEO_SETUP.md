@@ -115,6 +115,8 @@ After deploying, the homepage includes (in order):
 
 1. Trust bar
 2. Hero — single H1: **Premium Loose Leaf Tea, Packed Fresh** (brand line “Steep. Sip. Savor.” stays as eyebrow; matches OG title keyword intent)
+
+Collection pages use the same keyword pattern via `snippets/luxe-leaf-collection-seo-name.liquid` (H1, schema `name`, breadcrumbs, and document title) — e.g. **Premium Loose Leaf Green Tea**.
 3. **Featured teas** (first shoppable grid with Add to Bag)
 4. **Keep exploring** (browse rail + ItemList schema)
 5. Tea types grid

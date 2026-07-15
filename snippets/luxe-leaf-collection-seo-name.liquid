@@ -1,0 +1,28 @@
+{%- doc -%}
+  Keyword-aligned collection display/SEO name for H1, schema, breadcrumbs, and titles.
+
+  @param {object} collection - The collection object
+  @param {string} [heading_override] - Optional theme-editor heading override
+{%- enddoc -%}
+{%- liquid
+  if heading_override != blank
+    echo heading_override
+  elsif collection == blank
+    echo 'Premium Loose Leaf Tea'
+  else
+    case collection.handle
+      when 'green-tea'
+        echo 'Premium Loose Leaf Green Tea'
+      when 'oolong'
+        echo 'Premium Loose Leaf Oolong'
+      when 'pu-erh'
+        echo 'Premium Loose Leaf Pu-erh'
+      when 'black-tea'
+        echo 'Premium Loose Leaf Black Tea'
+      when 'all'
+        echo 'Premium Loose Leaf Tea'
+      else
+        echo collection.title
+    endcase
+  endif
+-%}
