@@ -377,6 +377,20 @@ export function unlockScroll(owner) {
 }
 
 /**
+ * Force-clear every scroll-lock owner (cart-drawer bridge / stuck modal recovery).
+ * Attribute-only clears can thrash with the MutationObserver while owners remain.
+ */
+export function forceUnlockAllScroll() {
+  scrollLockOwners.clear();
+  syncScrollLock();
+}
+
+// Expose for inline cart-drawer bridge (cannot import modules from liquid IIFE)
+if (typeof window !== 'undefined') {
+  window.__themeForceUnlockScroll = forceUnlockAllScroll;
+}
+
+/**
  * Check if the click is outside the element.
  * @param {MouseEvent} event The mouse event.
  * @param {Element} element The element to check.

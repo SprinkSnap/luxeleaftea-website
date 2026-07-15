@@ -1926,6 +1926,35 @@ html.luxe-chat-open body {
   border-color: rgb(var(--luxe-gold-rgb, 201 162 39) / 0.25);
 }
 
+/* While cart drawer is open: contain overscroll so edge-swipe cannot freeze the page */
+html.luxe-cart-drawer-open {
+  overscroll-behavior: none;
+}
+
+html.luxe-cart-drawer-open body {
+  overscroll-behavior: none;
+}
+
+/* Mobile modal mode only — desktop drawer is non-modal inside .page-wrapper */
+@media screen and (max-width: 989px) {
+  html.luxe-cart-drawer-open .page-wrapper {
+    overscroll-behavior: none;
+    touch-action: none;
+  }
+}
+
+#cart-drawer .theme-drawer__dialog {
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+
+#cart-drawer .cart-drawer__content,
+#cart-drawer .cart-drawer__inner {
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 html.luxe-cart-drawer-open .luxe-shipping-nudge,
 html.luxe-cart-drawer-open [data-mobile-shop-bar],
 html.luxe-menu-open .luxe-shipping-nudge,

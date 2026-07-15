@@ -29,8 +29,36 @@
       }
 
       function clearStuckLock() {
-        document.documentElement.removeAttribute('scroll-lock');
+        if (typeof window.__themeForceUnlockScroll === 'function') {
+          window.__themeForceUnlockScroll();
+        } else {
+          document.documentElement.removeAttribute('scroll-lock');
+        }
         document.documentElement.classList.remove('luxe-cart-drawer-open');
+      }
+
+      var historyPushed = false;
+      var ignorePopState = false;
+
+      function pushDrawerHistory() {
+        if (historyPushed) return;
+        try {
+          history.pushState({ luxeCartDrawer: 1 }, '', location.href);
+          historyPushed = true;
+        } catch (e) {}
+      }
+
+      function popDrawerHistory() {
+        if (!historyPushed) return;
+        historyPushed = false;
+        if (history.state && history.state.luxeCartDrawer) {
+          ignorePopState = true;
+          try {
+            history.back();
+          } catch (e) {
+            ignorePopState = false;
+          }
+        }
       }
 
       function isDrawerOpen(drawer) {
@@ -243,75 +271,43 @@
         closeCartDrawer(evt);
       });
 
-      /* Swipe drawer to the right to close (same intent as the X). */
-      (function initSwipeToClose() {
-        var startX = 0;
-        var startY = 0;
-        var tracking = false;
-        var decided = false;
-        var horizontal = false;
+      /*
+        Swipe-to-close REMOVED: calling forceCloseDrawer() mid-touchmove tore down
+        the modal dialog under an active finger and left scroll-lock / pointer half-state
+        (site frozen until a second tap). Close via X, backdrop, Escape, or edge-back.
+      */
 
-        function onTouchStart(evt) {
-          var drawer = document.getElementById('cart-drawer');
-          if (!drawer || !isDrawerOpen(drawer) || !evt.touches || !evt.touches[0]) return;
-
-          var target = evt.target;
-          if (!(target instanceof Element)) return;
-          if (target.closest(OPEN_TRIGGER)) return;
-          if (target.closest('input, textarea, select, [contenteditable="true"]')) return;
-
-          var dialog = drawer.querySelector('dialog');
-          if (!dialog || !dialog.contains(target)) return;
-
-          startX = evt.touches[0].clientX;
-          startY = evt.touches[0].clientY;
-          tracking = true;
-          decided = false;
-          horizontal = false;
+      // Edge swipe-back while the cart is open → close drawer only (no page leave / freeze)
+      window.addEventListener('popstate', function () {
+        if (ignorePopState) {
+          ignorePopState = false;
+          return;
         }
 
-        function onTouchMove(evt) {
-          if (!tracking || !evt.touches || !evt.touches[0]) return;
-
-          var dx = evt.touches[0].clientX - startX;
-          var dy = evt.touches[0].clientY - startY;
-
-          if (!decided) {
-            if (Math.abs(dx) < 14 && Math.abs(dy) < 14) return;
-            decided = true;
-            horizontal = Math.abs(dx) > Math.abs(dy) * 1.25;
-          }
-
-          if (horizontal && dx > 80) {
-            tracking = false;
-            forceCloseDrawer();
-          }
+        var drawer = document.getElementById('cart-drawer');
+        if (drawer && isDrawerOpen(drawer)) {
+          historyPushed = false;
+          forceCloseDrawer();
         }
-
-        function onTouchEnd() {
-          tracking = false;
-          decided = false;
-          horizontal = false;
-        }
-
-        document.addEventListener('touchstart', onTouchStart, { passive: true, capture: true });
-        document.addEventListener('touchmove', onTouchMove, { passive: true, capture: true });
-        document.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
-        document.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
-      })();
+      });
 
       window.addEventListener('pagehide', function () {
+        historyPushed = false;
         forceCloseDrawer();
         clearStuckLock();
       });
 
       document.addEventListener('theme-drawer:open', function (evt) {
-        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') syncDrawerChrome(true);
+        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
+          syncDrawerChrome(true);
+          pushDrawerHistory();
+        }
       });
       document.addEventListener('theme-drawer:close', function (evt) {
         if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
           syncDrawerChrome(false);
           clearStuckLock();
+          popDrawerHistory();
         }
       });
 
