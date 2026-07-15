@@ -97,69 +97,76 @@
   </div>
 
   <div class="luxe-brand-footer__main section section--page-width">
+    {%- comment -%}
+      Desktop = stacked rows (brand → nav → help) for a full-width clean scan.
+      Mobile keeps brand, then accordion Shop / Learn / Legal, then help.
+      open by default so crawlers always see sitemap links.
+    {%- endcomment -%}
     <div class="luxe-brand-footer__layout">
-      <div class="luxe-brand-footer__brand">
-        <a
-          href="{{ routes.root_url }}"
-          class="luxe-brand-footer__logo-link"
-          title="{{ shop.name | escape }} — premium loose leaf tea home"
-          aria-label="{{ shop.name | escape }} home — shop premium loose leaf tea"
-        >
-          <span class="luxe-brand-footer__logo-plate">
-            {% render 'luxe-leaf-tea-logo',
-              class: 'luxe-brand-footer__logo',
-              logo_height: 56,
-              logo_height_mobile: 48,
-              alt: shop.name | append: ' — premium Canada-wide loose leaf tea'
-            %}
-          </span>
-          <span class="luxe-brand-footer__logo-wordmark">
-            <span class="luxe-brand-footer__logo-name">{{ shop.name }}</span>
-            <span class="luxe-brand-footer__logo-tag">Premium loose leaf tea · Canada-wide shipping</span>
-          </span>
-        </a>
-        {%- if brand_blurb != blank -%}
-          <p class="luxe-brand-footer__blurb">{{ brand_blurb }}</p>
-        {%- endif -%}
-        <p class="luxe-brand-footer__brand-cta">
-          <a href="{{ shop_tea_url }}" class="luxe-brand-footer__brand-shop" title="Shop all premium loose leaf tea">
-            Shop Tea →
+      <div class="luxe-brand-footer__brand luxe-brand-footer__row">
+        <div class="luxe-brand-footer__brand-identity">
+          <a
+            href="{{ routes.root_url }}"
+            class="luxe-brand-footer__logo-link"
+            title="{{ shop.name | escape }} — premium loose leaf tea home"
+            aria-label="{{ shop.name | escape }} home — shop premium loose leaf tea"
+          >
+            <span class="luxe-brand-footer__logo-plate">
+              {% render 'luxe-leaf-tea-logo',
+                class: 'luxe-brand-footer__logo',
+                logo_height: 56,
+                logo_height_mobile: 48,
+                alt: shop.name | append: ' — premium Canada-wide loose leaf tea'
+              %}
+            </span>
+            <span class="luxe-brand-footer__logo-wordmark">
+              <span class="luxe-brand-footer__logo-name">{{ shop.name }}</span>
+              <span class="luxe-brand-footer__logo-tag">Premium loose leaf tea · Canada-wide shipping</span>
+            </span>
           </a>
-        </p>
+        </div>
 
-        {%- if instagram_url != blank or facebook_url != blank -%}
-          <nav class="luxe-brand-footer__social-nav" aria-label="Follow Luxe Leaf Tea">
-            {%- if instagram_url != blank -%}
-              <a
-                href="{{ instagram_url }}"
-                class="luxe-brand-footer__social-link"
-                rel="noopener noreferrer"
-                target="_blank"
-                title="Follow Luxe Leaf Tea on Instagram"
-              >
-                Instagram
+        <div class="luxe-brand-footer__brand-copy">
+          {%- if brand_blurb != blank -%}
+            <p class="luxe-brand-footer__blurb">{{ brand_blurb }}</p>
+          {%- endif -%}
+          <div class="luxe-brand-footer__brand-actions">
+            <p class="luxe-brand-footer__brand-cta">
+              <a href="{{ shop_tea_url }}" class="luxe-brand-footer__brand-shop" title="Shop all premium loose leaf tea">
+                Shop Tea →
               </a>
+            </p>
+            {%- if instagram_url != blank or facebook_url != blank -%}
+              <nav class="luxe-brand-footer__social-nav" aria-label="Follow Luxe Leaf Tea">
+                {%- if instagram_url != blank -%}
+                  <a
+                    href="{{ instagram_url }}"
+                    class="luxe-brand-footer__social-link"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    title="Follow Luxe Leaf Tea on Instagram"
+                  >
+                    Instagram
+                  </a>
+                {%- endif -%}
+                {%- if facebook_url != blank -%}
+                  <a
+                    href="{{ facebook_url }}"
+                    class="luxe-brand-footer__social-link"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    title="Follow Luxe Leaf Tea on Facebook"
+                  >
+                    Facebook
+                  </a>
+                {%- endif -%}
+              </nav>
             {%- endif -%}
-            {%- if facebook_url != blank -%}
-              <a
-                href="{{ facebook_url }}"
-                class="luxe-brand-footer__social-link"
-                rel="noopener noreferrer"
-                target="_blank"
-                title="Follow Luxe Leaf Tea on Facebook"
-              >
-                Facebook
-              </a>
-            {%- endif -%}
-          </nav>
-        {%- endif -%}
+          </div>
+        </div>
       </div>
 
-      <div class="luxe-brand-footer__columns">
-        {%- comment -%}
-          open by default so crawlers (and desktop) always see sitemap links.
-          Mobile JS collapses accordions for a compact conversion layout.
-        {%- endcomment -%}
+      <div class="luxe-brand-footer__columns luxe-brand-footer__row" aria-label="Footer sitemap">
         <nav class="luxe-brand-footer__nav-col" aria-labelledby="footer-shop-heading">
           <details class="luxe-brand-footer__accordion" data-footer-accordion open>
             <summary class="luxe-brand-footer__heading">
@@ -217,12 +224,13 @@
             </div>
           </details>
         </nav>
+      </div>
 
-        <div class="luxe-brand-footer__help">
+      <div class="luxe-brand-footer__help luxe-brand-footer__row">
+        <div class="luxe-brand-footer__help-contact">
           <h2 class="luxe-brand-footer__heading luxe-brand-footer__heading--static">
             <span class="luxe-brand-footer__heading-text">Get help</span>
           </h2>
-
           <ul class="luxe-brand-footer__contact list-unstyled" role="list">
             {%- if brand_phone != blank -%}
               <li>
@@ -256,30 +264,29 @@
               </li>
             {%- endif -%}
           </ul>
-
           {%- if response_time != blank -%}
             <p class="luxe-brand-footer__response">{{ response_time }}</p>
           {%- endif -%}
-
-          {%- if show_newsletter -%}
-            <div class="luxe-brand-footer__newsletter" style="color: #f8f6f0;">
-              <h3 class="luxe-brand-footer__newsletter-heading" style="color: #f8f6f0 !important;">
-                {{ newsletter_heading }}
-              </h3>
-              <p
-                class="luxe-brand-footer__newsletter-copy luxe-text-cream"
-                style="--color: #f8f6f0; --color-rgb: 248 246 240; color: #f8f6f0 !important;"
-              >
-                {{ newsletter_copy }}
-              </p>
-              {% render 'luxe-leaf-footer-newsletter',
-                placeholder: newsletter_placeholder,
-                button_label: newsletter_button_label,
-                success_message: newsletter_success_message
-              %}
-            </div>
-          {%- endif -%}
         </div>
+
+        {%- if show_newsletter -%}
+          <div class="luxe-brand-footer__newsletter" style="color: #f8f6f0;">
+            <h3 class="luxe-brand-footer__newsletter-heading" style="color: #f8f6f0 !important;">
+              {{ newsletter_heading }}
+            </h3>
+            <p
+              class="luxe-brand-footer__newsletter-copy luxe-text-cream"
+              style="--color: #f8f6f0; --color-rgb: 248 246 240; color: #f8f6f0 !important;"
+            >
+              {{ newsletter_copy }}
+            </p>
+            {% render 'luxe-leaf-footer-newsletter',
+              placeholder: newsletter_placeholder,
+              button_label: newsletter_button_label,
+              success_message: newsletter_success_message
+            %}
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </div>

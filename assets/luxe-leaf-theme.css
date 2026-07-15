@@ -2307,13 +2307,27 @@ body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
 
 .luxe-brand-footer__layout {
   display: grid;
-  gap: 1.75rem;
+  gap: 1.5rem;
 }
 
 .luxe-brand-footer__brand {
   display: grid;
   gap: 0.85rem;
   justify-items: start;
+}
+
+.luxe-brand-footer__brand-identity,
+.luxe-brand-footer__brand-copy,
+.luxe-brand-footer__brand-actions {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.luxe-brand-footer__help-contact {
+  display: grid;
+  gap: 0.65rem;
+  min-width: 0;
 }
 
 .luxe-brand-footer__logo-link {
@@ -2795,13 +2809,43 @@ body.luxe-leaf-theme .luxe-brand-footer__logo {
   }
 
   .luxe-brand-footer__main {
-    padding: 2.25rem 1.5rem 1.75rem;
+    padding: 2.5rem 1.5rem 2rem;
   }
 
+  /* Full-width stacked rows: brand → sitemap → help */
   .luxe-brand-footer__layout {
-    grid-template-columns: minmax(16rem, 1.15fr) minmax(0, 2fr);
-    gap: 2.5rem;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+
+  .luxe-brand-footer__row {
+    width: 100%;
+  }
+
+  .luxe-brand-footer__brand {
+    grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+    gap: 1.75rem 2.5rem;
+    align-items: center;
+    padding: 0 0 1.75rem;
+    border-bottom: 1px solid rgb(248 246 240 / 0.12);
+    justify-items: stretch;
+  }
+
+  .luxe-brand-footer__brand-copy {
+    gap: 0.85rem;
+  }
+
+  .luxe-brand-footer__brand-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.1rem;
+  }
+
+  .luxe-brand-footer__blurb {
+    max-width: 40rem;
   }
 
   .luxe-brand-footer__logo-link {
@@ -2829,42 +2873,48 @@ body.luxe-leaf-theme .luxe-brand-footer__logo {
   }
 
   .luxe-brand-footer__columns {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.1rem 1.25rem;
-    align-items: stretch;
-  }
-
-  .luxe-brand-footer__help {
-    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    align-items: start;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid rgb(248 246 240 / 0.12);
   }
 
   .luxe-brand-footer__nav-col {
     position: relative;
-    padding: 1.15rem 1.1rem 1.25rem;
-    border-radius: 1rem;
-    border: 1px solid rgb(248 246 240 / 0.12);
-    background:
-      linear-gradient(165deg, rgb(248 246 240 / 0.07) 0%, rgb(13 40 24 / 0.35) 100%),
-      radial-gradient(120% 90% at 0% 0%, rgb(201 162 39 / 0.14), transparent 55%);
-    box-shadow: inset 0 1px 0 rgb(248 246 240 / 0.06);
-    overflow: hidden;
-    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    padding: 0 1.35rem;
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+    transition: none;
+  }
+
+  .luxe-brand-footer__nav-col:first-child {
+    padding-left: 0;
+  }
+
+  .luxe-brand-footer__nav-col:last-child {
+    padding-right: 0;
+  }
+
+  .luxe-brand-footer__nav-col + .luxe-brand-footer__nav-col {
+    border-left: 1px solid rgb(248 246 240 / 0.12);
   }
 
   .luxe-brand-footer__nav-col::before {
-    content: '';
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 3px;
-    background: linear-gradient(180deg, #e4c76b 0%, #c9a227 45%, rgb(201 162 39 / 0.25) 100%);
+    display: none;
   }
 
   .luxe-brand-footer__nav-col:hover {
-    border-color: rgb(201 162 39 / 0.35);
-    transform: translateY(-2px);
-    box-shadow:
-      inset 0 1px 0 rgb(248 246 240 / 0.08),
-      0 0.75rem 1.5rem rgb(0 0 0 / 0.18);
+    border-color: transparent;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .luxe-brand-footer__nav-col + .luxe-brand-footer__nav-col:hover {
+    border-left-color: rgb(248 246 240 / 0.12);
   }
 
   .luxe-brand-footer__accordion {
@@ -2881,14 +2931,14 @@ body.luxe-leaf-theme .luxe-brand-footer__logo {
   .luxe-brand-footer__accordion .luxe-brand-footer__list,
   .luxe-brand-footer__accordion .luxe-brand-footer__legal-links .luxe-brand-footer__list {
     display: grid !important;
-    gap: 0.15rem;
+    gap: 0.1rem;
     margin-bottom: 0;
   }
 
   .luxe-brand-footer__accordion summary {
     pointer-events: none;
     cursor: default;
-    padding: 0 0 0.75rem;
+    padding: 0 0 0.65rem;
   }
 
   .luxe-brand-footer__accordion summary::after {
@@ -2897,9 +2947,13 @@ body.luxe-leaf-theme .luxe-brand-footer__logo {
 
   .luxe-brand-footer__heading {
     position: relative;
-    padding-bottom: 0.7rem;
-    font-size: 1.05rem;
-    letter-spacing: 0.04em;
+    padding: 0 0 0.65rem;
+    font-size: 0.78rem;
+    font-family: var(--font-body--family), 'Source Sans 3', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #e4c76b;
   }
 
   .luxe-brand-footer__heading::after {
@@ -2907,48 +2961,75 @@ body.luxe-leaf-theme .luxe-brand-footer__logo {
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 2.25rem;
+    width: 1.75rem;
     height: 2px;
     border-radius: 999px;
     background: linear-gradient(90deg, #e4c76b, rgb(201 162 39 / 0.15));
   }
 
-  .luxe-brand-footer__heading--static::after {
-    display: none;
-  }
-
   .luxe-brand-footer__nav-body {
-    padding: 0;
-    animation: luxe-footer-col-in 0.45s ease both;
+    padding: 0.85rem 0 0;
+    animation: luxe-footer-col-in 0.4s ease both;
   }
 
   .luxe-brand-footer__col-intro {
-    margin-bottom: 0.85rem;
-    max-width: 16rem;
+    margin-bottom: 0.75rem;
+    max-width: 18rem;
+    font-size: 0.78rem;
   }
 
   .luxe-brand-footer__list a {
-    min-height: 2.35rem;
-    padding-block: 0.2rem;
-    padding-inline: 0.15rem 0;
-    border-radius: 0.4rem;
-    font-size: 0.9rem;
+    min-height: 2.15rem;
+    padding-block: 0.15rem;
+    padding-inline: 0;
+    border-radius: 0;
+    font-size: 0.9375rem;
   }
 
   .luxe-brand-footer__list a:not(.luxe-brand-footer__shop-cta):hover,
   .luxe-brand-footer__list a:not(.luxe-brand-footer__shop-cta):focus-visible {
     color: #f3d56a !important;
-    padding-left: 0.4rem;
-    background: rgb(248 246 240 / 0.05);
+    padding-left: 0.25rem;
+    background: transparent;
   }
 
   .luxe-brand-footer__shop-cta {
-    width: 100%;
-    margin-bottom: 0.5rem;
+    width: auto;
+    max-width: 100%;
+    margin-bottom: 0.4rem;
+    min-height: 2.55rem !important;
+    padding-inline: 1rem !important;
   }
 
   .luxe-brand-footer__list .luxe-brand-footer__policy-link {
-    min-height: 2.25rem;
+    min-height: 2.15rem;
+  }
+
+  .luxe-brand-footer__help {
+    display: grid;
+    grid-template-columns: minmax(14rem, 0.9fr) minmax(0, 1.35fr);
+    gap: 1.5rem 2.25rem;
+    align-items: start;
+    padding: 1.75rem 0 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .luxe-brand-footer__help .luxe-brand-footer__heading {
+    padding-bottom: 0.65rem;
+  }
+
+  .luxe-brand-footer__contact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin: 0;
+  }
+
+  .luxe-brand-footer__newsletter {
+    margin-top: 0;
+    padding: 1.15rem 1.25rem;
   }
 
   .luxe-brand-footer__newsletter-field {
@@ -2984,33 +3065,37 @@ body.luxe-leaf-theme .luxe-brand-footer__logo {
 }
 
 @media screen and (min-width: 990px) {
+  .luxe-brand-footer__brand {
+    grid-template-columns: minmax(18rem, 24rem) minmax(0, 1fr);
+    gap: 2rem 3rem;
+  }
+
   .luxe-brand-footer__columns {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem 1.15rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .luxe-brand-footer__nav-col {
+    padding: 0 1.75rem;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .luxe-brand-footer__brand {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.15rem;
+  }
+
+  .luxe-brand-footer__columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .luxe-brand-footer__help {
-    grid-column: auto;
-    padding: 1.15rem 1.1rem 1.25rem;
-    border-radius: 1rem;
-    border: 1px solid rgb(248 246 240 / 0.12);
-    background:
-      linear-gradient(165deg, rgb(248 246 240 / 0.05) 0%, rgb(13 40 24 / 0.4) 100%);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
   }
 
-  .luxe-brand-footer__help .luxe-brand-footer__heading {
-    padding-bottom: 0.7rem;
-  }
-
-  .luxe-brand-footer__help .luxe-brand-footer__heading::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 2.25rem;
-    height: 2px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #e4c76b, rgb(201 162 39 / 0.15));
+  .luxe-brand-footer__contact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
