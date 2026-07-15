@@ -16,8 +16,9 @@
       "settings": {
         "policy_kind": "shipping",
         "show_toc": true,
-        "cta_text": "Order premium loose leaf tea — free Canada-wide shipping on orders over $50.",
-        "cta_note": "Packed fresh in 1–2 business days · Tracking included",
+        "cta_text": "Add more tea to your cart and unlock free Canada-wide shipping on orders over $50.",
+        "cta_note": "Browse collections · Add to bag · Unlock free shipping at $50",
+        "cta_primary_label": "Shop tea for free shipping",
         "padding-block-start": 24,
         "padding-block-end": 56
       }

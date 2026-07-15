@@ -120,7 +120,7 @@ body .button:not(.button-unstyled):hover {
   transform: translateY(-1px);
 }
 
-body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout) {
+body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn) {
   background: var(--luxe-jade);
   border-color: var(--luxe-jade);
   color: #fff;
@@ -143,6 +143,17 @@ body .luxe-mobile-bar__checkout {
   border-color: var(--luxe-gold) !important;
   color: var(--luxe-ink) !important;
 }
+
+body .luxe-policy-page__cta-primary,
+body .luxe-policy-page__ship-cta-btn,
+body .luxe-policy-page__sidebar-shop {
+  background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+  border: 2px solid #f3d56a !important;
+  color: #141414 !important;
+  -webkit-text-fill-color: #141414 !important;
+  font-weight: 800;
+}
+
 
 body .luxe-hero__button--secondary {
   background: transparent !important;

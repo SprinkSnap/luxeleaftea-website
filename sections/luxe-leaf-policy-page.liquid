@@ -64,6 +64,9 @@
   assign cta_primary_link = section.settings.cta_primary_link | default: shop_tea_url
   assign cta_secondary_label = section.settings.cta_secondary_label
   assign cta_secondary_link = section.settings.cta_secondary_link | default: faq_url
+  assign cta_band_text = section.settings.cta_text
+  assign cta_band_note = section.settings.cta_note
+  assign cta_band_eyebrow = blank
   assign show_toc = section.settings.show_toc
 
   case policy_kind
@@ -95,12 +98,22 @@
         assign page_intro = 'Free Canada-wide shipping on orders over ' | append: free_ship_label | append: '. Standard Canada-wide shipping from ' | append: standard_ship_label | append: '. Packed fresh within 1–2 business days — tracking included.'
       endif
       if cta_primary_label == section.settings.cta_primary_label or cta_primary_label == blank
-        assign cta_primary_label = 'Shop for free shipping'
+        assign cta_primary_label = 'Shop tea for free shipping'
         assign cta_primary_link = shop_tea_url
       endif
       if cta_secondary_label == section.settings.cta_secondary_label or cta_secondary_label == blank
         assign cta_secondary_label = 'Shipping FAQ'
         assign cta_secondary_link = faq_url
+      endif
+      if section.settings.cta_text == blank or section.settings.cta_text == 'Shop premium loose leaf tea with clear policies and secure checkout.' or section.settings.cta_text == 'Order premium loose leaf tea — free Canada-wide shipping on orders over $50.'
+        assign cta_band_text = 'Add more tea to your cart and unlock free Canada-wide shipping on orders over ' | append: free_ship_label | append: '.'
+      else
+        assign cta_band_text = section.settings.cta_text
+      endif
+      assign cta_band_eyebrow = 'Free shipping over ' | append: free_ship_label
+      assign cta_band_note = section.settings.cta_note
+      if cta_band_note == blank or cta_band_note == 'Secure checkout · Free Canada-wide shipping over $50 · Packed fresh to order'
+        assign cta_band_note = 'Browse collections · Add to bag · Unlock free shipping at ' | append: free_ship_label
       endif
     when 'privacy'
       if page_intro == section.settings.intro or page_intro == blank
@@ -189,6 +202,27 @@
     {%- endcase -%}
   </div>
 
+  {%- if policy_kind == 'shipping' -%}
+    <aside
+      class="luxe-policy-page__ship-cta"
+      aria-label="Unlock free Canada-wide shipping"
+    >
+      <div class="luxe-policy-page__ship-cta-copy">
+        <p class="luxe-policy-page__ship-cta-eyebrow">{{ cta_band_eyebrow }}</p>
+        <p class="luxe-policy-page__ship-cta-text">
+          Browse more tea and add to bag — build your cart over {{ free_ship_label }} for free Canada-wide shipping.
+        </p>
+      </div>
+      <a
+        href="{{ shop_tea_url }}"
+        class="button luxe-policy-page__ship-cta-btn"
+        title="Shop premium loose leaf tea to unlock free Canada-wide shipping over {{ free_ship_label }}"
+      >
+        Shop tea for free shipping
+      </a>
+    </aside>
+  {%- endif -%}
+
   {%- if show_toc and use_admin_body == false and use_page_body == false -%}
     <nav class="luxe-policy-page__toc" aria-label="On this page">
       <p class="luxe-policy-page__toc-label">On this page</p>
@@ -257,21 +291,42 @@
           </div>
         </div>
 
-        <div class="luxe-policy-page__sidebar-cta">
-          <p class="luxe-policy-page__sidebar-cta-text">{{ section.settings.sidebar_cta_text }}</p>
-          <a href="{{ shop_tea_url }}" class="button luxe-policy-page__sidebar-shop">
-            {{ section.settings.sidebar_shop_label }}
-          </a>
+        <div class="luxe-policy-page__sidebar-cta{% if policy_kind == 'shipping' %} luxe-policy-page__sidebar-cta--shipping{% endif %}">
+          {%- if policy_kind == 'shipping' -%}
+            <p class="luxe-policy-page__sidebar-cta-eyebrow">{{ cta_band_eyebrow }}</p>
+            <p class="luxe-policy-page__sidebar-cta-text">
+              Add tea to your bag until you hit {{ free_ship_label }} — free Canada-wide shipping unlocks automatically.
+            </p>
+            <a
+              href="{{ shop_tea_url }}"
+              class="button luxe-policy-page__sidebar-shop"
+              title="Shop premium loose leaf tea to unlock free Canada-wide shipping"
+            >
+              Shop for free shipping
+            </a>
+          {%- else -%}
+            <p class="luxe-policy-page__sidebar-cta-text">{{ section.settings.sidebar_cta_text }}</p>
+            <a href="{{ shop_tea_url }}" class="button luxe-policy-page__sidebar-shop" title="Shop all premium loose leaf tea">
+              {{ section.settings.sidebar_shop_label }}
+            </a>
+          {%- endif -%}
         </div>
       </aside>
     {%- endif -%}
   </div>
 
   {%- if cta_primary_label != blank -%}
-    <div class="luxe-policy-page__cta">
-      <p class="luxe-policy-page__cta-text">{{ section.settings.cta_text }}</p>
+    <div class="luxe-policy-page__cta{% if policy_kind == 'shipping' %} luxe-policy-page__cta--shipping{% endif %}">
+      {%- if cta_band_eyebrow != blank -%}
+        <p class="luxe-policy-page__cta-eyebrow">{{ cta_band_eyebrow }}</p>
+      {%- endif -%}
+      <p class="luxe-policy-page__cta-text">{{ cta_band_text }}</p>
       <div class="luxe-policy-page__cta-actions">
-        <a href="{{ cta_primary_link }}" class="button luxe-policy-page__cta-primary">
+        <a
+          href="{{ cta_primary_link }}"
+          class="button luxe-policy-page__cta-primary"
+          title="{% if policy_kind == 'shipping' %}Shop premium loose leaf tea to unlock free Canada-wide shipping over {{ free_ship_label }}{% else %}{{ cta_primary_label | escape }}{% endif %}"
+        >
           {{ cta_primary_label }}
         </a>
         {%- if cta_secondary_label != blank -%}
@@ -280,7 +335,9 @@
           </a>
         {%- endif -%}
       </div>
-      <p class="luxe-policy-page__cta-note">{{ section.settings.cta_note }}</p>
+      {%- if cta_band_note != blank -%}
+        <p class="luxe-policy-page__cta-note">{{ cta_band_note }}</p>
+      {%- endif -%}
     </div>
   {%- endif -%}
 </section>
@@ -586,21 +643,95 @@
     color: rgb(27 67 50 / 0.85);
   }
 
+  .luxe-policy-page__sidebar-cta--shipping .luxe-policy-page__sidebar-cta-text {
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__ship-cta {
+    display: grid;
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+    padding: 1.15rem 1.2rem 1.25rem;
+    border-radius: 1rem;
+    border: 1px solid rgb(201 162 39 / 0.45);
+    background:
+      radial-gradient(120% 140% at 0% 0%, rgb(201 162 39 / 0.22), transparent 55%),
+      linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
+    color: #f8f6f0;
+    box-shadow: 0 0.75rem 1.75rem rgb(13 40 24 / 0.18);
+  }
+
+  .luxe-policy-page__ship-cta-eyebrow,
+  .luxe-policy-page__cta-eyebrow,
+  .luxe-policy-page__sidebar-cta-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f3d56a !important;
+  }
+
+  .luxe-policy-page__ship-cta-text {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 600;
+    color: #f8f6f0 !important;
+  }
+
+  .luxe-policy-page__ship-cta-btn,
+  .luxe-policy-page__cta-primary,
   .luxe-policy-page__sidebar-shop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    min-height: 2.75rem;
+    min-height: 3.15rem;
+    padding: 0.85rem 1.4rem;
     border-radius: 999px;
-    background: #1b4332;
-    border-color: #1b4332;
+    background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+    border: 2px solid #f3d56a !important;
+    color: #141414 !important;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.18) inset,
+      0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .luxe-policy-page__ship-cta-btn:hover,
+  .luxe-policy-page__ship-cta-btn:focus-visible,
+  .luxe-policy-page__cta-primary:hover,
+  .luxe-policy-page__cta-primary:focus-visible,
+  .luxe-policy-page__sidebar-shop:hover,
+  .luxe-policy-page__sidebar-shop:focus-visible {
+    filter: brightness(1.06);
+    transform: translateY(-2px);
+    color: #141414 !important;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.22) inset,
+      0 0.65rem 1.5rem rgb(201 162 39 / 0.55);
   }
 
   .luxe-policy-page__cta {
     margin-top: 1.75rem;
-    padding: 1.5rem;
-    border-radius: 0.85rem;
+    padding: 1.5rem 1.25rem 1.6rem;
+    border-radius: 1rem;
     background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
     color: #f8f6f0;
     text-align: center;
+  }
+
+  .luxe-policy-page__cta--shipping {
+    border: 1px solid rgb(201 162 39 / 0.4);
+    box-shadow: 0 0.85rem 2rem rgb(13 40 24 / 0.2);
+    background:
+      radial-gradient(100% 120% at 50% 0%, rgb(201 162 39 / 0.2), transparent 55%),
+      linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
   }
 
   .luxe-policy-page__cta-text {
@@ -610,24 +741,25 @@
     color: #f8f6f0 !important;
   }
 
+  .luxe-policy-page__cta--shipping .luxe-policy-page__cta-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
   .luxe-policy-page__cta-actions {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 0.65rem;
     justify-content: center;
     margin-bottom: 0.75rem;
   }
 
-  .luxe-policy-page__cta-primary {
-    min-height: 2.75rem;
-    border-radius: 999px;
-    background: #c9a227;
-    border-color: #c9a227;
-    color: #1a1a1a !important;
-  }
-
   .luxe-policy-page__cta-secondary {
-    min-height: 2.75rem;
+    width: 100%;
+    min-height: 2.85rem;
     border-radius: 999px;
     border: 1.5px solid rgb(248 246 240 / 0.85) !important;
     background: transparent !important;
@@ -645,6 +777,70 @@
     font-size: 0.75rem;
     letter-spacing: 0.04em;
     color: rgb(248 246 240 / 0.85) !important;
+  }
+
+  .luxe-policy-page__sidebar-cta--shipping {
+    border-color: rgb(201 162 39 / 0.45);
+    background:
+      radial-gradient(120% 120% at 0% 0%, rgb(201 162 39 / 0.18), transparent 55%),
+      #102a1c;
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-policy-page__ship-cta {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1.25rem 1.75rem;
+      padding: 1.35rem 1.5rem;
+    }
+
+    .luxe-policy-page__ship-cta-btn {
+      width: auto;
+      min-width: 16.5rem;
+      min-height: 3.25rem;
+      font-size: 1.05rem;
+      animation: luxe-policy-cta-pulse 2.4s ease-in-out infinite;
+    }
+
+    .luxe-policy-page__cta-actions {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .luxe-policy-page__cta-primary,
+    .luxe-policy-page__cta-secondary {
+      width: auto;
+      min-width: 14rem;
+    }
+
+    .luxe-policy-page__cta--shipping .luxe-policy-page__cta-primary {
+      min-width: 18rem;
+      min-height: 3.35rem;
+      font-size: 1.0625rem;
+      animation: luxe-policy-cta-pulse 2.4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes luxe-policy-cta-pulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.18) inset,
+        0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.22) inset,
+        0 0.55rem 1.6rem rgb(201 162 39 / 0.62),
+        0 0 0 0.35rem rgb(201 162 39 / 0.12);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .luxe-policy-page__ship-cta-btn,
+    .luxe-policy-page__cta--shipping .luxe-policy-page__cta-primary {
+      animation: none;
+    }
   }
 {% endstylesheet %}
 
