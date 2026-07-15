@@ -497,10 +497,6 @@
               </div>
             {% endif %}
 
-            {% comment %}
-              Mobile Sort lives next to Filters in the facade — keep the drawer for facets only
-              so we do not duplicate sort input IDs.
-            {% endcomment %}
           </scroll-hint>
         </form>
       </facets-form-component>
@@ -642,10 +638,33 @@
     align-items: center;
     gap: var(--gap-sm);
     justify-content: flex-end;
+    min-width: 0;
+    flex: 1;
   }
 
   .facets-mobile-wrapper--multiple-controls {
     justify-content: space-between;
+  }
+
+  /* Filter + Sort row: keep Sort readable without crowding the Filter control */
+  .facets-toggle:not(.facets-toggle--no-filters) .facets-mobile-wrapper {
+    justify-content: flex-end;
+  }
+
+  .facets-toggle .sorting-filter__select-wrapper {
+    @media screen and (max-width: 749px) {
+      max-width: 11.5rem;
+      min-height: var(--minimum-touch-target);
+      border: 1px solid rgb(var(--color-foreground-rgb) / 0.16);
+      background: rgb(var(--color-background-rgb) / 0.85);
+    }
+  }
+
+  .facets-toggle .sorting-filter__container .sorting-filter__select {
+    @media screen and (max-width: 749px) {
+      font-size: var(--font-paragraph--size);
+      font-weight: 600;
+    }
   }
 
   .facets {
