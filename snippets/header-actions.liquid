@@ -137,10 +137,13 @@
   {% endif %}
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
-    <a
-      href="{{ routes.cart_url }}"
+    {% comment %}
+      Button (not link) so the first tap cannot navigate to /cart while the drawer
+      is still upgrading — that race froze the page and forced a double-tap.
+    {% endcomment %}
+    <button
+      type="button"
       class="header-actions__action button-unstyled{% if display_style == 'text' %} header-actions__text-style{% endif %}"
-      role="button"
       data-luxe-open-cart
       aria-haspopup="dialog"
       aria-expanded="false"
@@ -150,7 +153,7 @@
       data-testid="cart-drawer-trigger"
     >
       {{ cart_icon }}
-    </a>
+    </button>
   {% else %}
     <a
       href="{{ routes.cart_url }}"

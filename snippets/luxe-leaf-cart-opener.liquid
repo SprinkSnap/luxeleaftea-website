@@ -1,5 +1,5 @@
 {%- doc -%}
-  Cart drawer open/close bridge — reliable taps even if theme-drawer.js is slow.
+  Cart drawer open/close bridge — reliable single-tap open even if theme-drawer.js is slow.
   Render once near end of layout/theme.liquid (after cart-drawer markup).
 {%- enddoc -%}
 
@@ -11,12 +11,9 @@
 
       var OPEN_TRIGGER =
         '[data-luxe-open-cart],[data-testid="cart-drawer-trigger"],a[aria-controls="cart-drawer"],button[aria-controls="cart-drawer"],[data-mobile-cart-toggle],[data-shipping-nudge-cart]';
-      var CLOSE_TRIGGER = '#cart-drawer .theme-drawer__close-button';
-      var lockUntil = 0;
-
-      function getCartUrl() {
-        return (window.Theme && window.Theme.routes && window.Theme.routes.cart_url) || '/cart';
-      }
+      var CLOSE_TRIGGER = '#cart-drawer .theme-drawer__close-button, #cart-drawer .luxe-cart-drawer__continue';
+      var opening = false;
+      var ignoreClickUntil = 0;
 
       function syncDrawerChrome(isOpen) {
         document.documentElement.classList.toggle('luxe-cart-drawer-open', isOpen);
@@ -31,6 +28,11 @@
         });
       }
 
+      function clearStuckLock() {
+        document.documentElement.removeAttribute('scroll-lock');
+        document.documentElement.classList.remove('luxe-cart-drawer-open');
+      }
+
       function isDrawerOpen(drawer) {
         if (!drawer) return false;
         return drawer.hasAttribute('open') || Boolean(drawer.querySelector('dialog[open]'));
@@ -42,12 +44,64 @@
         }
       }
 
-      function forceOpenDrawer() {
+      function sleep(ms) {
+        return new Promise(function (resolve) {
+          window.setTimeout(resolve, ms);
+        });
+      }
+
+      function ensureDrawer() {
         var drawer = document.getElementById('cart-drawer');
-        if (!drawer) return false;
+        if (!drawer) return Promise.resolve(null);
+
+        if (!window.customElements || !window.customElements.whenDefined) {
+          return Promise.resolve(drawer);
+        }
+
+        if (window.customElements.get('theme-drawer')) {
+          upgradeDrawer(drawer);
+          return Promise.resolve(drawer);
+        }
+
+        return window.customElements.whenDefined('theme-drawer').then(function () {
+          upgradeDrawer(drawer);
+          return drawer;
+        });
+      }
+
+      function openDialogFallback(drawer) {
+        var dialog = drawer && drawer.querySelector('dialog');
+        if (!dialog) return false;
 
         try {
-          upgradeDrawer(drawer);
+          clearStuckLock();
+          drawer.setAttribute('open', '');
+          var modal = window.matchMedia('(max-width: 989px)').matches;
+          if (modal) {
+            if (!dialog.open) dialog.showModal();
+          } else if (!dialog.open) {
+            dialog.show();
+          }
+          dialog.classList.remove('theme-drawer__dialog--closing');
+          dialog.classList.add('theme-drawer__dialog--opening');
+          window.setTimeout(function () {
+            dialog.classList.remove('theme-drawer__dialog--opening');
+          }, 400);
+          drawer.dispatchEvent(new CustomEvent('theme-drawer:open', { bubbles: true }));
+          syncDrawerChrome(true);
+          return isDrawerOpen(drawer);
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function forceOpenDrawerSync(drawer) {
+        if (!drawer) return false;
+
+        clearStuckLock();
+        upgradeDrawer(drawer);
+
+        try {
           if (typeof drawer.open === 'function') {
             drawer.open();
             if (isDrawerOpen(drawer)) {
@@ -57,41 +111,21 @@
           }
         } catch (e) {}
 
-        var dialog = drawer.querySelector('dialog');
-        if (!dialog) return false;
-
-        try {
-          drawer.setAttribute('open', '');
-          var modal = window.matchMedia('(max-width: 989px)').matches;
-          if (modal) {
-            if (!dialog.open) dialog.showModal();
-          } else if (!dialog.open) {
-            dialog.show();
-          }
-          dialog.classList.add('theme-drawer__dialog--opening');
-          window.setTimeout(function () {
-            dialog.classList.remove('theme-drawer__dialog--opening');
-          }, 400);
-          drawer.dispatchEvent(new CustomEvent('theme-drawer:open', { bubbles: true }));
-          syncDrawerChrome(true);
-          return true;
-        } catch (e) {}
-
-        return false;
+        return openDialogFallback(drawer);
       }
 
       function forceCloseDrawer() {
         var drawer = document.getElementById('cart-drawer');
+        clearStuckLock();
+        syncDrawerChrome(false);
+
         if (!drawer || !isDrawerOpen(drawer)) return true;
 
         try {
           upgradeDrawer(drawer);
           if (typeof drawer.close === 'function') {
             drawer.close();
-            if (!isDrawerOpen(drawer)) {
-              syncDrawerChrome(false);
-              return true;
-            }
+            if (!isDrawerOpen(drawer)) return true;
           }
         } catch (e) {}
 
@@ -99,61 +133,59 @@
         if (!dialog) return false;
 
         try {
-          dialog.classList.add('theme-drawer__dialog--closing');
-          window.setTimeout(function () {
-            if (dialog.open) dialog.close();
-            drawer.removeAttribute('open');
-            dialog.classList.remove('theme-drawer__dialog--closing');
-            drawer.dispatchEvent(new CustomEvent('theme-drawer:close', { bubbles: true }));
-            syncDrawerChrome(false);
-          }, 280);
+          if (dialog.open) dialog.close();
+          drawer.removeAttribute('open');
+          dialog.classList.remove('theme-drawer__dialog--closing', 'theme-drawer__dialog--opening');
+          drawer.dispatchEvent(new CustomEvent('theme-drawer:close', { bubbles: true }));
+          syncDrawerChrome(false);
+          clearStuckLock();
           return true;
-        } catch (e) {}
-
-        return false;
+        } catch (e) {
+          clearStuckLock();
+          return false;
+        }
       }
 
-      function openCartDrawer(evt) {
-        if (Date.now() < lockUntil) return;
-        lockUntil = Date.now() + 450;
-
-        if (forceOpenDrawer()) {
-          if (evt) {
-            evt.preventDefault();
-            if (evt.stopPropagation) evt.stopPropagation();
-          }
-          return;
-        }
+      async function openCartDrawer(evt) {
+        if (opening) return;
+        opening = true;
 
         if (evt) {
           evt.preventDefault();
           if (evt.stopPropagation) evt.stopPropagation();
+          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
         }
 
-        var cartUrl = getCartUrl();
-        var settled = false;
-        function goToCart() {
-          if (settled) return;
-          settled = true;
-          window.location.href = cartUrl;
-        }
+        // Suppress the synthetic click that follows touch/pointer on the bag icon
+        ignoreClickUntil = Date.now() + 600;
 
-        var fallbackTimer = window.setTimeout(goToCart, 450);
+        try {
+          clearStuckLock();
+          var drawer = await ensureDrawer();
 
-        if (window.customElements && window.customElements.whenDefined) {
-          window.customElements
-            .whenDefined('theme-drawer')
-            .then(function () {
-              if (forceOpenDrawer()) {
-                settled = true;
-                window.clearTimeout(fallbackTimer);
-                return;
-              }
-              goToCart();
-            })
-            .catch(goToCart);
-        } else {
-          goToCart();
+          if (!drawer) return;
+
+          // If a close animation is in progress, ThemeDrawer.open() only defers —
+          // retry briefly instead of navigating away (which freezes on first tap).
+          for (var attempt = 0; attempt < 8; attempt++) {
+            if (forceOpenDrawerSync(drawer)) return;
+            await sleep(40);
+          }
+
+          // Last resort: hard reset dialog state, then open once more
+          var dialog = drawer.querySelector('dialog');
+          if (dialog) {
+            try {
+              if (dialog.open) dialog.close();
+            } catch (e) {}
+            drawer.removeAttribute('open');
+            dialog.classList.remove('theme-drawer__dialog--closing', 'theme-drawer__dialog--opening');
+            clearStuckLock();
+            await sleep(30);
+            forceOpenDrawerSync(drawer);
+          }
+        } finally {
+          opening = false;
         }
       }
 
@@ -165,21 +197,19 @@
         forceCloseDrawer();
       }
 
-      function eventTarget(evt) {
-        var target = evt.target;
-        if (!(target instanceof Element)) return null;
-
-        if (evt.type === 'touchend' && evt.changedTouches && evt.changedTouches[0]) {
-          var touch = evt.changedTouches[0];
-          target = document.elementFromPoint(touch.clientX, touch.clientY) || target;
+      function onDocumentIntent(evt) {
+        // Ghost click after pointer/touch open — ignore so double-fire can't stuck-lock
+        if (evt.type === 'click' && Date.now() < ignoreClickUntil) {
+          var maybeTrigger = evt.target instanceof Element ? evt.target.closest(OPEN_TRIGGER) : null;
+          if (maybeTrigger) {
+            evt.preventDefault();
+            if (evt.stopPropagation) evt.stopPropagation();
+            return;
+          }
         }
 
-        return target;
-      }
-
-      function onDocumentIntent(evt) {
-        var target = eventTarget(evt);
-        if (!target) return;
+        var target = evt.target;
+        if (!(target instanceof Element)) return;
 
         if (target.closest(CLOSE_TRIGGER)) {
           closeCartDrawer(evt);
@@ -201,8 +231,9 @@
         openCartDrawer(evt);
       }
 
+      // Single input path (click covers mouse + tap). Removed capture touchend —
+      // it raced click, set a 450ms lock, and fell back to /cart when open deferred mid-close.
       document.addEventListener('click', onDocumentIntent, true);
-      document.addEventListener('touchend', onDocumentIntent, { capture: true, passive: false });
 
       document.addEventListener('keydown', function (evt) {
         if (evt.key !== 'Escape') return;
@@ -212,8 +243,7 @@
         closeCartDrawer(evt);
       });
 
-      /* Swipe drawer to the right to close (same intent as the X) — avoid browser
-         swipe-back + view-transition freezes when shoppers dismiss without the X. */
+      /* Swipe drawer to the right to close (same intent as the X). */
       (function initSwipeToClose() {
         var startX = 0;
         var startY = 0;
@@ -227,6 +257,7 @@
 
           var target = evt.target;
           if (!(target instanceof Element)) return;
+          if (target.closest(OPEN_TRIGGER)) return;
           if (target.closest('input, textarea, select, [contenteditable="true"]')) return;
 
           var dialog = drawer.querySelector('dialog');
@@ -246,13 +277,12 @@
           var dy = evt.touches[0].clientY - startY;
 
           if (!decided) {
-            if (Math.abs(dx) < 12 && Math.abs(dy) < 12) return;
+            if (Math.abs(dx) < 14 && Math.abs(dy) < 14) return;
             decided = true;
-            horizontal = Math.abs(dx) > Math.abs(dy) * 1.15;
+            horizontal = Math.abs(dx) > Math.abs(dy) * 1.25;
           }
 
-          // Rightward horizontal swipe on the open cart drawer → close
-          if (horizontal && dx > 72) {
+          if (horizontal && dx > 80) {
             tracking = false;
             forceCloseDrawer();
           }
@@ -270,23 +300,19 @@
         document.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
       })();
 
-      // Never leave scroll-lock / drawer chrome stuck after swipe-back / bfcache restore
       window.addEventListener('pagehide', function () {
-        var drawer = document.getElementById('cart-drawer');
-        if (drawer && isDrawerOpen(drawer)) {
-          try {
-            forceCloseDrawer();
-          } catch (e) {}
-        }
-        document.documentElement.classList.remove('luxe-cart-drawer-open');
-        document.documentElement.removeAttribute('scroll-lock');
+        forceCloseDrawer();
+        clearStuckLock();
       });
 
       document.addEventListener('theme-drawer:open', function (evt) {
         if (/** @type {Element} */ (evt.target).id === 'cart-drawer') syncDrawerChrome(true);
       });
       document.addEventListener('theme-drawer:close', function (evt) {
-        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') syncDrawerChrome(false);
+        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
+          syncDrawerChrome(false);
+          clearStuckLock();
+        }
       });
 
       window.LuxeLeaf = window.LuxeLeaf || {};
