@@ -1916,7 +1916,8 @@
         "type": "checkbox",
         "id": "quick_add",
         "label": "t:settings.quick_add",
-        "default": true
+        "default": false,
+        "info": "Image-corner bag/+ overlay. Leave off for Luxe Leaf — collection cards use the clearer labeled Add to Bag button under each product instead."
       },
       {
         "type": "checkbox",

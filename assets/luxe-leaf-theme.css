@@ -2981,6 +2981,14 @@ body.luxe-leaf-theme .content-for-layout {
   color: #fff !important;
 }
 
+/* Hide Horizon's grey bag/+ image overlay — labeled Add to Bag under cards is the conversion CTA */
+body.luxe-leaf-theme product-card .quick-add,
+body.luxe-leaf-theme .product-card .quick-add,
+body.luxe-leaf-theme quick-add-component.quick-add {
+  display: none !important;
+  pointer-events: none !important;
+}
+
 /* Product grid inline browse add-to-cart — always-visible labeled CTA (not cryptic +) */
 .luxe-browse-atc-inline {
   margin-top: 0.45rem;
