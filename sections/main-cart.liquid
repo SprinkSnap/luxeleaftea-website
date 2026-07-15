@@ -72,6 +72,13 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 0 var(--padding-5xl);
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .cart-page > * {
+    min-width: 0;
   }
 
   .cart-page--empty {
@@ -125,12 +132,15 @@
       position: relative;
     }
 
+    /* Use percentage-based gutter offset — 100vw can bleed past the scrollport
+       and freeze horizontal swipes on the cart page. */
     .section--page-width .cart-page:has(.cart-summary--extend) {
       grid-column: 2 / 4;
       grid-template-columns: 1fr minmax(
           var(--sidebar-width),
-          calc((100vw - var(--page-width)) / 2 + var(--sidebar-width))
+          calc(var(--util-page-margin-offset, var(--page-margin)) + var(--sidebar-width))
         );
+      max-width: 100%;
     }
   }
 

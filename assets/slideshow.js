@@ -699,6 +699,25 @@ export class Slideshow extends Component {
     this.#dragging = true;
 
     /**
+     * Always release pointer capture and dragging state so a right-swipe
+     * abort path cannot leave the page frozen under a captured pointer.
+     * @param {PointerEvent} [event]
+     */
+    const cleanupDrag = (event) => {
+      this.#dragging = false;
+      this.removeAttribute('dragging');
+      try {
+        if (event?.pointerId != null) {
+          this.releasePointerCapture(event.pointerId);
+        }
+      } catch {
+        // already released
+      }
+      this.#scroll.snap = true;
+      this.resume();
+    };
+
+    /**
      * Handles the 'pointermove' event to update the scroll position.
      * @param {PointerEvent} event - The pointermove event.
      */
@@ -725,6 +744,7 @@ export class Slideshow extends Component {
 
         // Abort and let the parent slideshow handle the drag if we're moving in a direction where nested slideshow can't move
         if (isNested && cannotMoveInDirection) {
+          cleanupDrag(event);
           controller.abort();
           return;
         }
@@ -754,48 +774,61 @@ export class Slideshow extends Component {
       const { current, slides } = this;
       const { scroller } = this.refs;
 
+      // End this gesture immediately so a new drag can start during snap animation.
       this.#dragging = false;
 
-      if (!slides?.length || !scroller) return;
+      if (!slides?.length || !scroller) {
+        cleanupDrag(event);
+        return;
+      }
 
-      const direction = Math.sign(velocity);
-      const next = this.#sync();
+      try {
+        const direction = Math.sign(velocity);
+        const next = this.#sync();
 
-      const modifier = current !== next || Math.abs(velocity) < 10 || distanceTravelled < 10 ? 0 : direction;
-      const newIndex = clamp(next + modifier, 0, slides.length - 1);
+        const modifier = current !== next || Math.abs(velocity) < 10 || distanceTravelled < 10 ? 0 : direction;
+        const newIndex = clamp(next + modifier, 0, slides.length - 1);
 
-      const newSlide = slides[newIndex];
-      const currentIndex = this.current;
+        const newSlide = slides[newIndex];
+        const currentIndex = this.current;
 
-      if (!newSlide) throw new Error(`Slide not found at index ${newIndex}`);
+        if (!newSlide) throw new Error(`Slide not found at index ${newIndex}`);
 
-      this.#scroll.to(newSlide);
+        this.#scroll.to(newSlide);
 
-      this.removeAttribute('dragging');
-      this.releasePointerCapture(event.pointerId);
+        this.removeAttribute('dragging');
+        try {
+          this.releasePointerCapture(event.pointerId);
+        } catch {
+          // already released
+        }
 
-      this.#centerSelectedThumbnail(newIndex);
+        this.#centerSelectedThumbnail(newIndex);
 
-      this.dispatchEvent(
-        new SlideshowSelectEvent({
-          index: newIndex,
-          previousIndex: currentIndex,
-          userInitiated: true,
-          trigger: 'drag',
-          slide: newSlide,
-          id: newSlide.getAttribute('slide-id'),
-        })
-      );
+        this.dispatchEvent(
+          new SlideshowSelectEvent({
+            index: newIndex,
+            previousIndex: currentIndex,
+            userInitiated: true,
+            trigger: 'drag',
+            slide: newSlide,
+            id: newSlide.getAttribute('slide-id'),
+          })
+        );
 
-      this.current = newIndex;
+        this.current = newIndex;
 
-      await this.#scroll.finished;
+        await this.#scroll.finished;
 
-      // It's possible that the user started dragging again before the scroll finished
-      if (this.#dragging) return;
+        // It's possible that the user started dragging again before the scroll finished
+        if (this.#dragging) return;
 
-      this.#scroll.snap = true;
-      this.resume();
+        this.#scroll.snap = true;
+        this.resume();
+      } catch (error) {
+        cleanupDrag(event);
+        throw error;
+      }
     };
 
     this.#scroll.snap = false;

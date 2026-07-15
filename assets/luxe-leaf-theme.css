@@ -3260,6 +3260,14 @@ body.luxe-leaf-theme {
   text-size-adjust: 100%;
 }
 
+/* Desktop layout uses .page-wrapper as the scroll root; clip X so cart/sidebar
+   gutters cannot trap horizontal swipes into a frozen scrollport. */
+@media (min-width: 990px) {
+  body.luxe-leaf-theme .page-wrapper {
+    overflow-x: clip;
+  }
+}
+
 body.luxe-leaf-theme img:not(.luxe-hero__image),
 body.luxe-leaf-theme video,
 body.luxe-leaf-theme svg:not(.luxe-cart-stepper__icon) {
@@ -4247,6 +4255,22 @@ body.luxe-leaf-theme .sticky-add-to-cart__button .svg-wrapper {
     min-height: 2.875rem;
     font-size: 0.875rem;
   }
+
+  /* Contain horizontal carousel swipe so it cannot freeze the cart page */
+  .luxe-cart-recommendations slideshow-slides,
+  .luxe-cart-recommendations .resource-list__carousel {
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pinch-zoom;
+    max-width: 100%;
+  }
+}
+
+/* Cart page: no horizontal rubber-band past the viewport */
+body.luxe-leaf-theme .cart-page,
+body.luxe-leaf-theme .cart-page__summary,
+body.luxe-leaf-theme .section:has(.cart-page) {
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 /* Collection / browse cards: desktop second-image hover affordance */
