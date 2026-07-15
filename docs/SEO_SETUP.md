@@ -114,7 +114,7 @@ The FAQ page includes 6 preset Q&As, FAQPage structured data for rich results, a
 After deploying, the homepage includes (in order):
 
 1. Trust bar
-2. Hero
+2. Hero — single H1: **Premium Loose Leaf Tea, Packed Fresh** (brand line “Steep. Sip. Savor.” stays as eyebrow; matches OG title keyword intent)
 3. **Featured teas** (first shoppable grid with Add to Bag)
 4. **Keep exploring** (browse rail + ItemList schema)
 5. Tea types grid
