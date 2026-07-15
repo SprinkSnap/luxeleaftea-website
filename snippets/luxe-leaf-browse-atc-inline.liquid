@@ -1,5 +1,6 @@
 {%- doc -%}
   Inline browse add-to-cart for product grid cards — AJAX via luxe-leaf-browse-atc.js.
+  Labeled "Add to Bag" (not a cryptic +) for premium conversion on desktop + mobile.
 
   @param {object} product - Product to render
 {%- enddoc -%}
@@ -7,6 +8,7 @@
 {%- unless settings.brand_navigation == false -%}
   {%- liquid
     assign card_product = product | default: closest.product
+    assign free_ship_dollars = settings.free_shipping_threshold | default: 5000 | divided_by: 100
     if card_product == blank or card_product.available == false
       assign render_atc = false
     else
@@ -20,22 +22,30 @@
   -%}
 
   {%- if render_atc -%}
-    <div class="luxe-browse-atc-inline">
+    <div class="luxe-browse-atc-inline" data-browse-atc>
       {%- if is_single_variant -%}
         {%- form 'product', card_product, class: 'luxe-browse-atc-inline__form' -%}
           <input type="hidden" name="id" value="{{ variant.id }}">
-          <button type="submit" name="add" class="button luxe-browse-atc-inline__button">
-            Add to Bag
+          <button
+            type="submit"
+            name="add"
+            class="button luxe-browse-atc-inline__button"
+            aria-label="Add {{ card_product.title | escape }} to bag — free Canada-wide shipping over ${{ free_ship_dollars }}"
+          >
+            <span class="luxe-browse-atc-inline__label">Add to Bag</span>
+            <span class="luxe-browse-atc-inline__hint">Free ship ${{ free_ship_dollars }}+</span>
           </button>
         {%- endform -%}
       {%- else -%}
-        <button
-          type="button"
+        <a
+          href="{{ card_product.url }}"
           class="button button-secondary luxe-browse-atc-inline__button luxe-browse-atc-inline__button--choose"
           data-browse-atc-choose
+          aria-label="Choose options for {{ card_product.title | escape }}"
         >
-          Choose options
-        </button>
+          <span class="luxe-browse-atc-inline__label">Choose options</span>
+          <span class="luxe-browse-atc-inline__hint">View product</span>
+        </a>
       {%- endif -%}
     </div>
   {%- elsif card_product != blank and card_product.available == false -%}

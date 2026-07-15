@@ -148,12 +148,17 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "browse_atc_search": {
+              "type": "luxe-leaf-browse-atc",
+              "settings": {}
             }
           },
           "block_order": [
             "product_card_gallery_cFExAi",
             "product_title_j7qXTx",
-            "price_fYkUgG"
+            "price_fYkUgG",
+            "browse_atc_search"
           ]
         }
       },

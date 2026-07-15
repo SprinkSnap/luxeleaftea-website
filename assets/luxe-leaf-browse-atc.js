@@ -27,9 +27,22 @@ function getCartSectionIds() {
  * @param {string} label
  */
 function setButtonLabel(button, label) {
-  if (!button.dataset.defaultLabel) {
-    button.dataset.defaultLabel = button.textContent?.trim() ?? 'Add to Bag';
+  if (!button.dataset.defaultHtml) {
+    button.dataset.defaultHtml = button.innerHTML;
+    button.dataset.defaultLabel =
+      button.querySelector('.luxe-browse-atc-inline__label')?.textContent?.trim() ||
+      button.textContent?.trim() ||
+      'Add to Bag';
   }
+
+  const labelEl = button.querySelector('.luxe-browse-atc-inline__label');
+  const hintEl = button.querySelector('.luxe-browse-atc-inline__hint');
+  if (labelEl instanceof HTMLElement) {
+    labelEl.textContent = label;
+    if (hintEl instanceof HTMLElement) hintEl.hidden = true;
+    return;
+  }
+
   button.textContent = label;
 }
 
@@ -39,6 +52,10 @@ function setButtonLabel(button, label) {
 function resetButton(button) {
   button.classList.remove(ADDING_CLASS, SUCCESS_CLASS);
   button.disabled = false;
+  if (button.dataset.defaultHtml) {
+    button.innerHTML = button.dataset.defaultHtml;
+    return;
+  }
   button.textContent = button.dataset.defaultLabel ?? 'Add to Bag';
 }
 
@@ -147,7 +164,11 @@ function bindBrowseAddToCart() {
     if (quickChoose instanceof HTMLElement) {
       event.preventDefault();
       quickChoose.click();
+      return;
     }
+
+    // Fall through to product URL on the <a> so shoppers aren't stuck
+    // when the image overlay quick-add is suppressed on single-SKU brands.
   });
 }
 
