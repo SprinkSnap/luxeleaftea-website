@@ -62,10 +62,13 @@
     </a>
   </search-page-input-component>
 
-  {% if search.results.size == 0 and search.terms != blank %}
-    <div class="search-results__no-results">
-      <p>
+  {% if search.performed and search.results_count == 0 and search.terms != blank %}
+    <div class="search-results__no-results" role="status">
+      <p class="search-results__no-results-text">
         {{ 'content.search_results_no_results_check_spelling' | t: terms: search.terms }}
+      </p>
+      <p class="search-results__no-results-hint">
+        {{ 'content.search_empty_hint' | t }}
       </p>
     </div>
   {% endif %}
@@ -99,7 +102,29 @@
   }
 
   .search-results__no-results {
-    opacity: var(--opacity-subdued-text);
+    width: 100%;
+    max-width: var(--size-style-width, 100%);
+    margin: 0 0 var(--margin-md);
+    padding: 16px 18px;
+    border: 1px solid rgb(27 67 50 / 0.12);
+    border-radius: 12px;
+    background: #f8f6f0;
+    text-align: left;
+  }
+
+  .search-results__no-results-text {
+    margin: 0 0 6px;
+    color: #1b4332;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .search-results__no-results-hint {
+    margin: 0;
+    color: #2d4a3e;
+    font-size: 0.875rem;
+    line-height: 1.45;
   }
 
   search-page-input-component {
