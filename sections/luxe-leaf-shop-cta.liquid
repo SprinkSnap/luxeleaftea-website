@@ -4,25 +4,47 @@
 {%- assign luxe_scope_check = luxe_scope_check | strip -%}
 {%- if luxe_scope_check == 'show' -%}
 
+{%- liquid
+  assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+  assign shop_link = section.settings.primary_link
+  if shop_link == blank
+    assign shop_link = routes.all_products_collection_url
+    if collections.all != blank and collections.all.url != blank
+      assign shop_link = collections.all.url
+    endif
+  endif
+-%}
+
 <section
   class="luxe-shop-cta section section--full-width spacing-style"
   style="background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%); color: #f8f6f0; {% render 'spacing-style', settings: section.settings %}"
+  aria-label="Shop premium loose leaf tea"
 >
   <div class="luxe-shop-cta__inner page-width">
     <p class="luxe-shop-cta__eyebrow">{{ section.settings.eyebrow }}</p>
     <h2 class="luxe-shop-cta__heading">{{ section.settings.heading }}</h2>
     <div class="luxe-shop-cta__text" style="color: #f8f6f0 !important;">{{ section.settings.text }}</div>
     <div class="luxe-shop-cta__actions">
-      <a href="{{ section.settings.primary_link }}" class="button luxe-shop-cta__button">
+      <a
+        href="{{ shop_link }}"
+        class="button luxe-shop-cta__button"
+        title="{{ section.settings.primary_label | default: 'Shop premium loose leaf tea' | escape }} — free Canada-wide shipping over {{ free_ship_label }}"
+      >
         {{ section.settings.primary_label }}
       </a>
       {%- if section.settings.secondary_label != blank -%}
-        <a href="{{ section.settings.secondary_link }}" class="button button-secondary luxe-shop-cta__button-secondary">
+        <a
+          href="{{ section.settings.secondary_link }}"
+          class="button button-secondary luxe-shop-cta__button-secondary"
+          title="{{ section.settings.secondary_label | escape }}"
+        >
           {{ section.settings.secondary_label }}
         </a>
       {%- endif -%}
     </div>
-    <p class="luxe-shop-cta__note">{{ section.settings.note }}</p>
+    <p class="luxe-shop-cta__note">
+      {{ section.settings.note | default: 'Free Canada-wide shipping over $50 · Packed fresh to order · Secure checkout' }}
+    </p>
   </div>
 </section>
 {%- endif -%}
@@ -30,7 +52,9 @@
 {% stylesheet %}
   .luxe-shop-cta {
     padding-block: 64px;
-    background: linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
+    background:
+      radial-gradient(100% 120% at 50% 0%, rgb(201 162 39 / 0.16), transparent 55%),
+      linear-gradient(135deg, #1b4332 0%, #0d2818 100%) !important;
     color: #f8f6f0 !important;
     text-align: center;
   }
@@ -52,9 +76,10 @@
 
   .luxe-shop-cta__eyebrow {
     margin: 0 0 12px;
-    color: #c9a227;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
+    color: #f3d56a;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
@@ -73,6 +98,7 @@
 
   .luxe-shop-cta__actions {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 12px;
     justify-content: center;
@@ -80,12 +106,36 @@
   }
 
   .luxe-shop-cta__button {
-    background: #c9a227;
-    border-color: #c9a227;
-    color: #1a1a1a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 3.15rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+    border: 2px solid #f3d56a !important;
+    color: #141414 !important;
+    -webkit-text-fill-color: #141414 !important;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.18) inset,
+      0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .luxe-shop-cta__button:hover,
+  .luxe-shop-cta__button:focus-visible {
+    filter: brightness(1.06);
+    transform: translateY(-2px);
+    color: #141414 !important;
   }
 
   .luxe-shop-cta__button-secondary {
+    width: 100%;
+    min-height: 2.85rem;
     border-color: #f8f6f0 !important;
     color: #f8f6f0 !important;
     background: transparent !important;
@@ -96,6 +146,47 @@
     font-size: 0.8125rem;
     letter-spacing: 0.04em;
     color: rgb(248 246 240 / 0.92);
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-shop-cta__actions {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .luxe-shop-cta__button,
+    .luxe-shop-cta__button-secondary {
+      width: auto;
+      min-width: 14rem;
+    }
+
+    .luxe-shop-cta__button {
+      min-width: 17rem;
+      min-height: 3.25rem;
+      font-size: 1.05rem;
+      animation: luxe-shop-cta-pulse 2.4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes luxe-shop-cta-pulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.18) inset,
+        0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.22) inset,
+        0 0.55rem 1.6rem rgb(201 162 39 / 0.62),
+        0 0 0 0.35rem rgb(201 162 39 / 0.12);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .luxe-shop-cta__button {
+      animation: none;
+    }
   }
 {% endstylesheet %}
 
