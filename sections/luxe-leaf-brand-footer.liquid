@@ -23,10 +23,12 @@
 
 {% stylesheet %}
   .luxe-brand-footer__newsletter {
-    padding: 1rem;
-    border-radius: 0.625rem;
-    background: rgb(13 40 24 / 0.92) !important;
-    border: 1px solid rgb(248 246 240 / 0.12);
+    padding: 1rem 1.05rem 1.1rem;
+    border-radius: 0.75rem;
+    background:
+      radial-gradient(120% 100% at 0% 0%, rgb(201 162 39 / 0.14), transparent 55%),
+      rgb(13 40 24 / 0.96) !important;
+    border: 1px solid rgb(201 162 39 / 0.28);
     color: #f8f6f0 !important;
   }
 
@@ -36,9 +38,22 @@
   }
 
   .luxe-brand-footer__newsletter-copy {
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.85rem;
     font-size: 0.875rem;
     line-height: 1.55;
+  }
+
+  .luxe-brand-footer__newsletter-input {
+    background: #faf7ef !important;
+    background-color: #faf7ef !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  .luxe-brand-footer__newsletter-input::placeholder {
+    color: rgb(26 26 26 / 0.55) !important;
+    -webkit-text-fill-color: rgb(26 26 26 / 0.55) !important;
+    opacity: 1 !important;
   }
 {% endstylesheet %}
 
@@ -120,7 +135,7 @@
       "type": "text",
       "id": "newsletter_placeholder",
       "label": "Email placeholder",
-      "default": "Your email for tea tips"
+      "default": "you@email.com"
     },
     {
       "type": "text",
