@@ -200,7 +200,10 @@ export class ThemeDrawer extends Component {
       return;
     }
     if (this.#isClosing) {
+      // Prefer reopening after close finishes — but if open() was called from a
+      // bag-icon tap, clear stuck closing classes so the next sync open can win.
       this.#deferredOpen = { enter };
+      this.refs.panel?.classList.remove('theme-drawer__dialog--closing');
       return;
     }
 
@@ -216,8 +219,14 @@ export class ThemeDrawer extends Component {
     this.#previouslyFocused = /** @type {HTMLElement | null} */ (document.activeElement);
 
     if (this.#modalQuery.matches) {
-      lockScroll(panel);
-      panel.showModal();
+      // Never leave scroll-lock stuck if showModal fails on the first bag tap
+      try {
+        lockScroll(panel);
+        panel.showModal();
+      } catch (error) {
+        unlockScroll(panel);
+        throw error;
+      }
     } else {
       panel.show();
       trapFocus(panel);
