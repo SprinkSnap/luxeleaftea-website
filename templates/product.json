@@ -125,10 +125,10 @@
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h3",
-                    "font": "var(--font-primary--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
+                    "type_preset": "h1",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "1.85rem",
+                    "line_height": "tight",
                     "letter_spacing": "normal",
                     "case": "none",
                     "wrap": "pretty",
@@ -137,7 +137,7 @@
                     "background_color": "#00000026",
                     "corner_radius": 0,
                     "padding-block-start": 0,
-                    "padding-block-end": 0,
+                    "padding-block-end": 4,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0
                   },
@@ -164,11 +164,21 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {}
+                },
+                "buy_signals_taste": {
+                  "type": "luxe-leaf-pdp-buy-signals",
+                  "name": "Taste cue",
+                  "settings": {
+                    "show_taste": true,
+                    "show_trust": false
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
                 "text_xrnftG",
-                "price_tVjtKg"
+                "price_tVjtKg",
+                "buy_signals_taste"
               ]
             },
             "divider_VJhene": {
@@ -267,28 +277,11 @@
               "block_order": []
             },
             "trust_line_product": {
-              "type": "text",
-              "name": "Trust line",
+              "type": "luxe-leaf-pdp-buy-signals",
+              "name": "Trust signals",
               "settings": {
-                "text": "<p><strong>Packed fresh to order</strong> · Premium loose leaf tea · Free Canada-wide shipping over $50</p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "0.875rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 8,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "show_taste": false,
+                "show_trust": true
               },
               "blocks": {}
             }
@@ -319,27 +312,10 @@
       "type": "luxe-leaf-product-guide",
       "settings": {
         "product": "{{ product }}",
-        "trust_line": "Packed fresh to order · Premium loose leaf tea · Free Canada-wide shipping over $50",
+        "trust_line": "Packed fresh to order \u00b7 Premium loose leaf tea \u00b7 Free Canada-wide shipping over $50",
         "open_brewing": true,
         "padding-block-start": 24,
         "padding-block-end": 40
-      }
-    },
-    "keep_exploring": {
-      "type": "luxe-leaf-keep-exploring",
-      "settings": {
-        "eyebrow": "Keep exploring",
-        "heading": "Still browsing?",
-        "intro": "Swipe through more premium loose leaf teas \u2014 add to bag and keep discovering.",
-        "recent_eyebrow": "Welcome back",
-        "recent_heading": "Pick up where you left off",
-        "recent_intro": "Teas you recently viewed \u2014 one tap to add without leaving this page.",
-        "view_all_label": "Shop all teas",
-        "collection": "all",
-        "product_limit": 4,
-        "exclude_current_on_product": true,
-        "padding-block-start": 32,
-        "padding-block-end": 24
       }
     },
     "keep_exploring": {

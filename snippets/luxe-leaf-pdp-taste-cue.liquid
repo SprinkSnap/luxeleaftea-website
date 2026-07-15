@@ -1,0 +1,76 @@
+{%- doc -%}
+  Short buy-box taste / brew cue for PDP conversion + SEO.
+  @param {object} product
+  @param {string} [mode] - assign | echo (default echo)
+{%- enddoc -%}
+
+{%- liquid
+  assign cue_product = product | default: closest.product
+  assign tea_type = 'premium'
+  assign tag_handles = cue_product.tags | join: ',' | downcase
+  assign title_downcase = cue_product.title | downcase
+
+  if tag_handles contains 'green-tea' or tag_handles contains 'green tea' or title_downcase contains 'green' or title_downcase contains 'jasmine'
+    assign tea_type = 'green'
+  elsif tag_handles contains 'oolong' or title_downcase contains 'oolong' or title_downcase contains 'peach'
+    assign tea_type = 'oolong'
+  elsif tag_handles contains 'pu-erh' or tag_handles contains 'puerh' or title_downcase contains 'pu-erh' or title_downcase contains 'pu erh'
+    assign tea_type = 'puerh'
+  elsif tag_handles contains 'black-tea' or tag_handles contains 'black tea' or title_downcase contains 'black' or title_downcase contains 'assam' or title_downcase contains 'yunnan' or title_downcase contains 'thai' or title_downcase contains 'mocastar'
+    assign tea_type = 'black'
+  endif
+
+  case tea_type
+    when 'green'
+      assign taste_cue = 'Clean, sweet green cup · Re-steeps 3–4×'
+      assign type_label = 'Green tea'
+    when 'oolong'
+      assign taste_cue = 'Creamy floral oolong · Re-steeps 4–6×'
+      assign type_label = 'Oolong tea'
+    when 'puerh'
+      assign taste_cue = 'Deep, mellow pu-erh · Re-steeps 6–8×'
+      assign type_label = 'Pu-erh tea'
+    when 'black'
+      assign taste_cue = 'Full-bodied black tea · Bold & smooth'
+      assign type_label = 'Black tea'
+    else
+      assign taste_cue = 'Premium whole-leaf tea · Packed fresh to order'
+      assign type_label = 'Loose leaf tea'
+  endcase
+
+  if title_downcase contains 'jasmine'
+    assign taste_cue = 'Floral jasmine bouquet · Smooth & lightly sweet'
+    assign type_label = 'Jasmine green tea'
+  elsif title_downcase contains 'peach'
+    assign taste_cue = 'Creamy oolong with soft peach · Sip hot or iced'
+    assign type_label = 'Peach oolong'
+  elsif title_downcase contains 'falling snow'
+    assign taste_cue = 'Elegant Sibao jasmine · Silky floral finish'
+    assign type_label = 'Jasmine tea'
+  elsif title_downcase contains 'assam'
+    assign taste_cue = 'Malty Assam body · Classic breakfast cup'
+    assign type_label = 'Assam black tea'
+  elsif title_downcase contains 'chatramue' or title_downcase contains 'thai tea'
+    assign taste_cue = 'Bold Thai tea mix · Perfect for iced milk tea'
+    assign type_label = 'Thai tea'
+  elsif title_downcase contains 'mocastar'
+    assign taste_cue = 'Hong Kong milk-tea strength · Silky & bold'
+    assign type_label = 'Hong Kong black tea'
+  endif
+
+  assign metafield_tasting = cue_product.metafields.custom.tasting_notes.value | default: cue_product.metafields.custom.tasting_notes
+  if metafield_tasting != blank
+    assign taste_plain = metafield_tasting | metafield_tag | strip_html | strip | truncate: 90, '…'
+    if taste_plain != blank
+      assign taste_cue = taste_plain
+    endif
+  endif
+-%}
+
+{%- unless mode == 'assign' -%}
+  <p class="luxe-pdp-buy-signals__taste">
+    <span class="luxe-pdp-buy-signals__type">{{ type_label }}</span>
+    <span class="luxe-pdp-buy-signals__sep" aria-hidden="true">·</span>
+    <span class="luxe-pdp-buy-signals__cue">{{ taste_cue }}</span>
+  </p>
+{%- endunless -%}
