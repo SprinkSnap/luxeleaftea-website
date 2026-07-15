@@ -33,6 +33,11 @@
     assign meta_description = brand_default_description
     assign og_description = meta_description
   elsif request.page_type == 'collection' and collection
+    capture collection_seo_name
+      render 'luxe-leaf-collection-seo-name', collection: collection
+    endcapture
+    assign collection_seo_name = collection_seo_name | strip
+    assign og_title = collection_seo_name | append: ' | ' | append: shop.name
     case collection.handle
       when 'green-tea'
         assign meta_description = 'Shop premium loose leaf green tea — bright, sweet whole-leaf selections packed fresh to order. Free Canada-wide shipping over ' | append: free_ship_label | append: '.'
@@ -42,6 +47,8 @@
         assign meta_description = 'Premium loose leaf pu-erh tea — deep, smooth, and ideal for re-steeping. Shop Luxe Leaf Tea.'
       when 'black-tea'
         assign meta_description = 'Shop premium loose leaf black tea — rich, malty, and full-bodied. Packed fresh to order.'
+      when 'all'
+        assign meta_description = 'Shop premium loose leaf tea — green, oolong, pu-erh, and black teas packed fresh to order. Free Canada-wide shipping over ' | append: free_ship_label | append: '.'
     endcase
     if collection.description != blank
       assign meta_description = collection.description | strip_html | truncate: 155
@@ -226,10 +233,18 @@
 {%- endif -%}
 
 <title>
-  {{ page_title }}
-  {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-  {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-  {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  {%- if request.page_type == 'collection' or request.page_type == 'index' -%}
+    {{ og_title }}
+    {%- if request.page_type == 'collection' -%}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- endif -%}
+  {%- else -%}
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  {%- endif -%}
 </title>
 
 <link

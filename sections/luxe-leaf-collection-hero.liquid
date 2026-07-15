@@ -5,7 +5,6 @@
 {%- liquid
   assign handle = collection.handle
   assign eyebrow = section.settings.eyebrow
-  assign heading = section.settings.heading | default: collection.title
   assign description = section.settings.description
   assign image_file = section.settings.fallback_image
 
@@ -32,6 +31,10 @@
       assign image_file = image_file | default: 'luxe-leaf-tea-assortment-hero.png'
   endcase
 -%}
+{%- capture heading -%}
+  {%- render 'luxe-leaf-collection-seo-name', collection: collection, heading_override: section.settings.heading -%}
+{%- endcapture -%}
+{%- assign heading = heading | strip -%}
 
 <section class="luxe-collection-hero section section--page-width spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
   <div class="luxe-collection-hero__grid">
@@ -64,7 +67,7 @@
   </div>
 </section>
 
-{%- render 'luxe-leaf-collection-schema', collection: collection -%}
+{%- render 'luxe-leaf-collection-schema', collection: collection, seo_name: heading -%}
 
 {% stylesheet %}
   .luxe-collection-hero {
@@ -95,8 +98,9 @@
 
   .luxe-collection-hero__heading {
     margin: 0 0 16px;
-    font-size: clamp(2rem, 4vw, 3rem);
-    line-height: 1.1;
+    font-size: clamp(1.85rem, 3.8vw, 3rem);
+    line-height: 1.12;
+    text-wrap: balance;
   }
 
   .luxe-collection-hero__text {

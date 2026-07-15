@@ -9,7 +9,11 @@
   case request.page_type
     when 'collection'
       if collection
-        assign crumbs = 'Home|' | append: shop_url | append: '||' | append: collection.title | append: '|' | append: collection.url
+        capture collection_crumb_name
+          render 'luxe-leaf-collection-seo-name', collection: collection
+        endcapture
+        assign collection_crumb_name = collection_crumb_name | strip
+        assign crumbs = 'Home|' | append: shop_url | append: '||' | append: collection_crumb_name | append: '|' | append: collection.url
       endif
     when 'product'
       if product
@@ -32,7 +36,11 @@
 
         assign crumbs = 'Home|' | append: shop_url
         if breadcrumb_collection != blank
-          assign crumbs = crumbs | append: '||' | append: breadcrumb_collection.title | append: '|' | append: breadcrumb_collection.url
+          capture collection_crumb_name
+            render 'luxe-leaf-collection-seo-name', collection: breadcrumb_collection
+          endcapture
+          assign collection_crumb_name = collection_crumb_name | strip
+          assign crumbs = crumbs | append: '||' | append: collection_crumb_name | append: '|' | append: breadcrumb_collection.url
         endif
         assign crumbs = crumbs | append: '||' | append: product.title | append: '|' | append: product.url
       endif

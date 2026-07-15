@@ -1,14 +1,23 @@
 {%- doc -%}
   CollectionPage + BreadcrumbList + ItemList JSON-LD for collection SEO.
+
   @param {object} collection - The collection object
+  @param {string} [seo_name] - Keyword-aligned collection name (falls back to shared SEO name snippet)
 {%- enddoc -%}
 
 {%- if collection != blank -%}
   {%- liquid
     assign collection_url = shop.url | append: collection.url
+    if seo_name == blank
+      capture seo_name
+        render 'luxe-leaf-collection-seo-name', collection: collection
+      endcapture
+      assign seo_name = seo_name | strip
+    endif
+
     assign collection_desc = collection.description | strip_html | truncate: 300
     if collection_desc == blank
-      assign collection_desc = 'Shop premium loose leaf ' | append: collection.title | append: ' — packed fresh to order.'
+      assign collection_desc = 'Shop ' | append: seo_name | append: ' — packed fresh to order.'
     endif
     assign schema_product_limit = 20
   -%}
@@ -32,7 +41,7 @@
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": {{ collection.title | json }},
+      "name": {{ seo_name | json }},
       "description": {{ collection_desc | json }},
       "url": {{ collection_url | json }},
       "isPartOf": {
@@ -52,14 +61,14 @@
           {
             "@type": "ListItem",
             "position": 2,
-            "name": {{ collection.title | json }},
+            "name": {{ seo_name | json }},
             "item": {{ collection_url | json }}
           }
         ]
       }{%- if item_list_elements != blank -%},
       "mainEntity": {
         "@type": "ItemList",
-        "name": {{ collection.title | json }},
+        "name": {{ seo_name | json }},
         "itemListElement": [{{ item_list_elements }}]
       }{%- endif -%}
     }
