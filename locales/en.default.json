@@ -265,6 +265,13 @@
     "search_empty_shop_cta": "Shop all teas",
     "search_empty_faq_link": "Need help choosing? Read the FAQ",
     "search_empty_hint": "Or browse by tea type below — one tap to shop.",
+    "filter_empty_eyebrow": "Widen your search",
+    "filter_empty_heading": "No teas match these filters",
+    "filter_empty_message": "Clear your filters or browse by tea type to keep shopping premium loose leaf.",
+    "filter_empty_clear_cta": "Clear all filters",
+    "filter_empty_shop_cta": "Shop all teas",
+    "filter_empty_browse_label": "Browse by tea type",
+    "filter_empty_faq_link": "Need help choosing? Read the FAQ",
     "search_results_resource_articles": "Blog posts",
     "search_results_resource_collections": "Collections",
     // Section heading for Shopify store pages in search results
