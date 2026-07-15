@@ -16,7 +16,11 @@
   assign limit = section.settings.product_limit | default: 8
 -%}
 
-<section class="luxe-featured section section--page-width spacing-style" id="featured-teas">
+<section
+  class="luxe-featured section section--page-width spacing-style"
+  id="featured-teas"
+  aria-label="{{ section.settings.heading | escape }}"
+>
   <div class="luxe-featured__header">
     <p class="luxe-featured__eyebrow">
       {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
