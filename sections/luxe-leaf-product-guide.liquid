@@ -108,17 +108,18 @@
     assign brewing_html = brewing | metafield_tag
   endif
 
-  # When the PDP already shows a full product description below the buy box,
-  # skip default origin/tasting copy so the page does not duplicate the story.
+  # Keep tasting notes available for conversion even when a description exists.
+  # Only hide generic origin copy when the description already covers the story.
   assign show_origin = true
   assign show_tasting = true
-  if product.description != blank
-    if origin_is_default
-      assign show_origin = false
-    endif
-    if tasting_is_default
-      assign show_tasting = false
-    endif
+  if product.description != blank and origin_is_default
+    assign show_origin = false
+  endif
+
+  assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+  assign trust_line = section.settings.trust_line
+  if trust_line == blank or trust_line contains 'over $50'
+    assign trust_line = 'Packed fresh to order · Premium loose leaf tea · Free Canada-wide shipping over ' | append: free_ship_label
   endif
 
   assign tea_collection_handle = ''
@@ -160,7 +161,7 @@
 >
   <div class="luxe-product-guide__trust">
     <span class="luxe-product-guide__trust-icon" aria-hidden="true">{%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}</span>
-    {{ section.settings.trust_line }}
+    {{ trust_line }}
   </div>
 
   <div class="luxe-product-guide__accordion accordion accordion--caret accordion--dividers">

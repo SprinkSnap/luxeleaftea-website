@@ -120,7 +120,7 @@ body .button:not(.button-unstyled):hover {
   transform: translateY(-1px);
 }
 
-body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button) {
+body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button):not(.sticky-add-to-cart__button) {
   background: var(--luxe-jade);
   border-color: var(--luxe-jade);
   color: #fff;
@@ -4023,6 +4023,39 @@ zoom-dialog.luxe-zoom-dialog dialog {
   .product-details.luxe-pdp-buy-column > .group-block > .product-description {
     display: none !important;
   }
+}
+
+/* PDP buy box — hero title + decision cues above ATC */
+.luxe-pdp-buy-column .text-block.h1,
+.luxe-pdp-buy-column .text-block.h1 h1,
+.luxe-pdp-buy-column h1 {
+  margin: 0;
+  font-family: 'Playfair Display', var(--font-heading--family), Georgia, serif;
+  font-size: clamp(1.7rem, 3.4vw, 2.25rem) !important;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--luxe-jade, #1b4332) !important;
+}
+
+.luxe-pdp-buy-column .price,
+.luxe-pdp-buy-column .price-item {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--luxe-jade, #1b4332);
+}
+
+body.luxe-leaf-theme .sticky-add-to-cart__button {
+  background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+  border: 2px solid #f3d56a !important;
+  color: #141414 !important;
+  -webkit-text-fill-color: #141414 !important;
+  font-weight: 800;
+}
+
+body.luxe-leaf-theme .sticky-add-to-cart__button .add-to-cart-text__content,
+body.luxe-leaf-theme .sticky-add-to-cart__button .svg-wrapper {
+  color: #141414 !important;
 }
 
 /* Cart page — You may also like (conversion + responsive product cards) */
