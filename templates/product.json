@@ -281,6 +281,7 @@
               "name": "Trust signals",
               "settings": {
                 "show_taste": false,
+                "show_cart_free_ship": true,
                 "show_trust": true
               },
               "blocks": {}
