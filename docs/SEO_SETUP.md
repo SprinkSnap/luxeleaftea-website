@@ -118,13 +118,13 @@ After deploying, the homepage includes (in order):
 
 Collection pages use the same keyword pattern via `snippets/luxe-leaf-collection-seo-name.liquid` (H1, schema `name`, breadcrumbs, and document title) — e.g. **Premium Loose Leaf Green Tea**.
 3. **Featured teas** (first shoppable grid with Add to Bag)
-4. **Keep exploring** (browse rail + ItemList schema)
+4. **Keep exploring** (recent-views only on homepage)
 5. Tea types grid
-6. Store experience story
-7. About / trust story
-8. Brewing guide
-9. **Home FAQ** (visible accordions matching FAQ schema)
-10. **Social proof** (review quotes)
+6. **Social proof** (honest brand notes by default; switch to real reviews when available)
+7. Store experience story
+8. About / trust story
+9. Brewing guide
+10. **Home FAQ** (visible accordions matching FAQ schema)
 11. **Tea guides hub** (links to blog + collections)
 12. **Shop CTA** (final conversion block)
 
@@ -139,7 +139,8 @@ Add Facebook, Instagram, and YouTube URLs. These populate Organization `sameAs` 
 - [ ] Add unique meta descriptions to each collection (see `docs/PRODUCTS_AND_COLLECTIONS.md`)
 - [ ] Write product descriptions with origin, tasting notes, and brewing tips
 - [ ] Publish 1–2 tea guide articles per month
-- [ ] Replace placeholder social proof quotes with real customer reviews when available
+- [ ] Install a reviews app (Judge.me, Loox, etc.) and add its widget to **Product reviews** on the product template
+- [ ] When real reviews exist, set homepage/about social proof **Presentation → Customer reviews** and paste verified quotes (or hide brand notes)
 - [ ] Create FAQ page with template suffix `faq`
 - [ ] Add GA4 measurement ID and Search Console verification in theme settings
 - [ ] Monitor Search Console for crawl errors and keyword impressions

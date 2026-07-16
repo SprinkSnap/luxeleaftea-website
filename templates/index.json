@@ -211,34 +211,43 @@
     "social_proof": {
       "type": "luxe-leaf-social-proof",
       "blocks": {
-        "review_1": {
+        "note_1": {
           "type": "review",
           "settings": {
-            "quote": "The leaves taste incredibly fresh \u2014 bright, sweet, and nothing like bagged tea.",
-            "author": "Sarah M."
+            "label": "Freshness",
+            "quote": "Whole leaves packed fresh to order \u2014 brighter aroma and a cleaner cup than bagged tea.",
+            "author": ""
           }
         },
-        "review_2": {
+        "note_2": {
           "type": "review",
           "settings": {
-            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. My daily ritual now.",
-            "author": "James L."
+            "label": "Brewing",
+            "quote": "Clear temperature and steeping notes with every order, so your first cup lands with confidence.",
+            "author": ""
           }
         },
-        "review_3": {
+        "note_3": {
           "type": "review",
           "settings": {
-            "quote": "Finally found premium loose leaf tea that feels special without being intimidating.",
-            "author": "Elena K."
+            "label": "Shipping",
+            "quote": "Canada-wide delivery with free shipping over the store threshold \u2014 tea that arrives ready to steep.",
+            "author": ""
           }
         }
       },
       "block_order": [
-        "review_1",
-        "review_2",
-        "review_3"
+        "note_1",
+        "note_2",
+        "note_3"
       ],
       "settings": {
+        "presentation": "notes",
+        "hide_when_empty": false,
+        "eyebrow": "Why tea drinkers switch",
+        "heading": "Premium loose leaf, beautifully brewed",
+        "intro": "What you can expect from every Luxe Leaf order \u2014 fresh leaves, clear brew notes, and Canada-wide shipping.",
+        "section_id": "why-loose-leaf",
         "padding-block-start": 48,
         "padding-block-end": 48
       }
@@ -266,11 +275,11 @@
     "featured_teas",
     "keep_exploring",
     "tea_types",
+    "social_proof",
     "store_experience",
     "about_story",
     "brewing_guide",
     "home_faq",
-    "social_proof",
     "tea_guides",
     "shop_cta"
   ]

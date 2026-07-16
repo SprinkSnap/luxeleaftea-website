@@ -125,6 +125,7 @@ Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-
 
 ## 9. Ongoing
 
-- Replace placeholder social proof with real reviews
+- Install a reviews app; confirm stars appear under the PDP price and the Product reviews section hydrates
+- Swap homepage/about brand notes to real customer reviews only after verified quotes exist
 - Publish 1–2 tea guide articles per month
 - Monitor Search Console for impressions and crawl issues
