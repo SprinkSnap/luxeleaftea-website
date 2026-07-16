@@ -1,5 +1,5 @@
 {%- doc -%}
-  Cart drawer open/close bridge — reliable single-tap open even if theme-drawer.js is slow.
+  Cart drawer open/close bridge — reliable single-tap open, no swipe/touch freezes.
   Render once near end of layout/theme.liquid (after cart-drawer markup).
 {%- enddoc -%}
 
@@ -15,55 +15,45 @@
       var opening = false;
       var ignoreClickUntil = 0;
 
-      function syncDrawerChrome(isOpen) {
-        document.documentElement.classList.toggle('luxe-cart-drawer-open', isOpen);
-
-        var nudge = document.querySelector('[data-shipping-nudge]');
-        var bar = document.querySelector('[data-mobile-shop-bar]');
-        if (nudge) nudge.toggleAttribute('data-drawer-open', isOpen);
-        if (bar) bar.toggleAttribute('data-drawer-open', isOpen);
-
-        document.querySelectorAll('[aria-controls="cart-drawer"]').forEach(function (trigger) {
-          trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        });
+      function isDrawerOpen(drawer) {
+        if (!drawer) return false;
+        return drawer.hasAttribute('open') || Boolean(drawer.querySelector('dialog[open]'));
       }
 
-      function clearStuckLock() {
+      function getDrawer() {
+        return document.getElementById('cart-drawer');
+      }
+
+      function hardUnlockScroll() {
         if (typeof window.__themeForceUnlockScroll === 'function') {
           window.__themeForceUnlockScroll();
         } else {
           document.documentElement.removeAttribute('scroll-lock');
         }
-        document.documentElement.classList.remove('luxe-cart-drawer-open');
       }
 
-      var historyPushed = false;
-      var ignorePopState = false;
+      /**
+       * Keep chrome classes truthful. Stuck luxe-cart-drawer-open / scroll-lock
+       * was freezing all mobile swipes after cart use.
+       */
+      function reconcileDrawerChrome() {
+        var drawer = getDrawer();
+        var open = isDrawerOpen(drawer);
 
-      function pushDrawerHistory() {
-        if (historyPushed) return;
-        try {
-          history.pushState({ luxeCartDrawer: 1 }, '', location.href);
-          historyPushed = true;
-        } catch (e) {}
-      }
+        document.documentElement.classList.toggle('luxe-cart-drawer-open', open);
 
-      function popDrawerHistory() {
-        if (!historyPushed) return;
-        historyPushed = false;
-        if (history.state && history.state.luxeCartDrawer) {
-          ignorePopState = true;
-          try {
-            history.back();
-          } catch (e) {
-            ignorePopState = false;
-          }
+        var nudge = document.querySelector('[data-shipping-nudge]');
+        var bar = document.querySelector('[data-mobile-shop-bar]');
+        if (nudge) nudge.toggleAttribute('data-drawer-open', open);
+        if (bar) bar.toggleAttribute('data-drawer-open', open);
+
+        document.querySelectorAll('[aria-controls="cart-drawer"]').forEach(function (trigger) {
+          trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+
+        if (!open) {
+          hardUnlockScroll();
         }
-      }
-
-      function isDrawerOpen(drawer) {
-        if (!drawer) return false;
-        return drawer.hasAttribute('open') || Boolean(drawer.querySelector('dialog[open]'));
       }
 
       function upgradeDrawer(drawer) {
@@ -79,7 +69,7 @@
       }
 
       function ensureDrawer() {
-        var drawer = document.getElementById('cart-drawer');
+        var drawer = getDrawer();
         if (!drawer) return Promise.resolve(null);
 
         if (!window.customElements || !window.customElements.whenDefined) {
@@ -102,7 +92,6 @@
         if (!dialog) return false;
 
         try {
-          clearStuckLock();
           drawer.setAttribute('open', '');
           var modal = window.matchMedia('(max-width: 989px)').matches;
           if (modal) {
@@ -116,24 +105,23 @@
             dialog.classList.remove('theme-drawer__dialog--opening');
           }, 400);
           drawer.dispatchEvent(new CustomEvent('theme-drawer:open', { bubbles: true }));
-          syncDrawerChrome(true);
+          reconcileDrawerChrome();
           return isDrawerOpen(drawer);
         } catch (e) {
+          reconcileDrawerChrome();
           return false;
         }
       }
 
       function forceOpenDrawerSync(drawer) {
         if (!drawer) return false;
-
-        clearStuckLock();
         upgradeDrawer(drawer);
 
         try {
           if (typeof drawer.open === 'function') {
             drawer.open();
             if (isDrawerOpen(drawer)) {
-              syncDrawerChrome(true);
+              reconcileDrawerChrome();
               return true;
             }
           }
@@ -143,35 +131,32 @@
       }
 
       function forceCloseDrawer() {
-        var drawer = document.getElementById('cart-drawer');
-        clearStuckLock();
-        syncDrawerChrome(false);
+        var drawer = getDrawer();
 
-        if (!drawer || !isDrawerOpen(drawer)) return true;
+        if (drawer && isDrawerOpen(drawer)) {
+          try {
+            upgradeDrawer(drawer);
+            if (typeof drawer.close === 'function') {
+              drawer.close();
+            }
+          } catch (e) {}
 
-        try {
-          upgradeDrawer(drawer);
-          if (typeof drawer.close === 'function') {
-            drawer.close();
-            if (!isDrawerOpen(drawer)) return true;
+          var dialog = drawer.querySelector('dialog');
+          if (dialog) {
+            try {
+              if (dialog.open) dialog.close();
+            } catch (e2) {}
+            drawer.removeAttribute('open');
+            dialog.classList.remove('theme-drawer__dialog--closing', 'theme-drawer__dialog--opening');
+            try {
+              drawer.dispatchEvent(new CustomEvent('theme-drawer:close', { bubbles: true }));
+            } catch (e3) {}
           }
-        } catch (e) {}
-
-        var dialog = drawer.querySelector('dialog');
-        if (!dialog) return false;
-
-        try {
-          if (dialog.open) dialog.close();
-          drawer.removeAttribute('open');
-          dialog.classList.remove('theme-drawer__dialog--closing', 'theme-drawer__dialog--opening');
-          drawer.dispatchEvent(new CustomEvent('theme-drawer:close', { bubbles: true }));
-          syncDrawerChrome(false);
-          clearStuckLock();
-          return true;
-        } catch (e) {
-          clearStuckLock();
-          return false;
         }
+
+        hardUnlockScroll();
+        reconcileDrawerChrome();
+        return true;
       }
 
       async function openCartDrawer(evt) {
@@ -184,23 +169,18 @@
           if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
         }
 
-        // Suppress the synthetic click that follows touch/pointer on the bag icon
         ignoreClickUntil = Date.now() + 600;
 
         try {
-          clearStuckLock();
+          reconcileDrawerChrome();
           var drawer = await ensureDrawer();
-
           if (!drawer) return;
 
-          // If a close animation is in progress, ThemeDrawer.open() only defers —
-          // retry briefly instead of navigating away (which freezes on first tap).
           for (var attempt = 0; attempt < 8; attempt++) {
             if (forceOpenDrawerSync(drawer)) return;
             await sleep(40);
           }
 
-          // Last resort: hard reset dialog state, then open once more
           var dialog = drawer.querySelector('dialog');
           if (dialog) {
             try {
@@ -208,12 +188,13 @@
             } catch (e) {}
             drawer.removeAttribute('open');
             dialog.classList.remove('theme-drawer__dialog--closing', 'theme-drawer__dialog--opening');
-            clearStuckLock();
+            hardUnlockScroll();
             await sleep(30);
             forceOpenDrawerSync(drawer);
           }
         } finally {
           opening = false;
+          reconcileDrawerChrome();
         }
       }
 
@@ -226,7 +207,6 @@
       }
 
       function onDocumentIntent(evt) {
-        // Ghost click after pointer/touch open — ignore so double-fire can't stuck-lock
         if (evt.type === 'click' && Date.now() < ignoreClickUntil) {
           var maybeTrigger = evt.target instanceof Element ? evt.target.closest(OPEN_TRIGGER) : null;
           if (maybeTrigger) {
@@ -244,7 +224,7 @@
           return;
         }
 
-        var drawer = document.getElementById('cart-drawer');
+        var drawer = getDrawer();
         if (drawer && isDrawerOpen(drawer) && evt.type === 'click') {
           var dialog = drawer.querySelector('dialog');
           if (dialog && evt.target === dialog && window.matchMedia('(max-width: 989px)').matches) {
@@ -259,61 +239,59 @@
         openCartDrawer(evt);
       }
 
-      // Single input path (click covers mouse + tap). Removed capture touchend —
-      // it raced click, set a 450ms lock, and fell back to /cart when open deferred mid-close.
       document.addEventListener('click', onDocumentIntent, true);
 
       document.addEventListener('keydown', function (evt) {
         if (evt.key !== 'Escape') return;
-        var drawer = document.getElementById('cart-drawer');
+        var drawer = getDrawer();
         if (!drawer || !isDrawerOpen(drawer)) return;
         if (evt.defaultPrevented) return;
         closeCartDrawer(evt);
       });
 
-      /*
-        Swipe-to-close REMOVED: calling forceCloseDrawer() mid-touchmove tore down
-        the modal dialog under an active finger and left scroll-lock / pointer half-state
-        (site frozen until a second tap). Close via X, backdrop, Escape, or edge-back.
-      */
+      // Recover from stuck scroll-lock / chrome class (restores mobile swipe)
+      function recoverIfStuck() {
+        var drawer = getDrawer();
+        var open = isDrawerOpen(drawer);
+        var classStuck = document.documentElement.classList.contains('luxe-cart-drawer-open');
+        var lockStuck = document.documentElement.hasAttribute('scroll-lock');
 
-      // Edge swipe-back while the cart is open → close drawer only (no page leave / freeze)
-      window.addEventListener('popstate', function () {
-        if (ignorePopState) {
-          ignorePopState = false;
-          return;
+        if ((!open && classStuck) || (!open && lockStuck)) {
+          hardUnlockScroll();
+          reconcileDrawerChrome();
         }
+      }
 
-        var drawer = document.getElementById('cart-drawer');
-        if (drawer && isDrawerOpen(drawer)) {
-          historyPushed = false;
-          forceCloseDrawer();
-        }
+      document.addEventListener('touchstart', recoverIfStuck, { passive: true, capture: true });
+      document.addEventListener('pointerdown', recoverIfStuck, { passive: true, capture: true });
+      window.addEventListener('pageshow', function () {
+        hardUnlockScroll();
+        reconcileDrawerChrome();
       });
-
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') recoverIfStuck();
+      });
       window.addEventListener('pagehide', function () {
-        historyPushed = false;
         forceCloseDrawer();
-        clearStuckLock();
       });
 
       document.addEventListener('theme-drawer:open', function (evt) {
-        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
-          syncDrawerChrome(true);
-          pushDrawerHistory();
-        }
+        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') reconcileDrawerChrome();
       });
       document.addEventListener('theme-drawer:close', function (evt) {
         if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
-          syncDrawerChrome(false);
-          clearStuckLock();
-          popDrawerHistory();
+          hardUnlockScroll();
+          reconcileDrawerChrome();
         }
       });
+
+      // Initial cleanup in case a previous session left locks behind
+      reconcileDrawerChrome();
 
       window.LuxeLeaf = window.LuxeLeaf || {};
       window.LuxeLeaf.openCart = openCartDrawer;
       window.LuxeLeaf.closeCart = closeCartDrawer;
+      window.LuxeLeaf.reconcileCartDrawer = reconcileDrawerChrome;
     })();
   </script>
 {%- endif -%}
