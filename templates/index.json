@@ -58,6 +58,7 @@
         "recent_heading": "Pick up where you left off",
         "recent_intro": "Your recently viewed teas — one tap to add without leaving the page.",
         "view_all_label": "Shop all teas",
+        "recent_only": true,
         "collection": "all",
         "product_limit": 4,
         "exclude_current_on_product": true,

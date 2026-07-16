@@ -11,13 +11,20 @@ async function hydrateKeepExploring(section) {
   const sectionId = section.dataset.sectionId;
   if (!sectionId || section.dataset.keepExploringHydrated === 'true') return;
 
+  const recentOnly = section.dataset.recentOnly === 'true';
   const viewed = RecentlyViewed.getProducts();
   const excludeId = section.dataset.excludeProductId;
   const filtered = excludeId
     ? viewed.filter((id) => String(id) !== String(excludeId))
     : viewed;
 
-  if (filtered.length === 0) return;
+  if (filtered.length === 0) {
+    if (recentOnly) {
+      section.hidden = true;
+      section.classList.add('luxe-keep-exploring--pending');
+    }
+    return;
+  }
 
   const searchBase = window.Theme?.routes?.search_url ?? '/search';
   const url = new URL(searchBase, window.location.origin);
@@ -31,7 +38,13 @@ async function hydrateKeepExploring(section) {
     const freshRail = parsed.querySelector('[data-keep-exploring-rail]');
     const liveRail = section.querySelector('[data-keep-exploring-rail]');
 
-    if (!freshRail || !liveRail || !freshRail.children.length) return;
+    if (!freshRail || !liveRail || !freshRail.children.length) {
+      if (recentOnly) {
+        section.hidden = true;
+        section.classList.add('luxe-keep-exploring--pending');
+      }
+      return;
+    }
 
     liveRail.replaceChildren(...freshRail.children);
 
@@ -49,9 +62,18 @@ async function hydrateKeepExploring(section) {
       section.classList.add('luxe-keep-exploring--recent');
     }
 
+    if (recentOnly) {
+      section.hidden = false;
+      section.classList.remove('luxe-keep-exploring--pending');
+    }
+
     section.dataset.keepExploringHydrated = 'true';
   } catch {
-    /* keep server-rendered fallback */
+    if (recentOnly) {
+      section.hidden = true;
+      section.classList.add('luxe-keep-exploring--pending');
+    }
+    /* otherwise keep server-rendered fallback */
   }
 }
 
