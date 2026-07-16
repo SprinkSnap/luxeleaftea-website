@@ -238,6 +238,10 @@
               },
               "blocks": {}
             },
+            "card_taste_cue": {
+              "type": "luxe-leaf-card-taste-cue",
+              "settings": {}
+            },
             "price_A6DYPt": {
               "type": "price",
               "name": "t:names.product_price",
@@ -264,6 +268,7 @@
           "block_order": [
             "product_card_gallery_wxYqE3",
             "product_title_83YMDL",
+            "card_taste_cue",
             "price_A6DYPt"
           ]
         }

@@ -1,11 +1,13 @@
 {%- doc -%}
-  Short buy-box taste / brew cue for PDP conversion + SEO.
+  Taste / type cue for PDP buy box and product cards (browse differentiation + SEO).
   @param {object} product
   @param {string} [mode] - assign | echo (default echo)
+  @param {string} [presentation] - pdp (default) | card
 {%- enddoc -%}
 
 {%- liquid
   assign cue_product = product | default: closest.product
+  assign cue_presentation = presentation | default: 'pdp'
   assign tea_type = 'premium'
   assign tag_handles = cue_product.tags | join: ',' | downcase
   assign title_downcase = cue_product.title | downcase
@@ -65,12 +67,23 @@
       assign taste_cue = taste_plain
     endif
   endif
+
+  if cue_presentation == 'card'
+    assign taste_cue = taste_cue | truncate: 56, '…'
+  endif
 -%}
 
 {%- unless mode == 'assign' -%}
-  <p class="luxe-pdp-buy-signals__taste">
-    <span class="luxe-pdp-buy-signals__type">{{ type_label }}</span>
-    <span class="luxe-pdp-buy-signals__sep" aria-hidden="true">·</span>
-    <span class="luxe-pdp-buy-signals__cue">{{ taste_cue }}</span>
-  </p>
+  {%- if cue_presentation == 'card' -%}
+    <p class="luxe-card-taste">
+      <span class="luxe-card-taste__type">{{ type_label }}</span>
+      <span class="luxe-card-taste__cue">{{ taste_cue }}</span>
+    </p>
+  {%- else -%}
+    <p class="luxe-pdp-buy-signals__taste">
+      <span class="luxe-pdp-buy-signals__type">{{ type_label }}</span>
+      <span class="luxe-pdp-buy-signals__sep" aria-hidden="true">·</span>
+      <span class="luxe-pdp-buy-signals__cue">{{ taste_cue }}</span>
+    </p>
+  {%- endif -%}
 {%- endunless -%}

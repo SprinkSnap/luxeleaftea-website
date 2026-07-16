@@ -1,0 +1,61 @@
+{%- doc -%}
+  Compact taste / type cue for product cards — differentiates teas when images collide.
+{%- enddoc -%}
+
+{%- if closest.product != blank -%}
+  <div class="luxe-card-taste-block" {{ block.shopify_attributes }}>
+    {% render 'luxe-leaf-pdp-taste-cue', product: closest.product, presentation: 'card' %}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .luxe-card-taste-block {
+    width: 100%;
+  }
+
+  .luxe-card-taste {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .luxe-card-taste__type {
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .luxe-card-taste__cue {
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.78);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  @media screen and (max-width: 749px) {
+    .luxe-card-taste__cue {
+      font-size: 0.6875rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf card taste cue",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Luxe Leaf card taste cue"
+    }
+  ]
+}
+{% endschema %}

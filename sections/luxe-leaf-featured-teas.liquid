@@ -66,6 +66,7 @@
           <h3 class="luxe-featured__title">
             <a href="{{ variant.url }}">{{ product.title }}</a>
           </h3>
+          {% render 'luxe-leaf-pdp-taste-cue', product: product, presentation: 'card' %}
           <p class="luxe-featured__price">{{ variant.price | money }}</p>
           {%- if product.available -%}
             {%- form 'product', product, class: 'luxe-featured__form' -%}
@@ -234,6 +235,38 @@
   .luxe-featured__title a {
     color: var(--luxe-jade);
     text-decoration: none;
+  }
+
+  .luxe-featured .luxe-card-taste {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin: 0;
+  }
+
+  .luxe-featured .luxe-card-taste__type {
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .luxe-featured .luxe-card-taste__cue {
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.78);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  @media screen and (max-width: 749px) {
+    .luxe-featured .luxe-card-taste__cue {
+      font-size: 0.6875rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   }
 
   .luxe-featured__price {
