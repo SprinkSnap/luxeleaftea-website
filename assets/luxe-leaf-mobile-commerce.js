@@ -527,6 +527,12 @@ import { StandardEvents } from '@shopify/events';
     observeNudgeHeight();
     refreshCartPricing();
   });
+  // Keep --luxe-shipping-nudge-height accurate so Contact sticky dock stays above it
+  window.addEventListener('resize', syncNudgeHeight, { passive: true });
+  window.addEventListener('pageshow', () => {
+    observeNudgeHeight();
+    syncNudgeHeight();
+  });
   document.addEventListener('luxe:ca-location-change', refreshCartPricing);
   document.addEventListener(StandardEvents.cartLinesUpdate, syncBar);
   document.addEventListener('theme-drawer:open', (event) => {
