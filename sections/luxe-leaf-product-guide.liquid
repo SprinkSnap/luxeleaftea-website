@@ -123,8 +123,9 @@
   endif
 
   assign tea_collection_handle = ''
-  assign tea_guide_url = '/blogs/tea-guides/how-to-brew-loose-leaf-tea'
+  assign tea_guide_handle = 'how-to-brew-loose-leaf-tea'
   assign tea_collection_label = 'Shop premium loose leaf tea'
+  assign faq_fallback = pages['faq'].url | default: '/pages/faq'
 
   case tea_type
     when 'green'
@@ -132,7 +133,7 @@
       assign tea_collection_label = 'Shop premium green tea'
     when 'oolong'
       assign tea_collection_handle = 'oolong'
-      assign tea_guide_url = '/blogs/tea-guides/best-oolong-teas-for-beginners'
+      assign tea_guide_handle = 'best-oolong-teas-for-beginners'
       assign tea_collection_label = 'Shop premium oolong tea'
     when 'puerh'
       assign tea_collection_handle = 'pu-erh'
@@ -152,6 +153,11 @@
   else
     assign tea_collection_url = '/collections/all'
   endif
+
+  capture tea_guide_url
+    render 'luxe-leaf-tea-guides-url', target: tea_guide_handle, fallback: faq_fallback
+  endcapture
+  assign tea_guide_url = tea_guide_url | strip
 -%}
 
 <section
@@ -196,11 +202,13 @@
       {{ tea_collection_label }}
       {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
     </a>
-    <a href="{{ tea_guide_url }}" class="luxe-product-guide__link luxe-link-with-icon">
-      Read the brewing guide
-      {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
-    </a>
-    <a href="/pages/faq" class="luxe-product-guide__link luxe-link-with-icon">
+    {%- if tea_guide_url != blank and tea_guide_url != faq_fallback -%}
+      <a href="{{ tea_guide_url }}" class="luxe-product-guide__link luxe-link-with-icon">
+        Read the brewing guide
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
+    {%- endif -%}
+    <a href="{{ faq_fallback }}" class="luxe-product-guide__link luxe-link-with-icon">
       View FAQ
       {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
     </a>

@@ -74,7 +74,7 @@ Brand navigation is enabled by default (**Theme settings → Luxe Leaf Tea**):
 - Our Story → `/pages/about`
 - Contact → `/pages/contact`
 
-Footer also links to **Tea Guides** → `/blogs/tea-guides` and **FAQ** → `/pages/faq`.
+Footer links to **Tea Guides** only when the `tea-guides` blog has published articles; otherwise **FAQ** → `/pages/faq` covers brewing help.
 
 ## FAQ page
 

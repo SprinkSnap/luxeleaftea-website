@@ -35,7 +35,7 @@ The theme ships `templates/robots.txt.liquid` with the standard Shopify crawl ru
 | Title | Tea Guides |
 | Handle | `tea-guides` |
 
-The homepage tea guides section, footer link, and shop CTA all point to `/blogs/tea-guides`.
+The homepage tea guides section, footer link, and shop CTA resolve to `/blogs/tea-guides` only after this blog has published articles. Until then they fall back to FAQ/collections so links never 404.
 
 ## 4. Publish starter articles
 

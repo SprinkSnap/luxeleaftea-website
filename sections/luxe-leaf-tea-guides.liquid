@@ -1,3 +1,22 @@
+{%- doc -%}
+  Tea Guides hub cards — live blog articles when published, else shop/FAQ fallbacks (no 404s).
+{%- enddoc -%}
+
+{%- liquid
+  assign guides_blog = blogs['tea-guides']
+  assign has_live_guides = false
+  if guides_blog != blank and guides_blog.articles_count > 0
+    assign has_live_guides = true
+  endif
+
+  assign faq_url = pages['faq'].url | default: '/pages/faq'
+  assign green_url = collections['green-tea'].url | default: '/collections/green-tea'
+  assign oolong_url = collections['oolong'].url | default: '/collections/oolong'
+  assign all_url = routes.all_products_collection_url
+  if collections.all != blank and collections.all.url != blank
+    assign all_url = collections.all.url
+  endif
+-%}
 
 <section
   class="luxe-guides section section--page-width spacing-style"
@@ -8,34 +27,81 @@
     <p class="luxe-guides__eyebrow">{{ section.settings.eyebrow }}</p>
     <h2 class="luxe-guides__heading">{{ section.settings.heading }}</h2>
     <p class="luxe-guides__intro">{{ section.settings.intro }}</p>
+    {%- if has_live_guides -%}
+      <a href="{{ guides_blog.url }}" class="luxe-guides__hub-link luxe-link-with-icon">
+        Browse all Tea Guides
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
+    {%- endif -%}
   </div>
 
   <div class="luxe-guides__grid" role="list">
-    {%- assign guides = 'How to Brew Premium Loose Leaf Tea|/blogs/tea-guides/how-to-brew-loose-leaf-tea|Temperature, timing, and grams for a clearer cup.,Best Oolong Teas for Beginners|/blogs/tea-guides/best-oolong-teas-for-beginners|Floral, layered teas perfect for your first gaiwan.,Loose Leaf vs Tea Bags|/blogs/tea-guides/loose-leaf-vs-tea-bags|Why whole leaves taste better and re-steep beautifully.,Shop Premium Green Tea|/collections/green-tea|Bright, sweet loose leaf greens packed fresh to order.' | split: ',' -%}
-
-    {%- for entry in guides -%}
-      {%- assign parts = entry | split: '|' -%}
-      {%- assign title = parts[0] -%}
-      {%- assign url = parts[1] -%}
-      {%- assign blurb = parts[2] -%}
-
-      <a class="luxe-guides__card" href="{{ url }}" role="listitem">
-        <h3 class="luxe-guides__title">{{ title }}</h3>
-        <p class="luxe-guides__text">{{ blurb }}</p>
+    {%- if has_live_guides -%}
+      {%- for article in guides_blog.articles limit: 3 -%}
+        <a class="luxe-guides__card" href="{{ article.url }}" role="listitem">
+          <h3 class="luxe-guides__title">{{ article.title }}</h3>
+          <p class="luxe-guides__text">
+            {%- if article.excerpt != blank -%}
+              {{ article.excerpt | strip_html | truncate: 110 }}
+            {%- else -%}
+              Expert tips to brew with confidence and get more flavor from every leaf.
+            {%- endif -%}
+          </p>
+          <span class="luxe-guides__link luxe-link-with-icon">
+            Read guide
+            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+          </span>
+        </a>
+      {%- endfor -%}
+      <a class="luxe-guides__card" href="{{ green_url }}" role="listitem">
+        <h3 class="luxe-guides__title">Shop Premium Green Tea</h3>
+        <p class="luxe-guides__text">Bright, sweet loose leaf greens packed fresh to order.</p>
         <span class="luxe-guides__link luxe-link-with-icon">
-          Read guide
+          Shop green tea
           {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
         </span>
       </a>
-    {%- endfor -%}
+    {%- else -%}
+      <a class="luxe-guides__card" href="{{ faq_url }}" role="listitem">
+        <h3 class="luxe-guides__title">Brewing tips &amp; tea FAQ</h3>
+        <p class="luxe-guides__text">Temperature, timing, shipping, and first-order answers — shop with confidence.</p>
+        <span class="luxe-guides__link luxe-link-with-icon">
+          Read the FAQ
+          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+        </span>
+      </a>
+      <a class="luxe-guides__card" href="{{ oolong_url }}" role="listitem">
+        <h3 class="luxe-guides__title">Best oolongs to start with</h3>
+        <p class="luxe-guides__text">Floral, layered teas perfect for your first gaiwan or everyday steep.</p>
+        <span class="luxe-guides__link luxe-link-with-icon">
+          Shop oolong
+          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+        </span>
+      </a>
+      <a class="luxe-guides__card" href="{{ green_url }}" role="listitem">
+        <h3 class="luxe-guides__title">Shop Premium Green Tea</h3>
+        <p class="luxe-guides__text">Bright, sweet loose leaf greens packed fresh to order.</p>
+        <span class="luxe-guides__link luxe-link-with-icon">
+          Shop green tea
+          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+        </span>
+      </a>
+      <a class="luxe-guides__card" href="{{ all_url }}" role="listitem">
+        <h3 class="luxe-guides__title">Shop all premium loose leaf</h3>
+        <p class="luxe-guides__text">Whole leaves for a clearer, more aromatic cup — packed fresh to order.</p>
+        <span class="luxe-guides__link luxe-link-with-icon">
+          Shop all teas
+          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+        </span>
+      </a>
+    {%- endif -%}
   </div>
 
-  {%- assign blog = blogs['tea-guides'] -%}
-  {%- if blog != blank and blog.articles_count > 0 -%}
+  {%- if has_live_guides -%}
     <div class="luxe-guides__latest">
       <h3 class="luxe-guides__latest-heading">Latest from Tea Guides</h3>
       <ul class="luxe-guides__latest-list list-unstyled">
-        {%- for article in blog.articles limit: 3 -%}
+        {%- for article in guides_blog.articles limit: 3 -%}
           <li><a href="{{ article.url }}">{{ article.title }}</a></li>
         {%- endfor -%}
       </ul>
@@ -71,6 +137,21 @@
     margin: 0;
     color: rgb(27 67 50 / 0.88);
     line-height: 1.6;
+  }
+
+  .luxe-guides__hub-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    color: #1b4332;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .luxe-guides__hub-link:hover {
+    text-decoration: underline;
   }
 
   .luxe-guides__grid {
@@ -153,6 +234,10 @@
   "tag": "section",
   "class": "luxe-guides-section",
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "Uses live Tea Guides articles when the tea-guides blog has posts. Until then, cards link to FAQ and collections so nothing 404s."
+    },
     {
       "type": "text",
       "id": "eyebrow",

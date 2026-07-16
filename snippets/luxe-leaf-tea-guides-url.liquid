@@ -1,0 +1,42 @@
+{%- doc -%}
+  Resolves Tea Guides blog or article URLs only when content exists.
+  Outputs the URL string (or fallback / blank).
+
+  @param {string} [target] - "hub" (default) or an article handle
+  @param {string} [blog] - blog handle, default "tea-guides"
+  @param {string} [fallback] - URL when missing; blank = output nothing
+{%- enddoc -%}
+{%- liquid
+  assign blog_handle = blog | default: 'tea-guides'
+  assign target_key = target | default: 'hub'
+  assign fallback_url = fallback | default: ''
+  assign guides_blog = blogs[blog_handle]
+  assign resolved_url = blank
+
+  if guides_blog != blank
+    if target_key == 'hub' or target_key == blank
+      if guides_blog.articles_count > 0 and guides_blog.url != blank
+        assign resolved_url = guides_blog.url
+      endif
+    else
+      assign article_key = blog_handle | append: '/' | append: target_key
+      assign guide_article = articles[article_key]
+      if guide_article != blank and guide_article.url != blank
+        assign resolved_url = guide_article.url
+      else
+        for guide_article in guides_blog.articles
+          if guide_article.handle == target_key
+            assign resolved_url = guide_article.url
+            break
+          endif
+        endfor
+      endif
+    endif
+  endif
+
+  if resolved_url == blank
+    assign resolved_url = fallback_url
+  endif
+
+  echo resolved_url
+-%}

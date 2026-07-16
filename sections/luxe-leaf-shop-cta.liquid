@@ -13,6 +13,28 @@
       assign shop_link = collections.all.url
     endif
   endif
+
+  assign secondary_label = section.settings.secondary_label
+  assign secondary_link = section.settings.secondary_link
+  assign secondary_is_guides = false
+  if secondary_link == blank or secondary_link contains '/blogs/tea-guides'
+    assign secondary_is_guides = true
+  endif
+  if secondary_is_guides
+    capture resolved_guides
+      render 'luxe-leaf-tea-guides-url', target: 'hub', fallback: ''
+    endcapture
+    assign resolved_guides = resolved_guides | strip
+    if resolved_guides != blank
+      assign secondary_link = resolved_guides
+    else
+      assign secondary_link = pages['faq'].url | default: '/pages/faq'
+      assign secondary_label_down = secondary_label | downcase
+      if secondary_label == blank or secondary_label_down contains 'tea guide'
+        assign secondary_label = 'Read the FAQ'
+      endif
+    endif
+  endif
 -%}
 
 <section
@@ -32,13 +54,13 @@
       >
         {{ section.settings.primary_label }}
       </a>
-      {%- if section.settings.secondary_label != blank -%}
+      {%- if secondary_label != blank and secondary_link != blank -%}
         <a
-          href="{{ section.settings.secondary_link }}"
+          href="{{ secondary_link }}"
           class="button button-secondary luxe-shop-cta__button-secondary"
-          title="{{ section.settings.secondary_label | escape }}"
+          title="{{ secondary_label | escape }}"
         >
-          {{ section.settings.secondary_label }}
+          {{ secondary_label }}
         </a>
       {%- endif -%}
     </div>
@@ -282,7 +304,7 @@
       "name": "Luxe Leaf shop CTA",
       "settings": {
         "primary_link": "shopify://collections/all",
-        "secondary_link": "/blogs/tea-guides"
+        "secondary_link": "shopify://pages/faq"
       }
     }
   ]

@@ -47,7 +47,17 @@
     when 'article'
       if article
         assign blog_title = blog.title | default: 'Tea Guides'
-        assign blog_url = blog.url | default: '/blogs/tea-guides'
+        assign blog_url = blog.url
+        if blog_url == blank
+          capture blog_url
+            render 'luxe-leaf-tea-guides-url', target: 'hub', fallback: ''
+          endcapture
+          assign blog_url = blog_url | strip
+        endif
+        if blog_url == blank
+          assign blog_url = shop_url
+          assign blog_title = 'Home'
+        endif
         assign crumbs = 'Home|' | append: shop_url | append: '||' | append: blog_title | append: '|' | append: blog_url | append: '||' | append: article.title | append: '|' | append: article.url
       endif
     when 'blog'
