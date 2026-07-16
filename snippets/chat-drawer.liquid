@@ -108,11 +108,16 @@
       assign mobile_shipping_cost = standard_rate
     endif
     assign mobile_estimated_total = cart.total_price | plus: mobile_shipping_cost
+    assign is_pdp_buy_bar = false
+    if request.page_type == 'product'
+      assign is_pdp_buy_bar = true
+    endif
   -%}
   <nav
-    class="luxe-mobile-bar{% if cart.item_count > 0 %} luxe-mobile-bar--has-cart{% endif %}"
-    aria-label="Quick shop navigation"
+    class="luxe-mobile-bar{% if cart.item_count > 0 %} luxe-mobile-bar--has-cart{% endif %}{% if is_pdp_buy_bar %} luxe-mobile-bar--pdp{% endif %}"
+    aria-label="{% if is_pdp_buy_bar %}Product buy bar — add to bag and checkout{% else %}Quick shop navigation{% endif %}"
     data-mobile-shop-bar
+    {% if is_pdp_buy_bar %}data-pdp-buy-bar{% endif %}
   >
     <button
       type="button"
@@ -129,14 +134,30 @@
       <span class="luxe-mobile-bar__menu-label">Menu</span>
     </button>
 
-    <a
-      href="{{ routes.all_products_collection_url }}"
-      class="luxe-mobile-bar__shop button"
-      aria-label="Shop Tea — browse all premium loose leaf teas"
-    >
-      <span class="luxe-mobile-bar__shop-label luxe-mobile-bar__shop-label--long">Shop Tea</span>
-      <span class="luxe-mobile-bar__shop-label luxe-mobile-bar__shop-label--short" aria-hidden="true">Shop</span>
-    </a>
+    {%- if is_pdp_buy_bar -%}
+      <button
+        type="button"
+        class="luxe-mobile-bar__atc button"
+        data-mobile-pdp-atc
+        aria-label="{% if product %}Add {{ product.title | escape }} to bag{% else %}Add to bag{% endif %}"
+      >
+        <span class="luxe-mobile-bar__atc-label luxe-mobile-bar__atc-label--long" data-mobile-pdp-atc-label>
+          Add to Bag
+        </span>
+        <span class="luxe-mobile-bar__atc-label luxe-mobile-bar__atc-label--short" aria-hidden="true" data-mobile-pdp-atc-short>
+          Add
+        </span>
+      </button>
+    {%- else -%}
+      <a
+        href="{{ routes.all_products_collection_url }}"
+        class="luxe-mobile-bar__shop button"
+        aria-label="Shop Tea — browse all premium loose leaf teas"
+      >
+        <span class="luxe-mobile-bar__shop-label luxe-mobile-bar__shop-label--long">Shop Tea</span>
+        <span class="luxe-mobile-bar__shop-label luxe-mobile-bar__shop-label--short" aria-hidden="true">Shop</span>
+      </a>
+    {%- endif -%}
 
     {%- if settings.cart_type == 'drawer' -%}
       <button

@@ -413,6 +413,95 @@ import { StandardEvents } from '@shopify/events';
     );
   }
 
+  function getMainPdpAddToCartButton() {
+    return (
+      document.querySelector('product-form-component [ref="addToCartButton"]') ||
+      document.querySelector('.buy-buttons-block [ref="addToCartButton"]') ||
+      document.querySelector('.buy-buttons-block button[name="add"]') ||
+      document.querySelector('sticky-add-to-cart [ref="addToCartButton"]')
+    );
+  }
+
+  function syncPdpBuyBarAtc() {
+    const bar = document.querySelector('[data-pdp-buy-bar]');
+    const atcBtn = bar?.querySelector('[data-mobile-pdp-atc]');
+    if (!(atcBtn instanceof HTMLButtonElement)) return;
+
+    const mainBtn = getMainPdpAddToCartButton();
+    const longLabel = atcBtn.querySelector('[data-mobile-pdp-atc-label]');
+    const shortLabel = atcBtn.querySelector('[data-mobile-pdp-atc-short]');
+
+    if (!(mainBtn instanceof HTMLButtonElement)) {
+      atcBtn.disabled = false;
+      if (longLabel) longLabel.textContent = 'Add to Bag';
+      if (shortLabel) shortLabel.textContent = 'Add';
+      return;
+    }
+
+    const unavailable = mainBtn.disabled || mainBtn.getAttribute('aria-disabled') === 'true';
+    atcBtn.disabled = unavailable;
+
+    if (unavailable) {
+      if (longLabel) longLabel.textContent = 'Sold out';
+      if (shortLabel) shortLabel.textContent = 'Out';
+      atcBtn.setAttribute('aria-label', 'Sold out');
+    } else if (atcBtn.dataset.added === 'true') {
+      if (longLabel) longLabel.textContent = 'Added';
+      if (shortLabel) shortLabel.textContent = 'Added';
+    } else {
+      if (longLabel) longLabel.textContent = 'Add to Bag';
+      if (shortLabel) shortLabel.textContent = 'Add';
+      const productTitle = document.querySelector('h1')?.textContent?.trim();
+      atcBtn.setAttribute(
+        'aria-label',
+        productTitle ? `Add ${productTitle} to bag` : 'Add to bag'
+      );
+    }
+  }
+
+  function bindPdpBuyBar() {
+    if (!document.querySelector('[data-pdp-buy-bar]')) return;
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        const atcBtn = event.target instanceof Element ? event.target.closest('[data-mobile-pdp-atc]') : null;
+        if (!(atcBtn instanceof HTMLButtonElement) || atcBtn.disabled) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const mainBtn = getMainPdpAddToCartButton();
+        if (!(mainBtn instanceof HTMLButtonElement) || mainBtn.disabled) {
+          syncPdpBuyBarAtc();
+          return;
+        }
+
+        mainBtn.dataset.puppet = 'true';
+        mainBtn.click();
+
+        atcBtn.dataset.added = 'true';
+        syncPdpBuyBarAtc();
+        window.setTimeout(() => {
+          atcBtn.removeAttribute('data-added');
+          syncPdpBuyBarAtc();
+        }, 1200);
+      },
+      true
+    );
+
+    document.addEventListener(StandardEvents.cartLinesUpdate, () => {
+      window.setTimeout(syncPdpBuyBarAtc, 50);
+    });
+    document.addEventListener(StandardEvents.productSelect, () => {
+      window.setTimeout(syncPdpBuyBarAtc, 50);
+    });
+
+    syncPdpBuyBarAtc();
+    window.setTimeout(syncPdpBuyBarAtc, 300);
+    window.setTimeout(syncPdpBuyBarAtc, 1000);
+  }
+
   function bindSearchActions() {
     document.addEventListener(
       'click',
@@ -522,6 +611,7 @@ import { StandardEvents } from '@shopify/events';
     syncDrawerChrome();
     bindMobileMenuToggle();
     bindCheckoutActions();
+    bindPdpBuyBar();
     bindSearchActions();
     bindShippingNudgeActions();
     observeNudgeHeight();
