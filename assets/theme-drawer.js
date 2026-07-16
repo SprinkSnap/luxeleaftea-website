@@ -260,10 +260,13 @@ export class ThemeDrawer extends Component {
     // In modal mode, dialogs live in the browser's top layer where z-index
     // is ignored — stacking follows showModal() call order. Re-calling
     // showModal() moves this dialog to the top of the stack.
+    // Keep host [open] intact: panel.close() fires a native `close` event that
+    // other listeners may strip attributes from — restore immediately after.
     if (this.#modalQuery.matches && panel.open) {
       lockScroll(panel);
       panel.close();
       panel.showModal();
+      this.setAttribute('open', '');
     }
 
     const openClass =
@@ -314,15 +317,26 @@ export class ThemeDrawer extends Component {
    * Slides the drawer out, waits for the animation, then closes the dialog.
    * Always closes the native dialog in `finally` so an interrupted animation
    * (edge-swipe / navigate) cannot leave a ghost top-layer modal that traps taps.
+   *
+   * @param {{ restoreFocus?: boolean }} [options]
    */
-  async #closeDialog() {
+  async #closeDialog({ restoreFocus = true } = {}) {
+    const { panel } = this.refs;
+    const wasOpen = this.isOpen || Boolean(panel?.open);
+
+    // Nothing to close — avoid focus-stealing the bag icon (looks like blinking).
+    if (!wasOpen) {
+      this.#isClosing = false;
+      this.#deferredOpen = false;
+      unlockScroll(panel);
+      return;
+    }
+
     if (this.#isClosing) return;
     this.#isClosing = true;
 
     this.#removeEventListeners();
     removeTrapFocus();
-
-    const { panel } = this.refs;
 
     this.removeAttribute('open');
     this.dispatchEvent(new DrawerCloseEvent());
@@ -363,14 +377,19 @@ export class ThemeDrawer extends Component {
 
       const trigger = this.#previouslyFocused;
       this.#previouslyFocused = null;
-      // A Section Rendering API morph between open and close can replace the
-      // trigger node. The JS reference stays valid but the element is detached
-      // from the live DOM — and .focus() on a detached node is a silent no-op,
-      // so we explicitly check and fall back to a fresh query.
-      if (trigger && document.contains(trigger)) {
-        trigger.focus();
-      } else {
-        /** @type {HTMLElement | null} */ (document.querySelector(`[aria-controls="${this.id}"]`))?.focus();
+      // Programmatic ghost cleanup must not focus the bag — that flashes the icon.
+      if (restoreFocus) {
+        // A Section Rendering API morph between open and close can replace the
+        // trigger node. The JS reference stays valid but the element is detached
+        // from the live DOM — and .focus() on a detached node is a silent no-op,
+        // so we explicitly check and fall back to a fresh query.
+        if (trigger && document.contains(trigger)) {
+          trigger.focus({ preventScroll: true });
+        } else {
+          /** @type {HTMLElement | null} */ (document.querySelector(`[aria-controls="${this.id}"]`))?.focus({
+            preventScroll: true,
+          });
+        }
       }
 
       this.#isClosing = false;
@@ -386,8 +405,11 @@ export class ThemeDrawer extends Component {
 
   /**
    * Closes the drawer.
+   *
+   * @param {{ restoreFocus?: boolean }} [options] - Pass `restoreFocus: false` for
+   *   programmatic ghost cleanup so the bag icon is not focused/flashed.
    */
-  async close() {
+  async close({ restoreFocus = true } = {}) {
     if (this.#isClosing) {
       // A close is already in progress — cancel any deferred open so the
       // drawer stays closed when the animation finishes.
@@ -404,7 +426,7 @@ export class ThemeDrawer extends Component {
       unlockScroll(this.refs.panel);
       return;
     }
-    await this.#closeDialog();
+    await this.#closeDialog({ restoreFocus });
   }
 
   /**

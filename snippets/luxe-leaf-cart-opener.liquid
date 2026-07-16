@@ -16,6 +16,8 @@
       var CLOSE_TRIGGER = '#cart-drawer .theme-drawer__close-button, #cart-drawer .luxe-cart-drawer__continue';
       var opening = false;
       var openStartedAt = 0;
+      var lastOpenAt = 0;
+      var openTimer = 0;
 
       function getDrawer() {
         return document.getElementById('cart-drawer');
@@ -31,6 +33,12 @@
         return Boolean(dialog && dialog.open);
       }
 
+      function isProperlyOpen(drawer) {
+        drawer = drawer || getDrawer();
+        if (!drawer || !drawer.hasAttribute('open')) return false;
+        return isDialogOpen(drawer);
+      }
+
       function isDrawerOpen(drawer) {
         if (!drawer) return false;
         return drawer.hasAttribute('open') || isDialogOpen(drawer);
@@ -38,18 +46,28 @@
 
       /**
        * Ghost = modal dialog still in the top layer after swipe/incomplete close.
-       * Covers the right side (bag) while left chrome (logo/nav) still works.
+       * Do NOT treat normal open/close animations as ghosts (that caused bag blinks).
        */
       function isGhostCartDialog(drawer) {
         drawer = drawer || getDrawer();
         var dialog = getDialog(drawer);
         if (!drawer || !dialog || !dialog.open) return false;
 
-        // Host lost [open] while dialog stayed modal (mid-close abort / swipe)
-        if (!drawer.hasAttribute('open')) return true;
+        // Actively opening — not a ghost
+        if (
+          dialog.classList.contains('theme-drawer__dialog--opening') ||
+          dialog.classList.contains('theme-drawer__dialog--opening-inline-start')
+        ) {
+          return false;
+        }
 
-        // Close animation stuck — dialog still capturing hits
-        if (dialog.classList.contains('theme-drawer__dialog--closing')) return true;
+        // Mid close animation — wait; only stuck closes become ghosts
+        if (dialog.classList.contains('theme-drawer__dialog--closing')) {
+          return false;
+        }
+
+        // Host lost [open] while dialog stayed modal (swipe abort / bringToFront race)
+        if (!drawer.hasAttribute('open')) return true;
 
         // Visually dismissed off the right edge but still open
         try {
@@ -70,7 +88,7 @@
 
       function reconcileDrawerChrome() {
         var drawer = getDrawer();
-        var open = isDrawerOpen(drawer) && !isGhostCartDialog(drawer);
+        var open = isProperlyOpen(drawer);
 
         document.documentElement.classList.toggle('luxe-cart-drawer-open', open);
 
@@ -80,7 +98,10 @@
         if (bar) bar.toggleAttribute('data-drawer-open', open);
 
         document.querySelectorAll('[aria-controls="cart-drawer"]').forEach(function (trigger) {
-          trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+          var next = open ? 'true' : 'false';
+          if (trigger.getAttribute('aria-expanded') !== next) {
+            trigger.setAttribute('aria-expanded', next);
+          }
         });
 
         if (!open) hardUnlockScroll();
@@ -95,19 +116,21 @@
       }
 
       /**
-       * Always tear down the cart dialog — including ghosts where dialog.open
-       * is still true. recoverIfStuck used to bail when dialog.open, which left
-       * an invisible top-layer trap after edge-swipe close.
+       * Tear down cart dialog without focusing the bag (focus flashes the icon).
        */
       function hardForceCloseCart() {
         var drawer = getDrawer();
         opening = false;
+        if (openTimer) {
+          window.clearInterval(openTimer);
+          openTimer = 0;
+        }
 
         if (drawer) {
           try {
             upgradeDrawer(drawer);
             if (typeof drawer.close === 'function' && window.customElements.get('theme-drawer')) {
-              drawer.close();
+              drawer.close({ restoreFocus: false });
             }
           } catch (e) {}
 
@@ -122,17 +145,10 @@
               if (dialog.open) dialog.close();
             } catch (e2) {}
             dialog.removeAttribute('open');
-            try {
-              dialog.style.removeProperty('pointer-events');
-              dialog.style.removeProperty('visibility');
-            } catch (e3) {}
           }
 
           drawer.removeAttribute('open');
           drawer.removeAttribute('aria-hidden');
-          try {
-            drawer.dispatchEvent(new CustomEvent('theme-drawer:close', { bubbles: true }));
-          } catch (e4) {}
         }
 
         hardUnlockScroll();
@@ -141,30 +157,30 @@
         return true;
       }
 
-      /**
-       * Open the cart dialog directly. Prefer ThemeDrawer.open when available,
-       * but never depend on it — showModal/show is enough for a working bag tap.
-       */
       function forceOpenDrawer(drawer) {
         if (!drawer) return false;
+
+        // Already open — do not call open() again (bringToFront close/showModal blinks)
+        if (isProperlyOpen(drawer)) {
+          reconcileDrawerChrome();
+          return true;
+        }
 
         var dialog = getDialog(drawer);
         if (!dialog) return false;
 
         upgradeDrawer(drawer);
 
-        // ThemeDrawer path (keeps squeeze / focus trap in sync when upgraded)
         try {
           if (typeof drawer.open === 'function' && window.customElements.get('theme-drawer')) {
             drawer.open();
-            if (isDrawerOpen(drawer) && !isGhostCartDialog(drawer)) {
+            if (isProperlyOpen(drawer)) {
               reconcileDrawerChrome();
               return true;
             }
           }
         } catch (e) {}
 
-        // Direct dialog path — always works even if the custom element is slow/broken
         try {
           dialog.classList.remove(
             'theme-drawer__dialog--closing',
@@ -190,26 +206,25 @@
           } catch (e2) {}
 
           reconcileDrawerChrome();
-          return isDrawerOpen(drawer) && !isGhostCartDialog(drawer);
+          return isProperlyOpen(drawer);
         } catch (e3) {
           reconcileDrawerChrome();
           return false;
         }
       }
 
-      function forceCloseDrawer() {
-        return hardForceCloseCart();
-      }
-
       function openCartDrawer(evt) {
-        // Allow retry if a previous open hung (>1.5s)
+        // Debounce double-firing from capture + other listeners
         if (opening && Date.now() - openStartedAt < 1500) return;
+        if (Date.now() - lastOpenAt < 400) return;
+
         opening = true;
         openStartedAt = Date.now();
 
         if (evt) {
           evt.preventDefault();
-          if (evt.stopPropagation) evt.stopPropagation();
+          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+          else if (evt.stopPropagation) evt.stopPropagation();
         }
 
         var drawer = getDrawer();
@@ -219,26 +234,34 @@
           return;
         }
 
-        // Ghost modal after swipe: clear first so bag can open a fresh drawer
-        if (isGhostCartDialog(drawer) || (isDialogOpen(drawer) && !drawer.hasAttribute('open'))) {
-          hardForceCloseCart();
-        }
-
-        // Fast path — open immediately without waiting for modules
-        if (forceOpenDrawer(drawer)) {
+        // Bag tap while open → close once (toggle), never bringToFront/reopen
+        if (isProperlyOpen(drawer)) {
           opening = false;
+          hardForceCloseCart();
           return;
         }
 
-        // Retry briefly while theme-drawer.js upgrades (never hang forever)
+        // Only clear true ghosts before opening
+        if (isGhostCartDialog(drawer)) {
+          hardForceCloseCart();
+        }
+
+        if (forceOpenDrawer(drawer)) {
+          opening = false;
+          lastOpenAt = Date.now();
+          return;
+        }
+
         var tries = 0;
-        var timer = window.setInterval(function () {
+        if (openTimer) window.clearInterval(openTimer);
+        openTimer = window.setInterval(function () {
           tries += 1;
           upgradeDrawer(drawer);
-          var done = forceOpenDrawer(drawer) || tries >= 12;
-          if (done) {
-            window.clearInterval(timer);
+          if (isProperlyOpen(drawer) || forceOpenDrawer(drawer) || tries >= 8) {
+            window.clearInterval(openTimer);
+            openTimer = 0;
             opening = false;
+            lastOpenAt = Date.now();
             reconcileDrawerChrome();
           }
         }, 50);
@@ -247,7 +270,8 @@
       function closeCartDrawer(evt) {
         if (evt) {
           evt.preventDefault();
-          if (evt.stopPropagation) evt.stopPropagation();
+          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+          else if (evt.stopPropagation) evt.stopPropagation();
         }
         opening = false;
         hardForceCloseCart();
@@ -263,7 +287,7 @@
         }
 
         var drawer = getDrawer();
-        if (drawer && isDrawerOpen(drawer) && evt.type === 'click') {
+        if (drawer && isProperlyOpen(drawer) && evt.type === 'click') {
           var dialog = getDialog(drawer);
           if (dialog && evt.target === dialog && window.matchMedia('(max-width: 989px)').matches) {
             closeCartDrawer(evt);
@@ -277,22 +301,8 @@
         openCartDrawer(evt);
       }
 
-      // Bubble + capture so bag taps are not missed by other handlers
+      // Single capture handler — stopImmediatePropagation prevents double open/blink
       document.addEventListener('click', onDocumentIntent, true);
-
-      // Direct bind on bag controls (survives if document capture is stopped elsewhere)
-      function bindDirectTriggers() {
-        document.querySelectorAll(OPEN_TRIGGER).forEach(function (el) {
-          if (el.dataset.luxeCartBound === '1') return;
-          el.dataset.luxeCartBound = '1';
-          el.addEventListener('click', function (evt) {
-            openCartDrawer(evt);
-          });
-        });
-      }
-      bindDirectTriggers();
-      document.addEventListener('DOMContentLoaded', bindDirectTriggers);
-      window.setTimeout(bindDirectTriggers, 500);
 
       function bindDialogLifecycle() {
         var drawer = getDrawer();
@@ -301,22 +311,18 @@
         dialog.dataset.luxeCartLife = '1';
 
         dialog.addEventListener('close', function () {
-          if (drawer) drawer.removeAttribute('open');
-          opening = false;
-          hardUnlockScroll();
-          reconcileDrawerChrome();
-        });
-
-        dialog.addEventListener('cancel', function () {
-          // Native Esc/backdrop cancel — ensure no ghost remains
-          window.setTimeout(function () {
-            if (isGhostCartDialog(drawer) || (dialog && !dialog.open && drawer && drawer.hasAttribute('open'))) {
-              hardForceCloseCart();
-            } else if (!dialog.open) {
-              hardUnlockScroll();
+          // bringToFront does close()+showModal() sync — skip if dialog reopened
+          window.requestAnimationFrame(function () {
+            if (dialog.open) {
+              if (drawer && !drawer.hasAttribute('open')) drawer.setAttribute('open', '');
               reconcileDrawerChrome();
+              return;
             }
-          }, 0);
+            if (drawer) drawer.removeAttribute('open');
+            opening = false;
+            hardUnlockScroll();
+            reconcileDrawerChrome();
+          });
         });
       }
       bindDialogLifecycle();
@@ -325,15 +331,11 @@
       document.addEventListener('keydown', function (evt) {
         if (evt.key !== 'Escape') return;
         var drawer = getDrawer();
-        if (!drawer || !isDrawerOpen(drawer)) return;
+        if (!drawer || !isProperlyOpen(drawer)) return;
         if (evt.defaultPrevented) return;
         closeCartDrawer(evt);
       });
 
-      /**
-       * Clear stuck scroll-lock chrome AND ghost top-layer dialogs.
-       * Previously bailed when dialog.open — that left swipe-right ghosts alive.
-       */
       function recoverIfStuck() {
         var drawer = getDrawer();
 
@@ -354,49 +356,30 @@
         if (opening && Date.now() - openStartedAt > 1500) opening = false;
       }
 
-      // If a ghost dialog is capturing the tap (bag zone / anywhere), tear it down
-      // so the next interaction reaches real page chrome.
-      function onPointerCaptureClearGhost(evt) {
-        var drawer = getDrawer();
-        if (!isGhostCartDialog(drawer)) return;
-
-        hardForceCloseCart();
-
-        // If the tap was aimed at the bag, reopen after the ghost is gone
-        var path = typeof evt.composedPath === 'function' ? evt.composedPath() : [];
-        var hitBag = false;
-        for (var i = 0; i < path.length; i++) {
-          var node = path[i];
-          if (node && node.nodeType === 1 && node.matches && node.matches(OPEN_TRIGGER)) {
-            hitBag = true;
-            break;
-          }
-        }
-        if (!hitBag && evt.clientY < 96 && evt.clientX > window.innerWidth - 140) {
-          // Top-right header bag zone — ghost was covering the icon
-          hitBag = true;
-        }
-        if (hitBag) {
-          window.setTimeout(function () {
-            openCartDrawer(null);
-          }, 0);
-        }
-      }
-
-      document.addEventListener('pointerdown', onPointerCaptureClearGhost, true);
+      // Ghost covering the page: clear on pointerdown (no auto-reopen — that blinked the bag)
+      document.addEventListener(
+        'pointerdown',
+        function () {
+          if (isGhostCartDialog()) hardForceCloseCart();
+        },
+        true
+      );
       document.addEventListener('touchstart', recoverIfStuck, { passive: true, capture: true });
 
-      // Edge-swipe / browser back often fires popstate while leaving dialog.open
       window.addEventListener('popstate', function () {
         opening = false;
         hardForceCloseCart();
-        bindDirectTriggers();
       });
 
-      window.addEventListener('pageshow', function () {
+      // Only force-close on bfcache restore or when a ghost is already present.
+      // Closing on every pageshow focused the bag and made the icon blink.
+      window.addEventListener('pageshow', function (evt) {
         opening = false;
-        hardForceCloseCart();
-        bindDirectTriggers();
+        if (evt.persisted || isGhostCartDialog()) {
+          hardForceCloseCart();
+        } else {
+          reconcileDrawerChrome();
+        }
         bindDialogLifecycle();
       });
 
@@ -406,12 +389,13 @@
 
       window.addEventListener('pagehide', function () {
         opening = false;
-        hardForceCloseCart();
+        if (isProperlyOpen() || isGhostCartDialog()) hardForceCloseCart();
       });
 
       document.addEventListener('theme-drawer:open', function (evt) {
         if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
           opening = false;
+          lastOpenAt = Date.now();
           reconcileDrawerChrome();
         }
       });
