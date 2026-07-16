@@ -25,18 +25,6 @@
         "secondary_link": "shopify://collections"
       }
     },
-    "store_experience": {
-      "type": "luxe-leaf-store-experience",
-      "settings": {
-        "eyebrow": "Shop like you're in our tea room",
-        "heading": "Premium loose leaf tea, picked for your cup",
-        "intro": "No guesswork \u2014 whole leaves you can see, smell, and steep. We pack every order fresh so your first sip tastes like it came straight from the counter.",
-        "primary_label": "Shop Premium Loose Leaf Tea",
-        "primary_link": "shopify://collections/all",
-        "secondary_label": "Explore Tea Types",
-        "secondary_link": "shopify://collections"
-      }
-    },
     "featured_teas": {
       "type": "luxe-leaf-featured-teas",
       "settings": {
@@ -74,138 +62,6 @@
         "intro": "Find your next cup — bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
         "padding-block-start": 32,
         "padding-block-end": 24
-      }
-    },
-    "about_story": {
-      "type": "luxe-leaf-about-story",
-      "blocks": {
-        "trust_origin": {
-          "type": "trust_point",
-          "settings": {
-            "title": "Origin first",
-            "text": "Teas labeled by region, harvest, and style \u2014 so you know exactly what you're buying."
-          }
-        },
-        "trust_loose": {
-          "type": "trust_point",
-          "settings": {
-            "title": "Loose leaf only",
-            "text": "Whole leaves that unfurl in the cup \u2014 richer flavor, better re-steeps, no dusty bags."
-          }
-        },
-        "trust_fresh": {
-          "type": "trust_point",
-          "settings": {
-            "title": "Packed fresh",
-            "text": "Sealed after you order to protect aroma and keep every cup vibrant."
-          }
-        },
-        "trust_brew": {
-          "type": "trust_point",
-          "settings": {
-            "title": "Brewing guidance",
-            "text": "Every tea ships with temperature, timing, and gram tips \u2014 confidence from the first sip."
-          }
-        }
-      },
-      "block_order": [
-        "trust_origin",
-        "trust_loose",
-        "trust_fresh",
-        "trust_brew"
-      ],
-      "settings": {
-        "eyebrow": "Our Story",
-        "heading": "Tea leaves worth slowing down for",
-        "text": "<p>Luxe Leaf Tea sources drinkable premium loose-leaf teas from China's most respected growing regions \u2014 Longjing, Fujian, Yunnan, and beyond. Every lot is selected for aroma, clarity, and the kind of cup that turns a daily ritual into something special.</p><p>We work directly with trusted gardens and pack fresh to order, so what arrives at your door is ready to brew \u2014 not sitting on a shelf.</p>",
-        "button_label": "Read our full story",
-        "button_link": "shopify://pages/about",
-        "padding-block-start": 56,
-        "padding-block-end": 56
-      }
-    },
-    "brewing_guide": {
-      "type": "luxe-leaf-brewing-guide",
-      "blocks": {
-        "step_measure": {
-          "type": "step",
-          "settings": {
-            "title": "Measure",
-            "text": "Use 3g of leaf per 150ml water for most Chinese greens and oolongs."
-          }
-        },
-        "step_temp": {
-          "type": "step",
-          "settings": {
-            "title": "Water temperature",
-            "text": "Green teas: 175\u2013185\u00b0F. Oolongs: 195\u2013205\u00b0F. Never boiling for delicate leaves."
-          }
-        },
-        "step_steep": {
-          "type": "step",
-          "settings": {
-            "title": "Steep & re-steep",
-            "text": "Steep 1\u20132 minutes, then pour. Quality loose leaf can be re-steeped 3\u20135 times."
-          }
-        }
-      },
-      "block_order": [
-        "step_measure",
-        "step_temp",
-        "step_steep"
-      ],
-      "settings": {
-        "eyebrow": "How to brew",
-        "heading": "Unlock the full flavor in every leaf",
-        "intro": "Premium loose leaf rewards a little care. Follow these simple steps for a clearer, more drinkable cup.",
-        "button_label": "Shop premium teas",
-        "button_link": "shopify://collections/all",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      }
-    },
-    "home_faq": {
-      "type": "luxe-leaf-home-faq",
-      "blocks": {
-        "faq_1": {
-          "type": "faq",
-          "settings": {
-            "question": "How much loose leaf tea should I use per cup?",
-            "answer": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup.</p>"
-          }
-        },
-        "faq_2": {
-          "type": "faq",
-          "settings": {
-            "question": "What water temperature is best for loose leaf green tea?",
-            "answer": "<p>Premium loose leaf green tea brews best at 175\u2013185\u00b0F (80\u201385\u00b0C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
-          }
-        },
-        "faq_3": {
-          "type": "faq",
-          "settings": {
-            "question": "Can you re-steep premium loose leaf tea?",
-            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3\u20134 infusions; oolongs and pu-erh can offer 4\u20138.</p>"
-          }
-        },
-        "faq_4": {
-          "type": "faq",
-          "settings": {
-            "question": "Why choose loose leaf tea over tea bags?",
-            "answer": "<p>Loose leaf tea uses whole or large leaves that unfurl in water, releasing more aroma and flavor. Premium loose leaf also re-steeps better and offers clearer origin and quality.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "faq_1",
-        "faq_2",
-        "faq_3",
-        "faq_4"
-      ],
-      "settings": {
-        "link_url": "/pages/faq",
-        "padding-block-start": 48,
-        "padding-block-end": 48
       }
     },
     "social_proof": {
@@ -248,15 +104,103 @@
         "heading": "Premium loose leaf, beautifully brewed",
         "intro": "What you can expect from every Luxe Leaf order \u2014 fresh leaves, clear brew notes, and Canada-wide shipping.",
         "section_id": "why-loose-leaf",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "about_story": {
+      "type": "luxe-leaf-about-story",
+      "blocks": {
+        "trust_origin": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Origin first",
+            "text": "Teas labeled by region, harvest, and style \u2014 so you know exactly what you're buying."
+          }
+        },
+        "trust_gardens": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Trusted gardens",
+            "text": "Selected lots from respected growing regions in China \u2014 Longjing, Fujian, Yunnan, and beyond."
+          }
+        },
+        "trust_loose": {
+          "type": "trust_point",
+          "settings": {
+            "title": "Loose leaf only",
+            "text": "Whole leaves that unfurl in the cup \u2014 richer flavor, better re-steeps, no dusty bags."
+          }
+        }
+      },
+      "block_order": [
+        "trust_origin",
+        "trust_gardens",
+        "trust_loose"
+      ],
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "Tea leaves worth slowing down for",
+        "text": "<p>Luxe Leaf Tea sources drinkable premium loose-leaf teas from China's most respected growing regions. Every lot is selected for aroma, clarity, and the kind of cup that turns a daily ritual into something special.</p>",
+        "button_label": "Read our full story",
+        "button_link": "shopify://pages/about",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "home_faq": {
+      "type": "luxe-leaf-home-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "How much loose leaf tea should I use per cup?",
+            "answer": "<p>For most premium loose leaf teas, use about 3 grams of leaf per 150ml of water. Oolongs and pu-erh may use slightly more for a richer cup.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "What water temperature is best for loose leaf green tea?",
+            "answer": "<p>Premium loose leaf green tea brews best at 175\u2013185\u00b0F (80\u201385\u00b0C). Avoid boiling water, which can make delicate leaves taste bitter.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can you re-steep premium loose leaf tea?",
+            "answer": "<p>Yes. Quality whole-leaf teas can be re-steeped multiple times. Green teas often yield 3\u20134 infusions; oolongs and pu-erh can offer 4\u20138.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "Why choose loose leaf tea over tea bags?",
+            "answer": "<p>Loose leaf tea uses whole or large leaves that unfurl in water, releasing more aroma and flavor. Premium loose leaf also re-steeps better and offers clearer origin and quality.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4"
+      ],
+      "settings": {
+        "eyebrow": "How to brew",
+        "heading": "Brewing answers before you buy",
+        "intro": "Measure, temperature, and re-steep tips in one place \u2014 so you can shop with confidence and steep a clearer cup at home.",
+        "link_label": "View all FAQs",
+        "link_url": "/pages/faq",
+        "padding-block-start": 40,
+        "padding-block-end": 40
       }
     },
     "tea_guides": {
       "type": "luxe-leaf-tea-guides",
       "settings": {
-        "padding-block-start": 56,
-        "padding-block-end": 56
+        "padding-block-start": 48,
+        "padding-block-end": 48
       }
     },
     "shop_cta": {
@@ -264,8 +208,8 @@
       "settings": {
         "primary_link": "shopify://collections/all",
         "secondary_link": "/blogs/tea-guides",
-        "padding-block-start": 64,
-        "padding-block-end": 64
+        "padding-block-start": 56,
+        "padding-block-end": 56
       }
     }
   },
@@ -276,9 +220,7 @@
     "keep_exploring",
     "tea_types",
     "social_proof",
-    "store_experience",
     "about_story",
-    "brewing_guide",
     "home_faq",
     "tea_guides",
     "shop_cta"

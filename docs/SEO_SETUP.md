@@ -121,12 +121,12 @@ Collection pages use the same keyword pattern via `snippets/luxe-leaf-collection
 4. **Keep exploring** (recent-views only on homepage)
 5. Tea types grid
 6. **Social proof** (honest brand notes by default; switch to real reviews when available)
-7. Store experience story
-8. About / trust story
-9. Brewing guide
-10. **Home FAQ** (visible accordions matching FAQ schema)
-11. **Tea guides hub** (links to blog + collections)
-12. **Shop CTA** (final conversion block)
+7. **About story** (one origin narrative — not a second hero CTA block)
+8. **Home FAQ** (brew Q&As + FAQPage schema; replaces a separate brewing-guide section)
+9. **Tea guides hub** (live articles when published; else FAQ/collection fallbacks)
+10. **Shop CTA** (final conversion block)
+
+Below-fold narrative is intentionally lean: no duplicate store-experience or brewing-guide sections that repeated the hero CTAs and FAQ content.
 
 ## 8. Social profiles
 
