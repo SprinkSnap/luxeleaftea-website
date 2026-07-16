@@ -1,5 +1,5 @@
 {%- doc -%}
-  Cart drawer open/close bridge — reliable single-tap open, no swipe/touch freezes.
+  Cart drawer open/close bridge — single-tap bag open that cannot hang.
   Render once near end of layout/theme.liquid (after cart-drawer markup).
 {%- enddoc -%}
 
@@ -13,15 +13,16 @@
         '[data-luxe-open-cart],[data-testid="cart-drawer-trigger"],a[aria-controls="cart-drawer"],button[aria-controls="cart-drawer"],[data-mobile-cart-toggle],[data-shipping-nudge-cart]';
       var CLOSE_TRIGGER = '#cart-drawer .theme-drawer__close-button, #cart-drawer .luxe-cart-drawer__continue';
       var opening = false;
-      var ignoreClickUntil = 0;
-
-      function isDrawerOpen(drawer) {
-        if (!drawer) return false;
-        return drawer.hasAttribute('open') || Boolean(drawer.querySelector('dialog[open]'));
-      }
+      var openStartedAt = 0;
 
       function getDrawer() {
         return document.getElementById('cart-drawer');
+      }
+
+      function isDrawerOpen(drawer) {
+        if (!drawer) return false;
+        var dialog = drawer.querySelector('dialog');
+        return drawer.hasAttribute('open') || Boolean(dialog && dialog.open);
       }
 
       function hardUnlockScroll() {
@@ -32,10 +33,6 @@
         }
       }
 
-      /**
-       * Keep chrome classes truthful. Stuck luxe-cart-drawer-open / scroll-lock
-       * was freezing all mobile swipes after cart use.
-       */
       function reconcileDrawerChrome() {
         var drawer = getDrawer();
         var open = isDrawerOpen(drawer);
@@ -51,74 +48,32 @@
           trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
 
-        if (!open) {
-          hardUnlockScroll();
-        }
+        if (!open) hardUnlockScroll();
       }
 
       function upgradeDrawer(drawer) {
-        if (drawer && window.customElements && window.customElements.get('theme-drawer')) {
-          window.customElements.upgrade(drawer);
-        }
+        try {
+          if (drawer && window.customElements && window.customElements.get('theme-drawer')) {
+            window.customElements.upgrade(drawer);
+          }
+        } catch (e) {}
       }
 
-      function sleep(ms) {
-        return new Promise(function (resolve) {
-          window.setTimeout(resolve, ms);
-        });
-      }
+      /**
+       * Open the cart dialog directly. Prefer ThemeDrawer.open when available,
+       * but never depend on it — showModal/show is enough for a working bag tap.
+       */
+      function forceOpenDrawer(drawer) {
+        if (!drawer) return false;
 
-      function ensureDrawer() {
-        var drawer = getDrawer();
-        if (!drawer) return Promise.resolve(null);
-
-        if (!window.customElements || !window.customElements.whenDefined) {
-          return Promise.resolve(drawer);
-        }
-
-        if (window.customElements.get('theme-drawer')) {
-          upgradeDrawer(drawer);
-          return Promise.resolve(drawer);
-        }
-
-        return window.customElements.whenDefined('theme-drawer').then(function () {
-          upgradeDrawer(drawer);
-          return drawer;
-        });
-      }
-
-      function openDialogFallback(drawer) {
-        var dialog = drawer && drawer.querySelector('dialog');
+        var dialog = drawer.querySelector('dialog');
         if (!dialog) return false;
 
-        try {
-          drawer.setAttribute('open', '');
-          var modal = window.matchMedia('(max-width: 989px)').matches;
-          if (modal) {
-            if (!dialog.open) dialog.showModal();
-          } else if (!dialog.open) {
-            dialog.show();
-          }
-          dialog.classList.remove('theme-drawer__dialog--closing');
-          dialog.classList.add('theme-drawer__dialog--opening');
-          window.setTimeout(function () {
-            dialog.classList.remove('theme-drawer__dialog--opening');
-          }, 400);
-          drawer.dispatchEvent(new CustomEvent('theme-drawer:open', { bubbles: true }));
-          reconcileDrawerChrome();
-          return isDrawerOpen(drawer);
-        } catch (e) {
-          reconcileDrawerChrome();
-          return false;
-        }
-      }
-
-      function forceOpenDrawerSync(drawer) {
-        if (!drawer) return false;
         upgradeDrawer(drawer);
 
+        // ThemeDrawer path (keeps squeeze / focus trap in sync when upgraded)
         try {
-          if (typeof drawer.open === 'function') {
+          if (typeof drawer.open === 'function' && window.customElements.get('theme-drawer')) {
             drawer.open();
             if (isDrawerOpen(drawer)) {
               reconcileDrawerChrome();
@@ -127,16 +82,41 @@
           }
         } catch (e) {}
 
-        return openDialogFallback(drawer);
+        // Direct dialog path — always works even if the custom element is slow/broken
+        try {
+          dialog.classList.remove('theme-drawer__dialog--closing');
+          drawer.setAttribute('open', '');
+
+          var modal = window.matchMedia('(max-width: 989px)').matches;
+          if (modal) {
+            if (!dialog.open) dialog.showModal();
+          } else if (!dialog.open) {
+            dialog.show();
+          }
+
+          dialog.classList.add('theme-drawer__dialog--opening');
+          window.setTimeout(function () {
+            dialog.classList.remove('theme-drawer__dialog--opening');
+          }, 400);
+
+          try {
+            drawer.dispatchEvent(new CustomEvent('theme-drawer:open', { bubbles: true }));
+          } catch (e2) {}
+
+          reconcileDrawerChrome();
+          return isDrawerOpen(drawer);
+        } catch (e3) {
+          reconcileDrawerChrome();
+          return false;
+        }
       }
 
       function forceCloseDrawer() {
         var drawer = getDrawer();
-
-        if (drawer && isDrawerOpen(drawer)) {
+        if (drawer) {
           try {
             upgradeDrawer(drawer);
-            if (typeof drawer.close === 'function') {
+            if (typeof drawer.close === 'function' && window.customElements.get('theme-drawer')) {
               drawer.close();
             }
           } catch (e) {}
@@ -159,43 +139,41 @@
         return true;
       }
 
-      async function openCartDrawer(evt) {
-        if (opening) return;
+      function openCartDrawer(evt) {
+        // Allow retry if a previous open hung (>1.5s)
+        if (opening && Date.now() - openStartedAt < 1500) return;
         opening = true;
+        openStartedAt = Date.now();
 
         if (evt) {
           evt.preventDefault();
           if (evt.stopPropagation) evt.stopPropagation();
-          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
         }
 
-        ignoreClickUntil = Date.now() + 600;
-
-        try {
-          reconcileDrawerChrome();
-          var drawer = await ensureDrawer();
-          if (!drawer) return;
-
-          for (var attempt = 0; attempt < 8; attempt++) {
-            if (forceOpenDrawerSync(drawer)) return;
-            await sleep(40);
-          }
-
-          var dialog = drawer.querySelector('dialog');
-          if (dialog) {
-            try {
-              if (dialog.open) dialog.close();
-            } catch (e) {}
-            drawer.removeAttribute('open');
-            dialog.classList.remove('theme-drawer__dialog--closing', 'theme-drawer__dialog--opening');
-            hardUnlockScroll();
-            await sleep(30);
-            forceOpenDrawerSync(drawer);
-          }
-        } finally {
+        var drawer = getDrawer();
+        if (!drawer) {
           opening = false;
-          reconcileDrawerChrome();
+          return;
         }
+
+        // Fast path — open immediately without waiting for modules
+        if (forceOpenDrawer(drawer)) {
+          opening = false;
+          return;
+        }
+
+        // Retry briefly while theme-drawer.js upgrades (never hang forever)
+        var tries = 0;
+        var timer = window.setInterval(function () {
+          tries += 1;
+          upgradeDrawer(drawer);
+          var done = forceOpenDrawer(drawer) || tries >= 12;
+          if (done) {
+            window.clearInterval(timer);
+            opening = false;
+            reconcileDrawerChrome();
+          }
+        }, 50);
       }
 
       function closeCartDrawer(evt) {
@@ -203,19 +181,11 @@
           evt.preventDefault();
           if (evt.stopPropagation) evt.stopPropagation();
         }
+        opening = false;
         forceCloseDrawer();
       }
 
       function onDocumentIntent(evt) {
-        if (evt.type === 'click' && Date.now() < ignoreClickUntil) {
-          var maybeTrigger = evt.target instanceof Element ? evt.target.closest(OPEN_TRIGGER) : null;
-          if (maybeTrigger) {
-            evt.preventDefault();
-            if (evt.stopPropagation) evt.stopPropagation();
-            return;
-          }
-        }
-
         var target = evt.target;
         if (!(target instanceof Element)) return;
 
@@ -235,11 +205,27 @@
 
         var trigger = target.closest(OPEN_TRIGGER);
         if (!trigger || trigger.hidden || trigger.getAttribute('aria-disabled') === 'true') return;
+        if (trigger.getAttribute('aria-disabled') === 'true') return;
 
         openCartDrawer(evt);
       }
 
+      // Bubble + capture so bag taps are not missed by other handlers
       document.addEventListener('click', onDocumentIntent, true);
+
+      // Direct bind on bag controls (survives if document capture is stopped elsewhere)
+      function bindDirectTriggers() {
+        document.querySelectorAll(OPEN_TRIGGER).forEach(function (el) {
+          if (el.dataset.luxeCartBound === '1') return;
+          el.dataset.luxeCartBound = '1';
+          el.addEventListener('click', function (evt) {
+            openCartDrawer(evt);
+          });
+        });
+      }
+      bindDirectTriggers();
+      document.addEventListener('DOMContentLoaded', bindDirectTriggers);
+      window.setTimeout(bindDirectTriggers, 500);
 
       document.addEventListener('keydown', function (evt) {
         if (evt.key !== 'Escape') return;
@@ -249,43 +235,49 @@
         closeCartDrawer(evt);
       });
 
-      // Recover from stuck scroll-lock / chrome class (restores mobile swipe)
       function recoverIfStuck() {
         var drawer = getDrawer();
-        var open = isDrawerOpen(drawer);
-        var classStuck = document.documentElement.classList.contains('luxe-cart-drawer-open');
-        var lockStuck = document.documentElement.hasAttribute('scroll-lock');
-
-        if ((!open && classStuck) || (!open && lockStuck)) {
+        if (isDrawerOpen(drawer)) return;
+        if (
+          document.documentElement.classList.contains('luxe-cart-drawer-open') ||
+          document.documentElement.hasAttribute('scroll-lock')
+        ) {
           hardUnlockScroll();
           reconcileDrawerChrome();
         }
+        // Never leave the open-guard stuck
+        if (opening && Date.now() - openStartedAt > 1500) opening = false;
       }
 
       document.addEventListener('touchstart', recoverIfStuck, { passive: true, capture: true });
-      document.addEventListener('pointerdown', recoverIfStuck, { passive: true, capture: true });
       window.addEventListener('pageshow', function () {
+        opening = false;
         hardUnlockScroll();
         reconcileDrawerChrome();
+        bindDirectTriggers();
       });
       document.addEventListener('visibilitychange', function () {
         if (document.visibilityState === 'visible') recoverIfStuck();
       });
       window.addEventListener('pagehide', function () {
+        opening = false;
         forceCloseDrawer();
       });
 
       document.addEventListener('theme-drawer:open', function (evt) {
-        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') reconcileDrawerChrome();
+        if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
+          opening = false;
+          reconcileDrawerChrome();
+        }
       });
       document.addEventListener('theme-drawer:close', function (evt) {
         if (/** @type {Element} */ (evt.target).id === 'cart-drawer') {
+          opening = false;
           hardUnlockScroll();
           reconcileDrawerChrome();
         }
       });
 
-      // Initial cleanup in case a previous session left locks behind
       reconcileDrawerChrome();
 
       window.LuxeLeaf = window.LuxeLeaf || {};
