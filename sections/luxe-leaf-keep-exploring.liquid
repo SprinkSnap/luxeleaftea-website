@@ -15,6 +15,7 @@
   endif
 
   assign product_limit = section.settings.product_limit | default: 4
+  assign recent_only = section.settings.recent_only
   assign exclude_id = blank
   if product != blank and section.settings.exclude_current_on_product
     assign exclude_id = product.id
@@ -28,7 +29,7 @@
     assign rail_products = search.results
     assign order_ids = search.terms | replace: 'id:', '' | split: ' OR '
     assign is_recent = true
-  else
+  elsif recent_only == false
     assign rail_products = fallback_collection.products
   endif
 
@@ -36,10 +37,14 @@
 -%}
 
 <section
-  class="luxe-keep-exploring section section--page-width spacing-style{% if is_recent %} luxe-keep-exploring--recent{% endif %}"
+  class="luxe-keep-exploring section section--page-width spacing-style{% if is_recent %} luxe-keep-exploring--recent{% endif %}{% if recent_only and is_recent == false %} luxe-keep-exploring--pending{% endif %}"
   id="keep-exploring-{{ section.id }}"
   data-keep-exploring
   data-section-id="{{ section.id }}"
+  {% if recent_only %}
+    data-recent-only="true"
+    {% unless is_recent %}hidden{% endunless %}
+  {% endif %}
   {% if exclude_id != blank %}
     data-exclude-product-id="{{ exclude_id }}"
   {% endif %}
@@ -89,12 +94,14 @@
     role="list"
     aria-label="{{ section.settings.heading | escape }}"
   >
-    {% render 'luxe-leaf-keep-exploring-cards',
-      products: rail_products,
-      order_ids: order_ids,
-      limit: product_limit,
-      exclude_product_id: exclude_id
-    %}
+    {%- if rail_products != blank -%}
+      {% render 'luxe-leaf-keep-exploring-cards',
+        products: rail_products,
+        order_ids: order_ids,
+        limit: product_limit,
+        exclude_product_id: exclude_id
+      %}
+    {%- endif -%}
   </div>
 </section>
 
@@ -151,6 +158,10 @@
   .luxe-keep-exploring {
     padding-block: 3rem;
     background: linear-gradient(180deg, var(--luxe-cream, #f8f6f0) 0%, #fff 100%);
+  }
+
+  .luxe-keep-exploring--pending[hidden] {
+    display: none !important;
   }
 
   .luxe-keep-exploring__header {
@@ -427,10 +438,17 @@
       "default": "Shop all teas"
     },
     {
+      "type": "checkbox",
+      "id": "recent_only",
+      "label": "Recent views only",
+      "info": "Hide this section until the visitor has recently viewed products. Use on the homepage to avoid duplicating featured teas.",
+      "default": false
+    },
+    {
       "type": "collection",
       "id": "collection",
       "label": "Fallback collection",
-      "info": "Shown for first-time visitors without browsing history."
+      "info": "Shown for first-time visitors without browsing history (ignored when Recent views only is enabled)."
     },
     {
       "type": "range",
