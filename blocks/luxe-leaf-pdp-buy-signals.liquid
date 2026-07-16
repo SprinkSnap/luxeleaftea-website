@@ -1,10 +1,11 @@
 {%- doc -%}
-  PDP buy-box decision cues — taste line and free-shipping trust tied to settings.
+  PDP buy-box decision cues — taste line, cart-aware free-shipping callout, and trust.
 {%- enddoc -%}
 
 {%- liquid
   assign cue_product = closest.product | default: product
-  assign free_ship_label = settings.free_shipping_threshold | default: 5000 | money
+  assign threshold = settings.free_shipping_threshold | default: 5000
+  assign free_ship_label = threshold | money
   assign show_taste = block.settings.show_taste
   if show_taste == blank
     assign show_taste = true
@@ -13,15 +14,73 @@
   if show_trust == blank
     assign show_trust = true
   endif
+  assign show_cart_free_ship = block.settings.show_cart_free_ship
+  if show_cart_free_ship == blank
+    assign show_cart_free_ship = true
+  endif
+
+  assign cart_total = cart.total_price
+  assign remaining = threshold | minus: cart_total
+  if remaining < 0
+    assign remaining = 0
+  endif
+
+  assign variant = cue_product.selected_or_first_available_variant
+  assign variant_price = 0
+  if variant != blank
+    assign variant_price = variant.price
+  endif
+
+  assign projected_total = cart_total | plus: variant_price
+  assign after_remaining = threshold | minus: projected_total
+  if after_remaining < 0
+    assign after_remaining = 0
+  endif
+
+  assign ship_state = 'threshold'
+  assign ship_message = 'Free Canada-wide shipping over ' | append: free_ship_label
+
+  if show_cart_free_ship
+    if cart_total >= threshold
+      assign ship_state = 'unlocked'
+      assign ship_message = "You've unlocked free Canada-wide shipping"
+    elsif remaining > 0 and variant_price >= remaining
+      assign ship_state = 'unlocks'
+      assign ship_message = 'This tea unlocks free Canada-wide shipping'
+    elsif remaining > 0 and after_remaining > 0
+      assign ship_state = 'closer'
+      assign after_money = after_remaining | money
+      assign ship_message = 'After this, ' | append: after_money | append: ' to free Canada-wide shipping'
+    elsif remaining > 0
+      assign ship_state = 'unlocks'
+      assign ship_message = 'This tea unlocks free Canada-wide shipping'
+    endif
+  endif
 -%}
 
 {%- if cue_product != blank -%}
   <div
-    class="luxe-pdp-buy-signals{% if show_taste and show_trust == false %} luxe-pdp-buy-signals--taste{% endif %}{% if show_trust and show_taste == false %} luxe-pdp-buy-signals--trust{% endif %}"
+    class="luxe-pdp-buy-signals{% if show_taste and show_trust == false and show_cart_free_ship == false %} luxe-pdp-buy-signals--taste{% endif %}"
     {{ block.shopify_attributes }}
   >
     {%- if show_taste -%}
       {% render 'luxe-leaf-pdp-taste-cue', product: cue_product %}
+    {%- endif -%}
+
+    {%- if show_cart_free_ship -%}
+      <p
+        class="luxe-pdp-buy-signals__ship luxe-pdp-buy-signals__ship--{{ ship_state }}"
+        data-pdp-free-ship
+        data-threshold="{{ threshold }}"
+        data-cart-total="{{ cart_total }}"
+        data-variant-price="{{ variant_price }}"
+        data-threshold-label="{{ free_ship_label | escape }}"
+        role="status"
+        aria-live="polite"
+      >
+        {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+        <span data-pdp-free-ship-text>{{ ship_message }}</span>
+      </p>
     {%- endif -%}
 
     {%- if show_trust -%}
@@ -30,10 +89,12 @@
           {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
           <span>Packed fresh to order</span>
         </li>
-        <li>
-          {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-          <span>Free Canada-wide shipping over {{ free_ship_label }}</span>
-        </li>
+        {%- unless show_cart_free_ship -%}
+          <li>
+            {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
+            <span>Free Canada-wide shipping over {{ free_ship_label }}</span>
+          </li>
+        {%- endunless -%}
         <li>
           {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
           <span>Secure guest checkout</span>
@@ -77,6 +138,41 @@
     font-weight: 500;
   }
 
+  .luxe-pdp-buy-signals__ship {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(201 162 39 / 0.35);
+    background:
+      radial-gradient(120% 120% at 0% 0%, rgb(201 162 39 / 0.16), transparent 55%),
+      #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #1b4332;
+  }
+
+  .luxe-pdp-buy-signals__ship .luxe-icon {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: #1b4332;
+  }
+
+  .luxe-pdp-buy-signals__ship--unlocks,
+  .luxe-pdp-buy-signals__ship--unlocked {
+    border-color: rgb(27 67 50 / 0.22);
+    background:
+      radial-gradient(120% 120% at 0% 0%, rgb(27 67 50 / 0.1), transparent 55%),
+      rgb(248 246 240 / 0.95);
+  }
+
+  .luxe-pdp-buy-signals__ship--closer {
+    border-color: rgb(201 162 39 / 0.45);
+  }
+
   .luxe-pdp-buy-signals__trust {
     display: grid;
     gap: 0.4rem;
@@ -104,9 +200,20 @@
     color: #1b4332;
   }
 
+  @media screen and (max-width: 749px) {
+    .luxe-pdp-buy-signals__ship {
+      font-size: 0.8125rem;
+      padding: 0.65rem 0.75rem;
+    }
+  }
+
   @media screen and (min-width: 750px) {
     .luxe-pdp-buy-signals__taste {
       font-size: 1rem;
+    }
+
+    .luxe-pdp-buy-signals__ship {
+      font-size: 0.9375rem;
     }
 
     .luxe-pdp-buy-signals__trust {
@@ -128,8 +235,15 @@
     },
     {
       "type": "checkbox",
+      "id": "show_cart_free_ship",
+      "label": "Show cart-aware free shipping line",
+      "default": true,
+      "info": "Shows whether this tea unlocks free shipping or how much would remain after adding it."
+    },
+    {
+      "type": "checkbox",
       "id": "show_trust",
-      "label": "Show trust / free shipping",
+      "label": "Show trust signals",
       "default": true
     }
   ]
