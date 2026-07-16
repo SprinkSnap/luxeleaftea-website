@@ -75,8 +75,8 @@
     assign meta_description = "Discover Luxe Leaf Tea — a boutique for premium Chinese loose leaf tea. Whole leaves, honest origins, packed fresh to order. Shop green, oolong, pu-erh, and black teas without leaving the page."
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'contact'
-    assign og_title = 'Contact Luxe Leaf Tea | Call, Email, or Chat With Our Tea Team'
-    assign meta_description = 'Contact Luxe Leaf Tea — call, email, or chat with our Tea Guide for help choosing premium loose leaf tea, orders, brewing tips, and shipping questions. We reply within one business day.'
+    assign og_title = 'Contact Luxe Leaf Tea | Call, Email & Tea Guide Chat'
+    assign meta_description = 'Contact Luxe Leaf Tea — tap to call, email, or chat with our Tea Guide for premium loose leaf tea help, orders, brewing tips, and Canada-wide shipping. Reply within one business day.'
     assign og_description = meta_description
   elsif request.page_type == 'page' and page.handle == 'terms-of-service'
     assign og_title = 'Terms of Service | ' | append: shop.name

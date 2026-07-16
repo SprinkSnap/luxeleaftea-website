@@ -29,8 +29,28 @@
   endif
 
   assign page_url = shop.url | append: page.url
-  assign page_desc = section.settings.intro | strip_html | truncate: 300
+  assign page_desc = section.settings.intro | strip_html | truncate: 155
+  if page_desc == blank
+    assign page_desc = page_description | default: 'Contact Luxe Leaf Tea for help with premium loose leaf tea, orders, brewing, and shipping.'
+  endif
   assign form_id = 'ContactForm-' | append: section.id
+
+  assign phone_e164 = ''
+  if brand_phone_href != blank
+    assign phone_digits = brand_phone_href | strip
+    if phone_digits.size == 10
+      assign phone_e164 = '+1' | append: phone_digits
+    elsif phone_digits.size == 11
+      assign phone_leading = phone_digits | slice: 0, 1
+      if phone_leading == '1'
+        assign phone_e164 = '+' | append: phone_digits
+      else
+        assign phone_e164 = '+' | append: phone_digits
+      endif
+    else
+      assign phone_e164 = '+' | append: phone_digits
+    endif
+  endif
 
   assign welcome_image = section.settings.welcome_image
   if welcome_image == blank
@@ -98,20 +118,27 @@
 
       <ul class="luxe-contact-page__channel-list list-unstyled" role="list">
         {%- if brand_phone != blank -%}
-          <li class="luxe-contact-page__channel">
+          <li class="luxe-contact-page__channel luxe-contact-page__channel--phone">
             <span class="luxe-contact-page__channel-icon" aria-hidden="true">
               {%- render 'luxe-leaf-icon', name: 'cup', class: 'luxe-icon--sm' -%}
             </span>
-            <div>
+            <div class="luxe-contact-page__channel-body">
               <span class="luxe-contact-page__channel-label">Call us</span>
               <a
-                href="tel:{{ brand_phone_href | escape }}"
+                href="tel:{{ phone_e164 | default: brand_phone_href | escape }}"
                 class="luxe-contact-page__channel-value luxe-contact-page__channel-value--link"
-                title="Call Luxe Leaf Tea customer service"
+                title="Call Luxe Leaf Tea customer service — {{ brand_phone | escape }}"
               >
                 {{ brand_phone }}
               </a>
               <span class="luxe-contact-page__channel-note">{{ section.settings.phone_note }}</span>
+              <a
+                href="tel:{{ phone_e164 | default: brand_phone_href | escape }}"
+                class="button luxe-contact-page__call-btn"
+                title="Tap to call Luxe Leaf Tea"
+              >
+                Call {{ brand_phone }}
+              </a>
             </div>
           </li>
         {%- endif -%}
@@ -291,23 +318,13 @@
     </li>
     <li>
       {%- render 'luxe-leaf-icon', name: 'truck', class: 'luxe-icon--sm' -%}
-      <span>Free Canada-wide shipping {{ settings.free_shipping_threshold | default: 5000 | divided_by: 100 }}+</span>
+      <span>Free Canada-wide shipping ${{ settings.free_shipping_threshold | default: 5000 | divided_by: 100 }}+</span>
     </li>
     <li>
       {%- render 'luxe-leaf-icon', name: 'lock', class: 'luxe-icon--sm' -%}
       <span>Secure checkout</span>
     </li>
   </ul>
-
-  {%- if brand_phone != blank -%}
-    <a
-      href="tel:{{ brand_phone_href | escape }}"
-      class="luxe-contact-page__mobile-call button"
-      title="Call Luxe Leaf Tea"
-    >
-      Call {{ brand_phone }}
-    </a>
-  {%- endif -%}
 </section>
 
 <script type="application/ld+json">
@@ -317,26 +334,49 @@
     "name": {{ section.settings.heading | json }},
     "description": {{ page_desc | json }},
     "url": {{ page_url | json }},
+    "inLanguage": "en-CA",
     "isPartOf": {
       "@type": "WebSite",
       "name": {{ shop.name | json }},
       "url": {{ shop.url | json }}
     },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": {{ shop.url | json }}
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Contact",
+          "item": {{ page_url | json }}
+        }
+      ]
+    },
     "mainEntity": {
       "@type": "Organization",
       "name": {{ shop.name | json }},
       "url": {{ shop.url | json }},
+      "areaServed": {
+        "@type": "Country",
+        "name": "Canada"
+      },
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
         "availableLanguage": ["English"],
+        "areaServed": "CA",
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
           "opens": "09:00",
           "closes": "17:00"
-        }{%- if brand_phone != blank -%},
-        "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
+        }{%- if phone_e164 != blank -%},
+        "telephone": {{ phone_e164 | json }}{%- endif -%}{%- if brand_email != blank -%},
         "email": {{ brand_email | json }}{%- endif -%}
       }
     }
@@ -575,6 +615,36 @@
     color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
   }
 
+  /* Inline tap-to-call — never fixed over the mobile shop bar */
+  .luxe-contact-page__call-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.75rem;
+    min-height: 2.75rem;
+    padding-inline: 1.15rem;
+    width: 100%;
+    border-radius: 999px;
+    background: var(--luxe-jade, #1b4332);
+    border-color: var(--luxe-jade, #1b4332);
+    font-size: 0.9375rem;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .luxe-contact-page__call-btn:hover,
+  .luxe-contact-page__call-btn:focus-visible {
+    background: #163628;
+    border-color: #163628;
+  }
+
+  @media screen and (min-width: 900px) {
+    .luxe-contact-page__call-btn {
+      width: auto;
+      min-width: 11rem;
+    }
+  }
+
   .luxe-contact-page__quick-links {
     padding-top: 1rem;
     border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
@@ -760,30 +830,31 @@
     gap: 0.4rem;
   }
 
-  .luxe-contact-page__mobile-call {
-    display: none;
-    position: fixed;
-    left: 1rem;
-    right: 1rem;
-    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-    z-index: 20;
-    min-height: 3rem;
-    border-radius: 999px;
-    background: var(--luxe-jade, #1b4332);
-    border-color: var(--luxe-jade, #1b4332);
-    text-align: center;
-    box-shadow: 0 8px 24px rgb(27 67 50 / 0.25);
-  }
-
+  /* Keep page clear of the fixed mobile commerce bar (Shop / Bag / Checkout) */
   @media screen and (max-width: 749px) {
-    .luxe-contact-page__mobile-call {
-      display: flex;
-      align-items: center;
+    .luxe-contact-page {
+      padding-bottom: calc(1.5rem + var(--luxe-mobile-bar-height, 4.25rem) + env(safe-area-inset-bottom, 0px));
+    }
+
+    .luxe-contact-page__welcome-actions {
+      flex-direction: column;
+    }
+
+    .luxe-contact-page__welcome-chat,
+    .luxe-contact-page__welcome-shop {
+      width: 100%;
       justify-content: center;
     }
 
-    .luxe-contact-page {
-      padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    .luxe-contact-page__channel-value--link {
+      font-size: 1.125rem;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .luxe-contact-page__submit {
+      min-height: 3rem;
+      font-size: 1rem;
     }
   }
 {% endstylesheet %}
@@ -804,13 +875,13 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Talk to our tea team"
+      "default": "Contact our tea team"
     },
     {
       "type": "richtext",
       "id": "intro",
       "label": "Intro",
-      "default": "<p>Questions about a tea, your order, or how to brew? Reach us like you would at the counter — call, email, chat with our Tea Guide, or send a note below.</p>"
+      "default": "<p>Questions about premium loose leaf tea, your order, or how to brew? Call, email, chat with our Tea Guide, or send a note below — real people who love tea.</p>"
     },
     {
       "type": "header",
