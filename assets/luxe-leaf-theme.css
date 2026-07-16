@@ -2185,12 +2185,15 @@ body.luxe-leaf-theme #header-component a[aria-controls="cart-drawer"] .svg-wrapp
 }
 
 body.luxe-leaf-theme #header-component button[aria-controls="cart-drawer"],
-body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"] {
+body.luxe-leaf-theme #header-component a[aria-controls="cart-drawer"],
+body.luxe-leaf-theme #header-component [data-testid="cart-drawer-trigger"],
+body.luxe-leaf-theme #header-component [data-luxe-open-cart] {
   position: relative;
-  z-index: 5;
+  z-index: 6;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: rgb(201 162 39 / 0.25);
+  pointer-events: auto !important;
 }
 
 @media screen and (max-width: 749px) {
