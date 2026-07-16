@@ -463,7 +463,7 @@
 
 {% stylesheet %}
   .luxe-contact-page {
-    padding-block: 2rem 3rem;
+    padding-block: 2rem 1.25rem;
     background: linear-gradient(180deg, var(--luxe-cream, #f8f6f0) 0%, #fff 100%);
   }
 
@@ -1011,9 +1011,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.75rem 1.5rem;
+    gap: 0.55rem 1.25rem;
     margin: 0;
-    padding-top: 0.5rem;
+    padding: 0.35rem 0 0;
     font-size: 0.75rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -1026,24 +1026,22 @@
     gap: 0.4rem;
   }
 
-  /* Clear sticky contact dock + shipping nudge + mobile commerce bar */
-  .luxe-contact-page {
-    padding-bottom: calc(2rem + var(--luxe-contact-sticky-height, 3.75rem));
+  /*
+    Do NOT pad the contact section for fixed bars — that creates a huge gap
+    before “While you wait”. Clearance lives on body (theme.css) instead.
+  */
+  .luxe-contact-page-section + .luxe-featured-section .luxe-featured {
+    padding-block-start: 1.5rem;
   }
 
   @media screen and (max-width: 749px) {
     .luxe-contact-page {
-      padding-bottom: calc(
-        1.25rem + var(--luxe-contact-sticky-height, 3.75rem) + var(--luxe-mobile-bar-height, 4.25rem) +
-          var(--luxe-shipping-nudge-height, 0px) + env(safe-area-inset-bottom, 0px)
-      );
+      padding-block-end: 0.75rem;
     }
 
-    body.luxe-has-shipping-nudge .luxe-contact-page {
-      padding-bottom: calc(
-        1.25rem + var(--luxe-contact-sticky-height, 3.75rem) + var(--luxe-mobile-bar-height, 4.25rem) +
-          max(var(--luxe-shipping-nudge-height, 0px), 3.25rem) + env(safe-area-inset-bottom, 0px)
-      );
+    .luxe-contact-page-section + .luxe-featured-section .luxe-featured {
+      padding-block-start: 1rem;
+      padding-block-end: 2.5rem;
     }
 
     .luxe-contact-page__welcome-actions {

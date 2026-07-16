@@ -1141,10 +1141,23 @@ html.luxe-chat-open body {
   :root {
     --luxe-mobile-bar-height: 4.25rem;
     --luxe-shipping-nudge-height: 0px;
+    --luxe-contact-sticky-height: 0px;
   }
 
   body {
-    padding-bottom: calc(var(--luxe-mobile-bar-height) + var(--luxe-shipping-nudge-height, 0px));
+    padding-bottom: calc(
+      var(--luxe-mobile-bar-height) + var(--luxe-shipping-nudge-height, 0px) +
+        var(--luxe-contact-sticky-height, 0px)
+    );
+  }
+
+  /* Contact sticky dock clearance at page end — not between Secure checkout → While you wait */
+  body:has([data-contact-sticky]) {
+    --luxe-contact-sticky-height: 3.75rem;
+  }
+
+  body.luxe-has-shipping-nudge:has([data-contact-sticky]) {
+    --luxe-contact-sticky-height: 3.75rem;
   }
 
   .luxe-shipping-nudge {
@@ -1963,6 +1976,25 @@ html.luxe-chat-open [data-contact-sticky] {
 /* Contact sticky dock already includes Chat — hide floating Tea Guide FAB there */
 body:has([data-contact-sticky]) .luxe-tea-chat__launcher {
   display: none !important;
+}
+
+/* Desktop: leave room under last content for the floating Call/Email/Chat strip */
+@media screen and (min-width: 750px) {
+  body:has([data-contact-sticky]) {
+    --luxe-contact-sticky-height: 4.5rem;
+    padding-bottom: var(--luxe-contact-sticky-height);
+  }
+}
+
+/* Tighten Contact → “While you wait” handoff for conversion */
+.luxe-contact-page-section + .luxe-featured-section .luxe-featured {
+  padding-block-start: 1.5rem;
+}
+
+@media screen and (max-width: 749px) {
+  .luxe-contact-page-section + .luxe-featured-section .luxe-featured {
+    padding-block-start: 1rem;
+  }
 }
 
 /* Keep “Shop Tea” copy for SEO/conversion; only tighten spacing on small phones */
@@ -3266,7 +3298,10 @@ body.luxe-leaf-theme .luxe-brand-footer__logo {
 
 @media screen and (max-width: 749px) {
   .luxe-brand-footer {
-    padding-bottom: calc(var(--luxe-mobile-bar-height, 4.25rem) + var(--luxe-shipping-nudge-height, 0px));
+    padding-bottom: calc(
+      var(--luxe-mobile-bar-height, 4.25rem) + var(--luxe-shipping-nudge-height, 0px) +
+        var(--luxe-contact-sticky-height, 0px)
+    );
   }
 
   .luxe-brand-footer__accordion:not([open]) .luxe-brand-footer__nav-body {
