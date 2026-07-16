@@ -41,8 +41,12 @@
       {%- assign variant = product.selected_or_first_available_variant -%}
       <article class="luxe-featured__card" role="listitem">
         <a href="{{ variant.url }}" class="luxe-featured__media-link">
+          {%- capture luxe_image_fallback -%}
+            {%- render 'luxe-leaf-product-image-fallback', product: product -%}
+          {%- endcapture -%}
+          {%- assign luxe_image_fallback = luxe_image_fallback | strip -%}
           <div class="luxe-featured__media{% if product.media.size > 1 %} luxe-featured__media--has-hover{% endif %}">
-            {%- if product.featured_image -%}
+            {%- if luxe_image_fallback != blank or product.featured_image -%}
               {% render 'luxe-leaf-product-hover-images',
                 product: product,
                 class_prefix: 'luxe-featured',

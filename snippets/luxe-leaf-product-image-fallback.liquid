@@ -1,0 +1,51 @@
+{%- doc -%}
+  Theme asset override for products still using shared placeholder composites.
+  Outputs an asset filename (e.g. Jasmine-tea.png) or blank when admin media is unique.
+
+  Auto-disables once the featured image URL no longer matches the shared placeholder stem.
+
+  @param {product} product
+{%- enddoc -%}
+{%- liquid
+  assign fallback_asset = blank
+
+  if product != blank
+    assign handle = product.handle | default: ''
+    assign featured_src = ''
+    if product.featured_image != blank
+      assign featured_src = product.featured_image.src | default: ''
+    elsif product.featured_media != blank and product.featured_media.preview_image != blank
+      assign featured_src = product.featured_media.preview_image.src | default: ''
+    endif
+    assign featured_src_down = featured_src | downcase
+
+    assign uses_shared_green = false
+    assign uses_shared_oolong = false
+    if featured_src == blank
+      if handle == 'premium-jasmine-green-tea' or handle == 'premium-jasmine-falling-snow-tea'
+        assign uses_shared_green = true
+      elsif handle == 'premium-peach-oolong-tea'
+        assign uses_shared_oolong = true
+      endif
+    else
+      if featured_src_down contains 'luxe-leaf-green-tea-product'
+        assign uses_shared_green = true
+      endif
+      if featured_src_down contains 'luxe-leaf-oolong-tea-product'
+        assign uses_shared_oolong = true
+      endif
+    endif
+
+    if handle == 'premium-jasmine-green-tea' or handle == 'premium-jasmine-falling-snow-tea'
+      if uses_shared_green
+        assign fallback_asset = 'Jasmine-tea.png'
+      endif
+    elsif handle == 'premium-peach-oolong-tea'
+      if uses_shared_oolong
+        assign fallback_asset = 'Peach-oolong-tea.png'
+      endif
+    endif
+  endif
+
+  echo fallback_asset
+-%}

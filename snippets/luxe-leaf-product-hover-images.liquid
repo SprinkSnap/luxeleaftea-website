@@ -1,5 +1,6 @@
 {%- doc -%}
   Renders stacked product images for desktop hover second-image reveal.
+  Uses theme asset fallbacks when the product still has a shared placeholder composite.
 
   @param {object} product - Product with media
   @param {string} [class_prefix] - BEM prefix for image classes (e.g. luxe-featured)
@@ -18,6 +19,11 @@
   assign primary = product.featured_media | default: product.featured_image
   assign secondary = blank
 
+  capture fallback_asset
+    render 'luxe-leaf-product-image-fallback', product: product
+  endcapture
+  assign fallback_asset = fallback_asset | strip
+
   if product.media.size > 1
     for media in product.media
       if primary != blank and media.id == primary.id
@@ -31,7 +37,35 @@
   endif
 -%}
 
-{%- if primary != blank -%}
+{%- if fallback_asset != blank -%}
+  <img
+    src="{{ fallback_asset | asset_url }}"
+    alt="{{ product.title | escape }}"
+    width="{{ img_w }}"
+    height="{{ img_h }}"
+    loading="lazy"
+    class="{{ primary_class }}"
+  >
+  {%- if secondary != blank -%}
+    {%- liquid
+      assign secondary_alt = secondary.alt | strip
+      if secondary_alt == blank
+        assign secondary_alt = product.title | append: ' — detail view'
+      endif
+    -%}
+    {{
+      secondary
+      | image_url: width: hover_width
+      | image_tag:
+        loading: 'lazy',
+        alt: secondary_alt,
+        class: secondary_class,
+        widths: '240, 360, 480, 600, 800',
+        width: img_w,
+        height: img_h
+    }}
+  {%- endif -%}
+{%- elsif primary != blank -%}
   {{
     primary
     | image_url: width: hover_width

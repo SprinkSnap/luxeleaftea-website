@@ -98,7 +98,9 @@ Bundled theme assets (brewed cup + dry leaf):
 
 These are placeholder composites until you shoot real photos. Replace in Shopify admin when ready — especially jasmine, peach, ChaTraMue, and Mocastar listings.
 
-Until unique photos ship, product cards show a **taste / type cue** under the title (collection, search, featured, keep exploring) so SKUs stay distinguishable on desktop and mobile grids. Ready theme assets: `Jasmine-tea.png`, `Peach-oolong-tea.png`.
+Until unique photos ship:
+- Product cards show a **taste / type cue** under the title
+- Theme auto-swaps shared green/oolong composites for **`Jasmine-tea.png`** / **`Peach-oolong-tea.png`** on jasmine and peach handles (`snippets/luxe-leaf-product-image-fallback.liquid`). Override stops automatically once admin uploads a unique featured image (filename no longer contains `luxe-leaf-green-tea-product` / `luxe-leaf-oolong-tea-product`).
 
 Other assets:
 

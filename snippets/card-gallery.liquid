@@ -13,6 +13,11 @@
   assign block_settings = block.settings
   assign image_sizes = '(min-width: 750px) 50vw, 100vw'
 
+  capture luxe_image_fallback
+    render 'luxe-leaf-product-image-fallback', product: product
+  endcapture
+  assign luxe_image_fallback = luxe_image_fallback | strip
+
   # Check if product has badges and determine position
   assign has_badges = false
   assign badge_position = null
@@ -95,7 +100,24 @@
   data-image-ratio="{{ block_settings.image_ratio }}"
   {{ block.shopify_attributes }}
 >
-  {%- if product.media.size > 0 -%}
+  {%- if luxe_image_fallback != blank -%}
+    <a
+      class="contents"
+      ref="cardGalleryLink"
+      href="{{ product.selected_or_first_available_variant.url }}"
+      aria-label="{{- product.title -}}"
+    >
+      <img
+        src="{{ luxe_image_fallback | asset_url }}"
+        alt="{{ product.title | escape }}"
+        width="800"
+        height="800"
+        loading="{% if section.index == null or section.index < 5 %}eager{% else %}lazy{% endif %}"
+        class="luxe-card-gallery__fallback-image"
+        sizes="{{ image_sizes }}"
+      >
+    </a>
+  {%- elsif product.media.size > 0 -%}
     {% liquid
       # Check if there are generic media that are not variant images
       assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
@@ -241,6 +263,14 @@
 </div>
 
 {% stylesheet %}
+  .luxe-card-gallery__fallback-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: var(--gallery-aspect-ratio, 1);
+    object-fit: cover;
+  }
+
   .card-gallery {
     position: relative;
     overflow: hidden;
