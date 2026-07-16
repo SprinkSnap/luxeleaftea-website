@@ -2065,7 +2065,8 @@ body:has([data-contact-sticky]) .luxe-tea-chat__launcher {
     padding-inline: 0.45rem;
   }
 
-  .luxe-mobile-bar__shop {
+  .luxe-mobile-bar__shop,
+  .luxe-mobile-bar__atc {
     font-size: 0.6875rem;
     letter-spacing: 0.01em;
   }
@@ -2081,13 +2082,15 @@ body:has([data-contact-sticky]) .luxe-tea-chat__launcher {
   }
 }
 
-/* Ultra-narrow: shorter visual label only; aria-label still says Shop Tea */
+/* Ultra-narrow: shorter visual label only; aria-label still says Shop Tea / Add to Bag */
 @media screen and (max-width: 340px) {
-  .luxe-mobile-bar__shop-label--long {
+  .luxe-mobile-bar__shop-label--long,
+  .luxe-mobile-bar__atc-label--long {
     display: none;
   }
 
-  .luxe-mobile-bar__shop-label--short {
+  .luxe-mobile-bar__shop-label--short,
+  .luxe-mobile-bar__atc-label--short {
     display: inline;
   }
 }
