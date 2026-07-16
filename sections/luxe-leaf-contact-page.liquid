@@ -320,9 +320,10 @@
   </ul>
 
   {%- comment -%}
-    Sticky Call + Email (+ Chat) — Contact page only.
-    Sits above the mobile Shop/Bag bar so commerce stays tappable.
-    Phone/email remain in the channels list above for SEO crawlability.
+    Sticky Call · Email · Chat — Contact page only.
+    Same single-row pattern as Menu · Shop · Bag · Checkout.
+    Stacks above the shipping nudge + mobile commerce bar (never covers them).
+    Full phone/email stay in channels + schema for SEO.
   {%- endcomment -%}
   {%- if brand_phone != blank or brand_email != blank -%}
     <nav
@@ -330,42 +331,37 @@
       aria-label="Contact us right away — call, email, or chat"
       data-contact-sticky
     >
-      <p class="luxe-contact-page__sticky-label">
-        We’re here — like at the tea counter
-      </p>
-      <div class="luxe-contact-page__sticky-actions">
-        {%- if brand_phone != blank -%}
-          <a
-            href="tel:{{ phone_e164 | default: brand_phone_href | escape }}"
-            class="button luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--call"
-            title="Call Luxe Leaf Tea — {{ brand_phone | escape }}"
-          >
-            <span class="luxe-contact-page__sticky-btn-kicker">Call</span>
-            <span class="luxe-contact-page__sticky-btn-value">{{ brand_phone }}</span>
-          </a>
-        {%- endif -%}
-
-        {%- if brand_email != blank -%}
-          <a
-            href="mailto:{{ brand_email | escape }}"
-            class="button button-secondary luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--email"
-            title="Email Luxe Leaf Tea — {{ brand_email | escape }}"
-          >
-            <span class="luxe-contact-page__sticky-btn-kicker">Email</span>
-            <span class="luxe-contact-page__sticky-btn-value">{{ brand_email }}</span>
-          </a>
-        {%- endif -%}
-
-        <button
-          type="button"
-          class="button button-secondary luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--chat"
-          data-open-tea-guide
-          title="Chat with our Tea Guide"
+      {%- if brand_phone != blank -%}
+        <a
+          href="tel:{{ phone_e164 | default: brand_phone_href | escape }}"
+          class="luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--call"
+          aria-label="Call Luxe Leaf Tea {{ brand_phone | escape }}"
+          title="Call {{ brand_phone | escape }}"
         >
-          <span class="luxe-contact-page__sticky-btn-kicker">Chat</span>
-          <span class="luxe-contact-page__sticky-btn-value">Tea Guide</span>
-        </button>
-      </div>
+          <span class="luxe-contact-page__sticky-btn-label">Call</span>
+        </a>
+      {%- endif -%}
+
+      {%- if brand_email != blank -%}
+        <a
+          href="mailto:{{ brand_email | escape }}"
+          class="luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--email"
+          aria-label="Email Luxe Leaf Tea {{ brand_email | escape }}"
+          title="Email {{ brand_email | escape }}"
+        >
+          <span class="luxe-contact-page__sticky-btn-label">Email</span>
+        </a>
+      {%- endif -%}
+
+      <button
+        type="button"
+        class="luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--chat"
+        data-open-tea-guide
+        aria-label="Chat with our Tea Guide"
+        title="Chat with our Tea Guide"
+      >
+        <span class="luxe-contact-page__sticky-btn-label">Chat</span>
+      </button>
     </nav>
   {%- endif -%}
 </section>
@@ -432,6 +428,36 @@
       document.querySelector('[data-chat-launcher]')?.click();
     });
   });
+
+  /* Keep sticky dock above the live shipping-nudge height while scrolling */
+  (function syncContactStickyAboveNudge() {
+    var sticky = document.querySelector('[data-contact-sticky]');
+    if (!sticky) return;
+
+    function measure() {
+      var nudge = document.querySelector('[data-shipping-nudge]');
+      var height = '0px';
+      if (nudge instanceof HTMLElement && !nudge.hidden) {
+        height = Math.ceil(nudge.getBoundingClientRect().height) + 'px';
+        document.body.classList.add('luxe-has-shipping-nudge');
+      } else {
+        document.body.classList.remove('luxe-has-shipping-nudge');
+      }
+      document.documentElement.style.setProperty('--luxe-shipping-nudge-height', height);
+    }
+
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
+    window.addEventListener('pageshow', measure);
+    if (typeof ResizeObserver !== 'undefined') {
+      var nudge = document.querySelector('[data-shipping-nudge]');
+      if (nudge) {
+        new ResizeObserver(measure).observe(nudge);
+      }
+    }
+    window.setTimeout(measure, 100);
+    window.setTimeout(measure, 500);
+  })();
 </script>
 {%- endif -%}
 
@@ -666,76 +692,72 @@
   }
 
   /*
-    Sticky Call + Email + Chat — Contact page only.
-    Mobile: above Shop/Bag commerce bar (never covering it).
-    Desktop: slim dock at the bottom — always ready, like staff at the counter.
+    Sticky Call · Email · Chat — mirrors mobile commerce bar layout.
+    Stack: [sticky dock] → [shipping nudge] → [Menu/Shop/Bag/Checkout]
+    Never covers the free-shipping nudge or commerce bar.
   */
   .luxe-contact-page__sticky {
-    --luxe-contact-sticky-height: 4.75rem;
+    --luxe-contact-sticky-height: 3.75rem;
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: calc(var(--layer-menu-drawer, 12) + 3);
-    display: grid;
-    gap: 0.35rem;
-    padding: 0.55rem 0.75rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
-    background: linear-gradient(180deg, rgb(248 246 240 / 0.97) 0%, #f8f6f0 100%);
-    border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.12);
-    box-shadow: 0 -6px 24px rgb(27 67 50 / 0.1);
-    backdrop-filter: blur(10px);
-  }
-
-  .luxe-contact-page__sticky-label {
-    margin: 0;
-    text-align: center;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
-  }
-
-  .luxe-contact-page__sticky-actions {
+    z-index: calc(var(--layer-menu-drawer, 12) + 1);
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.4rem;
+    align-items: stretch;
+    column-gap: 0.4rem;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0.5rem 0.55rem;
+    box-sizing: border-box;
+    background: rgb(248 246 240 / 0.98);
+    border-top: 1px solid rgb(27 67 50 / 0.12);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 -4px 20px rgb(27 67 50 / 0.06);
+    overflow: hidden;
   }
 
-  .luxe-contact-page__sticky-actions:has(> :nth-child(2):last-child) {
+  .luxe-contact-page__sticky:has(> :nth-child(2):last-child) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .luxe-contact-page__sticky > * {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
   .luxe-contact-page__sticky-btn {
-    display: flex;
-    flex-direction: column;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    gap: 0.1rem;
-    min-height: 2.85rem;
-    min-width: 0;
-    padding: 0.4rem 0.35rem;
-    border-radius: 0.65rem;
+    min-height: 2.75rem;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0;
+    padding: 0.35rem !important;
+    border-radius: 0.625rem;
+    border: 1px solid rgb(27 67 50 / 0.14);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.1;
     text-align: center;
     text-decoration: none;
-    line-height: 1.15;
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .luxe-contact-page__sticky-btn-kicker {
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.85;
-  }
-
-  .luxe-contact-page__sticky-btn-value {
+  .luxe-contact-page__sticky-btn-label {
+    display: block;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.75rem;
-    font-weight: 600;
   }
 
   .luxe-contact-page__sticky-btn--call {
@@ -748,6 +770,7 @@
   .luxe-contact-page__sticky-btn--call:focus-visible {
     background: #163628;
     border-color: #163628;
+    color: #fff;
   }
 
   .luxe-contact-page__sticky-btn--email,
@@ -756,37 +779,58 @@
     color: var(--luxe-jade, #1b4332);
   }
 
+  .luxe-contact-page__sticky-btn--email:hover,
+  .luxe-contact-page__sticky-btn--email:focus-visible,
+  .luxe-contact-page__sticky-btn--chat:hover,
+  .luxe-contact-page__sticky-btn--chat:focus-visible {
+    border-color: var(--luxe-gold, #c9a227);
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  /* Desktop: same bar language, centered like a counter strip */
   @media screen and (min-width: 750px) {
     .luxe-contact-page__sticky {
-      --luxe-contact-sticky-height: 4.25rem;
+      --luxe-contact-sticky-height: 3.85rem;
       left: 50%;
       right: auto;
       bottom: 1rem;
-      width: min(42rem, calc(100vw - 2rem));
+      width: min(36rem, calc(100vw - 2rem));
       transform: translateX(-50%);
-      border-radius: 1rem;
-      border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.12);
-      padding: 0.65rem 0.85rem;
-      box-shadow: 0 10px 32px rgb(27 67 50 / 0.14);
+      border-radius: 0.85rem;
+      border: 1px solid rgb(27 67 50 / 0.12);
+      padding: 0.55rem;
+      box-shadow: 0 10px 28px rgb(27 67 50 / 0.12);
+      z-index: calc(var(--layer-menu-drawer, 12) + 2);
     }
 
     .luxe-contact-page__sticky-btn {
-      min-height: 3rem;
-      border-radius: 999px;
-      padding-inline: 0.75rem;
-    }
-
-    .luxe-contact-page__sticky-btn-value {
-      font-size: 0.8125rem;
+      min-height: 2.85rem;
+      font-size: 0.875rem;
     }
   }
 
+  /*
+    Mobile stack (bottom → top):
+    commerce bar → shipping nudge → contact sticky
+  */
   @media screen and (max-width: 749px) {
     .luxe-contact-page__sticky {
-      --luxe-contact-sticky-height: 5.25rem;
-      bottom: calc(var(--luxe-mobile-bar-height, 4.25rem) + var(--luxe-shipping-nudge-height, 0px));
-      padding-bottom: 0.5rem;
-      z-index: calc(var(--layer-menu-drawer, 12) + 2);
+      --luxe-contact-sticky-height: 3.75rem;
+      bottom: calc(
+        var(--luxe-mobile-bar-height, 4.25rem) + var(--luxe-shipping-nudge-height, 0px) +
+          env(safe-area-inset-bottom, 0px)
+      );
+      /* Below shipping nudge z-index so a height glitch never hides free-shipping copy */
+      z-index: calc(var(--layer-menu-drawer, 12) + 1);
+      padding: 0.45rem 0.55rem;
+    }
+
+    body.luxe-has-shipping-nudge .luxe-contact-page__sticky {
+      /* Fallback if JS height lags — nudge is typically ~3–3.75rem */
+      bottom: calc(
+        var(--luxe-mobile-bar-height, 4.25rem) + max(var(--luxe-shipping-nudge-height, 0px), 3.25rem) +
+          env(safe-area-inset-bottom, 0px)
+      );
     }
   }
 
@@ -982,16 +1026,23 @@
     gap: 0.4rem;
   }
 
-  /* Clear sticky contact dock + mobile commerce bar */
+  /* Clear sticky contact dock + shipping nudge + mobile commerce bar */
   .luxe-contact-page {
-    padding-bottom: calc(2rem + var(--luxe-contact-sticky-height, 4.75rem));
+    padding-bottom: calc(2rem + var(--luxe-contact-sticky-height, 3.75rem));
   }
 
   @media screen and (max-width: 749px) {
     .luxe-contact-page {
       padding-bottom: calc(
-        1.25rem + var(--luxe-contact-sticky-height, 5.25rem) + var(--luxe-mobile-bar-height, 4.25rem) +
+        1.25rem + var(--luxe-contact-sticky-height, 3.75rem) + var(--luxe-mobile-bar-height, 4.25rem) +
           var(--luxe-shipping-nudge-height, 0px) + env(safe-area-inset-bottom, 0px)
+      );
+    }
+
+    body.luxe-has-shipping-nudge .luxe-contact-page {
+      padding-bottom: calc(
+        1.25rem + var(--luxe-contact-sticky-height, 3.75rem) + var(--luxe-mobile-bar-height, 4.25rem) +
+          max(var(--luxe-shipping-nudge-height, 0px), 3.25rem) + env(safe-area-inset-bottom, 0px)
       );
     }
 
