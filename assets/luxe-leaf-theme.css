@@ -120,7 +120,7 @@ body .button:not(.button-unstyled):hover {
   transform: translateY(-1px);
 }
 
-body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button):not(.sticky-add-to-cart__button) {
+body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-mobile-bar__atc):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button):not(.sticky-add-to-cart__button) {
   background: var(--luxe-jade);
   border-color: var(--luxe-jade);
   color: #fff;
@@ -1262,6 +1262,7 @@ html.luxe-chat-open body {
 
   .luxe-mobile-bar__menu,
   .luxe-mobile-bar__shop,
+  .luxe-mobile-bar__atc,
   .luxe-mobile-bar__cart,
   .luxe-mobile-bar__checkout,
   .luxe-mobile-bar__checkout-form,
@@ -1372,6 +1373,65 @@ html.luxe-chat-open body {
 
   .luxe-mobile-bar__shop-label--short {
     display: none;
+  }
+
+  /*
+    PDP buy bar: Menu · Add to Bag · Bag · Checkout
+    Replaces Shop Tea so sticky ATC is not a second competing layer.
+  */
+  .luxe-mobile-bar--pdp {
+    grid-template-columns: var(--luxe-bar-icon-col) minmax(0, 1.45fr) var(--luxe-bar-icon-col);
+  }
+
+  .luxe-mobile-bar--pdp.luxe-mobile-bar--has-cart {
+    grid-template-columns:
+      var(--luxe-bar-icon-col)
+      minmax(0, 1.35fr)
+      var(--luxe-bar-icon-col)
+      minmax(0, 1.15fr);
+  }
+
+  .luxe-mobile-bar__atc {
+    background: var(--luxe-jade, #1b4332) !important;
+    border: 1.5px solid var(--luxe-jade, #1b4332) !important;
+    color: #fff !important;
+    font-weight: 700;
+    overflow: hidden !important;
+  }
+
+  .luxe-mobile-bar__atc:hover,
+  .luxe-mobile-bar__atc:focus-visible {
+    background: #163728 !important;
+    border-color: #163728 !important;
+    color: #fff !important;
+  }
+
+  .luxe-mobile-bar__atc:disabled,
+  .luxe-mobile-bar__atc[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .luxe-mobile-bar__atc[data-added='true'] {
+    background: #2d6a4f !important;
+    border-color: #2d6a4f !important;
+  }
+
+  .luxe-mobile-bar__atc-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .luxe-mobile-bar__atc-label--short {
+    display: none;
+  }
+
+  /* One buy layer on PDP: hide floating sticky ATC above the commerce bar */
+  body:has([data-pdp-buy-bar]) sticky-add-to-cart,
+  body:has([data-pdp-buy-bar]) .sticky-add-to-cart__bar {
+    display: none !important;
   }
 
   .luxe-mobile-bar__cart {
