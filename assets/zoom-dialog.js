@@ -40,6 +40,8 @@ export class ZoomDialog extends Component {
     const gallery = this.#gallery;
     gallery?.addEventListener('scroll', this.handleScroll, { passive: true });
     this.refs.dialog.addEventListener('scroll', this.handleScroll, { passive: true });
+    this.refs.dialog.addEventListener('close', this.#onDialogClose);
+    this.refs.dialog.addEventListener('cancel', this.#onDialogCancel);
   }
 
   disconnectedCallback() {
@@ -47,7 +49,30 @@ export class ZoomDialog extends Component {
     const gallery = this.#gallery;
     gallery?.removeEventListener('scroll', this.handleScroll);
     this.refs.dialog.removeEventListener('scroll', this.handleScroll);
+    this.refs.dialog.removeEventListener('close', this.#onDialogClose);
+    this.refs.dialog.removeEventListener('cancel', this.#onDialogCancel);
+    this.#setZoomOpen(false);
   }
+
+  /**
+   * Hide the mobile commerce bar / shipping nudge while the lightbox is open.
+   * @param {boolean} open
+   */
+  #setZoomOpen(open) {
+    document.documentElement.classList.toggle('luxe-zoom-open', open);
+  }
+
+  #onDialogClose = () => {
+    this.#setZoomOpen(false);
+  };
+
+  /**
+   * @param {Event} event
+   */
+  #onDialogCancel = (event) => {
+    event.preventDefault();
+    this.close();
+  };
 
   /**
    * Opens the zoom dialog.
@@ -66,6 +91,7 @@ export class ZoomDialog extends Component {
 
     const open = () => {
       dialog.showModal();
+      this.#setZoomOpen(true);
 
       requestAnimationFrame(() => {
         targetImage?.scrollIntoView({ behavior: 'instant', inline: 'center', block: 'nearest' });
@@ -208,6 +234,7 @@ export class ZoomDialog extends Component {
 
   closeDialog() {
     const { dialog } = this.refs;
+    this.#setZoomOpen(false);
     dialog.close();
     window.dispatchEvent(new DialogCloseEvent());
   }
