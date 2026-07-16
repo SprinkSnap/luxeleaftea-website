@@ -1936,6 +1936,18 @@ html.luxe-chat-open body {
   -webkit-overflow-scrolling: touch;
 }
 
+/*
+  Ghost cart modal safety net: host lost [open] but <dialog> stayed in the
+  top layer after edge-swipe / incomplete close. Without this, the invisible
+  dialog blocks the bag icon (right) while logo/nav (left) still work.
+  JS hard-closes these; pointer-events:none lets taps reach the page meantime.
+*/
+#cart-drawer:not([open]) > dialog[open],
+#cart-drawer:not([open]) dialog.cart-drawer__dialog[open],
+cart-drawer-component:not([open]) > dialog[open] {
+  pointer-events: none !important;
+}
+
 html.luxe-cart-drawer-open .luxe-shipping-nudge,
 html.luxe-cart-drawer-open [data-mobile-shop-bar],
 html.luxe-menu-open .luxe-shipping-nudge,

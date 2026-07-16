@@ -312,9 +312,10 @@ export class ThemeDrawer extends Component {
 
   /**
    * Slides the drawer out, waits for the animation, then closes the dialog.
+   * Always closes the native dialog in `finally` so an interrupted animation
+   * (edge-swipe / navigate) cannot leave a ghost top-layer modal that traps taps.
    */
   async #closeDialog() {
-    if (!this.isOpen) return;
     if (this.#isClosing) return;
     this.#isClosing = true;
 
@@ -326,37 +327,54 @@ export class ThemeDrawer extends Component {
     this.removeAttribute('open');
     this.dispatchEvent(new DrawerCloseEvent());
 
+    // Unlock immediately so swipe/back cannot leave the page scroll-locked
+    // while the close animation is still running (or gets aborted).
     unlockScroll(panel);
 
-    if (panel.open) {
-      // Cancel any in-progress open animation before starting the close.
-      panel.classList.remove('theme-drawer__dialog--opening', 'theme-drawer__dialog--opening-inline-start');
+    try {
+      if (panel.open) {
+        // Cancel any in-progress open animation before starting the close.
+        panel.classList.remove('theme-drawer__dialog--opening', 'theme-drawer__dialog--opening-inline-start');
 
-      panel.classList.add('theme-drawer__dialog--closing');
-      await onAnimationEnd(panel, undefined, { subtree: false });
-      panel.classList.remove('theme-drawer__dialog--closing');
+        panel.classList.add('theme-drawer__dialog--closing');
+        await onAnimationEnd(panel, undefined, { subtree: false });
+        panel.classList.remove('theme-drawer__dialog--closing');
+      }
+    } catch {
+      // Animation wait can reject/abort on navigate — still force-close below.
+    } finally {
+      try {
+        if (panel.open) panel.close();
+      } catch {
+        // ignore
+      }
+      panel.classList.remove(
+        'theme-drawer__dialog--closing',
+        'theme-drawer__dialog--opening',
+        'theme-drawer__dialog--opening-inline-start'
+      );
+      this.removeAttribute('open');
+      unlockScroll(panel);
+      this.style.removeProperty('--drawer-stack-order');
+
+      if (!document.querySelector('theme-drawer[open]')) {
+        ThemeDrawer.#stackOrder = 0;
+      }
+
+      const trigger = this.#previouslyFocused;
+      this.#previouslyFocused = null;
+      // A Section Rendering API morph between open and close can replace the
+      // trigger node. The JS reference stays valid but the element is detached
+      // from the live DOM — and .focus() on a detached node is a silent no-op,
+      // so we explicitly check and fall back to a fresh query.
+      if (trigger && document.contains(trigger)) {
+        trigger.focus();
+      } else {
+        /** @type {HTMLElement | null} */ (document.querySelector(`[aria-controls="${this.id}"]`))?.focus();
+      }
+
+      this.#isClosing = false;
     }
-
-    panel.close();
-    this.style.removeProperty('--drawer-stack-order');
-
-    if (!document.querySelector('theme-drawer[open]')) {
-      ThemeDrawer.#stackOrder = 0;
-    }
-
-    const trigger = this.#previouslyFocused;
-    this.#previouslyFocused = null;
-    // A Section Rendering API morph between open and close can replace the
-    // trigger node. The JS reference stays valid but the element is detached
-    // from the live DOM — and .focus() on a detached node is a silent no-op,
-    // so we explicitly check and fall back to a fresh query.
-    if (trigger && document.contains(trigger)) {
-      trigger.focus();
-    } else {
-      /** @type {HTMLElement | null} */ (document.querySelector(`[aria-controls="${this.id}"]`))?.focus();
-    }
-
-    this.#isClosing = false;
 
     // Reconcile: if open() was called during the close animation, reopen now.
     if (this.#deferredOpen) {
@@ -373,7 +391,17 @@ export class ThemeDrawer extends Component {
     if (this.#isClosing) {
       // A close is already in progress — cancel any deferred open so the
       // drawer stays closed when the animation finishes.
+      // Also force-close the native dialog in case the animation was aborted
+      // by an edge-swipe and left a ghost top-layer modal.
       this.#deferredOpen = false;
+      try {
+        const { panel } = this.refs;
+        if (panel?.open) panel.close();
+      } catch {
+        // ignore
+      }
+      this.removeAttribute('open');
+      unlockScroll(this.refs.panel);
       return;
     }
     await this.#closeDialog();
