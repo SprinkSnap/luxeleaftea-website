@@ -184,36 +184,41 @@
     "social_proof": {
       "type": "luxe-leaf-social-proof",
       "blocks": {
-        "review_1": {
+        "note_1": {
           "type": "review",
           "settings": {
-            "quote": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea. I added two more to my bag without leaving the page.",
-            "author": "Sarah M."
+            "label": "Origin first",
+            "quote": "Teas labeled by region, harvest, and style — so you know exactly what you are buying before you steep.",
+            "author": ""
           }
         },
-        "review_2": {
+        "note_2": {
           "type": "review",
           "settings": {
-            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. Feels like shopping at a real tea counter — my daily ritual now.",
-            "author": "James L."
+            "label": "Packed fresh",
+            "quote": "Whole leaves sealed after you order to protect aroma — not sitting on a shelf for months.",
+            "author": ""
           }
         },
-        "review_3": {
+        "note_3": {
           "type": "review",
           "settings": {
-            "quote": "Finally found premium loose leaf tea that feels special without being intimidating. The Tea Guide helped me pick my first oolong.",
-            "author": "Elena K."
+            "label": "Brew with confidence",
+            "quote": "Every tea ships with temperature, timing, and gram tips so the first cup feels like a tea-counter pour.",
+            "author": ""
           }
         }
       },
       "block_order": [
-        "review_1",
-        "review_2",
-        "review_3"
+        "note_1",
+        "note_2",
+        "note_3"
       ],
       "settings": {
-        "eyebrow": "Loved by tea drinkers",
+        "presentation": "notes",
+        "eyebrow": "What we stand behind",
         "heading": "Why people keep coming back",
+        "intro": "Brand promises you can verify in every order — origin clarity, fresh packing, and brew guidance included.",
         "section_id": "reviews",
         "padding-block-start": 48,
         "padding-block-end": 48

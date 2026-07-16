@@ -1,3 +1,6 @@
+{%- doc -%}
+  Social proof — real customer reviews or honest brand notes (never fabricated reviewers).
+{%- enddoc -%}
 
 {%- capture luxe_scope_check -%}
   {%- render 'luxe-leaf-page-scope-check', page_scope: section.settings.page_scope -%}
@@ -5,33 +8,70 @@
 {%- assign luxe_scope_check = luxe_scope_check | strip -%}
 {%- if luxe_scope_check == 'show' -%}
 
+{%- liquid
+  assign presentation = section.settings.presentation | default: 'notes'
+  assign is_reviews = false
+  if presentation == 'reviews'
+    assign is_reviews = true
+  endif
+
+  assign quote_count = 0
+  for block in section.blocks
+    if block.settings.quote != blank
+      assign quote_count = quote_count | plus: 1
+    endif
+  endfor
+
+  assign hide_empty = section.settings.hide_when_empty
+  if hide_empty == blank
+    assign hide_empty = false
+  endif
+-%}
+
+{%- unless hide_empty and quote_count == 0 -%}
 <section
-  class="luxe-proof section section--page-width spacing-style"
+  class="luxe-proof section section--page-width spacing-style{% if is_reviews %} luxe-proof--reviews{% else %} luxe-proof--notes{% endif %}"
   id="{{ section.settings.section_id | default: 'reviews' | escape }}"
   style="{% render 'spacing-style', settings: section.settings %}"
-  aria-label="Customer reviews"
+  aria-label="{% if is_reviews %}Customer reviews{% else %}{{ section.settings.heading | escape }}{% endif %}"
 >
   <div class="luxe-proof__header">
     <p class="luxe-proof__eyebrow">{{ section.settings.eyebrow }}</p>
     <h2 class="luxe-proof__heading">{{ section.settings.heading }}</h2>
+    {%- if section.settings.intro != blank -%}
+      <p class="luxe-proof__intro">{{ section.settings.intro }}</p>
+    {%- endif -%}
   </div>
 
-  <div class="luxe-proof__grid" role="list">
-    {%- for block in section.blocks -%}
-      <blockquote class="luxe-proof__quote" role="listitem" {{ block.shopify_attributes }}>
-        <p class="luxe-proof__stars" aria-hidden="true">
-          <span class="luxe-stars">
-            {%- for i in (1..5) -%}
-              {%- render 'luxe-leaf-icon', name: 'star', class: 'luxe-icon--sm' -%}
-            {%- endfor -%}
-          </span>
-        </p>
-        <p class="luxe-proof__text">"{{ block.settings.quote }}"</p>
-        <footer class="luxe-proof__author">— {{ block.settings.author }}</footer>
-      </blockquote>
-    {%- endfor -%}
-  </div>
+  {%- if quote_count > 0 -%}
+    <div class="luxe-proof__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.quote != blank -%}
+          <blockquote class="luxe-proof__quote" role="listitem" {{ block.shopify_attributes }}>
+            {%- if is_reviews -%}
+              <p class="luxe-proof__stars" aria-hidden="true">
+                <span class="luxe-stars">
+                  {%- for i in (1..5) -%}
+                    {%- render 'luxe-leaf-icon', name: 'star', class: 'luxe-icon--sm' -%}
+                  {%- endfor -%}
+                </span>
+              </p>
+            {%- elsif block.settings.label != blank -%}
+              <p class="luxe-proof__label">{{ block.settings.label | escape }}</p>
+            {%- endif -%}
+            <p class="luxe-proof__text">“{{ block.settings.quote | escape }}”</p>
+            {%- if block.settings.author != blank -%}
+              <footer class="luxe-proof__author">
+                {%- if is_reviews -%}— {{ block.settings.author | escape }}{%- else -%}{{ block.settings.author | escape }}{%- endif -%}
+              </footer>
+            {%- endif -%}
+          </blockquote>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </section>
+{%- endunless -%}
 {%- endif -%}
 
 {% stylesheet %}
@@ -59,6 +99,14 @@
     font-size: clamp(1.5rem, 2.5vw, 2rem);
   }
 
+  .luxe-proof__intro {
+    margin: 0.85rem auto 0;
+    max-width: 36rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: rgb(248 246 240 / 0.85);
+  }
+
   .luxe-proof__grid {
     display: grid;
     gap: 20px;
@@ -80,6 +128,16 @@
 
   .luxe-proof__stars {
     margin: 0 0 12px;
+    color: #c9a227;
+  }
+
+  .luxe-proof__label {
+    margin: 0 0 12px;
+    color: #c9a227;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .luxe-proof__text {
@@ -87,6 +145,10 @@
     font-size: 0.9375rem;
     line-height: 1.65;
     font-style: italic;
+  }
+
+  .luxe-proof--notes .luxe-proof__text {
+    font-style: normal;
   }
 
   .luxe-proof__author {
@@ -117,16 +179,39 @@
       "default": "any"
     },
     {
+      "type": "select",
+      "id": "presentation",
+      "label": "Presentation",
+      "options": [
+        { "value": "notes", "label": "Brand notes (not customer reviews)" },
+        { "value": "reviews", "label": "Customer reviews (use only with real quotes)" }
+      ],
+      "default": "notes",
+      "info": "Use Customer reviews only for real verified quotes. Brand notes avoid fake names and stars."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_when_empty",
+      "label": "Hide when no quotes",
+      "default": false
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "default": "Loved by tea drinkers"
+      "default": "Why tea drinkers switch"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Premium loose leaf, beautifully brewed"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": ""
     },
     {
       "type": "text",
@@ -158,19 +243,27 @@
   "blocks": [
     {
       "type": "review",
-      "name": "Review",
+      "name": "Quote",
       "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Note label",
+          "default": "Taste",
+          "info": "Shown in brand-notes mode (e.g. Freshness, Brewing, Shipping)."
+        },
         {
           "type": "textarea",
           "id": "quote",
           "label": "Quote",
-          "default": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea."
+          "default": "Whole leaves packed fresh to order — brighter aroma and a cleaner cup than bagged tea."
         },
         {
           "type": "text",
           "id": "author",
-          "label": "Author",
-          "default": "Verified buyer"
+          "label": "Attribution",
+          "default": "",
+          "info": "For real reviews: customer name. For brand notes: leave blank or use a short source label."
         }
       ]
     }
@@ -178,26 +271,34 @@
   "presets": [
     {
       "name": "Luxe Leaf social proof",
+      "settings": {
+        "presentation": "notes",
+        "eyebrow": "Why tea drinkers switch",
+        "heading": "Premium loose leaf, beautifully brewed"
+      },
       "blocks": [
         {
           "type": "review",
           "settings": {
-            "quote": "The leaves taste incredibly fresh — bright, sweet, and nothing like bagged tea.",
-            "author": "Sarah M."
+            "label": "Freshness",
+            "quote": "Whole leaves packed fresh to order — brighter aroma and a cleaner cup than bagged tea.",
+            "author": ""
           }
         },
         {
           "type": "review",
           "settings": {
-            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. My daily ritual now.",
-            "author": "James L."
+            "label": "Brewing",
+            "quote": "Clear temperature and steeping notes with every order, so your first cup lands with confidence.",
+            "author": ""
           }
         },
         {
           "type": "review",
           "settings": {
-            "quote": "Finally found premium loose leaf tea that feels special without being intimidating.",
-            "author": "Elena K."
+            "label": "Shipping",
+            "quote": "Canada-wide delivery with free shipping over the store threshold — tea that arrives ready to steep.",
+            "author": ""
           }
         }
       ]

@@ -1,0 +1,393 @@
+{%- doc -%}
+  PDP reviews rail — metafield star summary, app-widget slot, optional merchant quotes.
+  Hidden when empty so cold stores never show fabricated ratings.
+{%- enddoc -%}
+
+{%- liquid
+  assign review_product = section.settings.product | default: product
+  if review_product == blank
+    assign review_product = closest.product
+  endif
+
+  assign rating_value = blank
+  assign scale_max = 5
+  assign rating_count = blank
+  if review_product != blank
+    assign rating_value = review_product.metafields.reviews.rating.value.rating
+    assign scale_max = review_product.metafields.reviews.rating.value.scale_max | default: 5
+    assign rating_count = review_product.metafields.reviews.rating_count
+  endif
+
+  assign has_rating = false
+  if rating_value != blank
+    assign has_rating = true
+  endif
+
+  assign quote_count = 0
+  assign app_block_count = 0
+  for block in section.blocks
+    if block.type == 'review' and block.settings.quote != blank
+      assign quote_count = quote_count | plus: 1
+    elsif block.type == '@app'
+      assign app_block_count = app_block_count | plus: 1
+    endif
+  endfor
+
+  assign has_content = false
+  if has_rating or quote_count > 0 or app_block_count > 0
+    assign has_content = true
+  endif
+
+  assign hide_empty = section.settings.hide_when_empty
+  if hide_empty == blank
+    assign hide_empty = true
+  endif
+-%}
+
+{%- unless hide_empty and has_content == false -%}
+<section
+  class="luxe-product-reviews section section--page-width spacing-style"
+  id="{{ section.settings.section_id | default: 'product-reviews' | escape }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  aria-label="{{ section.settings.heading | escape }}"
+  data-product-reviews
+>
+  <div class="luxe-product-reviews__header">
+    <p class="luxe-product-reviews__eyebrow">
+      {%- render 'luxe-leaf-icon', name: 'star', class: 'luxe-icon--sm' -%}
+      {{ section.settings.eyebrow }}
+    </p>
+    <h2 class="luxe-product-reviews__heading">{{ section.settings.heading }}</h2>
+    {%- if section.settings.intro != blank -%}
+      <p class="luxe-product-reviews__intro">{{ section.settings.intro }}</p>
+    {%- endif -%}
+
+    {%- if has_rating -%}
+      <p class="luxe-product-reviews__summary">
+        <span class="luxe-product-reviews__score" aria-hidden="true">{{ rating_value | round: 1 }}</span>
+        <span class="luxe-stars" aria-hidden="true">
+          {%- assign filled = rating_value | floor -%}
+          {%- for i in (1..scale_max) -%}
+            <span class="luxe-product-reviews__star{% if i <= filled %} luxe-product-reviews__star--filled{% endif %}">
+              {%- render 'luxe-leaf-icon', name: 'star', class: 'luxe-icon--sm' -%}
+            </span>
+          {%- endfor -%}
+        </span>
+        <span class="visually-hidden">{{ rating_value | round: 1 }} out of {{ scale_max }} stars</span>
+        {%- if rating_count != blank -%}
+          <span class="luxe-product-reviews__count">
+            {{ rating_count }}
+            {%- if rating_count == 1 -%} review{%- else -%} reviews{%- endif -%}
+          </span>
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+
+  {%- if app_block_count > 0 -%}
+    <div class="luxe-product-reviews__app">
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}
+          {% render block %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if quote_count > 0 -%}
+    <div class="luxe-product-reviews__quotes" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'review' and block.settings.quote != blank -%}
+          <blockquote class="luxe-product-reviews__quote" role="listitem" {{ block.shopify_attributes }}>
+            {%- if block.settings.show_stars -%}
+              <p class="luxe-product-reviews__quote-stars" aria-hidden="true">
+                <span class="luxe-stars">
+                  {%- for i in (1..5) -%}
+                    {%- render 'luxe-leaf-icon', name: 'star', class: 'luxe-icon--sm' -%}
+                  {%- endfor -%}
+                </span>
+              </p>
+            {%- endif -%}
+            <p class="luxe-product-reviews__quote-text">“{{ block.settings.quote | escape }}”</p>
+            {%- if block.settings.author != blank -%}
+              <footer class="luxe-product-reviews__author">— {{ block.settings.author | escape }}</footer>
+            {%- endif -%}
+          </blockquote>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if has_content == false -%}
+    <div class="luxe-product-reviews__empty">
+      <p class="luxe-product-reviews__empty-text">{{ section.settings.empty_text }}</p>
+      {%- if section.settings.empty_cta_label != blank and section.settings.empty_cta_link != blank -%}
+        <a href="{{ section.settings.empty_cta_link }}" class="button luxe-product-reviews__empty-cta">
+          {{ section.settings.empty_cta_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+{%- endunless -%}
+
+{% stylesheet %}
+  .luxe-product-reviews {
+    padding-block: 2.5rem;
+    background: linear-gradient(180deg, #fff 0%, var(--luxe-cream, #f8f6f0) 100%);
+  }
+
+  .luxe-product-reviews__header {
+    margin-bottom: 1.5rem;
+    max-width: 40rem;
+  }
+
+  .luxe-product-reviews__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.65rem;
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .luxe-product-reviews__heading {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+    line-height: 1.15;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-product-reviews__intro {
+    margin: 0 0 1rem;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.82);
+    line-height: 1.6;
+    font-size: 0.9375rem;
+  }
+
+  .luxe-product-reviews__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem 0.75rem;
+    margin: 0;
+    color: var(--luxe-jade, #1b4332);
+    font-size: 0.9375rem;
+  }
+
+  .luxe-product-reviews__score {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-product-reviews__star {
+    opacity: 0.28;
+    color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-product-reviews__star--filled {
+    opacity: 1;
+  }
+
+  .luxe-product-reviews__count {
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.75);
+  }
+
+  .luxe-product-reviews__app {
+    margin-bottom: 1.25rem;
+  }
+
+  .luxe-product-reviews__quotes {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-product-reviews__quotes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .luxe-product-reviews__quotes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .luxe-product-reviews__quote {
+    margin: 0;
+    padding: 1.25rem;
+    border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
+    border-radius: var(--luxe-radius-lg, 0.75rem);
+    background: #fff;
+  }
+
+  .luxe-product-reviews__quote-stars {
+    margin: 0 0 0.65rem;
+    color: var(--luxe-gold, #c9a227);
+  }
+
+  .luxe-product-reviews__quote-text {
+    margin: 0 0 0.85rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    font-style: italic;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-product-reviews__author {
+    font-size: 0.8125rem;
+    letter-spacing: 0.03em;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.7);
+  }
+
+  .luxe-product-reviews__empty {
+    padding: 1.35rem 1.25rem;
+    border: 1px dashed rgb(var(--luxe-jade-rgb, 27 67 50) / 0.22);
+    border-radius: var(--luxe-radius-lg, 0.75rem);
+    background: rgb(255 255 255 / 0.7);
+  }
+
+  .luxe-product-reviews__empty-text {
+    margin: 0;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.82);
+    line-height: 1.6;
+  }
+
+  .luxe-product-reviews__empty-cta {
+    margin-top: 1rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxe Leaf product reviews",
+  "tag": "section",
+  "class": "luxe-product-reviews-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "autofill": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Shows Shopify review metafields (Judge.me, Loox, etc.) and app blocks. Stays hidden until real review data or an app widget is present."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_when_empty",
+      "label": "Hide when no reviews yet",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Customer reviews"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What tea drinkers say"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Real cups, real feedback — from people who steeped this tea at home."
+    },
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section HTML id",
+      "default": "product-reviews"
+    },
+    {
+      "type": "textarea",
+      "id": "empty_text",
+      "label": "Empty state text",
+      "default": "Be the first to review this tea after your first steep. Your notes help the next tea drinker choose with confidence."
+    },
+    {
+      "type": "text",
+      "id": "empty_cta_label",
+      "label": "Empty state button label",
+      "default": "Shop more teas"
+    },
+    {
+      "type": "url",
+      "id": "empty_cta_link",
+      "label": "Empty state button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "review",
+      "name": "Verified quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": ""
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Verified buyer"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stars",
+          "label": "Show stars",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxe Leaf product reviews",
+      "settings": {
+        "hide_when_empty": true,
+        "empty_cta_link": "/collections/all"
+      }
+    }
+  ]
+}
+{% endschema %}

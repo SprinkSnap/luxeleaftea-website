@@ -165,6 +165,19 @@
                   },
                   "blocks": {}
                 },
+                "review_stars_pdp": {
+                  "type": "review",
+                  "name": "Review stars",
+                  "settings": {
+                    "stars_style": "shaded",
+                    "show_number": true,
+                    "text_color": "#c9a227",
+                    "type_preset": "paragraph",
+                    "width": "100%",
+                    "alignment": "left"
+                  },
+                  "blocks": {}
+                },
                 "buy_signals_taste": {
                   "type": "luxe-leaf-pdp-buy-signals",
                   "name": "Taste cue",
@@ -178,6 +191,7 @@
               "block_order": [
                 "text_xrnftG",
                 "price_tVjtKg",
+                "review_stars_pdp",
                 "buy_signals_taste"
               ]
             },
@@ -316,6 +330,24 @@
         "trust_line": "Packed fresh to order \u00b7 Premium loose leaf tea \u00b7 Free Canada-wide shipping over $50",
         "open_brewing": true,
         "padding-block-start": 24,
+        "padding-block-end": 40
+      }
+    },
+    "product_reviews": {
+      "type": "luxe-leaf-product-reviews",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "product": "{{ product }}",
+        "hide_when_empty": true,
+        "eyebrow": "Customer reviews",
+        "heading": "What tea drinkers say",
+        "intro": "Real cups, real feedback \u2014 from people who steeped this tea at home.",
+        "section_id": "product-reviews",
+        "empty_text": "Be the first to review this tea after your first steep. Your notes help the next tea drinker choose with confidence.",
+        "empty_cta_label": "Shop more teas",
+        "empty_cta_link": "shopify://collections/all",
+        "padding-block-start": 32,
         "padding-block-end": 40
       }
     },
@@ -489,6 +521,7 @@
     "trust_bar",
     "main",
     "luxe_product_guide",
+    "product_reviews",
     "keep_exploring",
     "product_recommendations_qggXJq"
   ]

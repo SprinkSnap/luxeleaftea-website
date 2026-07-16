@@ -191,37 +191,42 @@
     "social_proof_about": {
       "type": "luxe-leaf-social-proof",
       "blocks": {
-        "review_1": {
+        "note_1": {
           "type": "review",
           "settings": {
-            "quote": "The leaves taste incredibly fresh \u2014 bright, sweet, and nothing like bagged tea. I added two more to my bag without leaving the page.",
-            "author": "Sarah M."
+            "label": "Origin first",
+            "quote": "Teas labeled by region, harvest, and style \u2014 so you know exactly what you are buying before you steep.",
+            "author": ""
           }
         },
-        "review_2": {
+        "note_2": {
           "type": "review",
           "settings": {
-            "quote": "Beautiful whole leaves, clear brewing notes, and fast shipping. Feels like shopping at a real tea counter \u2014 my daily ritual now.",
-            "author": "James L."
+            "label": "Packed fresh",
+            "quote": "Whole leaves sealed after you order to protect aroma \u2014 not sitting on a shelf for months.",
+            "author": ""
           }
         },
-        "review_3": {
+        "note_3": {
           "type": "review",
           "settings": {
-            "quote": "Finally found premium loose leaf tea that feels special without being intimidating. The Tea Guide helped me pick my first oolong.",
-            "author": "Elena K."
+            "label": "Brew with confidence",
+            "quote": "Every tea ships with temperature, timing, and gram tips so the first cup feels like a tea-counter pour.",
+            "author": ""
           }
         }
       },
       "block_order": [
-        "review_1",
-        "review_2",
-        "review_3"
+        "note_1",
+        "note_2",
+        "note_3"
       ],
       "settings": {
         "page_scope": "about",
-        "eyebrow": "Loved by tea drinkers",
+        "presentation": "notes",
+        "eyebrow": "What we stand behind",
         "heading": "Why people keep coming back",
+        "intro": "Brand promises you can verify in every order \u2014 origin clarity, fresh packing, and brew guidance included.",
         "section_id": "reviews",
         "padding-block-start": 48,
         "padding-block-end": 48
@@ -353,37 +358,42 @@
     "social_proof_contact": {
       "type": "luxe-leaf-social-proof",
       "blocks": {
-        "review_1": {
+        "note_1": {
           "type": "review",
           "settings": {
-            "quote": "Called with a brewing question \u2014 they answered in minutes and pointed me to the perfect oolong.",
-            "author": "Michael T."
+            "label": "Brewing help",
+            "quote": "Ask a steeping question and get a clear, tea-counter answer \u2014 temperature, grams, and which oolong fits your cup.",
+            "author": ""
           }
         },
-        "review_2": {
+        "note_2": {
           "type": "review",
           "settings": {
-            "quote": "Email reply was warm and helpful. Felt like talking to someone at a tea shop, not a call center.",
-            "author": "Priya S."
+            "label": "Human replies",
+            "quote": "Email and chat from people who drink the same teas you order \u2014 not a scripted call-center loop.",
+            "author": ""
           }
         },
-        "review_3": {
+        "note_3": {
           "type": "review",
           "settings": {
-            "quote": "The Tea Guide helped me build my first order without leaving the site. So easy.",
-            "author": "David R."
+            "label": "Guided shopping",
+            "quote": "Use the Tea Guide or contact us to build a first order without guessing your way through the catalog.",
+            "author": ""
           }
         }
       },
       "block_order": [
-        "review_1",
-        "review_2",
-        "review_3"
+        "note_1",
+        "note_2",
+        "note_3"
       ],
       "settings": {
         "page_scope": "contact",
-        "eyebrow": "Real support, real tea lovers",
-        "heading": "Customers feel at home here",
+        "presentation": "notes",
+        "eyebrow": "Real support for real tea",
+        "heading": "Help that feels like a tea shop",
+        "intro": "How we show up when you need guidance \u2014 replace with verified customer quotes once reviews are live.",
         "section_id": "contact-reviews",
         "padding-block-start": 48,
         "padding-block-end": 48
