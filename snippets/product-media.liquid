@@ -22,6 +22,21 @@
   if settings.transition_to_main_product
     assign ref_image_to_transition = 'imagesToTransition[]'
   endif
+
+  assign media_product = selected_product | default: closest.product | default: product
+  capture luxe_image_fallback
+    render 'luxe-leaf-product-image-fallback', product: media_product
+  endcapture
+  assign luxe_image_fallback = luxe_image_fallback | strip
+
+  assign use_luxe_fallback = false
+  if luxe_image_fallback != blank and media.media_type == 'image'
+    if is_main_product_media
+      assign use_luxe_fallback = true
+    elsif media_product.featured_media != blank and media.id == media_product.featured_media.id
+      assign use_luxe_fallback = true
+    endif
+  endif
 %}
 
 <div
@@ -36,22 +51,40 @@
       assign fetch_priority = 'high'
     endif
     assign focal_point_style = '--focal-point: ' | append: media.presentation.focal_point | append: ';'
+    assign media_alt = media.alt | default: media_product.title
   %}
-  {{
-    media.preview_image
-    | image_url: width: 3840
-    | image_tag:
-      widths: widths,
-      alt: media.alt,
-      sizes: sizes,
-      loading: loading,
-      class: 'product-media__image',
-      ref: ref_image_to_transition,
-      data_max_resolution: high_res_url,
-      fetchpriority: fetch_priority,
-      style: focal_point_style,
-      ref: image_ref
-  }}
+  {%- if use_luxe_fallback -%}
+    {%- assign high_res_url = luxe_image_fallback | asset_url -%}
+    <img
+      src="{{ luxe_image_fallback | asset_url }}"
+      alt="{{ media_alt | escape }}"
+      sizes="{{ sizes }}"
+      loading="{{ loading }}"
+      class="product-media__image"
+      {% if ref_image_to_transition != blank %}ref="{{ ref_image_to_transition }}"{% endif %}
+      {% if image_ref != blank %}ref="{{ image_ref }}"{% endif %}
+      data-max-resolution="{{ high_res_url }}"
+      fetchpriority="{{ fetch_priority }}"
+      width="1600"
+      height="1600"
+    >
+  {%- else -%}
+    {{
+      media.preview_image
+      | image_url: width: 3840
+      | image_tag:
+        widths: widths,
+        alt: media.alt,
+        sizes: sizes,
+        loading: loading,
+        class: 'product-media__image',
+        ref: ref_image_to_transition,
+        data_max_resolution: high_res_url,
+        fetchpriority: fetch_priority,
+        style: focal_point_style,
+        ref: image_ref
+    }}
+  {%- endif -%}
 
   {% unless preview_image_only %}
     {%- case media.media_type -%}
