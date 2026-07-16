@@ -201,64 +201,11 @@
       assign chat_ship_dollars = chat_ship_cents | divided_by: 100
     -%}
     <script src="{{ 'luxe-leaf-tea-chat.js' | asset_url }}" defer></script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "ContactPoint",
-            "contactType": "customer support",
-            "availableLanguage": ["English"],
-            "areaServed": "CA",
-            "url": {{ shop.url | append: '/pages/contact' | json }},
-            "name": {{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | json }},
-            "description": "Free AI tea guide chat for premium loose leaf tea recommendations, brewing tips, gifts, and free shipping over ${{ chat_ship_dollars }} at Luxe Leaf Tea."
-          },
-          {
-            "@type": "WebApplication",
-            "name": "Luxe Leaf Tea Guide Chat",
-            "applicationCategory": "BusinessApplication",
-            "operatingSystem": "Web",
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "USD"
-            },
-            "description": "Free conversational tea guide that helps shoppers choose premium loose leaf tea, learn brewing methods, and check free shipping.",
-            "url": {{ shop.url | json }}
-          },
-          {
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "Which premium loose leaf tea should I try first?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "For a first cup, try a bright green tea for clarity, a floral oolong for aroma, or a malty black tea for everyday sipping. Ask our free tea guide chat for a personalized recommendation."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How do I brew loose leaf tea?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Use about 2–3g whole leaves per 200ml. Greens around 175°F for 2–3 minutes, oolongs around 195°F with short steeps, and blacks around 205°F for 3–4 minutes. Whole leaves re-steep beautifully."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Does Luxe Leaf Tea offer free shipping?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes. Luxe Leaf Tea offers free Canada-wide shipping on orders over ${{ chat_ship_dollars }}. Orders under that ship Canada-wide from {{ settings.standard_shipping_rate | default: 995 | money }} with tracking. Ask the tea guide chat for help while you shop."
-                }
-              }
-            ]
-          }
-        ]
-      }
-    </script>
+    {%- comment -%}
+      No sitewide FAQPage / WebApplication JSON-LD here.
+      FAQ rich results come only from visible FAQ sections (home + /pages/faq).
+      Organization ContactPoint lives in luxe-leaf-footer-schema.
+    {%- endcomment -%}
     <luxe-tea-chat
       class="luxe-tea-chat"
       data-agent-name="{{ settings.tea_chat_agent_name | default: 'Mei — Tea Guide' | escape }}"
