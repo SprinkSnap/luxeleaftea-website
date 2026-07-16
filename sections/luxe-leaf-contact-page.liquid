@@ -132,23 +132,16 @@
                 {{ brand_phone }}
               </a>
               <span class="luxe-contact-page__channel-note">{{ section.settings.phone_note }}</span>
-              <a
-                href="tel:{{ phone_e164 | default: brand_phone_href | escape }}"
-                class="button luxe-contact-page__call-btn"
-                title="Tap to call Luxe Leaf Tea"
-              >
-                Call {{ brand_phone }}
-              </a>
             </div>
           </li>
         {%- endif -%}
 
         {%- if brand_email != blank -%}
-          <li class="luxe-contact-page__channel">
+          <li class="luxe-contact-page__channel luxe-contact-page__channel--email">
             <span class="luxe-contact-page__channel-icon" aria-hidden="true">
               {%- render 'luxe-leaf-icon', name: 'leaf', class: 'luxe-icon--sm' -%}
             </span>
-            <div>
+            <div class="luxe-contact-page__channel-body">
               <span class="luxe-contact-page__channel-label">Email</span>
               <a
                 href="mailto:{{ brand_email | escape }}"
@@ -325,6 +318,56 @@
       <span>Secure checkout</span>
     </li>
   </ul>
+
+  {%- comment -%}
+    Sticky Call + Email (+ Chat) — Contact page only.
+    Sits above the mobile Shop/Bag bar so commerce stays tappable.
+    Phone/email remain in the channels list above for SEO crawlability.
+  {%- endcomment -%}
+  {%- if brand_phone != blank or brand_email != blank -%}
+    <nav
+      class="luxe-contact-page__sticky"
+      aria-label="Contact us right away — call, email, or chat"
+      data-contact-sticky
+    >
+      <p class="luxe-contact-page__sticky-label">
+        We’re here — like at the tea counter
+      </p>
+      <div class="luxe-contact-page__sticky-actions">
+        {%- if brand_phone != blank -%}
+          <a
+            href="tel:{{ phone_e164 | default: brand_phone_href | escape }}"
+            class="button luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--call"
+            title="Call Luxe Leaf Tea — {{ brand_phone | escape }}"
+          >
+            <span class="luxe-contact-page__sticky-btn-kicker">Call</span>
+            <span class="luxe-contact-page__sticky-btn-value">{{ brand_phone }}</span>
+          </a>
+        {%- endif -%}
+
+        {%- if brand_email != blank -%}
+          <a
+            href="mailto:{{ brand_email | escape }}"
+            class="button button-secondary luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--email"
+            title="Email Luxe Leaf Tea — {{ brand_email | escape }}"
+          >
+            <span class="luxe-contact-page__sticky-btn-kicker">Email</span>
+            <span class="luxe-contact-page__sticky-btn-value">{{ brand_email }}</span>
+          </a>
+        {%- endif -%}
+
+        <button
+          type="button"
+          class="button button-secondary luxe-contact-page__sticky-btn luxe-contact-page__sticky-btn--chat"
+          data-open-tea-guide
+          title="Chat with our Tea Guide"
+        >
+          <span class="luxe-contact-page__sticky-btn-kicker">Chat</span>
+          <span class="luxe-contact-page__sticky-btn-value">Tea Guide</span>
+        </button>
+      </div>
+    </nav>
+  {%- endif -%}
 </section>
 
 <script type="application/ld+json">
@@ -548,6 +591,13 @@
     box-shadow: var(--luxe-shadow-soft, 0 4px 16px rgb(27 67 50 / 0.06));
   }
 
+  @media screen and (min-width: 900px) {
+    .luxe-contact-page__channels {
+      position: sticky;
+      top: calc(var(--header-height, 4.5rem) + 1rem);
+    }
+  }
+
   .luxe-contact-page__channels-title {
     margin: 0 0 1rem;
     font-size: 0.75rem;
@@ -615,34 +665,136 @@
     color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
   }
 
-  /* Inline tap-to-call — never fixed over the mobile shop bar */
-  .luxe-contact-page__call-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 0.75rem;
-    min-height: 2.75rem;
-    padding-inline: 1.15rem;
-    width: 100%;
-    border-radius: 999px;
-    background: var(--luxe-jade, #1b4332);
-    border-color: var(--luxe-jade, #1b4332);
-    font-size: 0.9375rem;
-    text-align: center;
-    text-decoration: none;
+  /*
+    Sticky Call + Email + Chat — Contact page only.
+    Mobile: above Shop/Bag commerce bar (never covering it).
+    Desktop: slim dock at the bottom — always ready, like staff at the counter.
+  */
+  .luxe-contact-page__sticky {
+    --luxe-contact-sticky-height: 4.75rem;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: calc(var(--layer-menu-drawer, 12) + 3);
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.55rem 0.75rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, rgb(248 246 240 / 0.97) 0%, #f8f6f0 100%);
+    border-top: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.12);
+    box-shadow: 0 -6px 24px rgb(27 67 50 / 0.1);
+    backdrop-filter: blur(10px);
   }
 
-  .luxe-contact-page__call-btn:hover,
-  .luxe-contact-page__call-btn:focus-visible {
+  .luxe-contact-page__sticky-label {
+    margin: 0;
+    text-align: center;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.65);
+  }
+
+  .luxe-contact-page__sticky-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .luxe-contact-page__sticky-actions:has(> :nth-child(2):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .luxe-contact-page__sticky-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    min-height: 2.85rem;
+    min-width: 0;
+    padding: 0.4rem 0.35rem;
+    border-radius: 0.65rem;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1.15;
+  }
+
+  .luxe-contact-page__sticky-btn-kicker {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .luxe-contact-page__sticky-btn-value {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .luxe-contact-page__sticky-btn--call {
+    background: var(--luxe-jade, #1b4332);
+    border-color: var(--luxe-jade, #1b4332);
+    color: #fff;
+  }
+
+  .luxe-contact-page__sticky-btn--call:hover,
+  .luxe-contact-page__sticky-btn--call:focus-visible {
     background: #163628;
     border-color: #163628;
   }
 
-  @media screen and (min-width: 900px) {
-    .luxe-contact-page__call-btn {
-      width: auto;
-      min-width: 11rem;
+  .luxe-contact-page__sticky-btn--email,
+  .luxe-contact-page__sticky-btn--chat {
+    background: #fff;
+    color: var(--luxe-jade, #1b4332);
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-contact-page__sticky {
+      --luxe-contact-sticky-height: 4.25rem;
+      left: 50%;
+      right: auto;
+      bottom: 1rem;
+      width: min(42rem, calc(100vw - 2rem));
+      transform: translateX(-50%);
+      border-radius: 1rem;
+      border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.12);
+      padding: 0.65rem 0.85rem;
+      box-shadow: 0 10px 32px rgb(27 67 50 / 0.14);
     }
+
+    .luxe-contact-page__sticky-btn {
+      min-height: 3rem;
+      border-radius: 999px;
+      padding-inline: 0.75rem;
+    }
+
+    .luxe-contact-page__sticky-btn-value {
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .luxe-contact-page__sticky {
+      --luxe-contact-sticky-height: 5.25rem;
+      bottom: calc(var(--luxe-mobile-bar-height, 4.25rem) + var(--luxe-shipping-nudge-height, 0px));
+      padding-bottom: 0.5rem;
+      z-index: calc(var(--layer-menu-drawer, 12) + 2);
+    }
+  }
+
+  html.luxe-cart-drawer-open .luxe-contact-page__sticky,
+  html.luxe-menu-open .luxe-contact-page__sticky,
+  html.luxe-chat-open .luxe-contact-page__sticky {
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .luxe-contact-page__quick-links {
@@ -830,10 +982,17 @@
     gap: 0.4rem;
   }
 
-  /* Keep page clear of the fixed mobile commerce bar (Shop / Bag / Checkout) */
+  /* Clear sticky contact dock + mobile commerce bar */
+  .luxe-contact-page {
+    padding-bottom: calc(2rem + var(--luxe-contact-sticky-height, 4.75rem));
+  }
+
   @media screen and (max-width: 749px) {
     .luxe-contact-page {
-      padding-bottom: calc(1.5rem + var(--luxe-mobile-bar-height, 4.25rem) + env(safe-area-inset-bottom, 0px));
+      padding-bottom: calc(
+        1.25rem + var(--luxe-contact-sticky-height, 5.25rem) + var(--luxe-mobile-bar-height, 4.25rem) +
+          var(--luxe-shipping-nudge-height, 0px) + env(safe-area-inset-bottom, 0px)
+      );
     }
 
     .luxe-contact-page__welcome-actions {

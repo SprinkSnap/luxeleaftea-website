@@ -1950,11 +1950,19 @@ cart-drawer-component:not([open]) > dialog[open] {
 
 html.luxe-cart-drawer-open .luxe-shipping-nudge,
 html.luxe-cart-drawer-open [data-mobile-shop-bar],
+html.luxe-cart-drawer-open [data-contact-sticky],
 html.luxe-menu-open .luxe-shipping-nudge,
 html.luxe-menu-open [data-mobile-shop-bar],
-html.luxe-menu-open .luxe-tea-chat {
+html.luxe-menu-open .luxe-tea-chat,
+html.luxe-menu-open [data-contact-sticky],
+html.luxe-chat-open [data-contact-sticky] {
   visibility: hidden;
   pointer-events: none;
+}
+
+/* Contact sticky dock already includes Chat — hide floating Tea Guide FAB there */
+body:has([data-contact-sticky]) .luxe-tea-chat__launcher {
+  display: none !important;
 }
 
 /* Keep “Shop Tea” copy for SEO/conversion; only tighten spacing on small phones */
