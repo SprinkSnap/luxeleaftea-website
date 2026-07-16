@@ -120,7 +120,7 @@ Create manual collections with handles: `green-tea`, `oolong`, `pu-erh`, `black-
 - [ ] Collection pages show hero + bottom CTA
 - [ ] Cart shows trust line
 - [ ] FAQ page at `/pages/faq`
-- [ ] Blog at `/blogs/tea-guides`
+- [ ] Blog at `/blogs/tea-guides` with the 3 starter articles published (theme auto-switches CTAs from FAQ fallbacks to live guides)
 - [ ] No Liquid errors in theme preview
 
 ## 9. Ongoing

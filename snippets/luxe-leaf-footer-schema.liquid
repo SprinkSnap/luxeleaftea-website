@@ -21,10 +21,20 @@
 
     assign home_abs = shop.url | append: routes.root_url
     assign shop_abs = shop.url | append: shop_tea_url
-    assign guides_abs = shop.url | append: '/blogs/tea-guides'
-    assign faq_abs = shop.url | append: '/pages/faq'
-    assign about_abs = shop.url | append: '/pages/about'
-    assign contact_abs = shop.url | append: '/pages/contact'
+    capture guides_path
+      render 'luxe-leaf-tea-guides-url', target: 'hub', fallback: ''
+    endcapture
+    assign guides_path = guides_path | strip
+    assign guides_abs = blank
+    if guides_path != blank
+      assign guides_abs = shop.url | append: guides_path
+    endif
+    assign faq_path = pages['faq'].url | default: '/pages/faq'
+    assign about_path = pages['about'].url | default: '/pages/about'
+    assign contact_path = pages['contact'].url | default: '/pages/contact'
+    assign faq_abs = shop.url | append: faq_path
+    assign about_abs = shop.url | append: about_path
+    assign contact_abs = shop.url | append: contact_path
 
     capture privacy_url_resolved
       render 'luxe-leaf-policy-url', which: 'privacy'
@@ -106,15 +116,30 @@
     {
       "@context": "https://schema.org",
       "@type": "SiteNavigationElement",
-      "name": ["Home", "Shop All Tea", "Green Tea", "Oolong Tea", "Pu-erh Tea", "Black Tea", "Tea Guides", "FAQ", "About", "Contact", "Privacy Policy", "Terms of Service", "Refund Policy", "Shipping Policy"],
+      "name": [
+        "Home",
+        "Shop All Tea",
+        "Green Tea",
+        "Oolong Tea",
+        "Pu-erh Tea",
+        "Black Tea"{%- if guides_abs != blank -%},
+        "Tea Guides"{%- endif -%},
+        "FAQ",
+        "About",
+        "Contact",
+        "Privacy Policy",
+        "Terms of Service",
+        "Refund Policy",
+        "Shipping Policy"
+      ],
       "url": [
         {{ home_abs | json }},
         {{ shop_abs | json }},
         {{ shop.url | append: '/collections/green-tea' | json }},
         {{ shop.url | append: '/collections/oolong' | json }},
         {{ shop.url | append: '/collections/pu-erh' | json }},
-        {{ shop.url | append: '/collections/black-tea' | json }},
-        {{ guides_abs | json }},
+        {{ shop.url | append: '/collections/black-tea' | json }}{%- if guides_abs != blank -%},
+        {{ guides_abs | json }}{%- endif -%},
         {{ faq_abs | json }},
         {{ about_abs | json }},
         {{ contact_abs | json }},

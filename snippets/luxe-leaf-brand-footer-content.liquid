@@ -40,6 +40,11 @@
   assign about_url = pages['about'].url | default: '/pages/about'
   assign contact_url = pages['contact'].url | default: '/pages/contact'
   assign faq_url = pages['faq'].url | default: '/pages/faq'
+
+  capture tea_guides_url
+    render 'luxe-leaf-tea-guides-url', target: 'hub', fallback: ''
+  endcapture
+  assign tea_guides_url = tea_guides_url | strip
 -%}
 
 <div class="luxe-brand-footer" role="contentinfo" aria-label="Site footer">
@@ -202,7 +207,9 @@
             <div class="luxe-brand-footer__nav-body">
               <p class="luxe-brand-footer__col-intro">Brewing tips, shipping answers, and our story.</p>
               <ul class="luxe-brand-footer__list list-unstyled" role="list">
-                <li><a href="/blogs/tea-guides" title="Premium loose leaf tea brewing guides">Tea Guides</a></li>
+                {%- if tea_guides_url != blank -%}
+                  <li><a href="{{ tea_guides_url }}" title="Premium loose leaf tea brewing guides">Tea Guides</a></li>
+                {%- endif -%}
                 <li><a href="{{ faq_url }}" title="Tea FAQ — Canada-wide shipping, brewing, and orders">FAQ</a></li>
                 <li><a href="{{ about_url }}" title="About Luxe Leaf Tea — our story">Our Story</a></li>
                 <li><a href="{{ contact_url }}" title="Contact Luxe Leaf Tea">Contact</a></li>
