@@ -98,6 +98,8 @@ Bundled theme assets (brewed cup + dry leaf):
 
 These are placeholder composites until you shoot real photos. Replace in Shopify admin when ready — especially jasmine, peach, ChaTraMue, and Mocastar listings.
 
+Until unique photos ship, product cards show a **taste / type cue** under the title (collection, search, featured, keep exploring) so SKUs stay distinguishable on desktop and mobile grids. Ready theme assets: `Jasmine-tea.png`, `Peach-oolong-tea.png`.
+
 Other assets:
 
 | Asset | Use for |

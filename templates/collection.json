@@ -101,6 +101,10 @@
               },
               "blocks": {}
             },
+            "card_taste_cue": {
+              "type": "luxe-leaf-card-taste-cue",
+              "settings": {}
+            },
             "price_EzJzMm": {
               "type": "price",
               "settings": {
@@ -130,6 +134,7 @@
           "block_order": [
             "card-gallery",
             "product_title_4nY4eT",
+            "card_taste_cue",
             "price_EzJzMm",
             "browse_atc_grid"
           ]

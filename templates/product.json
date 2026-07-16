@@ -457,6 +457,10 @@
               },
               "blocks": {}
             },
+            "card_taste_cue": {
+              "type": "luxe-leaf-card-taste-cue",
+              "settings": {}
+            },
             "price_gLWgA6": {
               "type": "price",
               "settings": {
@@ -487,6 +491,7 @@
           "block_order": [
             "product_card_gallery_DNizbJ",
             "product_title_M7MJkb",
+            "card_taste_cue",
             "price_gLWgA6",
             "browse_atc_recs"
           ]

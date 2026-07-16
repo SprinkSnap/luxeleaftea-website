@@ -53,6 +53,7 @@
         <h3 class="luxe-keep-exploring__title">
           <a href="{{ variant.url }}">{{ product.title }}</a>
         </h3>
+        {% render 'luxe-leaf-pdp-taste-cue', product: product, presentation: 'card' %}
         <p class="luxe-keep-exploring__price">{{ variant.price | money }}</p>
         {%- if product.available -%}
           {%- form 'product', product, class: 'luxe-keep-exploring__form' -%}
@@ -101,6 +102,7 @@
         <h3 class="luxe-keep-exploring__title">
           <a href="{{ variant.url }}">{{ product.title }}</a>
         </h3>
+        {% render 'luxe-leaf-pdp-taste-cue', product: product, presentation: 'card' %}
         <p class="luxe-keep-exploring__price">{{ variant.price | money }}</p>
         {%- if product.available -%}
           {%- form 'product', product, class: 'luxe-keep-exploring__form' -%}
