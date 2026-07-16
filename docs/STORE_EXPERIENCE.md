@@ -5,7 +5,7 @@ Custom boutique layer on Horizon — designed for premium **drinkable loose leaf
 ## What’s included
 
 ### In-store shopping feel
-- **Store experience section** — sensory 3-step journey (choose → pack fresh → steep)
+- **Homepage below-fold** — lean path: social proof → about story → brew FAQ → tea guides → shop CTA (store-experience / brewing-guide sections available in the theme editor if you want them back)
 - **Boutique design system** — jade/gold/cream palette, rounded cards, premium buttons
 - **Mobile shop bar** — sticky “Shop Tea” + cart on phones
 

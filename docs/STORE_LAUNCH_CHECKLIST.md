@@ -13,7 +13,7 @@ Complete these steps in order to activate conversion and SEO across the Luxe Lea
 3. If not connected yet:
    - **Add theme → Connect from GitHub**
    - Select `SprinkSnap/luxeleaftea-website` and branch **`main`**
-4. Open **Customize** on the updated theme and confirm sections load (store experience, tea chat, cart drawer)
+4. Open **Customize** on the updated theme and confirm sections load (featured teas, tea chat, cart drawer)
 5. Click **Publish** — the live site only updates after publish
 
 ### Option B — Shopify CLI
