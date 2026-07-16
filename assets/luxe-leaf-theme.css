@@ -2028,7 +2028,12 @@ html.luxe-menu-open .luxe-shipping-nudge,
 html.luxe-menu-open [data-mobile-shop-bar],
 html.luxe-menu-open .luxe-tea-chat,
 html.luxe-menu-open [data-contact-sticky],
-html.luxe-chat-open [data-contact-sticky] {
+html.luxe-chat-open [data-contact-sticky],
+html.luxe-zoom-open .luxe-shipping-nudge,
+html.luxe-zoom-open [data-mobile-shop-bar],
+html.luxe-zoom-open .luxe-mobile-bar,
+html.luxe-zoom-open .luxe-tea-chat,
+html.luxe-zoom-open [data-contact-sticky] {
   visibility: hidden;
   pointer-events: none;
 }
@@ -3838,7 +3843,8 @@ zoom-dialog.luxe-zoom-dialog dialog {
   background: rgb(248 246 240 / 0.98) !important;
   overflow: hidden !important;
   overscroll-behavior: none !important;
-  z-index: 80;
+  /* Sit above the mobile commerce bar while zoom is open */
+  z-index: calc(var(--layer-menu-drawer, 12) + 12) !important;
 }
 
 .luxe-zoom-dialog .dialog-zoomed-gallery {
@@ -4048,6 +4054,7 @@ zoom-dialog.luxe-zoom-dialog dialog {
   .luxe-zoom-dialog .luxe-zoom-controls {
     gap: 0.65rem;
     padding: 0.35rem 0.5rem;
+    /* Bar is hidden while zoom is open — keep controls at the safe area */
     bottom: max(0.85rem, env(safe-area-inset-bottom, 0px)) !important;
   }
 
@@ -4070,6 +4077,13 @@ zoom-dialog.luxe-zoom-dialog dialog {
 
   .luxe-zoom-dialog .dialog-thumbnails-list-container {
     bottom: max(5.1rem, calc(env(safe-area-inset-bottom, 0px) + 5.1rem)) !important;
+  }
+
+  html.luxe-zoom-open .luxe-mobile-bar,
+  html.luxe-zoom-open .luxe-shipping-nudge,
+  html.luxe-zoom-open [data-mobile-shop-bar] {
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 }
 
