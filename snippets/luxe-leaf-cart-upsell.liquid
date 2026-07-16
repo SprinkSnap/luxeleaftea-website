@@ -1,5 +1,7 @@
 {%- doc -%}
-  Cart drawer upsell — suggests teas not already in the cart.
+  Cart drawer upsell — prioritizes teas that close the free-shipping gap.
+  When remaining > 0: prefer unlockers (price ≥ remaining), then under-gap, then fillers.
+  When free shipping unlocked: ritual cross-sell of teas not already in the cart.
 {%- enddoc -%}
 
 {%- liquid
@@ -7,13 +9,128 @@
   if upsell_collection == blank
     assign upsell_collection = collections['all']
   endif
+
   assign upsell_limit = 3
   assign upsell_count = 0
+  assign shown_ids = '|'
+  assign threshold = settings.free_shipping_threshold | default: 5000
+  assign remaining = threshold | minus: cart.total_price
+  if remaining < 0
+    assign remaining = 0
+  endif
+  assign qualifies_free = false
+  if cart.total_price >= threshold
+    assign qualifies_free = true
+  endif
+  assign remaining_money = remaining | money
+  assign threshold_money = threshold | money
 -%}
 
 {%- if upsell_collection != blank and cart.item_count > 0 -%}
   {%- capture upsell_cards -%}
-    {%- for product in upsell_collection.products limit: 20 -%}
+    {%- comment -%} Pass 1: unlock free shipping in one add (price ≥ remaining) {%- endcomment -%}
+    {%- unless qualifies_free -%}
+      {%- for product in upsell_collection.products limit: 48 -%}
+        {%- if upsell_count >= upsell_limit -%}{%- break -%}{%- endif -%}
+        {%- assign already_in_cart = false -%}
+        {%- for item in cart.items -%}
+          {%- if item.product_id == product.id -%}
+            {%- assign already_in_cart = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign id_needle = '|' | append: product.id | append: '|' -%}
+        {%- if already_in_cart or product.available == false or shown_ids contains id_needle -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- assign variant = product.selected_or_first_available_variant -%}
+        {%- if variant == blank or variant.available == false -%}{%- continue -%}{%- endif -%}
+        {%- if variant.price >= remaining -%}
+          <article class="luxe-cart-upsell__card luxe-cart-upsell__card--unlock" role="listitem">
+            <a href="{{ variant.url }}" class="luxe-cart-upsell__media" tabindex="-1" aria-hidden="true">
+              {%- if product.featured_image -%}
+                {{
+                  product.featured_image
+                  | image_url: width: 160
+                  | image_tag: loading: 'lazy', alt: product.title, width: 80, height: 80
+                }}
+              {%- endif -%}
+            </a>
+            <div class="luxe-cart-upsell__info">
+              <p class="luxe-cart-upsell__badge">Unlocks free shipping</p>
+              <a href="{{ variant.url }}" class="luxe-cart-upsell__title">{{ product.title }}</a>
+              <p class="luxe-cart-upsell__price">{{ variant.price | money }}</p>
+            </div>
+            {%- form 'product', product, class: 'luxe-cart-upsell__form' -%}
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button
+                type="submit"
+                name="add"
+                class="button luxe-cart-upsell__add"
+                aria-label="Add {{ product.title | escape }} — unlocks free Canada-wide shipping"
+              >
+                Add
+              </button>
+            {%- endform -%}
+          </article>
+          {%- assign shown_ids = shown_ids | append: product.id | append: '|' -%}
+          {%- assign upsell_count = upsell_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Pass 2: under-gap teas (progress toward free shipping) {%- endcomment -%}
+      {%- for product in upsell_collection.products limit: 48 -%}
+        {%- if upsell_count >= upsell_limit -%}{%- break -%}{%- endif -%}
+        {%- assign already_in_cart = false -%}
+        {%- for item in cart.items -%}
+          {%- if item.product_id == product.id -%}
+            {%- assign already_in_cart = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign id_needle = '|' | append: product.id | append: '|' -%}
+        {%- if already_in_cart or product.available == false or shown_ids contains id_needle -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- assign variant = product.selected_or_first_available_variant -%}
+        {%- if variant == blank or variant.available == false -%}{%- continue -%}{%- endif -%}
+        {%- if variant.price < remaining -%}
+          <article class="luxe-cart-upsell__card luxe-cart-upsell__card--progress" role="listitem">
+            <a href="{{ variant.url }}" class="luxe-cart-upsell__media" tabindex="-1" aria-hidden="true">
+              {%- if product.featured_image -%}
+                {{
+                  product.featured_image
+                  | image_url: width: 160
+                  | image_tag: loading: 'lazy', alt: product.title, width: 80, height: 80
+                }}
+              {%- endif -%}
+            </a>
+            <div class="luxe-cart-upsell__info">
+              <p class="luxe-cart-upsell__badge luxe-cart-upsell__badge--soft">Closer to free shipping</p>
+              <a href="{{ variant.url }}" class="luxe-cart-upsell__title">{{ product.title }}</a>
+              <p class="luxe-cart-upsell__price">{{ variant.price | money }}</p>
+            </div>
+            {%- form 'product', product, class: 'luxe-cart-upsell__form' -%}
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button
+                type="submit"
+                name="add"
+                class="button button-secondary luxe-cart-upsell__add"
+                aria-label="Add {{ product.title | escape }} — {{ remaining_money | escape }} to free shipping"
+              >
+                Add
+              </button>
+            {%- endform -%}
+          </article>
+          {%- assign shown_ids = shown_ids | append: product.id | append: '|' -%}
+          {%- assign upsell_count = upsell_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+
+    {%- comment -%} Pass 3: fillers / ritual cross-sell {%- endcomment -%}
+    {%- for product in upsell_collection.products limit: 48 -%}
+      {%- if upsell_count >= upsell_limit -%}{%- break -%}{%- endif -%}
       {%- assign already_in_cart = false -%}
       {%- for item in cart.items -%}
         {%- if item.product_id == product.id -%}
@@ -21,42 +138,62 @@
           {%- break -%}
         {%- endif -%}
       {%- endfor -%}
-      {%- unless already_in_cart or product.available == false -%}
-        {%- assign variant = product.selected_or_first_available_variant -%}
-        <article class="luxe-cart-upsell__card">
-          <a href="{{ variant.url }}" class="luxe-cart-upsell__media">
-            {%- if product.featured_image -%}
-              {{
-                product.featured_image
-                | image_url: width: 160
-                | image_tag: loading: 'lazy', alt: product.title, width: 80, height: 80
-              }}
-            {%- endif -%}
-          </a>
-          <div class="luxe-cart-upsell__info">
-            <a href="{{ variant.url }}" class="luxe-cart-upsell__title">{{ product.title }}</a>
-            <p class="luxe-cart-upsell__price">{{ variant.price | money }}</p>
-          </div>
-          {%- form 'product', product, class: 'luxe-cart-upsell__form' -%}
-            <input type="hidden" name="id" value="{{ variant.id }}">
-            <button type="submit" name="add" class="button button-secondary luxe-cart-upsell__add">
-              Add
-            </button>
-          {%- endform -%}
-        </article>
-        {%- assign upsell_count = upsell_count | plus: 1 -%}
-        {%- if upsell_count >= upsell_limit -%}
-          {%- break -%}
-        {%- endif -%}
-      {%- endunless -%}
+      {%- assign id_needle = '|' | append: product.id | append: '|' -%}
+      {%- if already_in_cart or product.available == false or shown_ids contains id_needle -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- assign variant = product.selected_or_first_available_variant -%}
+      {%- if variant == blank or variant.available == false -%}{%- continue -%}{%- endif -%}
+      <article class="luxe-cart-upsell__card" role="listitem">
+        <a href="{{ variant.url }}" class="luxe-cart-upsell__media" tabindex="-1" aria-hidden="true">
+          {%- if product.featured_image -%}
+            {{
+              product.featured_image
+              | image_url: width: 160
+              | image_tag: loading: 'lazy', alt: product.title, width: 80, height: 80
+            }}
+          {%- endif -%}
+        </a>
+        <div class="luxe-cart-upsell__info">
+          <a href="{{ variant.url }}" class="luxe-cart-upsell__title">{{ product.title }}</a>
+          <p class="luxe-cart-upsell__price">{{ variant.price | money }}</p>
+        </div>
+        {%- form 'product', product, class: 'luxe-cart-upsell__form' -%}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <button
+            type="submit"
+            name="add"
+            class="button button-secondary luxe-cart-upsell__add"
+            aria-label="Add {{ product.title | escape }} to bag"
+          >
+            Add
+          </button>
+        {%- endform -%}
+      </article>
+      {%- assign shown_ids = shown_ids | append: product.id | append: '|' -%}
+      {%- assign upsell_count = upsell_count | plus: 1 -%}
     {%- endfor -%}
   {%- endcapture -%}
 
   {%- if upsell_count > 0 -%}
-    <div class="luxe-cart-upsell" data-cart-upsell>
+    <div
+      class="luxe-cart-upsell{% unless qualifies_free %} luxe-cart-upsell--gap{% endunless %}"
+      data-cart-upsell
+      data-upsell-remaining="{{ remaining }}"
+      {% if qualifies_free %}data-upsell-free-shipping{% endif %}
+    >
       <div class="luxe-cart-upsell__header">
-        <p class="luxe-cart-upsell__label">Complete your tea ritual</p>
-        <p class="luxe-cart-upsell__hint">Popular add-ons · one tap to add</p>
+        {%- if qualifies_free -%}
+          <p class="luxe-cart-upsell__label">Complete your tea ritual</p>
+          <p class="luxe-cart-upsell__hint">Popular add-ons · one tap to add</p>
+        {%- else -%}
+          <p class="luxe-cart-upsell__label">
+            Add {{ remaining_money }} more for free Canada-wide shipping
+          </p>
+          <p class="luxe-cart-upsell__hint">
+            Free shipping at {{ threshold_money }} · one tap to add
+          </p>
+        {%- endif -%}
       </div>
       <div class="luxe-cart-upsell__scroll" role="list">
         {{ upsell_cards }}
@@ -72,6 +209,14 @@
     background: rgb(var(--luxe-gold-rgb, 201 162 39) / 0.06);
   }
 
+  .luxe-cart-upsell--gap {
+    background: linear-gradient(
+      180deg,
+      rgb(var(--luxe-gold-rgb, 201 162 39) / 0.12) 0%,
+      rgb(var(--luxe-gold-rgb, 201 162 39) / 0.04) 100%
+    );
+  }
+
   .luxe-cart-upsell__header {
     margin-bottom: 0.65rem;
   }
@@ -80,6 +225,7 @@
     margin: 0;
     font-size: 0.8125rem;
     font-weight: 600;
+    line-height: 1.35;
     color: var(--luxe-jade, #1b4332);
   }
 
@@ -101,7 +247,7 @@
   }
 
   .luxe-cart-upsell__card {
-    flex: 0 0 min(14rem, 78vw);
+    flex: 0 0 min(14.5rem, 80vw);
     scroll-snap-align: start;
     display: grid;
     grid-template-columns: 3.5rem 1fr auto;
@@ -113,11 +259,31 @@
     border: 1px solid rgb(var(--luxe-jade-rgb, 27 67 50) / 0.1);
   }
 
+  .luxe-cart-upsell__card--unlock {
+    border-color: rgb(var(--luxe-gold-rgb, 201 162 39) / 0.55);
+    box-shadow: 0 0 0 1px rgb(var(--luxe-gold-rgb, 201 162 39) / 0.2);
+  }
+
   .luxe-cart-upsell__media img {
     width: 3.5rem;
     height: 3.5rem;
     object-fit: cover;
     border-radius: 0.45rem;
+  }
+
+  .luxe-cart-upsell__badge {
+    margin: 0 0 0.15rem;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--luxe-jade, #1b4332);
+    line-height: 1.2;
+  }
+
+  .luxe-cart-upsell__badge--soft {
+    color: rgb(var(--luxe-jade-rgb, 27 67 50) / 0.7);
+    font-weight: 600;
   }
 
   .luxe-cart-upsell__title {
@@ -141,5 +307,18 @@
     padding-inline: 0.65rem;
     font-size: 0.75rem;
     border-radius: 999px;
+  }
+
+  .luxe-cart-upsell__card--unlock .luxe-cart-upsell__add {
+    background: var(--luxe-jade, #1b4332);
+    border-color: var(--luxe-jade, #1b4332);
+    color: #fff;
+  }
+
+  .luxe-cart-upsell__card--unlock .luxe-cart-upsell__add:hover,
+  .luxe-cart-upsell__card--unlock .luxe-cart-upsell__add:focus-visible {
+    background: #163628;
+    border-color: #163628;
+    color: #fff;
   }
 {% endstylesheet %}
