@@ -1,0 +1,85 @@
+{%- doc -%}
+  Product JSON-LD for PDP SEO — brand, SKU, offers, and image (theme fallback when placeholders remain).
+
+  @param {product} product
+{%- enddoc -%}
+
+{%- if product != blank -%}
+  {%- liquid
+    assign schema_variant = product.selected_or_first_available_variant
+    assign product_url = shop.url | append: product.url
+    assign variant_url = product_url
+    if schema_variant != blank and schema_variant.url != blank
+      assign variant_url = shop.url | append: schema_variant.url
+    endif
+
+    assign product_brand = shop.name
+    if product.vendor != blank
+      assign product_brand = product.vendor
+    endif
+
+    assign product_desc = product.description | strip_html | truncate: 5000
+    if product_desc == blank
+      assign product_desc = 'Shop ' | append: product.title | append: ' — premium loose leaf tea packed fresh to order from ' | append: shop.name | append: '.'
+    endif
+
+    capture fallback_asset
+      render 'luxe-leaf-product-image-fallback', product: product
+    endcapture
+    assign fallback_asset = fallback_asset | strip
+
+    assign schema_image = blank
+    if fallback_asset != blank
+      assign schema_image = fallback_asset | asset_url | prepend: 'https:'
+    elsif product.featured_media != blank and product.featured_media.preview_image != blank
+      assign schema_image = product.featured_media.preview_image | image_url: width: 1200 | prepend: 'https:'
+    elsif product.featured_image != blank
+      assign schema_image = product.featured_image | image_url: width: 1200 | prepend: 'https:'
+    endif
+
+    assign currency_code = cart.currency.iso_code | default: shop.currency
+    assign offer_price = 0
+    assign offer_availability = 'https://schema.org/OutOfStock'
+    assign offer_sku = blank
+    if schema_variant != blank
+      assign offer_price = schema_variant.price | divided_by: 100.0
+      if schema_variant.available
+        assign offer_availability = 'https://schema.org/InStock'
+      endif
+      if schema_variant.sku != blank
+        assign offer_sku = schema_variant.sku
+      endif
+    endif
+  -%}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "description": {{ product_desc | json }},
+      "url": {{ product_url | json }},
+      "brand": {
+        "@type": "Brand",
+        "name": {{ product_brand | json }}
+      }{%- if offer_sku != blank -%},
+      "sku": {{ offer_sku | json }}{%- endif -%}{%- if product.type != blank -%},
+      "category": {{ product.type | json }}{%- endif -%}{%- if schema_image != blank -%},
+      "image": [
+        {{ schema_image | json }}
+      ]{%- endif -%}{%- if schema_variant != blank -%},
+      "offers": {
+        "@type": "Offer",
+        "url": {{ variant_url | json }},
+        "priceCurrency": {{ currency_code | json }},
+        "price": {{ offer_price | json }},
+        "availability": {{ offer_availability | json }},
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": {{ shop.name | json }}
+        }
+      }{%- endif -%}
+    }
+  </script>
+{%- endif -%}

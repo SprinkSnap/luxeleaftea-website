@@ -82,16 +82,18 @@ Each article template includes a **Shop the collection** CTA at the bottom (`sec
 
 ## 5. Structured data (automatic)
 
-The theme outputs JSON-LD via `snippets/meta-tags.liquid` (Organization, WebSite, FAQ, breadcrumbs, BlogPosting):
+The theme outputs JSON-LD across shared schema snippets (Organization, WebSite, FAQ, Collection, Product, breadcrumbs, BlogPosting):
 
 | Page | Schema |
 |------|--------|
 | All pages | Organization, WebSite (with SearchAction) |
 | Homepage | FAQPage (visible brewing FAQs only) |
 | Collection | BreadcrumbList, CollectionPage, ItemList |
-| Product | BreadcrumbList |
+| Product | Product (brand, SKU, offers, image with theme fallback) + visible BreadcrumbList |
 | Article | BlogPosting |
 | FAQ page | FAQPage (visible accordions + JSON-LD) |
+
+PDP Product JSON-LD lives in `snippets/luxe-leaf-product-schema.liquid` (rendered from the breadcrumbs section). It uses `product.vendor` for brand and prefers the Jasmine/Peach theme image fallback when a listing still uses a shared placeholder composite. Do **not** add fabricated `aggregateRating` — wire a reviews app when real ratings exist.
 
 Visible breadcrumbs appear on collection, product, blog, article, and FAQ pages via `snippets/luxe-leaf-breadcrumbs.liquid`.
 
