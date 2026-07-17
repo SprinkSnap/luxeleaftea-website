@@ -429,21 +429,46 @@
     });
   });
 
-  /* Keep sticky dock above the live shipping-nudge height while scrolling */
+  /* Keep sticky dock flush above the live commerce bar + shipping nudge */
   (function syncContactStickyAboveNudge() {
     var sticky = document.querySelector('[data-contact-sticky]');
     if (!sticky) return;
 
     function measure() {
       var nudge = document.querySelector('[data-shipping-nudge]');
-      var height = '0px';
+      var bar = document.querySelector('[data-mobile-shop-bar]');
+      var nudgeHeight = 0;
+      var barHeight = 0;
+
       if (nudge instanceof HTMLElement && !nudge.hidden) {
-        height = Math.ceil(nudge.getBoundingClientRect().height) + 'px';
+        nudgeHeight = Math.ceil(nudge.getBoundingClientRect().height);
         document.body.classList.add('luxe-has-shipping-nudge');
       } else {
         document.body.classList.remove('luxe-has-shipping-nudge');
       }
-      document.documentElement.style.setProperty('--luxe-shipping-nudge-height', height);
+
+      if (bar instanceof HTMLElement) {
+        var barStyle = window.getComputedStyle(bar);
+        if (barStyle.display !== 'none' && barStyle.visibility !== 'hidden') {
+          barHeight = Math.ceil(bar.getBoundingClientRect().height);
+        }
+      }
+
+      document.documentElement.style.setProperty(
+        '--luxe-shipping-nudge-height',
+        nudgeHeight > 0 ? nudgeHeight + 'px' : '0px'
+      );
+      if (barHeight > 0) {
+        document.documentElement.style.setProperty('--luxe-mobile-bar-height', barHeight + 'px');
+      }
+
+      var stickyHeight = Math.ceil(sticky.getBoundingClientRect().height);
+      if (stickyHeight > 0) {
+        document.documentElement.style.setProperty(
+          '--luxe-contact-sticky-height',
+          stickyHeight + 'px'
+        );
+      }
     }
 
     measure();
@@ -451,9 +476,11 @@
     window.addEventListener('pageshow', measure);
     if (typeof ResizeObserver !== 'undefined') {
       var nudge = document.querySelector('[data-shipping-nudge]');
-      if (nudge) {
-        new ResizeObserver(measure).observe(nudge);
-      }
+      var bar = document.querySelector('[data-mobile-shop-bar]');
+      var observer = new ResizeObserver(measure);
+      if (nudge) observer.observe(nudge);
+      if (bar) observer.observe(bar);
+      observer.observe(sticky);
     }
     window.setTimeout(measure, 100);
     window.setTimeout(measure, 500);
@@ -812,25 +839,22 @@
   /*
     Mobile stack (bottom → top):
     commerce bar → shipping nudge → contact sticky
+
+    --luxe-mobile-bar-height is the live measured bar height (already includes
+    safe-area padding). Do NOT add env(safe-area-inset-bottom) again or a
+    visible gap appears between Call/Email/Chat and Menu/Shop/Bag.
   */
   @media screen and (max-width: 749px) {
     .luxe-contact-page__sticky {
       --luxe-contact-sticky-height: 3.75rem;
       bottom: calc(
-        var(--luxe-mobile-bar-height, 4.25rem) + var(--luxe-shipping-nudge-height, 0px) +
-          env(safe-area-inset-bottom, 0px)
+        var(--luxe-mobile-bar-height, 4.25rem) + var(--luxe-shipping-nudge-height, 0px)
       );
       /* Below shipping nudge z-index so a height glitch never hides free-shipping copy */
       z-index: calc(var(--layer-menu-drawer, 12) + 1);
       padding: 0.45rem 0.55rem;
-    }
-
-    body.luxe-has-shipping-nudge .luxe-contact-page__sticky {
-      /* Fallback if JS height lags — nudge is typically ~3–3.75rem */
-      bottom: calc(
-        var(--luxe-mobile-bar-height, 4.25rem) + max(var(--luxe-shipping-nudge-height, 0px), 3.25rem) +
-          env(safe-area-inset-bottom, 0px)
-      );
+      margin: 0;
+      border-bottom: 0;
     }
   }
 

@@ -1182,7 +1182,8 @@ html.luxe-chat-open body {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(var(--luxe-mobile-bar-height) + env(safe-area-inset-bottom, 0px));
+    /* Bar height is measured including safe-area — do not add inset again */
+    bottom: var(--luxe-mobile-bar-height);
     z-index: calc(var(--layer-menu-drawer) + 2);
     background: linear-gradient(180deg, rgb(248 246 240 / 0.98) 0%, #f8f6f0 100%);
     border-top: 1px solid rgb(27 67 50 / 0.1);

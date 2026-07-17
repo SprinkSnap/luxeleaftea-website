@@ -11,6 +11,45 @@ import { StandardEvents } from '@shopify/events';
   const NUDGE_HEIGHT_SUCCESS_FALLBACK = '3rem';
 
   let nudgeResizeObserver = null;
+  let barResizeObserver = null;
+
+  const syncMobileBarHeight = () => {
+    const bar = document.querySelector('[data-mobile-shop-bar]');
+    if (!(bar instanceof HTMLElement)) {
+      document.documentElement.style.setProperty('--luxe-mobile-bar-height', '0px');
+      return;
+    }
+
+    const style = window.getComputedStyle(bar);
+    if (style.display === 'none' || style.visibility === 'hidden') {
+      document.documentElement.style.setProperty('--luxe-mobile-bar-height', '0px');
+      return;
+    }
+
+    const height = Math.ceil(bar.getBoundingClientRect().height);
+    document.documentElement.style.setProperty(
+      '--luxe-mobile-bar-height',
+      height > 0 ? `${height}px` : '0px'
+    );
+  };
+
+  const observeMobileBarHeight = () => {
+    const bar = document.querySelector('[data-mobile-shop-bar]');
+    if (!(bar instanceof HTMLElement)) {
+      syncMobileBarHeight();
+      return;
+    }
+
+    if (barResizeObserver) {
+      barResizeObserver.disconnect();
+    }
+
+    barResizeObserver = new ResizeObserver(() => {
+      syncMobileBarHeight();
+    });
+    barResizeObserver.observe(bar);
+    syncMobileBarHeight();
+  };
 
   const syncNudgeHeight = () => {
     const nudge = document.querySelector('[data-shipping-nudge]');
@@ -614,13 +653,24 @@ import { StandardEvents } from '@shopify/events';
     bindPdpBuyBar();
     bindSearchActions();
     bindShippingNudgeActions();
+    observeMobileBarHeight();
     observeNudgeHeight();
     refreshCartPricing();
   });
-  // Keep --luxe-shipping-nudge-height accurate so Contact sticky dock stays above it
-  window.addEventListener('resize', syncNudgeHeight, { passive: true });
+  // Keep --luxe-mobile-bar-height / --luxe-shipping-nudge-height accurate so
+  // Contact sticky Call·Email·Chat sits flush above Menu·Shop·Bag.
+  window.addEventListener(
+    'resize',
+    () => {
+      syncMobileBarHeight();
+      syncNudgeHeight();
+    },
+    { passive: true }
+  );
   window.addEventListener('pageshow', () => {
+    observeMobileBarHeight();
     observeNudgeHeight();
+    syncMobileBarHeight();
     syncNudgeHeight();
   });
   document.addEventListener('luxe:ca-location-change', refreshCartPricing);
