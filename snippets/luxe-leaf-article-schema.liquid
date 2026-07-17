@@ -1,0 +1,89 @@
+{%- doc -%}
+  BlogPosting JSON-LD for Tea Guides / article SEO.
+
+  @param {article} article
+  @param {blog} [blog]
+{%- enddoc -%}
+
+{%- if article != blank -%}
+  {%- liquid
+    assign article_url = shop.url | append: article.url
+    assign article_desc = article.excerpt | default: article.content | strip_html | truncate: 300
+    if article_desc == blank
+      assign article_desc = article.title | append: ' — premium loose leaf tea guidance from ' | append: shop.name | append: '.'
+    endif
+
+    assign published_iso = article.published_at | date: '%Y-%m-%dT%H:%M:%S%z'
+    assign modified_iso = article.updated_at | default: article.published_at | date: '%Y-%m-%dT%H:%M:%S%z'
+
+    assign author_name = article.author | default: shop.name
+    if author_name == blank
+      assign author_name = shop.name
+    endif
+
+    assign schema_image = blank
+    if article.image != blank
+      assign schema_image = article.image | image_url: width: 1200 | prepend: 'https:'
+    else
+      assign schema_image = 'luxe-leaf-tea-logo-og.png' | asset_url | prepend: 'https:'
+    endif
+
+    assign org_logo_url = 'luxe-leaf-tea-logo-header-2x.png' | asset_url | prepend: 'https:'
+    assign blog_title = blog.title | default: 'Tea Guides'
+    assign blog_url = blank
+    if blog != blank and blog.url != blank
+      assign blog_url = shop.url | append: blog.url
+    endif
+  -%}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": {{ article.title | json }},
+      "description": {{ article_desc | json }},
+      "url": {{ article_url | json }},
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": {{ article_url | json }}
+      },
+      "image": [
+        {{ schema_image | json }}
+      ],
+      "datePublished": {{ published_iso | json }},
+      "dateModified": {{ modified_iso | json }},
+      "author": {
+        "@type": "Person",
+        "name": {{ author_name | json }}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": {{ shop.name | json }},
+        "url": {{ shop.url | json }},
+        "logo": {
+          "@type": "ImageObject",
+          "url": {{ org_logo_url | json }},
+          "width": 434,
+          "height": 96
+        }
+      },
+      "isPartOf": {
+        "@type": "Blog",
+        "name": {{ blog_title | json }}{%- if blog_url != blank -%},
+        "url": {{ blog_url | json }}{%- endif -%}
+      },
+      "articleSection": {{ blog_title | json }},
+      "inLanguage": {{ request.locale.iso_code | default: 'en-CA' | json }},
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Premium loose leaf tea"
+        },
+        {
+          "@type": "Thing",
+          "name": "Tea brewing"
+        }
+      ]
+    }
+  </script>
+{%- endif -%}

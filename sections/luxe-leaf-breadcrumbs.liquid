@@ -6,6 +6,8 @@
   {%- render 'luxe-leaf-breadcrumbs' -%}
   {%- if request.page_type == 'product' and product != blank -%}
     {%- render 'luxe-leaf-product-schema', product: product -%}
+  {%- elsif request.page_type == 'article' and article != blank -%}
+    {%- render 'luxe-leaf-article-schema', article: article, blog: blog -%}
   {%- endif -%}
 </div>
 
