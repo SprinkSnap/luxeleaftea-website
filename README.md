@@ -29,7 +29,7 @@ See [`docs/SEO_SETUP.md`](docs/SEO_SETUP.md) for:
 - Google Search Console and sitemap submission
 - Tea Guides blog setup (`tea-guides` handle)
 - Three starter article outlines for organic traffic
-- JSON-LD structured data (Organization, FAQ, Breadcrumbs, BlogPosting)
+- JSON-LD structured data (Organization, FAQ, Product offers, Breadcrumbs, BlogPosting)
 
 The theme includes enhanced meta tags, `robots.txt.liquid`, homepage FAQ schema + visible FAQ section, visible breadcrumbs, FAQ page, collection CTAs, product internal links, GA4/Search Console hooks, and blog/article conversion CTAs.
 

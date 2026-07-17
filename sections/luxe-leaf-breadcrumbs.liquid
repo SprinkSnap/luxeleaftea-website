@@ -4,6 +4,9 @@
   style="{% render 'spacing-style', settings: section.settings %}"
 >
   {%- render 'luxe-leaf-breadcrumbs' -%}
+  {%- if request.page_type == 'product' and product != blank -%}
+    {%- render 'luxe-leaf-product-schema', product: product -%}
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
