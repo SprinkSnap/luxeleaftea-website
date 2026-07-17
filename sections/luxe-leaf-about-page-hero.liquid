@@ -49,9 +49,9 @@
             <span class="luxe-about-page__pillar-icon" aria-hidden="true">
               {%- render 'luxe-leaf-icon', name: block.settings.icon, class: 'luxe-icon--sm' -%}
             </span>
-            <div>
-              <strong>{{ block.settings.title }}</strong>
-              <span>{{ block.settings.text }}</span>
+            <div class="luxe-about-page__pillar-copy">
+              <strong class="luxe-about-page__pillar-title">{{ block.settings.title }}</strong>
+              <span class="luxe-about-page__pillar-text">{{ block.settings.text }}</span>
             </div>
           </li>
         {%- endfor -%}
@@ -199,7 +199,7 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 0.75rem;
-    align-items: start;
+    align-items: center;
     padding: 0.85rem 1rem;
     border-radius: 0.75rem;
     background: #fff;
@@ -211,11 +211,53 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
     border-radius: 999px;
     background: rgb(var(--luxe-gold-rgb, 201 162 39) / 0.15);
     color: var(--luxe-jade, #1b4332);
+  }
+
+  .luxe-about-page__pillar-icon .luxe-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    line-height: 0;
+    color: inherit;
+  }
+
+  .luxe-about-page__pillar-icon .luxe-icon svg {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    max-width: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-about-page__pillars {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .luxe-about-page__pillar {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      padding: 1.1rem 0.85rem 1rem;
+      min-height: 100%;
+    }
+
+    .luxe-about-page__pillar-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
   }
 
   .luxe-about-page__pillar strong {
