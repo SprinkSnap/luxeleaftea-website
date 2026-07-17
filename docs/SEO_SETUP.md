@@ -87,7 +87,7 @@ The theme outputs JSON-LD via `snippets/meta-tags.liquid` (Organization, WebSite
 | Page | Schema |
 |------|--------|
 | All pages | Organization, WebSite (with SearchAction) |
-| Homepage | FAQPage (brewing FAQs) |
+| Homepage | FAQPage (visible brewing FAQs only) |
 | Collection | BreadcrumbList, CollectionPage, ItemList |
 | Product | BreadcrumbList |
 | Article | BlogPosting |
@@ -95,7 +95,7 @@ The theme outputs JSON-LD via `snippets/meta-tags.liquid` (Organization, WebSite
 
 Visible breadcrumbs appear on collection, product, blog, article, and FAQ pages via `snippets/luxe-leaf-breadcrumbs.liquid`.
 
-Duplicate Organization markup was removed from `sections/header.liquid` to avoid conflicting signals.
+Duplicate Organization markup was removed from `sections/header.liquid` to avoid conflicting signals. The tea chat drawer does **not** emit FAQPage JSON-LD sitewide — FAQ rich results come only from visible FAQ UI on the homepage and `/pages/faq`.
 
 ## 6. Create the FAQ page
 
