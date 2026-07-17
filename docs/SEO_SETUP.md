@@ -89,11 +89,11 @@ The theme outputs JSON-LD across shared schema snippets (Organization, WebSite, 
 | All pages | Organization, WebSite (with SearchAction) |
 | Homepage | FAQPage (visible brewing FAQs only) |
 | Collection | BreadcrumbList, CollectionPage, ItemList |
-| Product | Product (brand, SKU, offers, image with theme fallback) + visible BreadcrumbList |
+| Product | Product (brand, SKU, offers with CA shipping/returns, image with theme fallback) + visible BreadcrumbList |
 | Article | BlogPosting |
 | FAQ page | FAQPage (visible accordions + JSON-LD) |
 
-PDP Product JSON-LD lives in `snippets/luxe-leaf-product-schema.liquid` (rendered from the breadcrumbs section). It uses `product.vendor` for brand and prefers the Jasmine/Peach theme image fallback when a listing still uses a shared placeholder composite. Do **not** add fabricated `aggregateRating` — wire a reviews app when real ratings exist.
+PDP Product JSON-LD lives in `snippets/luxe-leaf-product-schema.liquid` (rendered from the breadcrumbs section). It uses `product.vendor` for brand, prefers the Jasmine/Peach theme image fallback when a listing still uses a shared placeholder composite, and nests Canada-wide `shippingDetails` (free over theme threshold + standard rate) plus a 14-day `hasMerchantReturnPolicy` aligned with `snippets/luxe-leaf-policy-schema.liquid`. Do **not** add fabricated `aggregateRating` — wire a reviews app when real ratings exist.
 
 Visible breadcrumbs appear on collection, product, blog, article, and FAQ pages via `snippets/luxe-leaf-breadcrumbs.liquid`.
 
