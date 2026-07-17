@@ -1,5 +1,6 @@
 {%- doc -%}
   CollectionPage + BreadcrumbList + ItemList JSON-LD for collection SEO.
+  ItemList entries nest Product image + Offer (price/availability) with theme image fallbacks.
 
   @param {object} collection - The collection object
   @param {string} [seo_name] - Keyword-aligned collection name (falls back to shared SEO name snippet)
@@ -20,18 +21,74 @@
       assign collection_desc = 'Shop ' | append: seo_name | append: ' — packed fresh to order.'
     endif
     assign schema_product_limit = 20
+    assign currency_code = cart.currency.iso_code | default: shop.currency
   -%}
 
   {%- capture item_list_elements -%}
     {%- assign schema_count = 0 -%}
     {%- for schema_product in collection.products limit: schema_product_limit -%}
-      {%- assign schema_variant = schema_product.selected_or_first_available_variant -%}
+      {%- liquid
+        assign schema_variant = schema_product.selected_or_first_available_variant
+        assign item_url = shop.url | append: schema_product.url
+        if schema_variant != blank and schema_variant.url != blank
+          assign item_url = shop.url | append: schema_variant.url
+        endif
+
+        assign item_brand = shop.name
+        if schema_product.vendor != blank
+          assign item_brand = schema_product.vendor
+        endif
+
+        capture item_fallback
+          render 'luxe-leaf-product-image-fallback', product: schema_product
+        endcapture
+        assign item_fallback = item_fallback | strip
+
+        assign item_image = blank
+        if item_fallback != blank
+          assign item_image = item_fallback | asset_url | prepend: 'https:'
+        elsif schema_product.featured_media != blank and schema_product.featured_media.preview_image != blank
+          assign item_image = schema_product.featured_media.preview_image | image_url: width: 800 | prepend: 'https:'
+        elsif schema_product.featured_image != blank
+          assign item_image = schema_product.featured_image | image_url: width: 800 | prepend: 'https:'
+        endif
+
+        assign item_price = 0
+        assign item_availability = 'https://schema.org/OutOfStock'
+        assign item_sku = blank
+        if schema_variant != blank
+          assign item_price = schema_variant.price | divided_by: 100.0
+          if schema_variant.available
+            assign item_availability = 'https://schema.org/InStock'
+          endif
+          if schema_variant.sku != blank
+            assign item_sku = schema_variant.sku
+          endif
+        endif
+      -%}
       {%- if schema_count > 0 -%},{%- endif -%}
       {
         "@type": "ListItem",
         "position": {{ schema_count | plus: 1 }},
-        "url": {{ shop.url | append: schema_variant.url | json }},
-        "name": {{ schema_product.title | json }}
+        "item": {
+          "@type": "Product",
+          "name": {{ schema_product.title | json }},
+          "url": {{ item_url | json }},
+          "brand": {
+            "@type": "Brand",
+            "name": {{ item_brand | json }}
+          }{%- if item_sku != blank -%},
+          "sku": {{ item_sku | json }}{%- endif -%}{%- if item_image != blank -%},
+          "image": {{ item_image | json }}{%- endif -%}{%- if schema_variant != blank -%},
+          "offers": {
+            "@type": "Offer",
+            "url": {{ item_url | json }},
+            "price": {{ item_price | json }},
+            "priceCurrency": {{ currency_code | json }},
+            "availability": {{ item_availability | json }},
+            "itemCondition": "https://schema.org/NewCondition"
+          }{%- endif -%}
+        }
       }
       {%- assign schema_count = schema_count | plus: 1 -%}
     {%- endfor -%}
@@ -69,6 +126,7 @@
       "mainEntity": {
         "@type": "ItemList",
         "name": {{ seo_name | json }},
+        "numberOfItems": {{ schema_count | default: 0 }},
         "itemListElement": [{{ item_list_elements }}]
       }{%- endif -%}
     }
