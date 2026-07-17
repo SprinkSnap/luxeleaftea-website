@@ -28,7 +28,7 @@
     </p>
     <div class="luxe-featured__title-row">
       <h2 class="luxe-featured__heading">{{ section.settings.heading }}</h2>
-      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="luxe-featured__view-all luxe-link-with-icon">
+      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="luxe-featured__view-all luxe-featured__view-all--cta luxe-link-with-icon" title="{{ section.settings.view_all_label | escape }}">
         {{ section.settings.view_all_label }}
         {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
       </a>
@@ -128,7 +128,7 @@
   .luxe-featured__title-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 0.75rem;
@@ -142,10 +142,47 @@
   }
 
   .luxe-featured__view-all {
-    color: var(--luxe-jade);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 2.65rem;
+    padding: 0.55rem 1.05rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+    border: 2px solid #f3d56a !important;
+    color: #141414 !important;
+    -webkit-text-fill-color: #141414 !important;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 800;
     text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 0.35rem 0.9rem rgb(201 162 39 / 0.35);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .luxe-featured__view-all:hover,
+  .luxe-featured__view-all:focus-visible {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    color: #141414 !important;
+  }
+
+  .luxe-featured__view-all .luxe-icon {
+    color: inherit;
+  }
+
+  @media screen and (max-width: 749px) {
+    .luxe-featured__title-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .luxe-featured__view-all {
+      width: 100%;
+      min-height: 3rem;
+      font-size: 0.9375rem;
+    }
   }
 
   .luxe-featured__intro {

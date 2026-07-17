@@ -120,19 +120,19 @@ body .button:not(.button-unstyled):hover {
   transform: translateY(-1px);
 }
 
-body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-mobile-bar__atc):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button):not(.sticky-add-to-cart__button) {
+body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-mobile-bar__atc):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button):not(.luxe-faq-page__cta-primary):not(.luxe-faq-page__help-shop):not(.sticky-add-to-cart__button) {
   background: var(--luxe-jade);
   border-color: var(--luxe-jade);
   color: #fff;
 }
 
-body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn):not(.luxe-faq-page__cta-secondary):not(.luxe-policy-page__cta-secondary) {
+body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn):not(.luxe-faq-page__cta-secondary):not(.luxe-faq-page__help-chat):not(.luxe-policy-page__cta-secondary) {
   background: transparent;
   border: 1.5px solid var(--luxe-jade);
   color: var(--luxe-jade);
 }
 
-body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn):not(.luxe-faq-page__cta-secondary):not(.luxe-policy-page__cta-secondary):hover {
+body .button.button-secondary:not(.button-unstyled):not(.luxe-hero__button--secondary):not(.luxe-shop-cta__button-secondary):not(.luxe-collection-cta__button-secondary):not(.luxe-brand-footer__secondary-btn):not(.luxe-faq-page__cta-secondary):not(.luxe-faq-page__help-chat):not(.luxe-policy-page__cta-secondary):hover {
   background: rgb(var(--luxe-jade-rgb) / 0.06);
 }
 
@@ -149,7 +149,10 @@ body .luxe-policy-page__ship-cta-btn,
 body .luxe-policy-page__sidebar-shop,
 body .luxe-shop-cta__button,
 body .luxe-collection-cta__button,
-body .luxe-keep-exploring__view-all--cta {
+body .luxe-keep-exploring__view-all--cta,
+body .luxe-featured__view-all--cta,
+body .luxe-faq-page__cta-primary,
+body .luxe-faq-page__help-shop {
   background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
   border: 2px solid #f3d56a !important;
   color: #141414 !important;
@@ -186,6 +189,21 @@ body .luxe-policy-page__cta-secondary:hover {
   background: rgb(248 246 240 / 0.12) !important;
   border-color: #f8f6f0 !important;
   color: #f8f6f0 !important;
+}
+
+body .luxe-faq-page__cta-secondary {
+  border: 2px solid #f3d56a !important;
+  background: rgb(248 246 240 / 0.1) !important;
+  color: #faf6e8 !important;
+  -webkit-text-fill-color: #faf6e8 !important;
+  font-weight: 800;
+}
+
+body .luxe-faq-page__cta-secondary:hover {
+  background: rgb(240 213 106 / 0.18) !important;
+  border-color: #f8e7a0 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
 }
 
 body .luxe-featured__atc,
