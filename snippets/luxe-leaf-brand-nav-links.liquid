@@ -28,15 +28,40 @@
   assign contact_url = pages['contact'].url | default: '/pages/contact'
   assign faq_url = pages['faq'].url | default: '/pages/faq'
 
+  capture tea_guides_url
+    render 'luxe-leaf-tea-guides-url', target: 'hub', fallback: ''
+  endcapture
+  assign tea_guides_url = tea_guides_url | strip
+  assign has_tea_guides = false
+  if tea_guides_url != blank
+    assign has_tea_guides = true
+  endif
+
   case variant
     when 'desktop'
-      assign nav_keys = 'home|shop|about|contact' | split: '|'
+      if has_tea_guides
+        assign nav_keys = 'home|shop|guides|about|contact' | split: '|'
+      else
+        assign nav_keys = 'home|shop|about|contact' | split: '|'
+      endif
     when 'panel', 'drawer'
-      assign nav_keys = 'home|about|contact|faq' | split: '|'
+      if has_tea_guides
+        assign nav_keys = 'home|about|contact|guides|faq' | split: '|'
+      else
+        assign nav_keys = 'home|about|contact|faq' | split: '|'
+      endif
     when 'bar'
-      assign nav_keys = 'home|about|contact' | split: '|'
+      if has_tea_guides
+        assign nav_keys = 'home|guides|about|contact' | split: '|'
+      else
+        assign nav_keys = 'home|about|contact' | split: '|'
+      endif
     else
-      assign nav_keys = 'home|shop|about|contact' | split: '|'
+      if has_tea_guides
+        assign nav_keys = 'home|shop|guides|about|contact' | split: '|'
+      else
+        assign nav_keys = 'home|shop|about|contact' | split: '|'
+      endif
   endcase
 -%}
 
@@ -51,6 +76,10 @@
         assign label = 'Shop Tea'
         assign url = shop_tea_url
         assign nav_title = 'Shop premium loose leaf tea — green, oolong, pu-erh, and black'
+      when 'guides'
+        assign label = 'Tea Guides'
+        assign url = tea_guides_url
+        assign nav_title = 'Tea Guides — brewing tips and buying advice for premium loose leaf tea'
       when 'about'
         assign label = 'About'
         assign url = about_url
@@ -70,6 +99,10 @@
       assign is_active = true
     elsif nav_key == 'shop' and request.page_type == 'collection'
       assign is_active = true
+    elsif nav_key == 'guides'
+      if request.page_type == 'blog' or request.page_type == 'article'
+        assign is_active = true
+      endif
     elsif nav_key == 'about' and page.handle == 'about'
       assign is_active = true
     elsif nav_key == 'contact' and page.handle == 'contact'

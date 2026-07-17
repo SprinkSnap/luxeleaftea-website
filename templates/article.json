@@ -100,7 +100,12 @@
     "article_cta": {
       "type": "luxe-leaf-article-cta",
       "settings": {
-        "button_link": "shopify://collections/all"
+        "eyebrow": "Shop while you read",
+        "heading": "Ready to try premium loose leaf tea?",
+        "text": "Shop our curated collection — packed fresh to order with brewing guidance on every tea.",
+        "button_label": "Shop the collection",
+        "button_link": "shopify://collections/all",
+        "secondary_label": "All Tea Guides"
       }
     },
     "keep_reading": {

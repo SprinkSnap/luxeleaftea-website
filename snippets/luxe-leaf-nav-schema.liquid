@@ -13,16 +13,33 @@
     assign about_abs = shop.url | append: '/pages/about'
     assign contact_abs = shop.url | append: '/pages/contact'
     assign faq_abs = shop.url | append: '/pages/faq'
+
+    capture tea_guides_path
+      render 'luxe-leaf-tea-guides-url', target: 'hub', fallback: ''
+    endcapture
+    assign tea_guides_path = tea_guides_path | strip
+    assign guides_abs = blank
+    if tea_guides_path != blank
+      assign guides_abs = shop.url | append: tea_guides_path
+    endif
   -%}
 
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SiteNavigationElement",
-      "name": ["Home", "Shop Tea", "About", "Contact", "FAQ"],
+      "name": [
+        "Home",
+        "Shop Tea"{%- if guides_abs != blank -%},
+        "Tea Guides"{%- endif -%},
+        "About",
+        "Contact",
+        "FAQ"
+      ],
       "url": [
         {{ home_abs | json }},
-        {{ shop_abs | json }},
+        {{ shop_abs | json }}{%- if guides_abs != blank -%},
+        {{ guides_abs | json }}{%- endif -%},
         {{ about_abs | json }},
         {{ contact_abs | json }},
         {{ faq_abs | json }}

@@ -35,7 +35,14 @@ The theme ships `templates/robots.txt.liquid` with the standard Shopify crawl ru
 | Title | Tea Guides |
 | Handle | `tea-guides` |
 
-The homepage tea guides section, footer link, and shop CTA resolve to `/blogs/tea-guides` only after this blog has published articles. Until then they fall back to FAQ/collections so links never 404.
+The homepage tea guides section, footer **Learn → Tea Guides** link, desktop/mobile **Tea Guides** nav item, and shop CTA resolve to `/blogs/tea-guides` only after this blog has published articles. Until then they fall back to FAQ/collections so links never 404.
+
+**Where to view posts on the live site (after publish + theme Pull):**
+- Desktop nav: **Tea Guides**
+- Mobile: Menu leaf icon → **Tea Guides**
+- Homepage: scroll to the Tea Guides section → **Browse all Tea Guides** or article cards
+- Footer: **Learn → Tea Guides**
+- Direct URLs: `/blogs/tea-guides` and `/blogs/tea-guides/<article-handle>`
 
 ## 4. Publish starter articles
 

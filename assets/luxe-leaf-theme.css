@@ -120,7 +120,7 @@ body .button:not(.button-unstyled):hover {
   transform: translateY(-1px);
 }
 
-body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-mobile-bar__atc):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button):not(.luxe-faq-page__cta-primary):not(.luxe-faq-page__help-shop):not(.sticky-add-to-cart__button) {
+body .button:not(.button-secondary):not(.button-unstyled):not(.luxe-hero__button--primary):not(.cart__checkout-button):not(.luxe-mobile-bar__checkout):not(.luxe-mobile-bar__atc):not(.luxe-policy-page__cta-primary):not(.luxe-policy-page__sidebar-shop):not(.luxe-policy-page__ship-cta-btn):not(.luxe-shop-cta__button):not(.luxe-collection-cta__button):not(.luxe-faq-page__cta-primary):not(.luxe-faq-page__help-shop):not(.luxe-article-cta__button):not(.sticky-add-to-cart__button) {
   background: var(--luxe-jade);
   border-color: var(--luxe-jade);
   color: #fff;
@@ -152,7 +152,9 @@ body .luxe-collection-cta__button,
 body .luxe-keep-exploring__view-all--cta,
 body .luxe-featured__view-all--cta,
 body .luxe-faq-page__cta-primary,
-body .luxe-faq-page__help-shop {
+body .luxe-faq-page__help-shop,
+body .luxe-article-cta__button,
+body .luxe-guides__hub-link {
   background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
   border: 2px solid #f3d56a !important;
   color: #141414 !important;
