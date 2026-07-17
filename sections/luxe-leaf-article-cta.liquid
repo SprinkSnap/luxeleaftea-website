@@ -1,11 +1,42 @@
+{%- liquid
+  assign shop_link = section.settings.button_link
+  if shop_link == blank
+    assign shop_link = routes.all_products_collection_url
+    if collections.all != blank and collections.all.url != blank
+      assign shop_link = collections.all.url
+    endif
+  endif
+
+  capture guides_hub
+    render 'luxe-leaf-tea-guides-url', target: 'hub', fallback: ''
+  endcapture
+  assign guides_hub = guides_hub | strip
+-%}
 
 <section class="luxe-article-cta section section--page-width spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
   <div class="luxe-article-cta__box">
+    <p class="luxe-article-cta__eyebrow">{{ section.settings.eyebrow }}</p>
     <h2 class="luxe-article-cta__heading">{{ section.settings.heading }}</h2>
     <p class="luxe-article-cta__text">{{ section.settings.text }}</p>
-    <a href="{{ section.settings.button_link }}" class="button luxe-article-cta__button">
-      {{ section.settings.button_label }}
-    </a>
+    <div class="luxe-article-cta__actions">
+      <a
+        href="{{ shop_link }}"
+        class="button luxe-article-cta__button"
+        title="{{ section.settings.button_label | escape }} — premium loose leaf tea"
+      >
+        <span>{{ section.settings.button_label }}</span>
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </a>
+      {%- if guides_hub != blank and section.settings.secondary_label != blank -%}
+        <a
+          href="{{ guides_hub }}"
+          class="button button-secondary luxe-article-cta__button-secondary"
+          title="{{ section.settings.secondary_label | escape }}"
+        >
+          <span>{{ section.settings.secondary_label }}</span>
+        </a>
+      {%- endif -%}
+    </div>
   </div>
 </section>
 
@@ -15,27 +46,138 @@
   }
 
   .luxe-article-cta__box {
-    padding: 32px;
-    border-radius: 12px;
-    background: #f8f6f0;
-    border: 1px solid rgb(27 67 50 / 0.12);
+    padding: 2rem 1.5rem;
+    border-radius: 0.85rem;
+    background:
+      radial-gradient(100% 120% at 50% 0%, rgb(201 162 39 / 0.16), transparent 55%),
+      linear-gradient(135deg, #1b4332 0%, #0d2818 100%);
+    border: 1px solid rgb(201 162 39 / 0.28);
+    color: #f8f6f0;
     text-align: center;
   }
 
+  .luxe-article-cta__eyebrow {
+    margin: 0 0 0.55rem;
+    color: var(--luxe-gold, #c9a227);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
   .luxe-article-cta__heading {
-    margin: 0 0 12px;
-    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+    color: #f8f6f0;
   }
 
   .luxe-article-cta__text {
-    margin: 0 0 20px;
-    color: rgb(27 67 50 / 0.88);
+    margin: 0 0 1.25rem;
+    color: rgb(248 246 240 / 0.9);
     line-height: 1.6;
   }
 
+  .luxe-article-cta__actions {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .luxe-article-cta__button,
+  .luxe-article-cta__button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+  }
+
   .luxe-article-cta__button {
-    background: #1b4332;
-    border-color: #1b4332;
+    min-height: 3.15rem;
+    padding: 0.85rem 1.4rem;
+    background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+    border: 2px solid #f3d56a !important;
+    color: #141414 !important;
+    -webkit-text-fill-color: #141414 !important;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.18) inset,
+      0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+  }
+
+  .luxe-article-cta__button .luxe-icon {
+    color: inherit;
+  }
+
+  .luxe-article-cta__button:hover,
+  .luxe-article-cta__button:focus-visible {
+    filter: brightness(1.06);
+    transform: translateY(-2px);
+    color: #141414 !important;
+  }
+
+  .luxe-article-cta__button-secondary {
+    min-height: 2.95rem;
+    padding: 0.7rem 1.25rem;
+    border: 2px solid #f3d56a !important;
+    background: rgb(248 246 240 / 0.1) !important;
+    color: #faf6e8 !important;
+    -webkit-text-fill-color: #faf6e8 !important;
+  }
+
+  .luxe-article-cta__button-secondary:hover,
+  .luxe-article-cta__button-secondary:focus-visible {
+    background: rgb(240 213 106 / 0.18) !important;
+    border-color: #f8e7a0 !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+  }
+
+  @media screen and (min-width: 750px) {
+    .luxe-article-cta__actions {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    .luxe-article-cta__button,
+    .luxe-article-cta__button-secondary {
+      width: auto;
+      min-width: 14rem;
+    }
+
+    .luxe-article-cta__button {
+      min-width: 16rem;
+      min-height: 3.25rem;
+      font-size: 1.05rem;
+      animation: luxe-article-cta-pulse 2.4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes luxe-article-cta-pulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.18) inset,
+        0 0.45rem 1.25rem rgb(201 162 39 / 0.45);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.22) inset,
+        0 0.55rem 1.6rem rgb(201 162 39 / 0.62),
+        0 0 0 0.35rem rgb(201 162 39 / 0.12);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .luxe-article-cta__button {
+      animation: none;
+    }
   }
 {% endstylesheet %}
 
@@ -48,6 +190,12 @@
     "templates": ["article"]
   },
   "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop while you read"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -63,13 +211,19 @@
     {
       "type": "text",
       "id": "button_label",
-      "label": "Button label",
+      "label": "Primary button label",
       "default": "Shop the collection"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button link"
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "All Tea Guides"
     },
     {
       "type": "range",
