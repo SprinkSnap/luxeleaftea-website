@@ -1,5 +1,6 @@
 {%- doc -%}
-  Product JSON-LD for PDP SEO — brand, SKU, offers, and image (theme fallback when placeholders remain).
+  Product JSON-LD for PDP SEO — brand, SKU, offers (Canada shipping + returns), and image
+  (theme fallback when placeholders remain).
 
   @param {product} product
 {%- enddoc -%}
@@ -50,6 +51,20 @@
         assign offer_sku = schema_variant.sku
       endif
     endif
+
+    assign free_ship_cents = settings.free_shipping_threshold | default: 5000
+    assign standard_ship_cents = settings.standard_shipping_rate | default: 995
+    assign free_ship_schema = free_ship_cents | divided_by: 100.0
+    assign standard_ship_schema = standard_ship_cents | divided_by: 100.0
+
+    capture refund_url_resolved
+      render 'luxe-leaf-policy-url', which: 'refund'
+    endcapture
+    capture shipping_url_resolved
+      render 'luxe-leaf-policy-url', which: 'shipping'
+    endcapture
+    assign refund_abs = shop.url | append: refund_url_resolved | strip
+    assign shipping_abs = shop.url | append: shipping_url_resolved | strip
   -%}
 
   <script type="application/ld+json">
@@ -78,7 +93,85 @@
         "seller": {
           "@type": "Organization",
           "name": {{ shop.name | json }}
-        }
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "name": "Refund Policy",
+          "url": {{ refund_abs | json }},
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 14,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+          "applicableCountry": "CA",
+          "merchantReturnLink": {{ refund_abs | json }}
+        },
+        "shippingDetails": [
+          {
+            "@type": "OfferShippingDetails",
+            "name": "Free Canada-wide shipping",
+            "url": {{ shipping_abs | json }},
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": 0,
+              "currency": {{ currency_code | json }}
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "CA"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 2,
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 3,
+                "maxValue": 8,
+                "unitCode": "DAY"
+              }
+            },
+            "eligibleTransactionVolume": {
+              "@type": "PriceSpecification",
+              "minPrice": {{ free_ship_schema | json }},
+              "priceCurrency": {{ currency_code | json }}
+            },
+            "doesNotShip": false
+          },
+          {
+            "@type": "OfferShippingDetails",
+            "name": "Standard Canada-wide shipping",
+            "url": {{ shipping_abs | json }},
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": {{ standard_ship_schema | json }},
+              "currency": {{ currency_code | json }}
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "CA"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 2,
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 3,
+                "maxValue": 8,
+                "unitCode": "DAY"
+              }
+            },
+            "doesNotShip": false
+          }
+        ]
       }{%- endif -%}
     }
   </script>
