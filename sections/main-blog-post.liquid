@@ -56,9 +56,10 @@
   </div>
 </div>
 
-<script type="application/ld+json">
-  {{ article | structured_data }}
-</script>
+{%- comment -%}
+  BlogPosting JSON-LD is rendered once via luxe-leaf-article-schema (breadcrumbs section).
+  Do not emit Horizon structured_data here — duplicate BlogPosting markup confuses rich results.
+{%- endcomment -%}
 
 {% stylesheet %}
   .blog-post-comments-container {

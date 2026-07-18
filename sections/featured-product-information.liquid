@@ -1,8 +1,8 @@
 
-
-<script type="application/ld+json">
-  {{ section.settings.product | structured_data }}
-</script>
+{%- comment -%}
+  Avoid Horizon Product structured_data on featured sections — PDP owns Product JSON-LD
+  via luxe-leaf-product-schema. Duplicate Product markup on home/landing hurts rich results.
+{%- endcomment -%}
 
 {% capture media_gallery %}
   {% content_for 'block',

@@ -1,8 +1,8 @@
 
-
-<script type="application/ld+json">
-  {{ closest.product | structured_data }}
-</script>
+{%- comment -%}
+  Product JSON-LD is rendered once via luxe-leaf-product-schema (breadcrumbs section).
+  Do not emit Horizon structured_data here — duplicate Product markup confuses rich results.
+{%- endcomment -%}
 
 {% capture media_gallery %}
   {%- content_for 'block',
