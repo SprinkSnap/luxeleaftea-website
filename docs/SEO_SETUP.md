@@ -96,11 +96,11 @@ The theme outputs JSON-LD across shared schema snippets (Organization, WebSite, 
 | All pages | Organization, WebSite (with SearchAction) |
 | Homepage | FAQPage (visible brewing FAQs only) |
 | Collection | BreadcrumbList, CollectionPage, ItemList (Product image + Offer per item) |
-| Product | Product (brand, SKU, offers with CA shipping/returns, image with theme fallback) + visible BreadcrumbList |
+| Product | Product (brand, SKU, offers with CA shipping/returns, image with theme fallback, aggregateRating when real reviews exist) + visible BreadcrumbList |
 | Article | BlogPosting (headline, dates, author, publisher, image) + visible BreadcrumbList |
 | FAQ page | FAQPage (visible accordions + JSON-LD) |
 
-PDP Product JSON-LD lives in `snippets/luxe-leaf-product-schema.liquid` (rendered from the breadcrumbs section). It uses `product.vendor` for brand, prefers the Jasmine/Peach theme image fallback when a listing still uses a shared placeholder composite, and nests Canada-wide `shippingDetails` (free over theme threshold + standard rate) plus a 14-day `hasMerchantReturnPolicy` aligned with `snippets/luxe-leaf-policy-schema.liquid`. Do **not** add fabricated `aggregateRating` — wire a reviews app when real ratings exist.
+PDP Product JSON-LD lives in `snippets/luxe-leaf-product-schema.liquid` (rendered from the breadcrumbs section). It uses `product.vendor` for brand, prefers the Jasmine/Peach theme image fallback when a listing still uses a shared placeholder composite, and nests Canada-wide `shippingDetails` (free over theme threshold + standard rate) plus a 14-day `hasMerchantReturnPolicy` aligned with `snippets/luxe-leaf-policy-schema.liquid`. When Judge.me (or another reviews app) writes `reviews.rating` + `reviews.rating_count` metafields, Product JSON-LD also includes `aggregateRating` for star rich results — never fabricated.
 
 Collection ItemList JSON-LD (`snippets/luxe-leaf-collection-schema.liquid`) nests each listing as a Product with brand, image (theme fallback when placeholders remain), and a compact Offer (price, currency, availability) so category pages carry shopping signals alongside PDPs.
 
@@ -153,6 +153,7 @@ Add Facebook, Instagram, and YouTube URLs. These populate Organization `sameAs` 
 - [ ] Write product descriptions with origin, tasting notes, and brewing tips
 - [ ] Publish 1–2 tea guide articles per month
 - [ ] Install a reviews app (Judge.me, Loox, etc.) and add its widget to **Product reviews** on the product template
+- [ ] Collect first approved reviews so PDP stars + Product `aggregateRating` JSON-LD can surface
 - [ ] When real reviews exist, set homepage/about social proof **Presentation → Customer reviews** and paste verified quotes (or hide brand notes)
 - [ ] Create FAQ page with template suffix `faq`
 - [ ] Add GA4 measurement ID and Search Console verification in theme settings
