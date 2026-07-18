@@ -1,6 +1,7 @@
 {%- doc -%}
-  Product JSON-LD for PDP SEO — brand, SKU, offers (Canada shipping + returns), and image
-  (theme fallback when placeholders remain).
+  Product JSON-LD for PDP SEO — brand, SKU, offers (Canada shipping + returns), image
+  (theme fallback when placeholders remain), and aggregateRating only when real
+  review metafields exist (Judge.me / Shopify reviews — never fabricated).
 
   @param {product} product
 {%- enddoc -%}
@@ -36,6 +37,14 @@
       assign schema_image = product.featured_media.preview_image | image_url: width: 1200 | prepend: 'https:'
     elsif product.featured_image != blank
       assign schema_image = product.featured_image | image_url: width: 1200 | prepend: 'https:'
+    endif
+
+    assign schema_rating = product.metafields.reviews.rating.value.rating
+    assign schema_scale_max = product.metafields.reviews.rating.value.scale_max | default: 5
+    assign schema_rating_count = product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count
+    assign has_aggregate_rating = false
+    if schema_rating != blank and schema_rating_count != blank and schema_rating_count > 0
+      assign has_aggregate_rating = true
     endif
 
     assign currency_code = cart.currency.iso_code | default: shop.currency
@@ -82,7 +91,14 @@
       "category": {{ product.type | json }}{%- endif -%}{%- if schema_image != blank -%},
       "image": [
         {{ schema_image | json }}
-      ]{%- endif -%}{%- if schema_variant != blank -%},
+      ]{%- endif -%}{%- if has_aggregate_rating -%},
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": {{ schema_rating | json }},
+        "reviewCount": {{ schema_rating_count | json }},
+        "bestRating": {{ schema_scale_max | json }},
+        "worstRating": 1
+      }{%- endif -%}{%- if schema_variant != blank -%},
       "offers": {
         "@type": "Offer",
         "url": {{ variant_url | json }},
