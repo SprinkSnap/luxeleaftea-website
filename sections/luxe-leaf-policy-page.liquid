@@ -90,7 +90,7 @@
         assign cta_primary_link = contact_url
       endif
       if cta_secondary_label == section.settings.cta_secondary_label or cta_secondary_label == blank
-        assign cta_secondary_label = 'Shop all tea'
+        assign cta_secondary_label = 'Shop all teas'
         assign cta_secondary_link = shop_tea_url
       endif
     when 'shipping'
@@ -287,7 +287,7 @@
           <div class="luxe-policy-page__sidebar-links">
             <a href="{{ faq_url }}" class="luxe-policy-page__sidebar-link">FAQ</a>
             <a href="{{ contact_url }}" class="luxe-policy-page__sidebar-link">Contact us</a>
-            <a href="{{ shop_tea_url }}" class="luxe-policy-page__sidebar-link">Shop all tea</a>
+            <a href="{{ shop_tea_url }}" class="luxe-policy-page__sidebar-link">Shop all teas</a>
           </div>
         </div>
 
@@ -910,7 +910,7 @@
       "type": "text",
       "id": "sidebar_shop_label",
       "label": "Sidebar shop button",
-      "default": "Shop all tea"
+      "default": "Shop all teas"
     },
     {
       "type": "header",
@@ -926,7 +926,7 @@
       "type": "text",
       "id": "cta_primary_label",
       "label": "Primary button",
-      "default": "Shop all tea"
+      "default": "Shop all teas"
     },
     {
       "type": "url",

@@ -2444,9 +2444,10 @@ body.luxe-leaf-theme #header-component [data-luxe-open-cart] {
   width: 100%;
   min-height: 3rem;
   justify-content: center;
-  background: var(--luxe-gold, #c9a227) !important;
-  border-color: var(--luxe-gold, #c9a227) !important;
-  color: var(--luxe-ink, #1a1a1a) !important;
+  background: linear-gradient(135deg, #f0d56a 0%, #c9a227 48%, #b8921f 100%) !important;
+  border: 2px solid #f3d56a !important;
+  color: #141414 !important;
+  -webkit-text-fill-color: #141414 !important;
   font-weight: 700;
   box-shadow: 0 8px 24px rgb(201 162 39 / 0.28);
 }
