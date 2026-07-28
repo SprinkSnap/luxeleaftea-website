@@ -114,13 +114,22 @@ class LuxeTeaChat extends HTMLElement {
       const text = this.input?.value?.trim();
       if (!text || this.#pending) return;
       this.input.value = '';
+      if (this.input instanceof HTMLTextAreaElement) {
+        this.input.style.height = '';
+      }
       this.handleUserMessage(text);
+      this.input?.focus?.({ preventScroll: true });
     });
     this.input?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         this.form?.requestSubmit?.();
       }
+    });
+    this.input?.addEventListener('input', () => {
+      if (!(this.input instanceof HTMLTextAreaElement)) return;
+      this.input.style.height = 'auto';
+      this.input.style.height = `${Math.min(this.input.scrollHeight, 136)}px`;
     });
     this.inboxBtn?.addEventListener('click', () => this.openShopifyInbox());
     document.addEventListener('keydown', (e) => {

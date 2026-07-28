@@ -342,21 +342,21 @@
             <label class="visually-hidden" for="luxe-tea-chat-input">
               Type your question about premium loose leaf tea, brewing, or shipping
             </label>
-            <input
+            <textarea
               id="luxe-tea-chat-input"
               class="luxe-tea-chat__input"
-              type="text"
               name="message"
-              placeholder="Ask about tea, brewing, or shipping…"
+              rows="2"
+              placeholder="Ask about tea, brewing, gifts, or shipping…"
               autocomplete="off"
               enterkeyhint="send"
               maxlength="500"
               data-chat-input
               style="background:#ffffff;color:#14261d;-webkit-text-fill-color:#14261d;"
-            >
+            ></textarea>
             <button type="submit" class="luxe-tea-chat__send button" aria-label="Send tea question">
               <span class="luxe-tea-chat__send-label">Send</span>
-              <svg class="luxe-tea-chat__send-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
+              <svg class="luxe-tea-chat__send-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
                 <path d="M3.4 11.2 20.2 3.6c.7-.3 1.4.4 1.1 1.1L13.7 21.5c-.3.7-1.3.6-1.5-.2l-1.9-6.4-6.4-1.9c-.8-.2-.9-1.2-.5-1.8Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
               </svg>
             </button>
