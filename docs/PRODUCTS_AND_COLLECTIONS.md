@@ -27,14 +27,20 @@ Assign the default **collection** template (includes the Luxe Leaf collection he
 
 ### Live tea-type collections (small catalog)
 
-Only show type collections that have products. With a starter catalog of jasmine greens + Assam / ChaTraMue / Mocastar blacks:
+**Shop all / Shop Tea is the primary path.** Type collections appear in the storefront only when they usefully split the shelf:
 
-| Show now | Hide until stocked |
-|----------|--------------------|
-| Green Tea (`green-tea`) | Oolong (`oolong`) |
-| Black Tea (`black-tea`) | Pu-erh (`pu-erh`) |
+1. Collection has products (`products_count > 0`)
+2. Collection is **smaller than Shop all** (not a duplicate of the full catalog)
+3. At least **two** such type splits exist (otherwise hide “shop by type” and keep one clear CTA)
 
-Keep **Shop all** / **Shop Tea** as the primary CTA. The theme hides empty type tiles, footer links, and chips automatically when `products_count == 0`.
+With a starter catalog of jasmine greens + Assam / ChaTraMue / Mocastar blacks:
+
+| Show when stocked as subsets | Hide |
+|------------------------------|------|
+| Green Tea (`green-tea`) — jasmine only | Oolong / Pu-erh until stocked |
+| Black Tea (`black-tea`) — Assam + mixes | Any collection that lists every product (mirrors Shop all) |
+
+Empty or mirror collections can stay in admin for later — they stay hidden in the theme until they are useful splits.
 
 ### Optional curated collections
 

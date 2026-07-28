@@ -1,0 +1,23 @@
+{%- doc -%}
+  Echoes "true" when a collection is a useful shelf split:
+  has products AND fewer products than Shop all (not a duplicate catalog).
+
+  @param {string} [handle] - Collection handle
+  @param {collection} [collection] - Collection object (optional if handle given)
+{%- enddoc -%}
+
+{%- liquid
+  assign col = collection
+  if col == blank and handle != blank
+    assign col = collections[handle]
+  endif
+
+  assign all_count = 0
+  if collections.all != blank
+    assign all_count = collections.all.products_count | default: 0
+  endif
+
+  if col != blank and all_count > 0 and col.products_count > 0 and col.products_count < all_count
+    echo 'true'
+  endif
+-%}

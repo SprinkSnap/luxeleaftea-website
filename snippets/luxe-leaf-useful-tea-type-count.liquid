@@ -1,0 +1,24 @@
+{%- doc -%}
+  Echoes how many core tea-type collections are useful shelf splits
+  (products_count > 0 and strictly less than Shop all).
+{%- enddoc -%}
+
+{%- liquid
+  assign useful_count = 0
+  assign all_count = 0
+  if collections.all != blank
+    assign all_count = collections.all.products_count | default: 0
+  endif
+  assign type_handles = 'green-tea,oolong,pu-erh,black-tea' | split: ','
+
+  if all_count > 0
+    for handle in type_handles
+      assign col = collections[handle]
+      if col != blank and col.products_count > 0 and col.products_count < all_count
+        assign useful_count = useful_count | plus: 1
+      endif
+    endfor
+  endif
+
+  echo useful_count
+-%}

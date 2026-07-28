@@ -39,8 +39,21 @@
   {% endif %}
 
   {% capture list_items %}
+    {% liquid
+      assign all_count = 0
+      if collections.all != blank
+        assign all_count = collections.all.products_count | default: 0
+      endif
+    %}
     {% for collection in section_collections limit: max_items %}
       {% if collection.products_count == 0 %}
+        {% continue %}
+      {% endif %}
+      {% comment %}
+        Skip type/manual collections that mirror Shop all — keep a single clear path.
+        Allow the all-products collection itself.
+      {% endcomment %}
+      {% if collection.handle != 'all' and all_count > 0 and collection.products_count >= all_count %}
         {% continue %}
       {% endif %}
       {% capture list_item %}

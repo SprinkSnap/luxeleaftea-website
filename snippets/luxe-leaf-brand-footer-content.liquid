@@ -189,32 +189,41 @@
                     Shop all teas
                   </a>
                 </li>
-                {%- liquid
-                  assign footer_types = 'green-tea|Green Tea,oolong|Oolong Tea,pu-erh|Pu-erh Tea,black-tea|Black Tea' | split: ','
-                -%}
-                {%- for entry in footer_types -%}
+                {%- capture useful_type_count -%}
+                  {%- render 'luxe-leaf-useful-tea-type-count' -%}
+                {%- endcapture -%}
+                {%- assign useful_type_count = useful_type_count | strip | plus: 0 -%}
+                {%- if useful_type_count >= 2 -%}
                   {%- liquid
-                    assign parts = entry | split: '|'
-                    assign type_handle = parts[0] | strip
-                    assign type_title = parts[1] | strip
-                    assign type_collection = collections[type_handle]
+                    assign footer_types = 'green-tea|Green Tea,oolong|Oolong Tea,pu-erh|Pu-erh Tea,black-tea|Black Tea' | split: ','
                   -%}
-                  {%- if type_collection != blank and type_collection.products_count > 0 -%}
-                    {%- if type_collection.url != blank -%}
-                      {%- assign type_url = type_collection.url -%}
-                    {%- else -%}
-                      {%- assign type_url = '/collections/' | append: type_handle -%}
+                  {%- for entry in footer_types -%}
+                    {%- liquid
+                      assign parts = entry | split: '|'
+                      assign type_handle = parts[0] | strip
+                      assign type_title = parts[1] | strip
+                      assign type_collection = collections[type_handle]
+                    -%}
+                    {%- capture type_is_useful -%}
+                      {%- render 'luxe-leaf-collection-is-useful-split', handle: type_handle -%}
+                    {%- endcapture -%}
+                    {%- if type_is_useful contains 'true' -%}
+                      {%- if type_collection.url != blank -%}
+                        {%- assign type_url = type_collection.url -%}
+                      {%- else -%}
+                        {%- assign type_url = '/collections/' | append: type_handle -%}
+                      {%- endif -%}
+                      <li>
+                        <a
+                          href="{{ type_url }}"
+                          title="Premium loose leaf {{ type_title | downcase }}"
+                        >
+                          {{ type_title }}
+                        </a>
+                      </li>
                     {%- endif -%}
-                    <li>
-                      <a
-                        href="{{ type_url }}"
-                        title="Premium loose leaf {{ type_title | downcase }}"
-                      >
-                        {{ type_title }}
-                      </a>
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
+                  {%- endfor -%}
+                {%- endif -%}
                 <li><a href="{{ routes.root_url }}" title="Luxe Leaf Tea home">Home</a></li>
               </ul>
             </div>

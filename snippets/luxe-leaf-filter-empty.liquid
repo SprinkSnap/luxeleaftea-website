@@ -58,10 +58,16 @@
     </div>
 
     <div class="luxe-filter-empty__chips" role="list" aria-label="{{ 'content.filter_empty_browse_label' | t }}">
-      {%- assign types = 'green-tea|Green Tea,oolong|Oolong,pu-erh|Pu-erh,black-tea|Black Tea' | split: ',' -%}
-      {%- for entry in types -%}
-        {%- render 'luxe-leaf-tea-type-chip', entry: entry, chip_class: 'luxe-filter-empty__chip' -%}
-      {%- endfor -%}
+      {%- capture useful_type_count -%}
+        {%- render 'luxe-leaf-useful-tea-type-count' -%}
+      {%- endcapture -%}
+      {%- assign useful_type_count = useful_type_count | strip | plus: 0 -%}
+      {%- if useful_type_count >= 2 -%}
+        {%- assign types = 'green-tea|Green Tea,oolong|Oolong,pu-erh|Pu-erh,black-tea|Black Tea' | split: ',' -%}
+        {%- for entry in types -%}
+          {%- render 'luxe-leaf-tea-type-chip', entry: entry, chip_class: 'luxe-filter-empty__chip' -%}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
 
     <a href="/pages/faq" class="luxe-filter-empty__link">
