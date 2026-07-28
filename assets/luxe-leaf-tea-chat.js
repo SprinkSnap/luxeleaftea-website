@@ -114,6 +114,9 @@ class LuxeTeaChat extends HTMLElement {
       const text = this.input?.value?.trim();
       if (!text || this.#pending) return;
       this.input.value = '';
+      if (this.input instanceof HTMLTextAreaElement) {
+        this.input.style.height = '';
+      }
       this.handleUserMessage(text);
       this.input?.focus?.({ preventScroll: true });
     });
