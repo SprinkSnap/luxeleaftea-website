@@ -218,14 +218,75 @@ body .luxe-collection-cta__button {
   font-weight: 600;
 }
 
+/* Product cards: clip media only — never cut off price / ATC at bottom-left */
 body .product-card,
-body .product-grid__card,
 body product-card {
   border-radius: var(--luxe-radius-lg);
-  overflow: hidden;
+  overflow: visible;
   background: #fff;
   border: 1px solid rgb(var(--luxe-jade-rgb) / 0.08);
   box-shadow: var(--luxe-shadow-soft);
+}
+
+body .product-card .product-grid__card,
+body product-card .product-grid__card,
+body .product-card__content.product-grid__card {
+  overflow: visible !important;
+  padding-inline: 0.75rem !important;
+  padding-block-end: 0.85rem !important;
+}
+
+body .product-card .card-gallery,
+body product-card .card-gallery {
+  overflow: hidden;
+  border-radius: var(--luxe-radius-lg) var(--luxe-radius-lg) 0 0;
+  margin-inline: -0.75rem;
+  width: calc(100% + 1.5rem);
+  max-width: none;
+}
+
+/* Price as a clear buy signal — full amount visible on desktop + mobile */
+body .product-card product-price,
+body product-card product-price {
+  display: block;
+  line-height: 1.4;
+  padding-block: 0.1rem 0.2rem;
+  overflow: visible;
+}
+
+body .product-card .price,
+body product-card .price,
+body .product-card .price-item,
+body product-card .price-item {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--luxe-jade, #1b4332);
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+@media screen and (max-width: 749px) {
+  body .product-card .product-grid__card,
+  body product-card .product-grid__card,
+  body .product-card__content.product-grid__card {
+    padding-inline: 0.65rem !important;
+    padding-block-end: 0.75rem !important;
+  }
+
+  body .product-card .card-gallery,
+  body product-card .card-gallery {
+    margin-inline: -0.65rem;
+    width: calc(100% + 1.3rem);
+  }
+
+  body .product-card .price,
+  body product-card .price,
+  body .product-card .price-item,
+  body product-card .price-item {
+    font-size: 0.875rem;
+  }
 }
 
 body .product-card:hover {

@@ -24,10 +24,16 @@
   .product-card,
   .product-grid__card {
     border-radius: var(--luxe-radius-lg);
-    overflow: hidden;
+    overflow: visible;
     box-shadow: var(--luxe-shadow-soft);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
     position: relative;
+  }
+
+  .product-card .card-gallery,
+  product-card .card-gallery {
+    overflow: hidden;
+    border-radius: var(--luxe-radius-lg) var(--luxe-radius-lg) 0 0;
   }
 
   .product-card:hover {
