@@ -131,11 +131,13 @@ class LuxeTeaChat extends HTMLElement {
 
   bindSheetGestures() {
     const targets = [this.handle, this.panel?.querySelector('.luxe-tea-chat__header')].filter(Boolean);
+    const isMobileSheet = () => window.matchMedia('(max-width: 749px)').matches;
+
     targets.forEach((target) => {
       target.addEventListener(
         'touchstart',
         (e) => {
-          if (!this.isOpen() || !e.touches?.[0]) return;
+          if (!isMobileSheet() || !this.isOpen() || !e.touches?.[0]) return;
           this.#dragStartY = e.touches[0].clientY;
           this.#dragDelta = 0;
         },
@@ -144,7 +146,7 @@ class LuxeTeaChat extends HTMLElement {
       target.addEventListener(
         'touchmove',
         (e) => {
-          if (this.#dragStartY == null || !e.touches?.[0] || !this.panel) return;
+          if (!isMobileSheet() || this.#dragStartY == null || !e.touches?.[0] || !this.panel) return;
           this.#dragDelta = Math.max(0, e.touches[0].clientY - this.#dragStartY);
           if (this.#dragDelta > 8) {
             this.panel.style.transform = `translateY(${this.#dragDelta}px)`;
@@ -156,7 +158,7 @@ class LuxeTeaChat extends HTMLElement {
       target.addEventListener(
         'touchend',
         () => {
-          if (this.#dragStartY == null || !this.panel) return;
+          if (!isMobileSheet() || this.#dragStartY == null || !this.panel) return;
           const shouldMinimize = this.#dragDelta > 90;
           this.panel.style.transition = '';
           this.panel.style.transform = '';
