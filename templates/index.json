@@ -21,8 +21,8 @@
         "subhead": "Hand-selected whole leaves for a clearer, more aromatic cup \u2014 packed fresh to order.",
         "primary_label": "Shop Premium Loose Leaf Tea",
         "primary_link": "shopify://collections/all",
-        "secondary_label": "Explore Tea Types",
-        "secondary_link": "shopify://collections"
+        "secondary_label": "Browse by type",
+        "secondary_link": "#shop-by-type"
       }
     },
     "featured_teas": {
@@ -59,7 +59,7 @@
       "settings": {
         "eyebrow": "Shop by type",
         "heading": "Explore premium loose leaf tea",
-        "intro": "Find your next cup — bright greens, floral oolongs, deep pu-erh, and malty black teas to steep at home.",
+        "intro": "Browse the tea types we stock now — or shop all premium loose leaf teas in one place.",
         "padding-block-start": 32,
         "padding-block-end": 24
       }

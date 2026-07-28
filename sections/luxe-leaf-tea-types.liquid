@@ -4,6 +4,22 @@
 {%- assign luxe_scope_check = luxe_scope_check | strip -%}
 {%- if luxe_scope_check == 'show' -%}
 
+{%- liquid
+  assign types = 'green-tea|Green Tea|Bright, sweet, and refreshing premium loose leaf greens|luxe-leaf-green-tea-product.png,oolong|Oolong|Floral, layered, and beautifully balanced|luxe-leaf-oolong-tea-product.png,pu-erh|Pu-erh|Deep, smooth, and perfect for re-steeping|luxe-leaf-puerh-tea-product.png,black-tea|Black Tea|Rich, malty, and full-bodied|luxe-leaf-black-tea-product.png' | split: ','
+  assign hide_handle = blank
+  if section.settings.hide_current_collection and collection != blank
+    assign hide_handle = collection.handle
+  endif
+-%}
+
+{%- capture type_cards -%}
+  {%- for entry in types -%}
+    {%- render 'luxe-leaf-tea-type-entry', entry: entry, hide_handle: hide_handle -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign type_cards = type_cards | strip -%}
+
+{%- if type_cards != blank -%}
 <section
   class="luxe-tea-types section section--page-width spacing-style"
   id="shop-by-type"
@@ -16,56 +32,10 @@
   </div>
 
   <div class="luxe-tea-types__grid" role="list">
-    {%- assign types = 'green-tea|Green Tea|Bright, sweet, and refreshing premium loose leaf greens|luxe-leaf-green-tea-product.png,oolong|Oolong|Floral, layered, and beautifully balanced|luxe-leaf-oolong-tea-product.png,pu-erh|Pu-erh|Deep, smooth, and perfect for re-steeping|luxe-leaf-puerh-tea-product.png,black-tea|Black Tea|Rich, malty, and full-bodied|luxe-leaf-black-tea-product.png' | split: ',' -%}
-
-    {%- for entry in types -%}
-      {%- assign parts = entry | split: '|' -%}
-      {%- assign handle = parts[0] -%}
-      {%- if section.settings.hide_current_collection and collection != blank and collection.handle == handle -%}
-        {%- continue -%}
-      {%- endif -%}
-      {%- assign title = parts[1] -%}
-      {%- assign blurb = parts[2] -%}
-      {%- assign image_file = parts[3] -%}
-      {%- assign collection = collections[handle] -%}
-      {%- if collection.url != blank -%}
-        {%- assign url = collection.url -%}
-      {%- else -%}
-        {%- assign url = '/collections/' | append: handle -%}
-      {%- endif -%}
-
-      {%- assign type_image = collection.image -%}
-      <a class="luxe-tea-types__card" href="{{ url }}" role="listitem">
-        <div class="luxe-tea-types__media">
-          {%- if type_image != blank -%}
-            {{
-              type_image
-              | image_url: width: 800
-              | image_tag: loading: 'lazy', alt: title, class: 'luxe-tea-types__image', widths: '400, 600, 800'
-            }}
-          {%- else -%}
-            <img
-              src="{{ image_file | asset_url }}"
-              alt="{{ title }} — premium loose leaf tea"
-              width="800"
-              height="800"
-              loading="lazy"
-              class="luxe-tea-types__image"
-            >
-          {%- endif -%}
-        </div>
-        <div class="luxe-tea-types__body">
-          <h3 class="luxe-tea-types__title">{{ title }}</h3>
-          <p class="luxe-tea-types__text">{{ blurb }}</p>
-          <span class="luxe-tea-types__link luxe-link-with-icon">
-            Shop {{ title }}
-            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
-          </span>
-        </div>
-      </a>
-    {%- endfor -%}
+    {{ type_cards }}
   </div>
 </section>
+{%- endif -%}
 {%- endif -%}
 
 {% stylesheet %}
@@ -101,17 +71,12 @@
   .luxe-tea-types__grid {
     display: grid;
     gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   @media screen and (min-width: 750px) {
     .luxe-tea-types__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media screen and (min-width: 990px) {
-    .luxe-tea-types__grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
     }
   }
 
@@ -193,6 +158,10 @@
       "default": "any"
     },
     {
+      "type": "paragraph",
+      "content": "Only tea type collections with products are shown. Empty types (e.g. oolong/pu-erh) stay hidden until stocked. Shop all remains the primary CTA in nav and footer."
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
@@ -208,14 +177,14 @@
       "type": "textarea",
       "id": "intro",
       "label": "Intro",
-      "default": "Find your next favorite cup — from bright green teas to deep, re-steepable pu-erh."
+      "default": "Browse the tea types we stock now — or shop all premium loose leaf teas in one place."
     },
     {
       "type": "checkbox",
       "id": "hide_current_collection",
       "label": "Hide current collection on collection pages",
       "default": true,
-      "info": "When browsing a tea type, show the other three types instead of repeating the current one."
+      "info": "When browsing a tea type, show other live types instead of repeating the current one."
     },
     {
       "type": "range",

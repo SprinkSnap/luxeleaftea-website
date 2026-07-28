@@ -118,11 +118,18 @@
       "@type": "SiteNavigationElement",
       "name": [
         "Home",
-        "Shop all teas",
-        "Green Tea",
-        "Oolong Tea",
-        "Pu-erh Tea",
-        "Black Tea"{%- if guides_abs != blank -%},
+        "Shop all teas"{%- liquid
+          assign schema_types = 'green-tea|Green Tea,oolong|Oolong Tea,pu-erh|Pu-erh Tea,black-tea|Black Tea' | split: ','
+        -%}{%- for entry in schema_types -%}
+          {%- liquid
+            assign parts = entry | split: '|'
+            assign type_handle = parts[0] | strip
+            assign type_title = parts[1] | strip
+            assign type_collection = collections[type_handle]
+          -%}
+          {%- if type_collection != blank and type_collection.products_count > 0 -%},
+        {{ type_title | json }}{%- endif -%}
+        {%- endfor -%}{%- if guides_abs != blank -%},
         "Tea Guides"{%- endif -%},
         "FAQ",
         "About",
@@ -134,11 +141,15 @@
       ],
       "url": [
         {{ home_abs | json }},
-        {{ shop_abs | json }},
-        {{ shop.url | append: '/collections/green-tea' | json }},
-        {{ shop.url | append: '/collections/oolong' | json }},
-        {{ shop.url | append: '/collections/pu-erh' | json }},
-        {{ shop.url | append: '/collections/black-tea' | json }}{%- if guides_abs != blank -%},
+        {{ shop_abs | json }}{%- for entry in schema_types -%}
+          {%- liquid
+            assign parts = entry | split: '|'
+            assign type_handle = parts[0] | strip
+            assign type_collection = collections[type_handle]
+          -%}
+          {%- if type_collection != blank and type_collection.products_count > 0 -%},
+        {{ shop.url | append: type_collection.url | json }}{%- endif -%}
+        {%- endfor -%}{%- if guides_abs != blank -%},
         {{ guides_abs | json }}{%- endif -%},
         {{ faq_abs | json }},
         {{ about_abs | json }},

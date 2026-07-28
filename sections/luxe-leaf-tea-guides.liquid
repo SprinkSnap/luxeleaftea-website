@@ -10,8 +10,21 @@
   endif
 
   assign faq_url = pages['faq'].url | default: '/pages/faq'
-  assign green_url = collections['green-tea'].url | default: '/collections/green-tea'
-  assign oolong_url = collections['oolong'].url | default: '/collections/oolong'
+  assign green_collection = collections['green-tea']
+  assign oolong_collection = collections['oolong']
+  assign black_collection = collections['black-tea']
+  assign green_url = blank
+  assign oolong_url = blank
+  assign black_url = blank
+  if green_collection != blank and green_collection.products_count > 0
+    assign green_url = green_collection.url | default: '/collections/green-tea'
+  endif
+  if oolong_collection != blank and oolong_collection.products_count > 0
+    assign oolong_url = oolong_collection.url | default: '/collections/oolong'
+  endif
+  if black_collection != blank and black_collection.products_count > 0
+    assign black_url = black_collection.url | default: '/collections/black-tea'
+  endif
   assign all_url = routes.all_products_collection_url
   if collections.all != blank and collections.all.url != blank
     assign all_url = collections.all.url
@@ -53,14 +66,16 @@
           </span>
         </a>
       {%- endfor -%}
-      <a class="luxe-guides__card" href="{{ green_url }}" role="listitem">
-        <h3 class="luxe-guides__title">Shop Premium Green Tea</h3>
-        <p class="luxe-guides__text">Bright, sweet loose leaf greens packed fresh to order.</p>
-        <span class="luxe-guides__link luxe-link-with-icon">
-          Shop green tea
-          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
-        </span>
-      </a>
+      {%- if green_url != blank -%}
+        <a class="luxe-guides__card" href="{{ green_url }}" role="listitem">
+          <h3 class="luxe-guides__title">Shop Premium Green Tea</h3>
+          <p class="luxe-guides__text">Bright, sweet loose leaf greens packed fresh to order.</p>
+          <span class="luxe-guides__link luxe-link-with-icon">
+            Shop green tea
+            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+          </span>
+        </a>
+      {%- endif -%}
     {%- else -%}
       <a class="luxe-guides__card" href="{{ faq_url }}" role="listitem">
         <h3 class="luxe-guides__title">Brewing tips &amp; tea FAQ</h3>
@@ -70,22 +85,35 @@
           {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
         </span>
       </a>
-      <a class="luxe-guides__card" href="{{ oolong_url }}" role="listitem">
-        <h3 class="luxe-guides__title">Best oolongs to start with</h3>
-        <p class="luxe-guides__text">Floral, layered teas perfect for your first gaiwan or everyday steep.</p>
-        <span class="luxe-guides__link luxe-link-with-icon">
-          Shop oolong
-          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
-        </span>
-      </a>
-      <a class="luxe-guides__card" href="{{ green_url }}" role="listitem">
-        <h3 class="luxe-guides__title">Shop Premium Green Tea</h3>
-        <p class="luxe-guides__text">Bright, sweet loose leaf greens packed fresh to order.</p>
-        <span class="luxe-guides__link luxe-link-with-icon">
-          Shop green tea
-          {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
-        </span>
-      </a>
+      {%- if oolong_url != blank -%}
+        <a class="luxe-guides__card" href="{{ oolong_url }}" role="listitem">
+          <h3 class="luxe-guides__title">Best oolongs to start with</h3>
+          <p class="luxe-guides__text">Floral, layered teas perfect for your first gaiwan or everyday steep.</p>
+          <span class="luxe-guides__link luxe-link-with-icon">
+            Shop oolong
+            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+          </span>
+        </a>
+      {%- elsif black_url != blank -%}
+        <a class="luxe-guides__card" href="{{ black_url }}" role="listitem">
+          <h3 class="luxe-guides__title">Shop Premium Black Tea</h3>
+          <p class="luxe-guides__text">Rich, malty loose leaf blacks for breakfast cups and milk tea.</p>
+          <span class="luxe-guides__link luxe-link-with-icon">
+            Shop black tea
+            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+          </span>
+        </a>
+      {%- endif -%}
+      {%- if green_url != blank -%}
+        <a class="luxe-guides__card" href="{{ green_url }}" role="listitem">
+          <h3 class="luxe-guides__title">Shop Premium Green Tea</h3>
+          <p class="luxe-guides__text">Bright, sweet loose leaf greens packed fresh to order.</p>
+          <span class="luxe-guides__link luxe-link-with-icon">
+            Shop green tea
+            {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+          </span>
+        </a>
+      {%- endif -%}
       <a class="luxe-guides__card" href="{{ all_url }}" role="listitem">
         <h3 class="luxe-guides__title">Shop all premium loose leaf</h3>
         <p class="luxe-guides__text">Whole leaves for a clearer, more aromatic cup — packed fresh to order.</p>

@@ -40,18 +40,29 @@
 
   {% capture list_items %}
     {% for collection in section_collections limit: max_items %}
+      {% if collection.products_count == 0 %}
+        {% continue %}
+      {% endif %}
+      {% capture list_item %}
       <div class="resource-list__item">
         {% content_for 'block', type: '_collection-card', id: 'static-collection-card', closest.collection: collection %}
       </div>
-      {% unless forloop.last %}
+      {% endcapture %}
+      {% assign list_item = list_item | strip %}
+      {% if list_item != blank %}
+        {{ list_item }}
         <!--@list/split-->
-      {% endunless %}
+      {% endif %}
     {% endfor %}
   {% endcapture %}
 
   {% liquid
     # Create an array from the list items to be used for different layout types
-    assign list_items_array = list_items | strip | split: '<!--@list/split-->'
+    assign list_items = list_items | strip
+    if list_items contains '<!--@list/split-->'
+      assign list_items = list_items | replace_last: '<!--@list/split-->', ''
+    endif
+    assign list_items_array = list_items | split: '<!--@list/split-->'
   %}
 
   {% render 'resource-list',

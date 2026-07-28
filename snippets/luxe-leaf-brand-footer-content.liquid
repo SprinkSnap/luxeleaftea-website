@@ -189,10 +189,32 @@
                     Shop all teas
                   </a>
                 </li>
-                <li><a href="/collections/green-tea" title="Premium loose leaf green tea">Green Tea</a></li>
-                <li><a href="/collections/oolong" title="Premium loose leaf oolong tea">Oolong Tea</a></li>
-                <li><a href="/collections/pu-erh" title="Premium loose leaf pu-erh tea">Pu-erh Tea</a></li>
-                <li><a href="/collections/black-tea" title="Premium loose leaf black tea">Black Tea</a></li>
+                {%- liquid
+                  assign footer_types = 'green-tea|Green Tea,oolong|Oolong Tea,pu-erh|Pu-erh Tea,black-tea|Black Tea' | split: ','
+                -%}
+                {%- for entry in footer_types -%}
+                  {%- liquid
+                    assign parts = entry | split: '|'
+                    assign type_handle = parts[0] | strip
+                    assign type_title = parts[1] | strip
+                    assign type_collection = collections[type_handle]
+                  -%}
+                  {%- if type_collection != blank and type_collection.products_count > 0 -%}
+                    {%- if type_collection.url != blank -%}
+                      {%- assign type_url = type_collection.url -%}
+                    {%- else -%}
+                      {%- assign type_url = '/collections/' | append: type_handle -%}
+                    {%- endif -%}
+                    <li>
+                      <a
+                        href="{{ type_url }}"
+                        title="Premium loose leaf {{ type_title | downcase }}"
+                      >
+                        {{ type_title }}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
                 <li><a href="{{ routes.root_url }}" title="Luxe Leaf Tea home">Home</a></li>
               </ul>
             </div>
