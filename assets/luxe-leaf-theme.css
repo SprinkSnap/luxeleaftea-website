@@ -670,8 +670,45 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     display: none;
   }
 
+  /* Desktop dock: tall side panel — shop stays visible and scrollable */
+  .luxe-tea-chat--open {
+    inset: 0;
+    width: auto;
+    height: auto;
+    left: auto;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  .luxe-tea-chat--open > * {
+    pointer-events: auto;
+  }
+
   .luxe-tea-chat__backdrop {
-    background: rgb(8 14 11 / 0.28);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .luxe-tea-chat__panel {
+    position: fixed;
+    top: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: min(25rem, calc(100vw - 1.5rem));
+    max-height: none;
+    height: auto;
+    border-radius: 1rem;
+    box-shadow: 0 16px 48px rgb(10 20 14 / 0.22);
+    animation: luxe-chat-desktop-in 0.22s ease;
+  }
+
+  .luxe-tea-chat--open .luxe-tea-chat__launcher {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.92);
   }
 
   .luxe-tea-chat__icon-btn-label {
@@ -689,7 +726,28 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-tea-chat__messages {
-    min-height: 16rem;
+    min-height: 0;
+    flex: 1 1 auto;
+  }
+
+  .luxe-tea-chat__subtitle {
+    display: block;
+  }
+
+  .luxe-tea-chat__conversion {
+    display: flex;
+  }
+}
+
+@keyframes luxe-chat-desktop-in {
+  from {
+    opacity: 0;
+    transform: translateX(0.85rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -1212,10 +1270,13 @@ body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__input:focus {
   font: inherit;
 }
 
-html.luxe-chat-open,
-html.luxe-chat-open body {
-  overflow: hidden;
-  overscroll-behavior: none;
+/* Scroll lock only on mobile full-screen chat — desktop dock keeps the shop scrollable */
+@media screen and (max-width: 749px) {
+  html.luxe-chat-open,
+  html.luxe-chat-open body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
 }
 
 @media screen and (max-width: 749px) {
