@@ -16,20 +16,30 @@
   assign green_url = blank
   assign oolong_url = blank
   assign black_url = blank
-  if green_collection != blank and green_collection.products_count > 0
-    assign green_url = green_collection.url | default: '/collections/green-tea'
-  endif
-  if oolong_collection != blank and oolong_collection.products_count > 0
-    assign oolong_url = oolong_collection.url | default: '/collections/oolong'
-  endif
-  if black_collection != blank and black_collection.products_count > 0
-    assign black_url = black_collection.url | default: '/collections/black-tea'
-  endif
   assign all_url = routes.all_products_collection_url
   if collections.all != blank and collections.all.url != blank
     assign all_url = collections.all.url
   endif
 -%}
+
+{%- capture green_is_useful -%}
+  {%- render 'luxe-leaf-collection-is-useful-split', collection: green_collection -%}
+{%- endcapture -%}
+{%- capture oolong_is_useful -%}
+  {%- render 'luxe-leaf-collection-is-useful-split', collection: oolong_collection -%}
+{%- endcapture -%}
+{%- capture black_is_useful -%}
+  {%- render 'luxe-leaf-collection-is-useful-split', collection: black_collection -%}
+{%- endcapture -%}
+{%- if green_is_useful contains 'true' -%}
+  {%- assign green_url = green_collection.url | default: '/collections/green-tea' -%}
+{%- endif -%}
+{%- if oolong_is_useful contains 'true' -%}
+  {%- assign oolong_url = oolong_collection.url | default: '/collections/oolong' -%}
+{%- endif -%}
+{%- if black_is_useful contains 'true' -%}
+  {%- assign black_url = black_collection.url | default: '/collections/black-tea' -%}
+{%- endif -%}
 
 <section
   class="luxe-guides section section--page-width spacing-style"

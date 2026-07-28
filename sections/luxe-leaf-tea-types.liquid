@@ -12,6 +12,16 @@
   endif
 -%}
 
+{%- capture useful_type_count -%}
+  {%- render 'luxe-leaf-useful-tea-type-count' -%}
+{%- endcapture -%}
+{%- assign useful_type_count = useful_type_count | strip | plus: 0 -%}
+
+{%- comment -%}
+  Need at least two useful type splits to show “shop by type”.
+  Otherwise Shop all is the single clear path for a small catalog.
+{%- endcomment -%}
+{%- if useful_type_count >= 2 -%}
 {%- capture type_cards -%}
   {%- for entry in types -%}
     {%- render 'luxe-leaf-tea-type-entry', entry: entry, hide_handle: hide_handle -%}
@@ -35,6 +45,7 @@
     {{ type_cards }}
   </div>
 </section>
+{%- endif -%}
 {%- endif -%}
 {%- endif -%}
 
@@ -159,7 +170,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Only tea type collections with products are shown. Empty types (e.g. oolong/pu-erh) stay hidden until stocked. Shop all remains the primary CTA in nav and footer."
+      "content": "Shop all stays the primary CTA. Type tiles appear only when at least two tea types each have products and are smaller than Shop all (not duplicate catalogs). Empty or mirror collections stay hidden."
     },
     {
       "type": "text",

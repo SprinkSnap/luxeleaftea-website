@@ -1,5 +1,6 @@
 {%- doc -%}
-  Renders one tea-type shop card only when the collection has products.
+  Renders one tea-type shop card only when the collection usefully splits Shop all
+  (has products and is not a duplicate of the full catalog).
   Entry format: handle|Title|blurb|fallback-image-asset
 
   @param {string} entry - Pipe-delimited type entry
@@ -19,16 +20,21 @@
   if hide_handle != blank and type_handle == hide_handle
     assign type_collection = blank
   endif
-
-  if type_collection != blank and type_collection.products_count > 0
-    assign type_is_live = true
-    if type_collection.url != blank
-      assign type_url = type_collection.url
-    else
-      assign type_url = '/collections/' | append: type_handle
-    endif
-  endif
 -%}
+
+{%- if type_collection != blank -%}
+  {%- capture type_is_useful -%}
+    {%- render 'luxe-leaf-collection-is-useful-split', collection: type_collection -%}
+  {%- endcapture -%}
+  {%- if type_is_useful contains 'true' -%}
+    {%- assign type_is_live = true -%}
+    {%- if type_collection.url != blank -%}
+      {%- assign type_url = type_collection.url -%}
+    {%- else -%}
+      {%- assign type_url = '/collections/' | append: type_handle -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
 
 {%- if type_is_live -%}
   {%- assign type_image = type_collection.image -%}

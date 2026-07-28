@@ -1,5 +1,5 @@
 {%- doc -%}
-  Renders a compact tea-type chip link only when the collection has products.
+  Renders a compact tea-type chip only when the collection usefully splits Shop all.
   Entry format: handle|Title
 
   @param {string} entry - Pipe-delimited type entry
@@ -13,7 +13,11 @@
   assign type_collection = collections[type_handle]
 -%}
 
-{%- if type_collection != blank and type_collection.products_count > 0 -%}
+{%- capture type_is_useful -%}
+  {%- render 'luxe-leaf-collection-is-useful-split', handle: type_handle -%}
+{%- endcapture -%}
+
+{%- if type_is_useful contains 'true' -%}
   {%- if type_collection.url != blank -%}
     {%- assign type_url = type_collection.url -%}
   {%- else -%}

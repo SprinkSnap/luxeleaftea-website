@@ -36,7 +36,23 @@
         <a href="{{ section.settings.primary_link }}" class="button luxe-hero__button luxe-hero__button--primary">
           {{ section.settings.primary_label }}
         </a>
-        {%- if section.settings.secondary_label != blank -%}
+        {%- liquid
+          assign show_secondary = false
+          if section.settings.secondary_label != blank and section.settings.secondary_link != blank
+            assign show_secondary = true
+            assign secondary_href = section.settings.secondary_link
+            if secondary_href == '#shop-by-type' or secondary_href contains 'shop-by-type'
+              capture useful_type_count
+                render 'luxe-leaf-useful-tea-type-count'
+              endcapture
+              assign useful_type_count = useful_type_count | strip | plus: 0
+              if useful_type_count < 2
+                assign show_secondary = false
+              endif
+            endif
+          endif
+        -%}
+        {%- if show_secondary -%}
           <a href="{{ section.settings.secondary_link }}" class="luxe-hero__text-link">
             {{ section.settings.secondary_label }}
           </a>
