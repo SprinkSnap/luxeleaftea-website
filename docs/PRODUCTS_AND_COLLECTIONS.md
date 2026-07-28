@@ -25,6 +25,17 @@ Create four manual collections with these exact handles:
 
 Assign the default **collection** template (includes the Luxe Leaf collection hero).
 
+### Live tea-type collections (small catalog)
+
+Only show type collections that have products. With a starter catalog of jasmine greens + Assam / ChaTraMue / Mocastar blacks:
+
+| Show now | Hide until stocked |
+|----------|--------------------|
+| Green Tea (`green-tea`) | Oolong (`oolong`) |
+| Black Tea (`black-tea`) | Pu-erh (`pu-erh`) |
+
+Keep **Shop all** / **Shop Tea** as the primary CTA. The theme hides empty type tiles, footer links, and chips automatically when `products_count == 0`.
+
 ### Optional curated collections
 
 Create additional manual collections if you want to merchandise by use case or brand:
