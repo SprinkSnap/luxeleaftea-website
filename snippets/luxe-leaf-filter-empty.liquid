@@ -60,18 +60,7 @@
     <div class="luxe-filter-empty__chips" role="list" aria-label="{{ 'content.filter_empty_browse_label' | t }}">
       {%- assign types = 'green-tea|Green Tea,oolong|Oolong,pu-erh|Pu-erh,black-tea|Black Tea' | split: ',' -%}
       {%- for entry in types -%}
-        {%- assign parts = entry | split: '|' -%}
-        {%- assign handle = parts[0] -%}
-        {%- assign title = parts[1] -%}
-        {%- assign type_collection = collections[handle] -%}
-        {%- if type_collection.url != blank -%}
-          {%- assign url = type_collection.url -%}
-        {%- else -%}
-          {%- assign url = '/collections/' | append: handle -%}
-        {%- endif -%}
-        <a class="luxe-filter-empty__chip" href="{{ url }}" role="listitem">
-          {{ title }}
-        </a>
+        {%- render 'luxe-leaf-tea-type-chip', entry: entry, chip_class: 'luxe-filter-empty__chip' -%}
       {%- endfor -%}
     </div>
 

@@ -1,0 +1,65 @@
+{%- doc -%}
+  Renders one tea-type shop card only when the collection has products.
+  Entry format: handle|Title|blurb|fallback-image-asset
+
+  @param {string} entry - Pipe-delimited type entry
+  @param {string} [hide_handle] - Skip this handle (current collection page)
+{%- enddoc -%}
+
+{%- liquid
+  assign parts = entry | split: '|'
+  assign type_handle = parts[0] | strip
+  assign type_title = parts[1] | strip
+  assign type_blurb = parts[2] | strip
+  assign type_image_file = parts[3] | strip
+  assign type_collection = collections[type_handle]
+  assign type_url = blank
+  assign type_is_live = false
+
+  if hide_handle != blank and type_handle == hide_handle
+    assign type_collection = blank
+  endif
+
+  if type_collection != blank and type_collection.products_count > 0
+    assign type_is_live = true
+    if type_collection.url != blank
+      assign type_url = type_collection.url
+    else
+      assign type_url = '/collections/' | append: type_handle
+    endif
+  endif
+-%}
+
+{%- if type_is_live -%}
+  {%- assign type_image = type_collection.image -%}
+  <a class="luxe-tea-types__card" href="{{ type_url }}" role="listitem">
+    <div class="luxe-tea-types__media">
+      {%- if type_image != blank -%}
+        {{
+          type_image
+          | image_url: width: 800
+          | image_tag: loading: 'lazy', alt: type_title, class: 'luxe-tea-types__image', widths: '400, 600, 800'
+        }}
+      {%- elsif type_image_file != blank -%}
+        <img
+          src="{{ type_image_file | asset_url }}"
+          alt="{{ type_title }} — premium loose leaf tea"
+          width="800"
+          height="800"
+          loading="lazy"
+          class="luxe-tea-types__image"
+        >
+      {%- endif -%}
+    </div>
+    <div class="luxe-tea-types__body">
+      <h3 class="luxe-tea-types__title">{{ type_title }}</h3>
+      {%- if type_blurb != blank -%}
+        <p class="luxe-tea-types__text">{{ type_blurb }}</p>
+      {%- endif -%}
+      <span class="luxe-tea-types__link luxe-link-with-icon">
+        Shop {{ type_title }}
+        {%- render 'luxe-leaf-icon', name: 'arrow', class: 'luxe-icon--sm' -%}
+      </span>
+    </div>
+  </a>
+{%- endif -%}

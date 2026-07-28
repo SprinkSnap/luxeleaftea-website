@@ -1,0 +1,25 @@
+{%- doc -%}
+  Renders a compact tea-type chip link only when the collection has products.
+  Entry format: handle|Title
+
+  @param {string} entry - Pipe-delimited type entry
+  @param {string} chip_class - CSS class for the anchor
+{%- enddoc -%}
+
+{%- liquid
+  assign parts = entry | split: '|'
+  assign type_handle = parts[0] | strip
+  assign type_title = parts[1] | strip
+  assign type_collection = collections[type_handle]
+-%}
+
+{%- if type_collection != blank and type_collection.products_count > 0 -%}
+  {%- if type_collection.url != blank -%}
+    {%- assign type_url = type_collection.url -%}
+  {%- else -%}
+    {%- assign type_url = '/collections/' | append: type_handle -%}
+  {%- endif -%}
+  <a class="{{ chip_class }}" href="{{ type_url }}" role="listitem">
+    {{ type_title }}
+  </a>
+{%- endif -%}
