@@ -688,12 +688,12 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 @keyframes luxe-chat-desktop-in {
   from {
     opacity: 0;
-    transform: translateX(0.85rem);
+    transform: scale(0.985);
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: scale(1);
   }
 }
 
@@ -735,13 +735,19 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   display: none !important;
 }
 
-/* Desktop dock MUST follow base panel/backdrop rules so it wins the cascade */
+/* Desktop full-screen chat — fills the computer viewport (not a side dock) */
 @media screen and (min-width: 750px) {
+  html.luxe-chat-open,
+  html.luxe-chat-open body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
   .luxe-tea-chat--open {
     inset: 0;
-    width: auto;
-    height: auto;
-    left: auto;
+    width: 100%;
+    height: 100%;
+    left: 0;
     right: 0;
     top: 0;
     bottom: 0;
@@ -753,7 +759,7 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-tea-chat__backdrop {
-    background: transparent !important;
+    background: rgb(8 14 11 / 0.42) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     filter: none !important;
@@ -761,16 +767,19 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 
   .luxe-tea-chat__panel {
     position: fixed;
-    top: 0.75rem;
-    right: 0.75rem;
-    bottom: 0.75rem;
-    left: auto;
-    width: min(25rem, calc(100vw - 1.5rem));
-    max-height: none;
-    height: auto;
-    border-radius: 1rem;
-    box-shadow: 0 16px 48px rgb(10 20 14 / 0.22);
-    animation: luxe-chat-desktop-in 0.22s ease;
+    inset: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    animation: luxe-chat-desktop-in 0.2s ease;
   }
 
   .luxe-tea-chat--open .luxe-tea-chat__launcher {
@@ -779,9 +788,28 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     transform: scale(0.92);
   }
 
+  /* Readable conversation column on wide monitors */
+  .luxe-tea-chat__header,
+  .luxe-tea-chat__messages,
+  .luxe-tea-chat__composer {
+    width: 100%;
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+
+  .luxe-tea-chat__header {
+    padding: 1.1rem 1.35rem 1rem;
+  }
+
   .luxe-tea-chat__messages {
     min-height: 0;
     flex: 1 1 auto;
+    padding: 1.15rem 1.35rem 1rem;
+  }
+
+  .luxe-tea-chat__bubble {
+    max-width: 85%;
+    font-size: 0.9375rem;
   }
 
   .luxe-tea-chat__subtitle {
@@ -790,6 +818,25 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 
   .luxe-tea-chat__conversion {
     display: flex;
+    max-width: 52rem;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 1.35rem;
+  }
+
+  .luxe-tea-chat__quick-replies {
+    max-width: 52rem;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 1.35rem;
+  }
+
+  .luxe-tea-chat__icon-btn-label {
+    display: inline;
+  }
+
+  .luxe-tea-chat__clear-btn-label {
+    display: inline;
   }
 }
 
@@ -1274,7 +1321,7 @@ body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__input:focus {
   font: inherit;
 }
 
-/* Scroll lock only on mobile full-screen chat — desktop dock keeps the shop scrollable */
+/* Scroll lock when chat is full-screen (mobile sheet + desktop full view) */
 @media screen and (max-width: 749px) {
   html.luxe-chat-open,
   html.luxe-chat-open body {
