@@ -901,38 +901,49 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     align-items: center;
   }
 
-  body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__quick-replies button,
   body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__chip,
-  .luxe-tea-chat__quick-replies button,
-  .luxe-tea-chat__chip {
+  .luxe-tea-chat .luxe-tea-chat__chip {
     flex: 0 0 auto !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-height: 2.25rem !important;
+    min-height: 2.35rem !important;
     height: auto !important;
     max-width: none !important;
-    padding: 0.45rem 0.85rem !important;
+    padding: 0.5rem 0.9rem !important;
     font-size: 0.8125rem !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
     letter-spacing: 0.01em !important;
     white-space: nowrap !important;
     text-align: center !important;
-    color: #14261d !important;
-    -webkit-text-fill-color: #14261d !important;
-    caret-color: #14261d !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    border: 1.5px solid #1b4332 !important;
+    /* Jade chip + cream label — stays readable even if UA forces light text */
+    color: #f8f6f0 !important;
+    -webkit-text-fill-color: #f8f6f0 !important;
+    caret-color: #f8f6f0 !important;
+    background: #1b4332 !important;
+    background-color: #1b4332 !important;
+    border: 1.5px solid #c9a227 !important;
     border-radius: 999px !important;
     box-shadow: none !important;
     opacity: 1 !important;
     visibility: visible !important;
     overflow: visible !important;
     text-shadow: none !important;
-    appearance: none !important;
-    -webkit-appearance: none !important;
+    cursor: pointer !important;
+    user-select: none !important;
+  }
+
+  body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__chip-label,
+  .luxe-tea-chat .luxe-tea-chat__chip-label {
+    display: inline !important;
+    color: #f8f6f0 !important;
+    -webkit-text-fill-color: #f8f6f0 !important;
+    font-size: 0.8125rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .luxe-tea-chat__form {
@@ -1338,23 +1349,21 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   display: none;
 }
 
-body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__quick-replies button,
 body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__chip,
-.luxe-tea-chat__quick-replies button,
-.luxe-tea-chat__chip {
+.luxe-tea-chat .luxe-tea-chat__chip {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.25rem;
-  padding: 0.45rem 0.85rem;
-  border: 1.5px solid #1b4332;
+  min-height: 2.35rem;
+  padding: 0.5rem 0.9rem;
+  border: 1.5px solid #c9a227;
   border-radius: 999px;
-  background: #ffffff;
-  background-color: #ffffff;
-  color: #14261d !important;
-  -webkit-text-fill-color: #14261d !important;
-  caret-color: #14261d !important;
+  background: #1b4332;
+  background-color: #1b4332;
+  color: #f8f6f0 !important;
+  -webkit-text-fill-color: #f8f6f0 !important;
+  caret-color: #f8f6f0 !important;
   font-size: 0.8125rem;
   font-weight: 700;
   line-height: 1.2;
@@ -1366,14 +1375,26 @@ body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__chip,
   visibility: visible;
   overflow: visible;
   text-shadow: none;
-  appearance: none;
-  -webkit-appearance: none;
+  user-select: none;
 }
 
-.luxe-tea-chat__quick-replies button:disabled,
-.luxe-tea-chat__chip:disabled {
+body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__chip-label,
+.luxe-tea-chat .luxe-tea-chat__chip-label {
+  display: inline;
+  color: #f8f6f0 !important;
+  -webkit-text-fill-color: #f8f6f0 !important;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  opacity: 1;
+  visibility: visible;
+}
+
+.luxe-tea-chat__chip--disabled,
+.luxe-tea-chat__chip[aria-disabled='true'] {
   opacity: 0.55;
   cursor: wait;
+  pointer-events: none;
 }
 
 .luxe-tea-chat__conversion {

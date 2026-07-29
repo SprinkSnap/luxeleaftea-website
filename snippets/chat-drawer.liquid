@@ -420,4 +420,37 @@
   .theme-drawer__dialog.chat-drawer:has(shopify-chat:defined) {
     display: flex;
   }
+
+  /* Suggestion chips live in this snippet stylesheet so labels cannot be blanked
+     by Horizon/Safari form-control color-scheme on native <button>s. */
+  .luxe-tea-chat__chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    min-height: 2.35rem !important;
+    padding: 0.5rem 0.9rem !important;
+    border-radius: 999px !important;
+    border: 1.5px solid #c9a227 !important;
+    background: #1b4332 !important;
+    background-color: #1b4332 !important;
+    color: #f8f6f0 !important;
+    -webkit-text-fill-color: #f8f6f0 !important;
+    font-size: 0.8125rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .luxe-tea-chat__chip-label {
+    color: #f8f6f0 !important;
+    -webkit-text-fill-color: #f8f6f0 !important;
+    font-size: 0.8125rem !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 {% endstylesheet %}
