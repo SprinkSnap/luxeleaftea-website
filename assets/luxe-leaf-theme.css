@@ -581,6 +581,8 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   --chat-input-bg: #ffffff;
   --chat-input-text: #14261d;
   --chat-input-placeholder: rgb(20 38 29 / 0.48);
+  /* Beat Horizon/Safari color-scheme that can force light text on chips/inputs */
+  color-scheme: light;
   position: fixed;
   right: 1rem;
   bottom: calc(1rem + var(--luxe-mobile-bar-height, 0px));
@@ -682,7 +684,7 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   .luxe-tea-chat__quick-replies {
     flex-wrap: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     max-height: none;
   }
 }
@@ -892,28 +894,45 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   .luxe-tea-chat__quick-replies {
     padding: 0.55rem 0.8rem 0.35rem;
     background: #fff;
-    gap: 0.35rem;
+    gap: 0.4rem;
     flex-wrap: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
+    align-items: center;
   }
 
-  .luxe-tea-chat__quick-replies button {
-    flex: 0 0 auto;
-    min-height: 2.1rem;
-    max-width: none;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 650;
-    line-height: 1.25;
-    white-space: nowrap;
-    text-align: center;
-    color: #1b4332 !important;
-    -webkit-text-fill-color: #1b4332 !important;
-    background: var(--chat-cream) !important;
-    background-color: #f3eee4 !important;
-    border: 1px solid rgb(27 67 50 / 0.22) !important;
+  body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__quick-replies button,
+  body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__chip,
+  .luxe-tea-chat__quick-replies button,
+  .luxe-tea-chat__chip {
+    flex: 0 0 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 2.25rem !important;
+    height: auto !important;
+    max-width: none !important;
+    padding: 0.45rem 0.85rem !important;
+    font-size: 0.8125rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.01em !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    color: #14261d !important;
+    -webkit-text-fill-color: #14261d !important;
+    caret-color: #14261d !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1.5px solid #1b4332 !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
     opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    text-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
   }
 
   .luxe-tea-chat__form {
@@ -1304,10 +1323,12 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 .luxe-tea-chat__quick-replies {
   display: flex;
   flex-wrap: nowrap;
+  align-items: center;
   gap: 0.4rem;
   padding: 0.65rem 1rem 0.45rem;
   background: #fff;
   overflow-x: auto;
+  overflow-y: visible;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
@@ -1317,24 +1338,40 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   display: none;
 }
 
-.luxe-tea-chat__quick-replies button {
+body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__quick-replies button,
+body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__chip,
+.luxe-tea-chat__quick-replies button,
+.luxe-tea-chat__chip {
   flex: 0 0 auto;
-  padding: 0.45rem 0.75rem;
-  border: 1px solid rgb(27 67 50 / 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.85rem;
+  border: 1.5px solid #1b4332;
   border-radius: 999px;
-  background: var(--chat-cream);
-  background-color: #f3eee4;
-  color: #1b4332 !important;
-  -webkit-text-fill-color: #1b4332 !important;
-  font-size: 0.75rem;
-  font-weight: 650;
+  background: #ffffff;
+  background-color: #ffffff;
+  color: #14261d !important;
+  -webkit-text-fill-color: #14261d !important;
+  caret-color: #14261d !important;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
   cursor: pointer;
   touch-action: manipulation;
   white-space: nowrap;
   opacity: 1;
+  visibility: visible;
+  overflow: visible;
+  text-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.luxe-tea-chat__quick-replies button:disabled {
+.luxe-tea-chat__quick-replies button:disabled,
+.luxe-tea-chat__chip:disabled {
   opacity: 0.55;
   cursor: wait;
 }
