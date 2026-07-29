@@ -1395,7 +1395,7 @@ body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__input:focus {
   font: inherit;
 }
 
-/* Scroll lock when chat is full-screen (mobile sheet + desktop full view) */
+/* Scroll lock only for mobile fullscreen sheet (desktop dock stays scrollable) */
 @media screen and (max-width: 749px) {
   html.luxe-chat-open,
   html.luxe-chat-open body {
