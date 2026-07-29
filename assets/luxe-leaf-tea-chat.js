@@ -173,7 +173,7 @@ class LuxeTeaChat extends HTMLElement {
     const keyboardInset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
     this.style.setProperty('--chat-keyboard-inset', `${Math.round(keyboardInset)}px`);
 
-    if (window.matchMedia('(max-width: 749px)').matches) {
+    if (this.isMobileSheet()) {
       this.style.setProperty('--chat-vv-height', `${Math.round(vv.height)}px`);
       this.style.setProperty('--chat-vv-offset', `${Math.round(vv.offsetTop)}px`);
     } else {
@@ -226,13 +226,12 @@ class LuxeTeaChat extends HTMLElement {
 
   bindSheetGestures() {
     const targets = [this.handle, this.panel?.querySelector('.luxe-tea-chat__header')].filter(Boolean);
-    const isMobileSheet = () => window.matchMedia('(max-width: 749px)').matches;
 
     targets.forEach((target) => {
       target.addEventListener(
         'touchstart',
         (e) => {
-          if (!isMobileSheet() || !this.isOpen() || !e.touches?.[0]) return;
+          if (!this.isMobileSheet() || !this.isOpen() || !e.touches?.[0]) return;
           this.#dragStartY = e.touches[0].clientY;
           this.#dragDelta = 0;
         },
@@ -241,7 +240,7 @@ class LuxeTeaChat extends HTMLElement {
       target.addEventListener(
         'touchmove',
         (e) => {
-          if (!isMobileSheet() || this.#dragStartY == null || !e.touches?.[0] || !this.panel) return;
+          if (!this.isMobileSheet() || this.#dragStartY == null || !e.touches?.[0] || !this.panel) return;
           this.#dragDelta = Math.max(0, e.touches[0].clientY - this.#dragStartY);
           if (this.#dragDelta > 8) {
             this.panel.style.transform = `translateY(${this.#dragDelta}px)`;
@@ -253,7 +252,7 @@ class LuxeTeaChat extends HTMLElement {
       target.addEventListener(
         'touchend',
         () => {
-          if (!isMobileSheet() || this.#dragStartY == null || !this.panel) return;
+          if (!this.isMobileSheet() || this.#dragStartY == null || !this.panel) return;
           const shouldMinimize = this.#dragDelta > 90;
           this.panel.style.transition = '';
           this.panel.style.transform = '';
@@ -273,13 +272,18 @@ class LuxeTeaChat extends HTMLElement {
     return Boolean(this.panel && !this.panel.hidden);
   }
 
+  isMobileSheet() {
+    return window.matchMedia('(max-width: 749px)').matches;
+  }
+
   toggle(open) {
     const shouldOpen = open ?? !this.isOpen();
     this.panel.hidden = !shouldOpen;
     if (this.backdrop) this.backdrop.hidden = !shouldOpen;
     this.launcher?.setAttribute('aria-expanded', String(shouldOpen));
     this.classList.toggle('luxe-tea-chat--open', shouldOpen);
-    document.documentElement.classList.toggle('luxe-chat-open', shouldOpen);
+    // Scroll-lock only on mobile fullscreen sheet — desktop dock keeps shopping scrollable
+    document.documentElement.classList.toggle('luxe-chat-open', shouldOpen && this.isMobileSheet());
 
     if (shouldOpen) {
       this.#focusBeforeOpen = document.activeElement;
@@ -291,12 +295,7 @@ class LuxeTeaChat extends HTMLElement {
       this.syncViewportInsets();
       requestAnimationFrame(() => {
         this.syncViewportInsets();
-        if (window.matchMedia('(min-width: 750px)').matches) {
-          this.input?.focus({ preventScroll: true });
-        } else {
-          const first = this.getFocusableElements()[0];
-          first?.focus?.({ preventScroll: true });
-        }
+        this.input?.focus({ preventScroll: true });
       });
     } else {
       if (this.panel) {
@@ -306,6 +305,7 @@ class LuxeTeaChat extends HTMLElement {
       this.style.removeProperty('--chat-keyboard-inset');
       this.style.removeProperty('--chat-vv-height');
       this.style.removeProperty('--chat-vv-offset');
+      document.documentElement.classList.remove('luxe-chat-open');
       if (this.#focusBeforeOpen instanceof HTMLElement) {
         this.#focusBeforeOpen.focus({ preventScroll: true });
       } else {
