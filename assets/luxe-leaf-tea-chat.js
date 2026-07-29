@@ -378,17 +378,19 @@ class LuxeTeaChat extends HTMLElement {
     if (!this.quickReplies) return;
     this.quickReplies.innerHTML = '';
     (prompts || []).slice(0, 3).forEach((prompt) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'luxe-tea-chat__chip';
-      btn.textContent = prompt;
-      // Inline styles beat Horizon/Safari color-scheme cascade that blanked chip labels
-      btn.style.setProperty('color', '#14261d', 'important');
-      btn.style.setProperty('-webkit-text-fill-color', '#14261d', 'important');
-      btn.style.setProperty('background-color', '#ffffff', 'important');
-      btn.style.setProperty('border', '1.5px solid #1b4332', 'important');
-      btn.style.setProperty('opacity', '1', 'important');
-      btn.addEventListener('click', () => {
+      // Use a div chip — native <button> inherits Safari/Horizon form colors that blanked labels
+      const chip = document.createElement('div');
+      chip.className = 'luxe-tea-chat__chip';
+      chip.setAttribute('role', 'button');
+      chip.setAttribute('tabindex', '0');
+      chip.setAttribute('aria-label', prompt);
+
+      const label = document.createElement('span');
+      label.className = 'luxe-tea-chat__chip-label';
+      label.textContent = prompt;
+      chip.appendChild(label);
+
+      const activate = () => {
         if (this.#pending) return;
         const normalized = this.normalize(prompt);
         if (this.includesAny(normalized, ['shop all', 'shop teas', 'shop tea', 'browse'])) {
@@ -397,8 +399,16 @@ class LuxeTeaChat extends HTMLElement {
           return;
         }
         this.handleUserMessage(prompt);
+      };
+
+      chip.addEventListener('click', activate);
+      chip.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activate();
+        }
       });
-      this.quickReplies.appendChild(btn);
+      this.quickReplies.appendChild(chip);
     });
   }
 
@@ -495,8 +505,10 @@ class LuxeTeaChat extends HTMLElement {
     this.#pending = pending;
     if (this.input) this.input.disabled = pending;
     if (this.sendBtn) this.sendBtn.disabled = pending;
-    this.quickReplies?.querySelectorAll('button').forEach((btn) => {
-      btn.disabled = pending;
+    this.quickReplies?.querySelectorAll('.luxe-tea-chat__chip, button').forEach((chip) => {
+      chip.setAttribute('aria-disabled', String(pending));
+      chip.classList.toggle('luxe-tea-chat__chip--disabled', pending);
+      if (chip instanceof HTMLButtonElement) chip.disabled = pending;
     });
   }
 
