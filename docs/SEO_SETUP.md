@@ -156,7 +156,8 @@ Add Facebook, Instagram, and YouTube URLs. These populate Organization `sameAs` 
 - [ ] Collect first approved reviews so PDP stars + Product `aggregateRating` JSON-LD can surface
 - [ ] When real reviews exist, set homepage/about social proof **Presentation → Customer reviews** and paste verified quotes (or hide brand notes)
 - [ ] Create FAQ page with template suffix `faq`
-- [ ] Add GA4 measurement ID and Search Console verification in theme settings
+- [ ] Add GA4 measurement ID and Search Console verification in theme settings (injected via `snippets/meta-tags.liquid`)
+- [ ] Confirm Tea Guide chat is enabled under Theme settings → Tea Guide chat (powers Ask Mei + chat conversion events when GA4 is set)
 - [ ] Monitor Search Console for crawl errors and keyword impressions
 
 ## 10. Collection conversion

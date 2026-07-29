@@ -35,8 +35,10 @@ Response:
 ### 2. Connect in Shopify
 
 1. **Online Store → Themes → Customize → Theme settings**
-2. Under **Store conversion**, paste your API URL into **Tea chat AI API URL**
-3. Save and publish
+2. Under **Tea Guide chat**, confirm **Enable Tea Guide chat (Mei)** is on
+3. Optionally set the display name, then paste your API URL into **Tea chat AI API URL**
+4. Under **SEO & analytics**, add your GA4 measurement ID so chat open/message/shop events are tracked
+5. Save and publish
 
 ### 3. Test
 

@@ -105,13 +105,36 @@
         },
         {
           "type": "header",
+          "content": "Tea Guide chat"
+        },
+        {
+          "type": "checkbox",
+          "id": "tea_chat_enabled",
+          "label": "Enable Tea Guide chat (Mei)",
+          "default": true,
+          "info": "Shows the Ask Mei floating chat for tea recommendations, brewing tips, and free shipping help across the storefront."
+        },
+        {
+          "type": "text",
+          "id": "tea_chat_agent_name",
+          "label": "Tea Guide display name",
+          "default": "Mei — Tea Guide"
+        },
+        {
+          "type": "text",
+          "id": "tea_chat_api_url",
+          "label": "Tea chat AI API URL",
+          "info": "Optional GPT backend URL (POST JSON). Leave blank to use the built-in smart guide. See docs/TEA_CHAT_AI_SETUP.md."
+        },
+        {
+          "type": "header",
           "content": "SEO & analytics"
         },
         {
           "type": "text",
           "id": "ga4_measurement_id",
           "label": "Google Analytics 4 measurement ID",
-          "info": "Example: G-XXXXXXXXXX. Leave blank to disable."
+          "info": "Example: G-XXXXXXXXXX. Leave blank to disable. Powers tea chat, add_to_cart, and begin_checkout events."
         },
         {
           "type": "text",

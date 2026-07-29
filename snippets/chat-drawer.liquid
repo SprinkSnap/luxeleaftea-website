@@ -317,9 +317,12 @@
         </header>
 
         <p class="luxe-tea-chat__seo-copy">
-          Use Luxe Leaf Tea’s free AI tea guide chat to get premium loose leaf tea recommendations, brewing tips,
-          gift ideas, and free shipping details over ${{ chat_ship_dollars }}. Ask which green, oolong, black, or
-          pu-erh tea to try first. Start a new chat anytime to reset the conversation, or minimize to keep shopping.
+          Chat with Luxe Leaf Tea’s free AI Tea Guide (Mei) for premium loose leaf tea recommendations, brewing tips,
+          gift ideas, and Canada-wide shipping — including free shipping over ${{ chat_ship_dollars }}. Ask which green,
+          oolong, black, or pu-erh tea to try first. Prefer a person?
+          <a href="/pages/contact">Contact Luxe Leaf Tea</a>
+          or read the
+          <a href="/pages/faq">premium loose leaf tea FAQ</a>.
         </p>
 
         <div class="luxe-tea-chat__toast" data-chat-toast hidden role="status" aria-live="polite"></div>
@@ -331,10 +334,12 @@
 
           <div class="luxe-tea-chat__conversion" aria-label="Quick shopping actions">
             <button type="button" class="luxe-tea-chat__conversion-shop" data-chat-shop>
-              Shop loose leaf tea
+              <span class="luxe-tea-chat__conversion-label luxe-tea-chat__conversion-label--long">Shop loose leaf tea</span>
+              <span class="luxe-tea-chat__conversion-label luxe-tea-chat__conversion-label--short">Shop tea</span>
             </button>
             <button type="button" class="luxe-tea-chat__conversion-ship" data-chat-shipping-prompt>
-              Free Canada-wide shipping ${{ chat_ship_dollars }}+
+              <span class="luxe-tea-chat__conversion-label luxe-tea-chat__conversion-label--long">Free Canada-wide shipping ${{ chat_ship_dollars }}+</span>
+              <span class="luxe-tea-chat__conversion-label luxe-tea-chat__conversion-label--short">Free ship ${{ chat_ship_dollars }}+</span>
             </button>
           </div>
 
@@ -380,7 +385,25 @@
      query below — @shopify/storefront-components reads this value once at
      init and uses it to decide when to force standalone mode. */
   shopify-chat {
-    --shopify-chat-breakpoint: 768px;
+    /* Keep in sync with Luxe Tea Guide breakpoint (750px) */
+    --shopify-chat-breakpoint: 750px;
+  }
+
+  /* When Mei is present, tuck the Inbox FAB away so launchers don't compete.
+     Inbox still opens via “Talk to our team” inside the Tea Guide. */
+  html.luxe-has-tea-chat shopify-chat:not([open]) {
+    position: fixed !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   shopify-chat[mode='managed'] {

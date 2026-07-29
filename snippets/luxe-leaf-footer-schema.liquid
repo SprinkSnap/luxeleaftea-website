@@ -89,14 +89,24 @@
         {%- if facebook_url != blank -%}
           {{ facebook_url | json }}
         {%- endif -%}
-      ]{%- endif -%}{%- if brand_phone != blank or brand_email != blank -%},
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer service",
-        "availableLanguage": ["English"]{%- if brand_phone != blank -%},
-        "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
-        "email": {{ brand_email | json }}{%- endif -%}
-      }{%- endif -%},
+      ]{%- endif -%}{%- if brand_phone != blank or brand_email != blank or settings.tea_chat_enabled != false -%},
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "availableLanguage": ["English"],
+          "url": {{ contact_abs | json }}{%- if brand_phone != blank -%},
+          "telephone": {{ brand_phone | json }}{%- endif -%}{%- if brand_email != blank -%},
+          "email": {{ brand_email | json }}{%- endif -%}
+        }{%- unless settings.tea_chat_enabled == false -%},
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "availableLanguage": ["English"],
+          "url": {{ contact_abs | json }},
+          "description": "Free AI Tea Guide chat for premium loose leaf tea recommendations, brewing tips, and shipping help"
+        }{%- endunless -%}
+      ]{%- endif -%},
       "makesOffer": {
         "@type": "Offer",
         "name": "Canada-wide shipping",

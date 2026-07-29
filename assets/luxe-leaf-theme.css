@@ -779,6 +779,9 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     border-radius: 0;
     border: none;
     box-shadow: none;
+    background:
+      radial-gradient(90% 55% at 50% -10%, rgb(27 67 50 / 0.14), transparent 58%),
+      linear-gradient(180deg, #efe8da 0%, var(--chat-cream) 38%, #f7f3ea 100%);
     animation: luxe-chat-desktop-in 0.2s ease;
   }
 
@@ -793,10 +796,24 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     padding: 1.1rem clamp(1.25rem, 4vw, 2.5rem) 1rem;
   }
 
+  .luxe-tea-chat__header-copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 48rem;
+  }
+
+  .luxe-tea-chat__header-actions {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
   .luxe-tea-chat__messages {
     min-height: 0;
     flex: 1 1 auto;
-    padding: 1.15rem clamp(1.25rem, 4vw, 2.5rem) 1rem;
+    padding: 1.25rem clamp(1.25rem, 4vw, 2.5rem) 1.1rem;
+    background:
+      radial-gradient(120% 70% at 0% 0%, rgb(27 67 50 / 0.05), transparent 55%),
+      transparent;
   }
 
   .luxe-tea-chat__messages > * {
@@ -806,34 +823,40 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   }
 
   .luxe-tea-chat__bubble {
-    max-width: 85%;
-    font-size: 1rem;
+    max-width: min(42rem, 88%);
+    font-size: 1.0625rem;
+    line-height: 1.55;
   }
 
   .luxe-tea-chat__subtitle {
     display: block;
+    max-width: 40rem;
   }
 
   .luxe-tea-chat__composer {
     width: 100%;
-    box-shadow: 0 -10px 28px rgb(20 38 29 / 0.08);
+    box-shadow: 0 -12px 32px rgb(20 38 29 / 0.1);
+    border-top: 1px solid rgb(27 67 50 / 0.12);
+    background: linear-gradient(180deg, #fffefb 0%, #ffffff 100%);
   }
 
   .luxe-tea-chat__conversion {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
     max-width: 48rem;
     margin-inline: auto;
     width: 100%;
-    gap: 0.65rem;
-    padding: 0.35rem clamp(1.25rem, 4vw, 2.5rem) 0.55rem;
+    gap: 0.7rem;
+    padding: 0.45rem clamp(1.25rem, 4vw, 2.5rem) 0.6rem;
     box-sizing: border-box;
+    background: transparent;
   }
 
   .luxe-tea-chat__conversion-shop,
   .luxe-tea-chat__conversion-ship {
-    min-height: 2.85rem;
-    font-size: 0.875rem;
-    border-radius: 0.85rem;
+    min-height: 3rem;
+    font-size: 0.9375rem;
+    border-radius: 0.9rem;
   }
 
   .luxe-tea-chat__quick-replies,
@@ -844,6 +867,11 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
     width: 100%;
     padding-inline: clamp(1.25rem, 4vw, 2.5rem);
     box-sizing: border-box;
+    background: transparent;
+  }
+
+  .luxe-tea-chat__quick-replies {
+    padding-top: 0.75rem;
   }
 
   .luxe-tea-chat__form {
@@ -854,24 +882,30 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   .luxe-tea-chat .luxe-tea-chat__input,
   .luxe-tea-chat textarea.luxe-tea-chat__input,
   body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__input {
-    min-height: 3.6rem !important;
+    min-height: 3.75rem !important;
     font-size: 1.125rem !important;
-    padding: 1rem 1.15rem !important;
+    padding: 1.05rem 1.2rem !important;
     border-radius: 1rem !important;
   }
 
   .luxe-tea-chat__send {
-    min-width: 7.5rem;
-    min-height: 3.6rem;
+    min-width: 7.75rem;
+    min-height: 3.75rem;
     font-size: 1.0625rem;
     border-radius: 1rem;
-    padding-inline: 1.35rem;
+    padding-inline: 1.4rem;
   }
 
   .luxe-tea-chat__quick-replies button {
-    min-height: 2.5rem;
-    padding: 0.55rem 0.95rem;
+    min-height: 2.55rem;
+    padding: 0.55rem 1rem;
     font-size: 0.875rem;
+  }
+
+  .luxe-tea-chat__actions {
+    max-width: 48rem;
+    width: 100%;
+    margin-inline: auto;
   }
 
   .luxe-tea-chat__icon-btn-label {
@@ -880,6 +914,11 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
 
   .luxe-tea-chat__clear-btn-label {
     display: inline;
+  }
+
+  .luxe-tea-chat__footer-note {
+    padding-bottom: 0.85rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -1266,6 +1305,20 @@ body.luxe-leaf-theme .luxe-brand-footer .luxe-brand-footer__newsletter-copy {
   background: var(--chat-cream);
   color: #1b4332 !important;
   border: 1px solid rgb(27 67 50 / 0.18);
+}
+
+.luxe-tea-chat__conversion-label--short {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .luxe-tea-chat__conversion-label--long {
+    display: none;
+  }
+
+  .luxe-tea-chat__conversion-label--short {
+    display: inline;
+  }
 }
 
 .luxe-tea-chat__form {
@@ -1890,13 +1943,26 @@ body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__input:focus {
 
   .luxe-tea-chat__composer {
     flex: 0 0 auto;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--chat-keyboard-inset, 0px));
     box-shadow: 0 -8px 24px rgb(20 38 29 / 0.08);
   }
 
-  /* Keep message area dominant: conversion CTAs live in header + footer on phones */
+  /* Compact conversion strip — primary path to shop without leaving chat */
   .luxe-tea-chat__conversion {
-    display: none;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 0.4rem;
+    padding: 0 0.85rem 0.45rem;
+    background: #fff;
+  }
+
+  .luxe-tea-chat__conversion-shop,
+  .luxe-tea-chat__conversion-ship {
+    min-height: 2.55rem;
+    padding: 0.35rem 0.45rem;
+    font-size: 0.6875rem;
+    border-radius: 0.7rem;
+    line-height: 1.2;
   }
 
   .luxe-tea-chat__quick-replies {
@@ -1945,6 +2011,14 @@ body.luxe-leaf-theme .luxe-tea-chat .luxe-tea-chat__input:focus {
     min-height: 3rem;
     padding-inline: 0.9rem;
     font-size: 0.9375rem;
+  }
+
+  /* Keyboard-aware sheet height (set via visualViewport in JS) */
+  .luxe-tea-chat--open .luxe-tea-chat__panel {
+    height: var(--chat-vv-height, 100dvh);
+    max-height: var(--chat-vv-height, 100dvh);
+    top: var(--chat-vv-offset, 0px);
+    bottom: auto;
   }
 }
 
