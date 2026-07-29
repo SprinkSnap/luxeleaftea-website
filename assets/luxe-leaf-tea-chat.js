@@ -65,17 +65,10 @@ class LuxeTeaChat extends HTMLElement {
 
   buildDefaultPrompts() {
     if (this.productContext) {
-      return [
-        `Is ${this.productContext} a good starter tea?`,
-        'How should I brew this?',
-        'Do you have free shipping?',
-      ];
+      return ['Good starter tea?', 'How do I brew this?', 'Free shipping?'];
     }
-    return [
-      'Which tea should I try first?',
-      'How do I brew loose leaf?',
-      'Do you have free shipping?',
-    ];
+    // Short dock-friendly chips — long labels looked blank in the narrow desktop panel
+    return ['Which tea first?', 'How do I brew?', 'Free shipping?'];
   }
 
   readProductContext() {
@@ -387,7 +380,14 @@ class LuxeTeaChat extends HTMLElement {
     (prompts || []).slice(0, 3).forEach((prompt) => {
       const btn = document.createElement('button');
       btn.type = 'button';
+      btn.className = 'luxe-tea-chat__chip';
       btn.textContent = prompt;
+      // Inline styles beat Horizon/Safari color-scheme cascade that blanked chip labels
+      btn.style.setProperty('color', '#14261d', 'important');
+      btn.style.setProperty('-webkit-text-fill-color', '#14261d', 'important');
+      btn.style.setProperty('background-color', '#ffffff', 'important');
+      btn.style.setProperty('border', '1.5px solid #1b4332', 'important');
+      btn.style.setProperty('opacity', '1', 'important');
       btn.addEventListener('click', () => {
         if (this.#pending) return;
         const normalized = this.normalize(prompt);
@@ -405,22 +405,22 @@ class LuxeTeaChat extends HTMLElement {
   followUpsFor(text) {
     const q = this.normalize(text);
     if (this.isSmallTalk(q)) {
-      return ['Which tea should I try first?', 'Something calming for evening', 'Tell me about free shipping'];
+      return ['Which tea first?', 'Calming evening tea', 'Free shipping?'];
     }
     if (this.includesAny(q, ['ship', 'deliver', 'shipping', 'tracking']) || /\bfree shipping\b/.test(q)) {
-      return ['Shop all teas', 'Which tea should I try first?', 'How do I brew loose leaf?'];
+      return ['Shop all teas', 'Which tea first?', 'How do I brew?'];
     }
     if (this.includesAny(q, ['brew', 'steep', 'temperature', 'iced', 'cold brew'])) {
-      return ['Which tea should I try first?', 'Shop all teas', 'Free shipping?'];
+      return ['Which tea first?', 'Shop all teas', 'Free shipping?'];
     }
     if (this.includesAny(q, ['green', 'oolong', 'black', 'pu', 'recommend', 'try first', 'calming', 'evening'])) {
-      return ['How do I brew loose leaf?', 'Shop all teas', 'Is this a good gift?'];
+      return ['How do I brew?', 'Shop all teas', 'Good gift?'];
     }
     if (this.includesAny(q, ['gift', 'present'])) {
-      return ['Shop all teas', 'Free shipping?', 'How do I brew loose leaf?'];
+      return ['Shop all teas', 'Free shipping?', 'How do I brew?'];
     }
     if (this.includesAny(q, ['caffeine', 'sleep', 'decaf'])) {
-      return ['Something calming for evening', 'How do I brew loose leaf?', 'Shop all teas'];
+      return ['Calming evening tea', 'How do I brew?', 'Shop all teas'];
     }
     return this.defaultPrompts;
   }
