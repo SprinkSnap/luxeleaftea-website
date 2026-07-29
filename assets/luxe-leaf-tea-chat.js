@@ -9,6 +9,8 @@ class LuxeTeaChat extends HTMLElement {
   #focusBeforeOpen = null;
   #dragStartY = null;
   #dragDelta = 0;
+  #onDocumentKeyDown = null;
+  #onViewportChange = null;
 
   connectedCallback() {
     this.agentName = this.dataset.agentName || 'Mei — Tea Guide';
@@ -41,10 +43,24 @@ class LuxeTeaChat extends HTMLElement {
 
     this.defaultPrompts = this.buildDefaultPrompts();
 
+    document.documentElement.classList.add('luxe-has-tea-chat');
     this.removeAttribute('hidden');
     this.restoreSession();
     this.bindEvents();
+    this.bindViewport();
     this.renderQuickReplies(this.defaultPrompts);
+  }
+
+  disconnectedCallback() {
+    document.documentElement.classList.remove('luxe-has-tea-chat', 'luxe-chat-open');
+    if (this.#onDocumentKeyDown) {
+      document.removeEventListener('keydown', this.#onDocumentKeyDown);
+    }
+    const vv = window.visualViewport;
+    if (vv && this.#onViewportChange) {
+      vv.removeEventListener('resize', this.#onViewportChange);
+      vv.removeEventListener('scroll', this.#onViewportChange);
+    }
   }
 
   buildDefaultPrompts() {
@@ -132,10 +148,80 @@ class LuxeTeaChat extends HTMLElement {
       this.input.style.height = `${Math.min(this.input.scrollHeight, 136)}px`;
     });
     this.inboxBtn?.addEventListener('click', () => this.openShopifyInbox());
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.isOpen()) this.toggle(false);
-    });
+    this.#onDocumentKeyDown = (e) => this.handleDocumentKeyDown(e);
+    document.addEventListener('keydown', this.#onDocumentKeyDown);
     this.bindSheetGestures();
+  }
+
+  bindViewport() {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    this.#onViewportChange = () => this.syncViewportInsets();
+    vv.addEventListener('resize', this.#onViewportChange);
+    vv.addEventListener('scroll', this.#onViewportChange);
+  }
+
+  syncViewportInsets() {
+    const vv = window.visualViewport;
+    if (!vv || !this.isOpen()) {
+      this.style.removeProperty('--chat-keyboard-inset');
+      this.style.removeProperty('--chat-vv-height');
+      this.style.removeProperty('--chat-vv-offset');
+      return;
+    }
+
+    const keyboardInset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    this.style.setProperty('--chat-keyboard-inset', `${Math.round(keyboardInset)}px`);
+
+    if (window.matchMedia('(max-width: 749px)').matches) {
+      this.style.setProperty('--chat-vv-height', `${Math.round(vv.height)}px`);
+      this.style.setProperty('--chat-vv-offset', `${Math.round(vv.offsetTop)}px`);
+    } else {
+      this.style.removeProperty('--chat-vv-height');
+      this.style.removeProperty('--chat-vv-offset');
+    }
+  }
+
+  getFocusableElements() {
+    if (!this.panel) return [];
+    return Array.from(
+      this.panel.querySelectorAll(
+        'button:not([disabled]):not([hidden]), [href], textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((el) => {
+      if (!(el instanceof HTMLElement) || el.closest('[hidden]')) return false;
+      const style = window.getComputedStyle(el);
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
+  }
+
+  handleDocumentKeyDown(e) {
+    if (!this.isOpen()) return;
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      this.toggle(false);
+      return;
+    }
+
+    if (e.key !== 'Tab') return;
+    const focusables = this.getFocusableElements();
+    if (focusables.length === 0) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement;
+
+    if (e.shiftKey && active === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault();
+      first.focus();
+    } else if (!this.panel?.contains(active)) {
+      e.preventDefault();
+      first.focus();
+    }
   }
 
   bindSheetGestures() {
@@ -202,9 +288,14 @@ class LuxeTeaChat extends HTMLElement {
         this.bootstrapConversation();
       }
       this.track('tea_chat_open');
+      this.syncViewportInsets();
       requestAnimationFrame(() => {
+        this.syncViewportInsets();
         if (window.matchMedia('(min-width: 750px)').matches) {
           this.input?.focus({ preventScroll: true });
+        } else {
+          const first = this.getFocusableElements()[0];
+          first?.focus?.({ preventScroll: true });
         }
       });
     } else {
@@ -212,11 +303,15 @@ class LuxeTeaChat extends HTMLElement {
         this.panel.style.transform = '';
         this.panel.style.transition = '';
       }
+      this.style.removeProperty('--chat-keyboard-inset');
+      this.style.removeProperty('--chat-vv-height');
+      this.style.removeProperty('--chat-vv-offset');
       if (this.#focusBeforeOpen instanceof HTMLElement) {
         this.#focusBeforeOpen.focus({ preventScroll: true });
+      } else {
+        this.launcher?.focus?.({ preventScroll: true });
       }
       this.#focusBeforeOpen = null;
-      this.launcher?.focus?.({ preventScroll: true });
     }
   }
 
@@ -465,10 +560,52 @@ class LuxeTeaChat extends HTMLElement {
   addAgentMessage(html, options = {}) {
     const bubble = document.createElement('div');
     bubble.className = 'luxe-tea-chat__bubble luxe-tea-chat__bubble--agent';
-    bubble.innerHTML = html;
+    bubble.innerHTML = this.sanitizeAgentHtml(html);
     this.messages.appendChild(bubble);
     if (options.actions) this.appendConversionActions();
     this.scrollMessages();
+  }
+
+  sanitizeAgentHtml(html) {
+    const allowed = new Set(['A', 'STRONG', 'EM', 'B', 'I', 'BR', 'SPAN']);
+    const root = document.createElement('div');
+    root.innerHTML = String(html || '');
+
+    const walk = (node) => {
+      Array.from(node.childNodes).forEach((child) => {
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          if (!allowed.has(child.tagName)) {
+            const text = document.createTextNode(child.textContent || '');
+            child.replaceWith(text);
+            return;
+          }
+          [...child.attributes].forEach((attr) => {
+            const name = attr.name.toLowerCase();
+            if (child.tagName === 'A' && (name === 'href' || name === 'target' || name === 'rel')) {
+              if (name === 'href') {
+                const href = attr.value.trim();
+                if (/^\s*javascript:/i.test(href) || /^\s*data:/i.test(href)) {
+                  child.removeAttribute(attr.name);
+                }
+              }
+              return;
+            }
+            child.removeAttribute(attr.name);
+          });
+          if (child.tagName === 'A') {
+            const href = child.getAttribute('href') || '';
+            if (!href.startsWith('/') && !href.startsWith('#') && !/^https?:\/\//i.test(href)) {
+              child.removeAttribute('href');
+            }
+            child.setAttribute('rel', 'noopener');
+          }
+          walk(child);
+        }
+      });
+    };
+
+    walk(root);
+    return root.innerHTML;
   }
 
   appendConversionActions() {
